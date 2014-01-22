@@ -1,4 +1,4 @@
-chaturaji
-=========
+Chaturaji Four Player Chess
+===========================
 
-Android application for Chaturaji - a four player chess-like game called meaning "four kings"
+Android application for Chaturaji - a four player chess-like game meaning "four kings"
