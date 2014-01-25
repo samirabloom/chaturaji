@@ -3,9 +3,9 @@ package ac.ic.chaturaji;
 /**
  * @author samirarabbanian
  */
-public class HelloWorld {
+public class HelloAI {
 
     public String sayHello() {
-        return "hello";
+        return "ai";
     }
 }

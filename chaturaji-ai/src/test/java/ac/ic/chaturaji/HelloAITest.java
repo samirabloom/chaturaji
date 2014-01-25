@@ -7,14 +7,14 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author samirarabbanian
  */
-public class HelloWorldTest {
+public class HelloAITest {
 
     @Test
-    public void shouldSayHello() {
+    public void shouldSayAI() {
         // given
-        HelloWorld helloWorld = new HelloWorld();
+        HelloAI helloAI = new HelloAI();
 
         // then
-        assertEquals("hello", helloWorld.sayHello());
+        assertEquals("ai", helloAI.sayHello());
     }
 }

@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class HelloAndroidTest {
 
     @Test
-    public void shouldSayHello() {
+    public void shouldSayAndroid() {
         // given
         HelloAndroid helloAndroid = new HelloAndroid();
 
