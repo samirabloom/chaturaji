@@ -4,8 +4,8 @@ Chaturaji Four Player Chess
 Android application for Chaturaji - a four player chess-like game meaning "four kings"
 
 ####This project is built using Maven, for the following reasons:
-* for Java applications Maven is the most common and widely used tool for compilation and library management, it is the Java equivalent of Make for C++
-* each developer can choose their own IDE (such as Eclipse or IntelliJ) as they prefer
+* for Java applications Maven is the most common and widely used tool for compilation and library management; it is the Java equivalent of Make for C++
+* each developer can choose their own IDE (such as Eclipse or IntelliJ) as they prefer as all Java IDEs support Maven
 * the build process will create two artifacts: an android application and a web application
 * the build process will automatically run any tests added to the project
 * application libraries (and the libraries used by libraries) will be automatically managed and downloaded
