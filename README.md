@@ -14,7 +14,55 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 ##To compile project:
  1. Install [mvn](http://maven.apache.org/)
- 2. mvn clean install
+ 2. Add the bin directory inside the location where you unzipped your maven download to your **PATH** environment variable, as follows:
+
+In the terminal:
+
+--------------------
+
+    export PATH=$PATH:~/Downloads/apache-maven-3.1.1-bin/bin
+    echo "export PATH=$PATH:~/Downloads/apache-maven-3.1.1-bin/bin" >> ~/.bash_profile
+    echo $PATH
+
+--------------------
+
+**Note:** *~/Downloads/apache-maven-3.1.1-bin* must be replaced by the location where you unzipped your maven download.
+
+ 3. Install [Android SDK](http://developer.android.com/sdk/index.html)
+ 4. Set **ANDROID_HOME** environment variable to point to sdk folder in the terminal as follows:
+
+ In the terminal:
+
+--------------------
+
+    export ANDROID_HOME=~/Downloads/adt-bundle-mac-x86_64-20131030-2/sdk
+    echo "export ANDROID_HOME=~/Downloads/adt-bundle-mac-x86_64-20131030-2/sdk" >> ~/.bash_profile
+    echo $ANDROID_HOME
+
+--------------------
+
+**Note:** *~/Downloads/adt-bundle-mac-x86_64-20131030-2* must be replaced by the location where you downloaded the Android SDK.
+
+ 5. Create android emulator, as follows (or plugin an Android device via USB):
+
+In the terminal:
+
+--------------------
+
+    $ANDROID_HOME/tools/android avd
+
+--------------------
+
+ 7. Start and Android emulator using the Android Virtual Device Manager
+ 6. Run the build
+
+In the terminal:
+
+--------------------
+
+    mvn clean install
+
+--------------------
 
 ##To add a new library:
  1. Go to http://search.maven.org/

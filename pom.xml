@@ -14,6 +14,7 @@
 
     <modules>
         <module>chaturaji-android-app</module>
+        <module>chaturaji-android-app-integration-tests</module>
         <module>chaturaji-web-services</module>
         <module>chaturaji-ai</module>
     </modules>
