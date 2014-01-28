@@ -35,6 +35,9 @@ Thumbs.db
 
 ## Eclipse Config Files
 .project
+.classpath
+project.properties
+default.properties
 
 ## Maven Build Files
 target
