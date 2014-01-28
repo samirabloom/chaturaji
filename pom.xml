@@ -14,25 +14,20 @@
 
     <modules>
         <module>chaturaji-android-app</module>
-        <module>chaturaji-android-app-integration-tests</module>
         <module>chaturaji-web-services</module>
         <module>chaturaji-ai</module>
     </modules>
 
-<dependencies>
-    
-        ...
-        
-        <!-- Apache HTTP Client -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcomponents-client</artifactId>
-            <version>4.3.2</version>
-        </dependency> 
-        
-        ...
-        
-    </dependencies>
-
+    <profiles>
+        <profile>
+            <id>integration-tests</id>
+            <modules>
+                <module>chaturaji-android-app</module>
+                <module>chaturaji-android-app-integration-tests</module>
+                <module>chaturaji-web-services</module>
+                <module>chaturaji-ai</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
