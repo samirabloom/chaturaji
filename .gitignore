@@ -38,6 +38,7 @@ Thumbs.db
 .classpath
 project.properties
 default.properties
+bin
 
 ## Maven Build Files
 target
