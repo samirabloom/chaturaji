@@ -68,9 +68,6 @@
                         <!--<package>your.package.name</package> -->
                         <!--</packages> -->
                     </test>
-                    <sdk>
-                        <platform>19</platform>
-                    </sdk>
                 </configuration>
                 <extensions>true</extensions>
             </plugin>
