@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>chaturaji-android-app-it</artifactId>
+    <artifactId>chaturaji-android-app-integration-tests</artifactId>
     <packaging>apk</packaging>
 
     <name>Chaturaji Android Application Integration Tests</name>
