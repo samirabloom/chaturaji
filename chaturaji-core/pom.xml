@@ -9,19 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>chaturaji-ai</artifactId>
+    <artifactId>chaturaji-core</artifactId>
 
-    <name>Chaturaji AI</name>
-
-    <dependencies>
-
-        <!-- testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <name>Chaturaji Core</name>
 
 </project>

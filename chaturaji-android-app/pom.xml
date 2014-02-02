@@ -15,9 +15,7 @@
     <name>Chaturaji Android Application</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <platform.version>4.1.1.4</platform.version>
-        <android.plugin.version>3.5.3</android.plugin.version>
+        <platform.version>4.1.1</platform.version>
     </properties>
 
     <dependencies>
@@ -27,6 +25,12 @@
             <artifactId>android</artifactId>
             <version>4.1.1.4</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- chaturaji -->
+        <dependency>
+            <groupId>org.chaturaji</groupId>
+            <artifactId>chaturaji-core</artifactId>
         </dependency>
 
         <!-- unit testing -->
@@ -45,7 +49,7 @@
                 <plugin>
                     <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                     <artifactId>android-maven-plugin</artifactId>
-                    <version>${android.plugin.version}</version>
+                    <version>3.8.2</version>
                     <extensions>true</extensions>
                 </plugin>
             </plugins>
