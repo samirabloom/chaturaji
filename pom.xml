@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,22 +11,44 @@
     <name>Chaturaji Four Player Chess</name>
     <description>Android application for Chaturaji - a four player chess-like game meaning "four kings"</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <modules>
         <module>chaturaji-android-app</module>
         <module>chaturaji-web-services</module>
         <module>chaturaji-ai</module>
+        <module>chaturaji-core</module>
     </modules>
 
-    <profiles>
-        <profile>
-            <id>integration-tests</id>
-            <modules>
-                <module>chaturaji-android-app</module>
-                <module>chaturaji-android-app-integration-tests</module>
-                <module>chaturaji-web-services</module>
-                <module>chaturaji-ai</module>
-            </modules>
-        </profile>
-    </profiles>
+    <dependencyManagement>
+        <dependencies>
+            <!-- chaturaji -->
+            <dependency>
+                <groupId>org.chaturaji</groupId>
+                <artifactId>chaturaji-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.chaturaji</groupId>
+                <artifactId>chaturaji-ai</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

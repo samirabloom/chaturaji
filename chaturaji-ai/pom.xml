@@ -11,6 +11,8 @@
 
     <artifactId>chaturaji-ai</artifactId>
 
+    <name>Chaturaji AI</name>
+
     <dependencies>
 
         <!-- testing -->
