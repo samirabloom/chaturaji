@@ -1,7 +1,10 @@
 package ac.ic.chaturaji.android;
 
+import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,6 +27,17 @@ public class MainMenu extends Activity {
 
         //setContentView(R.layout.activity_main);
         setContentView(R.layout.in_game);
+
+        // This is only for testing purposes in order to make the request
+        StrictMode.ThreadPolicy policy = new StrictMode.
+                ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        ChatuService testService = new ChatuService();
+        String test = testService.getGames();
+
+        Log.d("Request Test", test);
+        // End of testing section
+
     }
 
     @Override
