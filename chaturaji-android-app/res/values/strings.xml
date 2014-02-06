@@ -17,4 +17,9 @@
     <color name="white">#FFFFFF</color>
     <color name="grey">#222222</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="light_brown">#FCDCB6</color>
+    <color name="dark_brown">#B9663A</color>
+    <color name="darkest_brown">#501C1C</color>
+    <color name="gold">#FFCD34</color>
+
 </resources>
