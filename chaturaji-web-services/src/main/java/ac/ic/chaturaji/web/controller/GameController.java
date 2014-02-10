@@ -25,6 +25,7 @@ public class GameController {
     @RequestMapping(value = "/games", method = RequestMethod.GET)
     public String getGameList() throws IOException {
 
-        return objectMapper.writeValueAsString(gameDAO.getAll());
+        String result = objectMapper.writeValueAsString(gameDAO.getAll());
+        return result;
     }
 }

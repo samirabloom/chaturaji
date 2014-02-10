@@ -1,11 +1,17 @@
 package ac.ic.chaturaji.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import java.util.Date;
+
 /**
  * @author samirarabbanian
  */
 public class Game extends EqualsHashCodeToString {
     private String id;
+    private Date startDate;
     private Player[] player = new Player[4];
+    @JsonIgnore
     private long[] bitboards;
     private Colour currentPlayer;
 
@@ -17,6 +23,14 @@ public class Game extends EqualsHashCodeToString {
         this.id = id;
     }
 
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
     public Player[] getPlayer() {
         return player;
     }
@@ -25,6 +39,9 @@ public class Game extends EqualsHashCodeToString {
         this.player = player;
     }
 
+    /**
+     * Needed by AI but not for client to use
+     */
     public long[] getBitboards() {
         return bitboards;
     }
