@@ -15,6 +15,12 @@
 
     <dependencies>
 
+        <!-- chaturaji -->
+        <dependency>
+            <groupId>org.chaturaji</groupId>
+            <artifactId>chaturaji-core</artifactId>
+        </dependency>
+
         <!-- testing -->
         <dependency>
             <groupId>junit</groupId>
