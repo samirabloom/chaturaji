@@ -9,19 +9,20 @@ import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainMenu extends Activity {
+/**
+ * Created by Haider on 12/02/14.
+ */
+public class GameRoomActivity extends Activity {
 
-    /**
-     * Called when the activity is first created.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.in_game);
 
     }
 
@@ -31,6 +32,4 @@ public class MainMenu extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 }
-

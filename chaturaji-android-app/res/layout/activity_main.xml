@@ -64,24 +64,21 @@
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
                 android:text="@string/login"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 style="@style/btnStyleArsenic"
                 android:id="@+id/login_button"/>
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp"/>
 
         <Button
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="@string/signup"
                 android:id="@+id/signup_button"
                 style="@style/btnStyleArsenic"/>
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp"/>
+
         <Button
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"

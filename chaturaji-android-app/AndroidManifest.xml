@@ -7,12 +7,24 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <application android:allowBackup="true" android:debuggable="true" android:icon="@drawable/ic_launcher"
                  android:label="@string/app_name" android:theme="@style/AppTheme">
-        <activity android:name=".MainMenu">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+                android:name=".MainMenu"
+                android:label="Main Menu" >
+        </activity>
+        <activity
+                android:name=".GameRoomActivity"
+                android:label="Game Rooms" >
+        </activity>
+        <activity
+                android:name=".GameActivity"
+                android:label="In-Game" >
         </activity>
     </application>
 
