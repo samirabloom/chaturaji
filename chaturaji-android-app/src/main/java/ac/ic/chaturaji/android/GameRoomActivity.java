@@ -19,6 +19,7 @@ import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ import java.util.List;
 public class GameRoomActivity extends Activity {
 
     ListView gameRooms;
-    List<Game> gamesList = null;
+    Game[] gamesList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,29 +45,31 @@ public class GameRoomActivity extends Activity {
         StrictMode.setThreadPolicy(policy);
         ChatuService testService = new ChatuService();
         String test = testService.getGames();
-
+        Log.d("Request Test", test);
         try {
-            gamesList = new ObjectMapper().readValue(test, new TypeReference<List<Game>>(){});
+            gamesList = new ObjectMapper().readValue(test, Game[].class);
         }
         catch (JsonGenerationException e) {
-
+            Log.d("JsonGenerationException ",  e.toString());
             e.printStackTrace();
 
         } catch (JsonMappingException e) {
-
+            Log.d("JsonMappingException", e.toString());
             e.printStackTrace();
 
         } catch (IOException e) {
-
+            Log.d("IOException", e.toString());
             e.printStackTrace();
 
         }
 
-        Log.d("Request Test", test);
+
+        //Log.d("Request Test",String.valueOf(gamesList.size()));
+        Log.d("Request Test 2", gamesList[1].getId());
         // End of testing section
 
         if(gameRooms != null)
-        gameRooms.setAdapter(new GameRoomAdapter(this, gamesList));
+        gameRooms.setAdapter(new GameRoomAdapter(this, Arrays.asList(gamesList)));
 
     }
 
