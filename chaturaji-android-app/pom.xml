@@ -32,6 +32,13 @@
             <groupId>org.chaturaji</groupId>
             <artifactId>chaturaji-core</artifactId>
         </dependency>
+		
+		        <!-- Jackson JSON Serializer -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
 
         <!-- unit testing -->
         <dependency>
