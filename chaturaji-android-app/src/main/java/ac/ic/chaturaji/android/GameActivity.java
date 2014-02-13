@@ -2,12 +2,18 @@ package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Layout;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+
 
 /**
  * Created by Haider on 12/02/14.
@@ -21,10 +27,7 @@ public class GameActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //setContentView(R.layout.activity_main);
         setContentView(R.layout.in_game);
-
-
 
     }
 
