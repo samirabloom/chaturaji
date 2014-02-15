@@ -93,3 +93,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 --------------------
 
 **Note:** The Java JDK standard API is automatically added to Maven projects so you only need to add additional libraries such as Apache Http Client or the Android JDK.
+
+## Useful Commands
+
+$ANDROID_HOME/platform-tools/adb devices
