@@ -2,6 +2,8 @@ package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.dao.GameDAO;
 import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.model.ServiceResponse;
+import ac.ic.chaturaji.model.ServiceResult;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -51,6 +54,21 @@ public class GameControllerTest {
 
         verify(gameDAO).getAll();
         verify(objectMapper).writeValueAsString(Arrays.asList(new Game("a")));
+    }
+
+    @Test
+    public void shouldSaveGameToDAOAndReturnResultJSON() throws IOException {
+        // given
+        when(objectMapper.writeValueAsString(new ServiceResponse(ServiceResult.SUCCESS, ""))).thenReturn("json");
+
+        // when
+        String result = gameController.createGame(0);
+
+        // then
+        assertEquals("json", result);
+
+        verify(gameDAO).save(any(Game.class));
+        verify(objectMapper).writeValueAsString(new ServiceResponse(ServiceResult.SUCCESS, ""));
     }
 
 

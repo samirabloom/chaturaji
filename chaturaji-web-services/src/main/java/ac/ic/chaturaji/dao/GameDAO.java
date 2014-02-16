@@ -3,8 +3,7 @@ package ac.ic.chaturaji.dao;
 import ac.ic.chaturaji.model.Game;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author samirarabbanian
@@ -12,14 +11,29 @@ import java.util.List;
 @Component
 public class GameDAO {
 
-    public List<Game> getAll() {
-        List<Game> games = new ArrayList<>();
-        games.add(new Game("1"));
-        games.add(new Game("2"));
-        games.add(new Game("3"));
-        games.add(new Game("4"));
+    private Map<String, Game> games = new HashMap<>();
 
-        return games;
+    public GameDAO() {
+        List<Game> games = Arrays.asList(
+                new Game(UUID.randomUUID().toString()),
+                new Game(UUID.randomUUID().toString()),
+                new Game(UUID.randomUUID().toString()),
+                new Game(UUID.randomUUID().toString())
+        );
+        for (Game game : games) {
+            save(game);
+        }
     }
 
+    public Collection<Game> getAll() {
+        return games.values();
+    }
+
+    public Game get(String id) {
+        return games.get(id);
+    }
+
+    public void save(Game game) {
+        games.put(game.getId(), game);
+    }
 }

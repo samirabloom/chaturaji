@@ -59,7 +59,8 @@ public class Game extends EqualsHashCodeToString {
     }
 
     // Dummy constructor needed to map JSON string back to Java object
-    public Game(){}
+    public Game() {
+    }
 
     public Game(String id) {
         this.id = id;
