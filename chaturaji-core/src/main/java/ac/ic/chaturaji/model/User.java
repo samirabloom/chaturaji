@@ -7,6 +7,15 @@ public class User extends EqualsHashCodeToString {
     private String id;
     private String nickname;
 
+    // Dummy constructor needed to map JSON string back to Java object
+    public User() {
+    }
+
+    public User(String id, String nickname) {
+        this.id = id;
+        this.nickname = nickname;
+    }
+
     public String getId() {
         return id;
     }

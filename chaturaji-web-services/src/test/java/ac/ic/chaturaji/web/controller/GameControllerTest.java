@@ -2,13 +2,13 @@ package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.dao.GameDAO;
 import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.ServiceResponse;
-import ac.ic.chaturaji.model.ServiceResult;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -16,8 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -57,18 +56,54 @@ public class GameControllerTest {
     }
 
     @Test
-    public void shouldSaveGameToDAOAndReturnResultJSON() throws IOException {
-        // given
-        when(objectMapper.writeValueAsString(new ServiceResponse(ServiceResult.SUCCESS, ""))).thenReturn("json");
-
+    public void shouldSaveGameToDAOSuccessfully() throws IOException {
         // when
-        String result = gameController.createGame(0);
+        ResponseEntity<String> result = gameController.createGame(0);
 
         // then
-        assertEquals("json", result);
+        assertEquals("", result.getBody());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
 
         verify(gameDAO).save(any(Game.class));
-        verify(objectMapper).writeValueAsString(new ServiceResponse(ServiceResult.SUCCESS, ""));
+    }
+
+    @Test
+    public void shouldValidateNumberOfAIPlayerNotTooLarge() throws IOException {
+        // when
+        ResponseEntity<String> result = gameController.createGame(5);
+
+        // then
+        assertEquals("Invalid numberOfAIPlayers: 5 is not between 0 and 3 inclusive", result.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+
+        verifyNoMoreInteractions(gameDAO);
+    }
+
+    @Test
+    public void shouldValidateNumberOfAIPlayerNotTooSmall() throws IOException {
+        // when
+        ResponseEntity<String> result = gameController.createGame(-1);
+
+        // then
+        assertEquals("Invalid numberOfAIPlayers: -1 is not between 0 and 3 inclusive", result.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+
+        verifyNoMoreInteractions(gameDAO);
+    }
+
+    @Test
+    public void shouldHandleDAOException() throws IOException {
+        // given
+        doThrow(new RuntimeException("test exception")).when(gameDAO).save(any(Game.class));
+
+        // when
+        ResponseEntity<String> result = gameController.createGame(0);
+
+        // then
+        assertEquals("test exception", result.getBody());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
+
+        verify(gameDAO).save(any(Game.class));
     }
 
 
