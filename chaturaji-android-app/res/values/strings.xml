@@ -21,5 +21,12 @@
     <color name="dark_brown">#B9663A</color>
     <color name="darkest_brown">#501C1C</color>
     <color name="gold">#FFCD34</color>
+    <color name="light_blue">#80669CDE</color>
+
+    <string name="pawn">pawn</string>
+    <string name="boat">boat</string>
+    <string name="knight">knight</string>
+    <string name="elephant">elephant</string>
+    <string name="king">king</string>
 
 </resources>

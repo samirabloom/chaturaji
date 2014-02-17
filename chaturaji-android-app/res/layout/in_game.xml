@@ -17,6 +17,7 @@
                           android:layout_height="match_parent"
                           android:gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -42,9 +43,39 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/redboat"
                             android:clickable="true"
-                            android:id="@+id/red_boat"
-                            android:scaleType="fitCenter" android:layout_gravity="center_vertical"/>
+                            android:id="@+id/A8"
+                            android:tag="@string/boat"
+                            android:background="@color/transparent"/>
 
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:background="@color/dark_brown"
+                              android:layout_weight="1">
+
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:src="@drawable/redpawn"
+                            android:id="@+id/B8"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
+
+                 </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="horizontal"
+                              android:background="@color/light_brown"
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/C8"
+                            android:background="@color/transparent"/>
                 </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent"
@@ -54,20 +85,11 @@
                     <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/redpawn"
                             android:clickable="true"
-                            android:id="@+id/red_pawn1" android:layout_gravity="center_vertical"/>
+                            android:id="@+id/D8"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
 
-                 </LinearLayout>
-
-                <LinearLayout android:layout_width="match_parent"
-                              android:layout_height="match_parent"
-                              android:background="@color/light_brown"
-                              android:layout_weight="1"/>
-                <LinearLayout android:layout_width="match_parent"
-                              android:layout_height="match_parent"
-                              android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -77,7 +99,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/greenking"
                             android:clickable="true"
-                            android:id="@+id/green_king" android:layout_gravity="center_vertical"/>
+                            android:id="@+id/E8"
+                            android:tag="@string/king"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -90,9 +114,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/greenelephant"
                             android:clickable="true"
-                            android:id="@+id/green_elephant" android:layout_gravity="center_vertical"/>
+                            android:id="@+id/F8"
+                            android:tag="@string/elephant"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -102,9 +129,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/greenknight"
                             android:clickable="true"
-                            android:id="@+id/green_knight"/>
+                            android:id="@+id/G8"
+                            android:tag="@string/knight"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
@@ -115,7 +145,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/greenboat"
                             android:clickable="true"
-                            android:id="@+id/green_boat"/>
+                            android:id="@+id/H8"
+                            android:tag="@string/boat"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -125,6 +157,7 @@
                           android:layout_height="match_parent"
                           android:layout_gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -150,9 +183,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/redknight"
                             android:clickable="true"
-                            android:id="@+id/red_boat"/>
+                            android:id="@+id/A7"
+                            android:tag="@string/knight"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -163,43 +199,36 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/redpawn"
                             android:clickable="true"
-                            android:id="@+id/red_pawn2"/>
+                            android:id="@+id/B7"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
-                <LinearLayout android:layout_width="match_parent"
-                              android:layout_height="match_parent"
-                              android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
-                <LinearLayout android:layout_width="match_parent"
-                              android:layout_height="match_parent"
-                              android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
                               android:layout_weight="1">
-
                     <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/greenpawn"
                             android:clickable="true"
-                            android:id="@+id/green_pawn4"/>
-
+                            android:id="@+id/C7"
+                            android:background="@color/transparent"/>
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
                               android:layout_weight="1">
-
                     <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/greenpawn"
                             android:clickable="true"
-                            android:id="@+id/green_pawn3"/>
-
+                            android:id="@+id/D7"
+                            android:background="@color/transparent"/>
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
@@ -210,9 +239,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/greenpawn"
                             android:clickable="true"
-                            android:id="@+id/green_pawn2"/>
+                            android:id="@+id/E7"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -223,7 +255,41 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/greenpawn"
                             android:clickable="true"
-                            android:id="@+id/green_pawn1"/>
+                            android:id="@+id/F7"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:background="@color/dark_brown"
+                              android:layout_weight="1">
+
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/greenpawn"
+                            android:clickable="true"
+                            android:id="@+id/G7"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:background="@color/light_brown"
+                              android:layout_weight="1">
+
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/greenpawn"
+                            android:clickable="true"
+                            android:id="@+id/H7"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -233,6 +299,7 @@
                           android:layout_height="match_parent"
                           android:layout_gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -258,9 +325,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/redelephant"
                             android:clickable="true"
-                            android:id="@+id/red_elephant"/>
+                            android:id="@+id/A6"
+                            android:tag="@string/elephant"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
@@ -270,33 +340,83 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/redpawn"
                             android:clickable="true"
-                            android:id="@+id/red_pawn3"/>
+                            android:id="@+id/B6"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/C6"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/D6"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/E6"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/F6"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/G6"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/H6"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -304,6 +424,7 @@
                           android:layout_height="match_parent"
                           android:layout_gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -328,9 +449,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/redking"
                             android:clickable="true"
-                            android:id="@+id/red_king"/>
+                            android:id="@+id/A5"
+                            android:tag="@string/king"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -340,35 +464,83 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/redpawn"
                             android:clickable="true"
-                            android:id="@+id/red_pawn4"/>
+                            android:id="@+id/B5"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/C5"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
-                <LinearLayout android:layout_width="match_parent"
-                              android:layout_height="match_parent"
-                              android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
-                <LinearLayout android:layout_width="match_parent"
-                              android:layout_height="match_parent"
-                              android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/D5"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/E5"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/F5"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:background="@color/dark_brown"
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/G5"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:background="@color/light_brown"
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/H5"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -376,6 +548,7 @@
                           android:layout_height="match_parent"
                           android:layout_gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -394,27 +567,75 @@
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/A4"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/B4"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/C4"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/D4"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/E4"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/F4"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -424,9 +645,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowpawn"
                             android:clickable="true"
-                            android:id="@+id/yellow_pawn4"/>
+                            android:id="@+id/G4"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
@@ -436,7 +660,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowking"
                             android:clickable="true"
-                            android:id="@+id/yellow_king"/>
+                            android:id="@+id/H4"
+                            android:tag="@string/king"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -446,6 +672,7 @@
                           android:layout_height="match_parent"
                           android:layout_gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -464,27 +691,75 @@
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/A3"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/B3"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/C3"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/D3"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/E3"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/F3"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
@@ -494,9 +769,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowpawn"
                             android:clickable="true"
-                            android:id="@+id/yellow_pawn3"/>
+                            android:id="@+id/G3"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -506,7 +784,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowelephant"
                             android:clickable="true"
-                            android:id="@+id/yellow_elephant"/>
+                            android:id="@+id/H3"
+                            android:tag="@string/elephant"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -516,6 +796,7 @@
                           android:layout_height="match_parent"
                           android:layout_gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -540,7 +821,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/bluepawn"
                             android:clickable="true"
-                            android:id="@+id/blue_pawn1"/>
+                            android:id="@+id/A2"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -553,7 +836,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/bluepawn"
                             android:clickable="true"
-                            android:id="@+id/blue_pawn2"/>
+                            android:id="@+id/B2"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -566,7 +851,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/bluepawn"
                             android:clickable="true"
-                            android:id="@+id/blue_pawn3"/>
+                            android:id="@+id/C2"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -579,18 +866,36 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/bluepawn"
                             android:clickable="true"
-                            android:id="@+id/blue_pawn4"/>
+                            android:id="@+id/D2"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/E2"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/F2"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -600,9 +905,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowpawn"
                             android:clickable="true"
-                            android:id="@+id/yellow_pawn2"/>
+                            android:id="@+id/G2"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
@@ -612,7 +920,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowknight"
                             android:clickable="true"
-                            android:id="@+id/yellow_knight"/>
+                            android:id="@+id/H2"
+                            android:tag="@string/knight"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -622,6 +932,7 @@
                           android:layout_height="match_parent"
                           android:layout_gravity="left"
                           android:orientation="horizontal"
+                          android:baselineAligned="false"
                           android:layout_weight="1">
 
                 <LinearLayout android:layout_width="match_parent"
@@ -647,7 +958,9 @@
                             android:src="@drawable/blueboat"
                             android:clickable="true"
                             android:layout_weight="0.7"
-                            android:id="@+id/blue_boat"/>
+                            android:id="@+id/A1"
+                            android:tag="@string/boat"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -660,7 +973,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/blueknight"
                             android:clickable="true"
-                            android:id="@+id/blue_knight"/>
+                            android:id="@+id/B1"
+                            android:tag="@string/knight"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -673,7 +988,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/blueelephant"
                             android:clickable="true"
-                            android:id="@+id/blue_elephant"/>
+                            android:id="@+id/C1"
+                            android:tag="@string/elephant"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -686,18 +1003,36 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/blueking"
                             android:clickable="true"
-                            android:id="@+id/blue_king"/>
+                            android:id="@+id/D1"
+                            android:tag="@string/king"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/E1"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
-                              android:layout_weight="1"/>
+                              android:layout_weight="1">
+                    <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:id="@+id/F1"
+                            android:background="@color/transparent"/>
+                </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/dark_brown"
@@ -707,9 +1042,12 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowpawn"
                             android:clickable="true"
-                            android:id="@+id/yellow_pawn1"/>
+                            android:id="@+id/G1"
+                            android:tag="@string/pawn"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
+
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               android:background="@color/light_brown"
@@ -719,7 +1057,9 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/yellowboat"
                             android:clickable="true"
-                            android:id="@+id/yellow_boat"/>
+                            android:id="@+id/H1"
+                            android:tag="@string/boat"
+                            android:background="@color/transparent"/>
 
                 </LinearLayout>
 
@@ -836,6 +1176,10 @@
     <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
                   android:background="@color/main_colour"
                   android:layout_weight="2">
+
+        <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
+                  android:textColor="@color/white"
+                  android:id="@+id/testdisplay"/>
 
     </LinearLayout>
 </LinearLayout>
