@@ -28,7 +28,6 @@ public class LoginActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_main);
 
         login_button = (Button) findViewById(R.id.login_button);
