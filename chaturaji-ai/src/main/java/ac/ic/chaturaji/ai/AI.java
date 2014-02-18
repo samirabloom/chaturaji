@@ -31,26 +31,30 @@ public class AI {
         Result result = null;
 	PlayerHuman human;
 	PlayerComp ai;
+	AIMove Mov;
 	int piece;
 	int colour = move.getColour();
 
-	AIMov Mov;
 	AIBoard board = new AIBoard(game.getBitBoards(), colour);
 
 	if (game.getPlayer() == PlayerType.HUMAN) {
-	    piece = board.FindPieceColour(move.getSource());
-	    Mov = new AIMov(piece, move.getSource(), move.getDestination());
 
+	    // First find the piece that the move given specifies:
+	    piece = board.FindPieceColour(move.getSource(), colour);
+	    
+	    // Create an AIMove to check if the move given is valid.
+
+	    Mov = new AIMove(piece, move.getSource(), move.getDestination());
 	    human = new PlayerHuman(game.setCurrentPlayer, Mov);
 	    human.GetMove(game.getBitBoards());
 
-	    // Need to check if valid move first, but assume it is:
+	    // Suppose the move is valid, then update the board:
 	    board.ApplyMove(Mov);
       
 	    // ApplyMove changes the bitboards. Return them to the game class:
 	    game.setBitBoard(board.ReturnBitBoards());
 
-	    // Sets the current player as the next colour to move:
+	    // Set the current player in the game as the next colour to move:
 	    game.setCurrentPlayer(board.GetCurrentPlayer);
 
 	    // Set the values in the result class. Not too sure about this,
@@ -64,15 +68,23 @@ public class AI {
 	    result.setMove(move);
 	}
 	else {
+	    
+	    // Easier on this side, just create an PlayerComp class and generate the
+	    // best move.
 	    ai = new PlayerComp(colour);
 	    Mov = (AIMove)ai.GetMove(board);
+	    
+	    // I presume 'move' will be empty, so set its members?
+	    move.setSource(Mov.getSource());
+	    move.setDestination(Mov.getDest());
+	    move.setColour(board.GetCurrentPlayer());
 
+	    // Apply the move and change the bit boards:
 	    board.ApplyMove(Mov);
       
 	    game.setBitBoard(board.ReturnBitBoards());
-
 	    game.setCurrentPlayer(board.GetCurrentPlayer);
-
+	    
 	    // Check if the AI chooses to resign:
 	    if (Mov.getType() == GameConstants.RESIGN) 
 		result.setGameStatus(GameStatus.GAME_OVER);
@@ -80,9 +92,9 @@ public class AI {
 		result.setgameStatus(GameStatus.IN_PLAY);
 	}
 	
-	// We may need to change the ResultType class I think, as on the AI side
-	// we have a choice between normal move/ capture/ resign (and boat triumph
-	// is done separately).
+	// We may need to change some bits here I think, as on the AI side
+	// we have a choice between normal move/ capture/ resign as move types
+	// (and boat triumph is done separately). This would be straighforward though.
 
 	result.setType(Mov.getType());
 	result.setGame(game);
@@ -96,7 +108,8 @@ public class AI {
                 }
             }
         }
-        return null;
+
+        return result;
     }
 
     public synchronized void registerListener(String gameId, MoveListener moveListener) {
