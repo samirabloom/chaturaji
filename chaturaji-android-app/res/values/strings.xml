@@ -28,5 +28,6 @@
     <string name="knight">knight</string>
     <string name="elephant">elephant</string>
     <string name="king">king</string>
+    <string name="empty">empty</string>
 
 </resources>
