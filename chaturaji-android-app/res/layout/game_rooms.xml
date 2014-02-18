@@ -8,5 +8,13 @@
     <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/game_rooms_list"/>
+            android:id="@+id/game_rooms_list"
+            android:layout_weight="8"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Game"
+            android:id="@+id/create_game_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"/>
 </LinearLayout>

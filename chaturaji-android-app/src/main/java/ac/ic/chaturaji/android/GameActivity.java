@@ -2,8 +2,10 @@ package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Layout;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.swing.text.html.ImageView;
 import java.awt.*;
@@ -27,6 +30,7 @@ public class GameActivity extends Activity {
     private int selected_row = -1; // -1 if nothing selected
     private boolean[][] valid_moves = new boolean[8][8];
     private boolean moved = false;
+    private String numberOfAIs = "0";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,16 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.in_game);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.
+                ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        Intent intent =getIntent();
+        numberOfAIs = intent.getStringExtra("numberOfAI");
+        System.out.println(numberOfAIs);
+        PostGame postgame = new PostGame();
+        postgame.execute(numberOfAIs);
 
         /* Following code done by Kadir Sekha */
 
@@ -555,5 +569,24 @@ public class GameActivity extends Activity {
 
         Board[destination_column][destination_row].setImageResource(identifier);
         Board[source_column][source_row].setImageResource(0);
+    }
+
+    /* This makes the HTTP request thread safe - Haider's code */
+
+    private class PostGame extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... AIs) {
+            ChatuService chatuService = new ChatuService();
+            String state = chatuService.createGame(AIs[0]);
+            return state;
+        }
+
+        protected void onPostExecute(String state) {
+            System.out.println(state);
+            if(state.equals("Error")){
+                Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
