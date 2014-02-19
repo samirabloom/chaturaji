@@ -103,7 +103,6 @@ public class GameActivity extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.in_game);
-        set_pieces();
         draw_pieces();
     }
 
