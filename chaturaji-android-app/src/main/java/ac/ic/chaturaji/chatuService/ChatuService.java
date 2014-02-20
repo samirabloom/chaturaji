@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ChatuService{
 
-    private String localHost = ""; // Put your server address here...
+    private String localHost = "192.168.2.2"; // Put your server address here...
     private HttpClient httpClient = new DefaultHttpClient();
 
     public String getGames(){

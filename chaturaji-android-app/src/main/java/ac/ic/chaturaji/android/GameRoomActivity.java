@@ -1,6 +1,8 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.PlayerType;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
@@ -91,8 +93,8 @@ public class GameRoomActivity extends Activity {
 
             }
 
-            if(gameRooms != null && gamesList != null)
-                gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
+            if(gameRooms != null && gamesList != null){
+                gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));}
             else
                 Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
 
