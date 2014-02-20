@@ -6,5 +6,6 @@ package ac.ic.chaturaji.model;
 public enum ResultType {
     NONE_TAKEN,
     PIECE_TAKEN,
-    BOAT_TRIUMPH
+    BOAT_TRIUMPH,
+    NOT_VALID
 }

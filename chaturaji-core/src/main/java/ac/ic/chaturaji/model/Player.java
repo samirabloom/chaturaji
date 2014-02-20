@@ -8,6 +8,8 @@ public class Player extends EqualsHashCodeToString {
     private PlayerType type;
     private Colour colour;
     private User user;
+    private int points;
+    private int[] KingsCaptured;
 
     public String getId() {
         return id;
@@ -40,4 +42,12 @@ public class Player extends EqualsHashCodeToString {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public int getPoints() { return points; }
+
+    public void setPoints(int Points) { points = Points; }
+
+    public int[] getKingsCaptured() { return KingsCaptured; }
+
+    public void setKingsCaptured(int[] kings) { KingsCaptured = kings; }
 }
