@@ -18,11 +18,14 @@ public class Game_AI
     Move_AI move = new Move_AI();
     int key;
 
+    int points = 0;
+    int[] kings = {0,0,0,0};
+
     Players = new Player_AI[ 4 ];
-    Players[GameConstants_AI.YELLOW] = new PlayerAI_AI(GameConstants_AI.YELLOW);
-    Players[GameConstants_AI.BLUE] = new PlayerAI_AI(GameConstants_AI.BLUE);
-    Players[GameConstants_AI.RED] = new PlayerAI_AI(GameConstants_AI.RED);
-    Players[GameConstants_AI.GREEN] = new PlayerAI_AI(GameConstants_AI.GREEN);
+    Players[GameConstants_AI.YELLOW] = new PlayerAI_AI(GameConstants_AI.YELLOW,points,kings);
+    Players[GameConstants_AI.BLUE] = new PlayerAI_AI(GameConstants_AI.BLUE,points,kings);
+    Players[GameConstants_AI.RED] = new PlayerAI_AI(GameConstants_AI.RED,points,kings);
+    Players[GameConstants_AI.GREEN] = new PlayerAI_AI(GameConstants_AI.GREEN,points,kings);
 
     return true;
   }
