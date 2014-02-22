@@ -4,22 +4,13 @@ import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.Layout;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.*;
 import android.view.Menu;
 import android.view.Window;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import javax.swing.text.html.ImageView;
-import java.awt.*;
 
 
 public class GameActivity extends Activity {
@@ -39,7 +30,7 @@ public class GameActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.in_game);
+        setContentView(R.layout.in_game_blue);
 
         StrictMode.ThreadPolicy policy = new StrictMode.
                 ThreadPolicy.Builder().permitAll().build();
@@ -102,7 +93,7 @@ public class GameActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.in_game);
+        setContentView(R.layout.in_game_blue);
         draw_pieces();
     }
 

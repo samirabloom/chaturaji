@@ -1,0 +1,1185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/main_colour">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/main_colour"
+            android:layout_weight="1"
+            android:id="@+id/board_layout">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="1"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/H1"
+                        android:tag="@string/boat"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G1"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="horizontal"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F1"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E1"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D1"
+                        android:tag="@string/king"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C1"
+                        android:tag="@string/elephant"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B1"
+                        android:tag="@string/knight"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A1"
+                        android:tag="@string/boat"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="2"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/H2"
+                        android:tag="@string/knight"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G2"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F2"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E2"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D2"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C2"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B2"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A2"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="3"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/H3"
+                        android:tag="@string/elephant"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G3"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F3"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E3"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D3"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C3"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B3"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A3"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="4"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/H4"
+                        android:tag="@string/king"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G4"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F4"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E4"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D4"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C4"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B4"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A4"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="5"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/H5"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G5"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F5"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E5"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D5"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C5"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B5"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A5"
+                        android:tag="@string/king"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="6"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/H6"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G6"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F6"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E6"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D6"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C6"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B6"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A6"
+                        android:tag="@string/elephant"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="7"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/H7"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G7"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F7"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E7"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D7"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C7"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B7"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A7"
+                        android:tag="@string/knight"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="left"
+                      android:orientation="horizontal"
+                      android:baselineAligned="false"
+                      android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:background="@color/darkest_brown"
+                          android:layout_weight="1.06">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="8"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:layout_weight="0.7"
+                        android:id="@+id/H8"
+                        android:tag="@string/boat"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/G8"
+                        android:tag="@string/knight"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/F8"
+                        android:tag="@string/elephant"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/E8"
+                        android:tag="@string/king"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/D8"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/C8"
+                        android:tag="@string/empty"
+                        android:background="@color/transparent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/dark_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/B8"
+                        android:tag="@string/pawn"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/light_brown"
+                          android:layout_weight="1">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:id="@+id/A8"
+                        android:tag="@string/boat"
+                        android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:background="@color/darkest_brown"
+                      android:layout_weight="1.06">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                          android:layout_weight="1.06"/>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="H"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="G"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="F"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="E"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="D"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="C"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="B"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center"
+                          android:textColor="@color/gold"
+                          android:text="A"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+                  android:background="@color/main_colour"
+                  android:layout_weight="2">
+
+        <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
+                  android:textColor="@color/white"
+                  android:id="@+id/testdisplay"/>
+
+    </LinearLayout>
+</LinearLayout>
