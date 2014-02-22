@@ -4,7 +4,8 @@
               android:id="@+id/game_room_row"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:background="@color/main_colour">
 
     <ImageView
             android:layout_width="wrap_content"
@@ -15,7 +16,7 @@
             android:id="@+id/gameImage"
             android:src="@drawable/oneplayer"/>
 
-    <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
                    android:id="@+id/game_room_row"
                    android:orientation="vertical"
                    android:layout_width="match_parent"
@@ -26,12 +27,13 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
+            android:textColor="@color/white"
             android:textSize="15dip"
             android:textStyle="bold"
             android:text="USERNAME"
             android:id="@+id/game_username"/>
 
-        <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
                        android:id="@+id/game_room_row"
                        android:orientation="horizontal"
                        android:layout_width="match_parent"
@@ -43,6 +45,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
+            android:textColor="@color/white"
             android:text="HUMANS:"
             android:id="@+id/game_humans"/>
 
@@ -52,6 +55,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
+            android:textColor="@color/white"
             android:text="AIs:"
             android:id="@+id/game_ais"/>
 

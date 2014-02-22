@@ -3,7 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/main_colour">
 
     <ListView
             android:layout_width="match_parent"
@@ -14,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Create Game"
+            style="@style/btnStyleArsenic"
             android:id="@+id/create_game_button"
             android:layout_gravity="center_horizontal"
             />
