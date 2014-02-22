@@ -215,7 +215,6 @@ public class GameActivity extends Activity {
         selected_column = -1;
     }
 
-    //Need to add elephant to this method
     public void show_valid_moves(int column, int row) {
 
         if(Board[column][row].getTag().equals("pawn"))
@@ -224,12 +223,13 @@ public class GameActivity extends Activity {
             boat_valid_moves(column, row);
         else if(Board[column][row].getTag().equals("knight"))
             knight_valid_moves(column, row);
+        else if(Board[column][row].getTag().equals("elephant"))
+            elephant_valid_moves(column, row);
         else if(Board[column][row].getTag().equals("king"))
             king_valid_moves(column, row);
 
     }
 
-    // Add elephant valid moves
     public void pawn_valid_moves(int column, int row) {
 
         if(pieces[column][row] == 1 && (row <= 6))
@@ -453,6 +453,57 @@ public class GameActivity extends Activity {
                 Board[column + 2][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 2][row + 1] = true;
             }
+        }
+    }
+
+    public void elephant_valid_moves(int column, int row) {
+
+        for(int i = 1; i <= (7 - column); i++)
+        {
+            if(pieces[column][row] == pieces[column + i][row])
+                break;
+
+            Board[column + i][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
+            valid_moves[column + i][row] = true;
+
+            if(pieces[column + i][row] != 0)
+                break;
+        }
+
+        for(int i = 1; i <= column; i++)
+        {
+            if(pieces[column][row] == pieces[column - i][row])
+                break;
+
+            Board[column - i][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
+            valid_moves[column - i][row] = true;
+
+            if(pieces[column - i][row] != 0)
+                break;
+        }
+
+        for(int i = 1; i <= (7 - row); i++)
+        {
+            if(pieces[column][row] == pieces[column][row + i])
+                break;
+
+            Board[column][row + i].setBackgroundColor(getResources().getColor(R.color.light_blue));
+            valid_moves[column][row + i] = true;
+
+            if(pieces[column][row + i] != 0)
+                break;
+        }
+
+        for(int i = 1; i <= row; i++)
+        {
+            if(pieces[column][row] == pieces[column][row - i])
+                break;
+
+            Board[column][row - i].setBackgroundColor(getResources().getColor(R.color.light_blue));
+            valid_moves[column][row - i] = true;
+
+            if(pieces[column][row - i] != 0)
+                break;
         }
     }
 
