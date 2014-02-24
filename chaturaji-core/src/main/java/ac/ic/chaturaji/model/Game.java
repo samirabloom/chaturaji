@@ -2,7 +2,9 @@ package ac.ic.chaturaji.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author samirarabbanian
@@ -10,10 +12,19 @@ import java.util.Date;
 public class Game extends EqualsHashCodeToString {
     private String id;
     private Date startDate;
-    private Player[] player = new Player[4];
+    private List<Player> players = new ArrayList<>();
     @JsonIgnore
     private long[] bitboards;
     private Colour currentPlayer;
+
+    // Dummy constructor needed to map JSON string back to Java object
+    public Game() {
+    }
+
+    public Game(String id, Player player) {
+        this.id = id;
+        players.add(player);
+    }
 
     public String getId() {
         return id;
@@ -31,12 +42,12 @@ public class Game extends EqualsHashCodeToString {
         this.startDate = startDate;
     }
 
-    public Player[] getPlayer() {
-        return player;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setPlayer(Player[] player) {
-        this.player = player;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
     /**
@@ -58,13 +69,15 @@ public class Game extends EqualsHashCodeToString {
         this.currentPlayer = currentPlayer;
     }
 
-    // Dummy constructor needed to map JSON string back to Java object
-    public Game() {
+    public Player getPlayer(int index) {
+        return players.get(index);
     }
 
-    public Game(String id) {
-        this.id = id;
+    public void addPlayer(Player player) {
+        if (players.size() < 4) {
+            players.add(player);
+        } else {
+            throw new RuntimeException("Game already has four players");
+        }
     }
-
-
 }

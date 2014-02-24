@@ -1,7 +1,13 @@
 package ac.ic.chaturaji.web.controller;
 
+import ac.ic.chaturaji.ai.AI;
+import ac.ic.chaturaji.ai.MoveListener;
 import ac.ic.chaturaji.dao.GameDAO;
 import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.Result;
+import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,18 +31,25 @@ import java.util.UUID;
 @Controller
 public class GameController {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Resource
     private GameDAO gameDAO;
-
+    @Resource
+    private AI ai;
+    @Resource
+    private SpringSecurityUserContext springSecurityUserContext;
     private ObjectMapper objectMapper = new ObjectMapper();
-
 
     @ResponseBody
     @RequestMapping(value = "/games", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
     public String getGameList() throws IOException {
-
-        return objectMapper.writeValueAsString(gameDAO.getAll());
+        User currentUser = springSecurityUserContext.getCurrentUser();
+        List<Game> notYourGames = new ArrayList<>();
+        for (Game game : gameDAO.getAll()) {
+            if (!alreadyJoinedGame(game, currentUser)) {
+                notYourGames.add(game);
+            }
+        }
+        return objectMapper.writeValueAsString(notYourGames);
     }
 
     @ResponseBody
@@ -43,13 +58,65 @@ public class GameController {
         if (numberOfAIPlayers < 0 || numberOfAIPlayers > 3) {
             return new ResponseEntity<>("Invalid numberOfAIPlayers: " + numberOfAIPlayers + " is not between 0 and 3 inclusive", HttpStatus.BAD_REQUEST);
         }
+        User currentUser = springSecurityUserContext.getCurrentUser();
         try {
-            gameDAO.save(new Game(UUID.randomUUID().toString()));
+            String id = UUID.randomUUID().toString();
+            gameDAO.save(new Game(id, new Player(currentUser)));
+            ai.registerListener(id, new MoveListener() {
+                @Override
+                public void pieceMoved(Result result) {
+                    System.out.println("result = " + result);
+                }
+            });
+
         } catch (Exception e) {
             logger.warn("Exception while saving game", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("", HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.CREATED);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/joinGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public ResponseEntity<String> joinGame(@RequestParam("gameId") String gameId) throws IOException {
+        Game game = gameDAO.get(gameId);
+        if (game == null) {
+            return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
+        }
+        if (game.getPlayers().size() >= 4) {
+            return new ResponseEntity<>("Game already has four players", HttpStatus.BAD_REQUEST);
+        }
+        User currentUser = springSecurityUserContext.getCurrentUser();
+        if (alreadyJoinedGame(game, currentUser)) {
+            return new ResponseEntity<>("You have already joined this game", HttpStatus.BAD_REQUEST);
+        }
+
+        game.addPlayer(new Player(currentUser));
+        try {
+            gameDAO.save(game);
+            ai.registerListener(gameId, new MoveListener() {
+                @Override
+                public void pieceMoved(Result result) {
+                    System.out.println("result = " + result);
+                }
+            });
+
+        } catch (Exception e) {
+            logger.warn("Exception while saving game", e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("", HttpStatus.CREATED);
+    }
+
+    public boolean alreadyJoinedGame(Game game, User user) {
+        if (user != null) {
+            for (Player player : game.getPlayers()) {
+                if (player.getUser().equals(user)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

@@ -97,3 +97,19 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 ## Useful Commands
 
 $ANDROID_HOME/platform-tools/adb devices
+
+## Add SSL (HTTPS) Support To Tomcat
+
+ 1. Edit server.xml inside the **conf** directory in the tomcat installation location to add the following section:
+
+-----
+    <!-- Define a SSL Coyote HTTP/1.1 Connector on port 8443 -->
+    <Connector
+        protocol="HTTP/1.1"
+        port="8443" maxThreads="200"
+        scheme="https" secure="true" SSLEnabled="true"
+        keystoreFile="<chaturaji project root>/keystore" keystorePass="changeit"
+        clientAuth="false" sslProtocol="TLS"/>
+-----
+
+For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html)

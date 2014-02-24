@@ -7,7 +7,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,10 +24,11 @@ public class GameRoomAdapter extends BaseAdapter {
     Context context;
     List<Game> gamesList;
 
-    public GameRoomAdapter (Context context, List<Game> gamesList){
+    public GameRoomAdapter(Context context, List<Game> gamesList) {
         this.context = context;
         this.gamesList = gamesList;
     }
+
     @Override
     public int getCount() {
         return gamesList.size();
@@ -51,13 +51,13 @@ public class GameRoomAdapter extends BaseAdapter {
         int ais = 0;
 
         Game current = gamesList.get(i);
-        Player[] players = current.getPlayer();
+        List<Player> players = current.getPlayers();
 
-        for(int j = 1; j < 4; j++){
-            if(players[j] != null){
-                if(players[j].getType() == PlayerType.AI)
+        for (int j = 1; j < 4; j++) {
+            if (players.get(j) != null) {
+                if (players.get(j).getType() == PlayerType.AI)
                     ais++;
-                if(players[j].getType() == PlayerType.HUMAN)
+                if (players.get(j).getType() == PlayerType.HUMAN)
                     humans++;
             }
         }
@@ -69,7 +69,7 @@ public class GameRoomAdapter extends BaseAdapter {
         TextView human_text = (TextView) row.findViewById(R.id.game_humans);
         ImageView icon = (ImageView) row.findViewById(R.id.gameImage);
 
-        switch (humans){
+        switch (humans) {
             case 2:
                 icon.setImageResource(R.drawable.twoplayer);
                 break;
@@ -82,15 +82,14 @@ public class GameRoomAdapter extends BaseAdapter {
             default:
                 break;
         }
-;
-        if(players[0] != null)
-        username.setText(players[0].getId());
+
+        if (players.get(0) != null)
+            username.setText(players.get(0).getId());
 
         String display_ais = "AIs: " + String.valueOf(ais);
         String display_humans = "HUMANs: " + String.valueOf(humans);
         ais_text.setText(display_ais);
         human_text.setText(display_humans);
-
 
 
         return row;

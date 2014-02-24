@@ -1,8 +1,10 @@
-package ac.ic.chaturaji.web.controller;
+package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.config.RootConfiguration;
 import ac.ic.chaturaji.dao.GameDAO;
 import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.web.config.WebMvcConfiguration;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,18 +48,18 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
         @ContextConfiguration(
                 classes = {
                         WebMvcConfiguration.class,
-                        GameControllerIntegrationTest.MockDaoConfiguration.class
+                        GameControllerMockMVCIntegrationTest.MockDaoConfiguration.class
                 }
         )
 })
-public class GameControllerIntegrationTest {
+public class GameControllerMockMVCIntegrationTest {
 
     @Resource
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
     @Resource
-    private GameDAO mockGameDAO;
+    private GameDAO gameDAO;
 
     @Before
     public void setupFixture() {
@@ -67,11 +69,11 @@ public class GameControllerIntegrationTest {
     @Test
     public void shouldLoadListOfGames() throws Exception {
         // given
-        when(mockGameDAO.getAll()).thenReturn(Arrays.asList(
-                new Game("1"),
-                new Game("2"),
-                new Game("3"),
-                new Game("4")
+        when(gameDAO.getAll()).thenReturn(Arrays.asList(
+                new Game("1", new Player(new User())),
+                new Game("2", new Player(new User())),
+                new Game("3", new Player(new User())),
+                new Game("4", new Player(new User()))
         ));
 
         // when
@@ -94,7 +96,7 @@ public class GameControllerIntegrationTest {
                         .param("numberOfAIPlayers", "0")
         )
                 // then
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
                 .andReturn();
 
@@ -111,7 +113,6 @@ public class GameControllerIntegrationTest {
         )
                 // then
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
                 .andReturn();
 
         assertEquals("Invalid numberOfAIPlayers: -1 is not between 0 and 3 inclusive", result.getResponse().getContentAsString());
@@ -127,7 +128,6 @@ public class GameControllerIntegrationTest {
         )
                 // then
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
                 .andReturn();
 
         assertEquals("Invalid numberOfAIPlayers: 5 is not between 0 and 3 inclusive", result.getResponse().getContentAsString());

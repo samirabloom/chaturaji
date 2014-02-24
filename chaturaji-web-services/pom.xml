@@ -14,13 +14,15 @@
     <name>Chaturaji Web Services</name>
 
     <properties>
-        <aspectj.version>1.7.1</aspectj.version>
-        <java.version>1.7</java.version>
+        <!-- build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+        <java.version>1.7</java.version>
+        <!-- version properties -->
+        <aspectj.version>1.7.1</aspectj.version>
         <spring.version>3.2.5.RELEASE</spring.version>
         <spring-security.version>3.1.3.RELEASE</spring-security.version>
         <slf4j.version>1.7.2</slf4j.version>
+        <tomcat.version>7.0.47</tomcat.version>
     </properties>
 
     <dependencies>
@@ -94,6 +96,16 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+        <!-- Validation -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <!-- Spring Security -->
@@ -193,6 +205,28 @@
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <version>1.0.1.Final</version>
+        </dependency>
+
+        <!-- Apache HTTP Client -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Tomcat Server (Integration Testing) -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- testing -->

@@ -11,6 +11,14 @@ public class Player extends EqualsHashCodeToString {
     private int points;
     private int[] KingsCaptured;
 
+    // Dummy constructor needed to map JSON string back to Java object
+    public Player() {
+    }
+
+    public Player(User user) {
+        this.user = user;
+    }
+
     public String getId() {
         return id;
     }
@@ -43,11 +51,19 @@ public class Player extends EqualsHashCodeToString {
         this.user = user;
     }
 
-    public int getPoints() { return points; }
+    public int getPoints() {
+        return points;
+    }
 
-    public void setPoints(int Points) { points = Points; }
+    public void setPoints(int Points) {
+        points = Points;
+    }
 
-    public int[] getKingsCaptured() { return KingsCaptured; }
+    public int[] getKingsCaptured() {
+        return KingsCaptured;
+    }
 
-    public void setKingsCaptured(int[] kings) { KingsCaptured = kings; }
+    public void setKingsCaptured(int[] kings) {
+        KingsCaptured = kings;
+    }
 }

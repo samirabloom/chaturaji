@@ -11,6 +11,7 @@ import ac.ic.chaturaji.model.Move;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.Result;
 import ac.ic.chaturaji.model.ResultType;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author samirarabbanian
  */
+@Component
 public class AI {
 
     Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
@@ -46,7 +48,7 @@ public class AI {
         int source = move.getSource();
         int dest = move.getDestination();
 
-        Player player = game.getPlayer()[colour];
+        Player player = game.getPlayer(colour);
         Move_AI theMove;
         PlayerHuman humanPlayer;
         PlayerComp playerAI;
@@ -68,7 +70,7 @@ public class AI {
                 board.ApplyMove(theMove);
 
                 game.setBitboards(board.GetBitBoards());
-                game.getPlayer()[colour].setPoints(humanPlayer.GetPoints());
+                game.getPlayer(colour).setPoints(humanPlayer.GetPoints());
                 game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
 
                 result = new Result(GameStatus.IN_PLAY, game, move);
@@ -90,7 +92,7 @@ public class AI {
                 theMove = playerAI.GetMove(board);
                 board.ApplyMove(theMove);
 
-                game.getPlayer()[colour].setPoints(playerAI.GetPoints());
+                game.getPlayer(colour).setPoints(playerAI.GetPoints());
 
                 //Create Move and Game to return in a result object
                 Move ResultMove = new Move();

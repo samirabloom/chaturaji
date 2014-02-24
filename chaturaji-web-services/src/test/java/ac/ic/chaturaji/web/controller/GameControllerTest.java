@@ -1,7 +1,11 @@
 package ac.ic.chaturaji.web.controller;
 
+import ac.ic.chaturaji.ai.AI;
 import ac.ic.chaturaji.dao.GameDAO;
 import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +32,10 @@ public class GameControllerTest {
     private GameDAO gameDAO;
     @Mock
     private ObjectMapper objectMapper;
+    @Mock
+    private AI ai;
+    @Mock
+    private SpringSecurityUserContext springSecurityUserContext;
     @InjectMocks
     private GameController gameController;
 
@@ -41,7 +49,7 @@ public class GameControllerTest {
     @Test
     public void shouldGetGamesFromDAOAndCreateJSON() throws IOException {
         // given
-        List<Game> games = Arrays.asList(new Game("a"));
+        List<Game> games = Arrays.asList(new Game("a", new Player(new User())));
         when(gameDAO.getAll()).thenReturn(games);
         when(objectMapper.writeValueAsString(games)).thenReturn("json");
 
@@ -52,7 +60,7 @@ public class GameControllerTest {
         assertEquals("json", result);
 
         verify(gameDAO).getAll();
-        verify(objectMapper).writeValueAsString(Arrays.asList(new Game("a")));
+        verify(objectMapper).writeValueAsString(Arrays.asList(new Game("a", new Player(new User()))));
     }
 
     @Test
@@ -62,7 +70,7 @@ public class GameControllerTest {
 
         // then
         assertEquals("", result.getBody());
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
 
         verify(gameDAO).save(any(Game.class));
     }
