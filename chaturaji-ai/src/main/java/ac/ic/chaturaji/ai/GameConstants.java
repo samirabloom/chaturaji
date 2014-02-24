@@ -1,17 +1,10 @@
 package ac.ic.chaturaji.ai;
-//import Project.Chaturaji.*;
 
+public class GameConstants {
 
-/**
-     * Created with IntelliJ IDEA.
-     * User: vea11
-     * Date: 10/02/14
-     * Time: 19:21
-     * To change this template use File | Settings | File Templates.
-     */
-public class GameConstants_AI {
+    /*------ BOARD CONSTANTS ------*/
 
-    // Allows quick referral to pieces when constructing bitboards.
+    // Allows quick referral to pieces when constructing bit boards.
     public static int YELLOW = 0;
     public static int BLUE = 1;
     public static int RED = 2;
@@ -70,26 +63,28 @@ public class GameConstants_AI {
 
     public static final int ALL_BITBOARDS = 32;
 
+    // An array of bitfields, each of which contains the single bit associated
+    // with a square in a bitboard
+    public static long SquareBits[];
+
+    /*------ MOVE CONSTANTS ------*/
     //Possible kind of moves
     public static final int NORMAL_MOVE = 0;
     public static final int CAPTURE = 1;
     public static final int RESIGN = 2;
 
-    /***************************************************************************
-     * DATA MEMBERS
-     **************************************************************************/
+    /*------ PLAYER CONSTANTS ------*/
 
-    // An array of bitfields, each of which contains the single bit associated
-    // with a square in a bitboard
-    public static long SquareBits[];
+    public static final int HUMAN = 0;
+    public static final int AI = 1;
 
-    // Private table of tokens (string representations) for all pieces
+    /*------ OTHER CONSTANTS ------*/
+    // Used for printing:
     public static String PieceStrings[];
-    public static final String PlayerStrings[] = { "YELLOW", "BLUE", "RED", "GREEN"};
-    // Data needed to compute the evaluation function
+    public static final String PlayerStrings[] = { "Yellow", "Blue", "Red", "Green"};
 
-    public static int PieceValues[ ];
 
+    /*------ MEMBER INITIALISATION ------*/
     // static member initialization
     static
     {
@@ -100,9 +95,9 @@ public class GameConstants_AI {
             SquareBits[ i ] = ( 1L << i );
         }
 
-        // Tokens representing the various concepts in the game, for printint
-        // and file i/o purposes
-        // PieceStrings contains an extra string representing empty squares
+        // Tokens representing the various concepts in the game, for printing
+        // and file i/o purposes.
+        // PieceStrings contains an extra string representing empty squares.
         PieceStrings = new String[ ALL_PIECES + 1 ];
         PieceStrings[ YELLOW_PAWN ] = "YP";
         PieceStrings[ YELLOW_ELEPHANT ] = "YR";
@@ -129,33 +124,5 @@ public class GameConstants_AI {
         PieceStrings[ GREEN_KING ] = "GK";
 
         PieceStrings[ ALL_PIECES ] = "  ";
-
-        // Numerical evaluation of piece material values
-        PieceValues = new int[ ALL_PIECES ];
-        PieceValues[ YELLOW_PAWN ] = 150;
-        PieceValues[ BLUE_PAWN ] = 150;
-        PieceValues[ RED_PAWN ] = 150;
-        PieceValues[ GREEN_PAWN ] = 150;
-
-        PieceValues[ YELLOW_BOAT ] = 300;
-        PieceValues[ BLUE_BOAT ] = 300;
-        PieceValues[ RED_BOAT ] = 300;
-        PieceValues[ GREEN_BOAT ] = 300;
-
-        PieceValues[ YELLOW_KNIGHT ] = 350;
-        PieceValues[ BLUE_KNIGHT ] = 350;
-        PieceValues[ RED_KNIGHT ] = 350;
-        PieceValues[ GREEN_KNIGHT ] = 350;
-
-        PieceValues[ YELLOW_ELEPHANT ] = 500;
-        PieceValues[ BLUE_ELEPHANT ] = 500;
-        PieceValues[ RED_ELEPHANT ] = 500;
-        PieceValues[ GREEN_ELEPHANT ] = 500;
-
-        PieceValues[ YELLOW_KING ] = 1500;
-        PieceValues[ BLUE_KING ] = 1500;
-        PieceValues[ RED_KING ] = 1500;
-        PieceValues[ GREEN_KING ] = 1500;
     }
-
 }

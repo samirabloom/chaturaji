@@ -1,7 +1,6 @@
 
 package ac.ic.chaturaji.ai;
-//import Project.Chaturaji.*;
-
+import java.lang.System;
 
 public class Move_AI
 {
@@ -38,22 +37,22 @@ public class Move_AI
     public boolean getTriumph() {return BoatTriumph;}
 
     public void SetDest(int newDest) {
-	    Dest = newDest;
+        Dest = newDest;
     }
     public void SetSource(int newSrc) {
-	    Source = newSrc;
+        Source = newSrc;
     }
     public void SetPiece(int newPc) {
-	    Piece = newPc;
-    }	
+        Piece = newPc;
+    }
     public void SetCaptured(int newCap) {
-	    CapturedPiece = newCap;
+        CapturedPiece = newCap;
     }
     public void SetType(int moveType) {
-	    Type = moveType;
+        Type = moveType;
     }
     public void SetPromotion(int promoType) {
-	    PromotionType = promoType;
+        PromotionType = promoType;
     }
     public void SetBoatTriumph(boolean isTrue) {
         BoatTriumph = isTrue;
@@ -84,15 +83,17 @@ public class Move_AI
     {
         System.out.print( "Move: " );
 
-        if (Type != GameConstants_AI.RESIGN)
+        if (Type != GameConstants.RESIGN)
         {
-            System.out.print(GameConstants_AI.PieceStrings[Piece]);
+            System.out.print(GameConstants.PieceStrings[Piece]);
             System.out.print(" [ ");
             System.out.print(Source);
             System.out.print(", ");
             System.out.print(Dest);
             System.out.print(" ] TYPE: ");
             System.out.println(Type);
+            System.out.print(" Captured Piece: ");
+            System.out.println(CapturedPiece);
         }
         else
         {

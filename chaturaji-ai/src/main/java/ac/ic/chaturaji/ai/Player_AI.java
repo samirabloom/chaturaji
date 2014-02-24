@@ -1,49 +1,56 @@
 package ac.ic.chaturaji.ai;
-//import Project.Chaturaji.*;
-
 
 abstract public class Player_AI
 {
     // Data Members
-	int colour;
+    int colour;
     int points;
+    int type;
     int[] KingsCaptured;
 
-	// Constructor
-	public Player_AI(int Points, int[] kings) {
+    /*---- Methods ------*/
+
+    // Constructor
+    public Player_AI(int Points, int[] kings) {
         points = Points;
         KingsCaptured = kings;
     }
 
-	// Accessors
-	int GetColour()
-	{
-		return colour;
-	}
-	void SetColour( int col )
-	{
-		colour = col;
-	}
+    // Accessors:
+    int GetColour()
+    {
+        return colour;
+    }
+    int GetType() {
+        return type;
+    }
+
+    // Functions:
+    void SetColour( int col )
+    {
+        colour = col;
+    }
 
     int GetPoints() { return points; }
+
     protected void setPoints(Board_AI theBoard, Move_AI theMove){
         int captured = theMove.getCaptured();
         switch (captured){
-            case GameConstants_AI.PAWN:
+            case GameConstants.PAWN:
                 points++;
                 break;
-            case GameConstants_AI.BOAT:
+            case GameConstants.BOAT:
                 points+=2;
                 break;
-            case GameConstants_AI.KNIGHT:
+            case GameConstants.KNIGHT:
                 points+=3;
                 break;
-            case GameConstants_AI.ELEPHANT:
+            case GameConstants.ELEPHANT:
                 points+=4;
                 break;
-            case GameConstants_AI.KING:
+            case GameConstants.KING:
                 int kingColour = theBoard.FindColourPieceInSquare(theMove.getDest());
-                if(checkKingsCaptured(kingColour) && theBoard.GetBitBoard(GameConstants_AI.KING+colour) != 0)
+                if(checkKingsCaptured(kingColour) && theBoard.GetBitBoard(GameConstants.KING+colour) != 0)
                     points+= 54;
                 else
                     points+=5;
@@ -55,23 +62,9 @@ abstract public class Player_AI
             points+=6;
     }
 
-    //Helper functions
-    protected void CheckPawnPromotion(Move_AI Mov, Board_AI theBoard, int colour) {
-        boolean is_pawn = (Mov.getPiece() == GameConstants_AI.PAWN + colour);
-        boolean reached_end = ((Mov.getDest() & theBoard.GetBitBoard(GameConstants_AI.YELLOW_END_SQUARES + colour)) != 0);
+    // Functions
 
-        if (is_pawn && reached_end)
-        {
-            if((Mov.getSource() & theBoard.GetBitBoard(GameConstants_AI.KNIGHT_PAWNS)) != 0 )
-                Mov.SetPromotion(GameConstants_AI.KNIGHT);
-            else if( (Mov.getSource() & theBoard.GetBitBoard(GameConstants_AI.BOAT_PAWNS)) != 0 )
-                Mov.SetPromotion(GameConstants_AI.BOAT);
-            else if( (Mov.getSource() & theBoard.GetBitBoard(GameConstants_AI.ELEPHANT_PAWNS)) != 0  )
-                Mov.SetPromotion(GameConstants_AI.ELEPHANT);
-            else
-                Mov.SetPromotion(GameConstants_AI.KING);
-        }
-    }
+    //public abstract Move_AI GetMove(Board_AI theBoard, int source, int dest);
 
     protected boolean checkKingsCaptured(int kingColour){
         KingsCaptured[kingColour] = 1;
@@ -82,7 +75,4 @@ abstract public class Player_AI
             return true;
         return false;
     }
-
-    // Functions
-	//public abstract Move_AI GetMove(Board_AI theBoard);
 }

@@ -1,9 +1,6 @@
 package ac.ic.chaturaji.ai;
-//import Project.Chaturaji.*;
 
-
-
-public class PieceMoves_AI {
+public class PieceMoves {
     public static int KnightMoves[][];
     public static int KingMoves[][];
     public static int BoatMoves[][];
