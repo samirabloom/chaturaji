@@ -24,18 +24,16 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class AI {
-
     Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
 
     public Game startGame(Game game) {
 
-        //Create a new board and assign the new bitboards to the bitboards in game
+        //Create a new board and set up the bitboards within the Game class:
         Board_AI board = new Board_AI();
+        board.Print();
 
         game.setBitboards(board.GetBitBoards());
-
-        // Do we need to set the current player?
-        // game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
+        game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
 
         return game;
     }
@@ -62,22 +60,28 @@ public class AI {
 
                 theMove = humanPlayer.GetMove(board, source, dest);
 
-                if(theMove == null){
+                if (theMove == null){
+                    result = new Result(GameStatus.IN_PLAY, game, move);
                     result.setType(ResultType.NOT_VALID);
-                    return null;
+                    return result;
                 }
 
                 board.ApplyMove(theMove);
+                board.Print();
+                theMove.Print();
 
                 game.setBitboards(board.GetBitBoards());
                 game.getPlayer(colour).setPoints(humanPlayer.GetPoints());
                 game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
 
-                result = new Result(GameStatus.IN_PLAY, game, move);
+                if (board.isGameOver() == 0)
+                    result = new Result(GameStatus.GAME_OVER, game, move);
+                else
+                    result = new Result(GameStatus.IN_PLAY, game, move);
 
                 if(theMove.getTriumph())
                     result.setType(ResultType.BOAT_TRIUMPH);
-                else if( theMove.getCaptured() >= 0)
+                else if(theMove.getType() > 0)
                     result.setType(ResultType.PIECE_TAKEN);
                 else
                     result.setType(ResultType.NONE_TAKEN);
@@ -90,33 +94,44 @@ public class AI {
 
                 // If it's the AI's turn just generate a move:
                 theMove = playerAI.GetMove(board);
+
+                if (theMove == null){
+                    result = new Result(GameStatus.IN_PLAY, game, move);
+                    result.setType(ResultType.NOT_VALID);
+                    return result;
+                }
+
                 board.ApplyMove(theMove);
+                board.Print();
+                theMove.Print();
 
                 game.getPlayer(colour).setPoints(playerAI.GetPoints());
 
                 //Create Move and Game to return in a result object
-                Move ResultMove = new Move();
-                ResultMove.setSource(theMove.getSource());
-                ResultMove.setDestination(theMove.getDest());
-                ResultMove.setColour(game.getCurrentPlayer());
+                //Move ResultMove = new Move();
+                move.setSource(theMove.getSource());
+                move.setDestination(theMove.getDest());
+                move.setColour(game.getCurrentPlayer());
 
-                Game ResultGame = new Game();
-                ResultGame.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
-                ResultGame.setBitboards(board.GetBitBoards());
+                //Game ResultGame = new Game();
+                game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
+                game.setBitboards(board.GetBitBoards());
+
+                if (board.isGameOver() == 0)
+                    result = new Result(GameStatus.GAME_OVER, game, move);
+                else
+                    result = new Result(GameStatus.IN_PLAY, game, move);
 
                 //Set the type of the move
                 if(theMove.getTriumph())
                     result.setType(ResultType.BOAT_TRIUMPH);
-                else if(theMove.getCaptured() >= 0)
+                else if(theMove.getType() > 0)
                     result.setType(ResultType.PIECE_TAKEN);
                 else
                     result.setType(ResultType.NONE_TAKEN);
-
-                //Construct result object and return
-                result = new Result(GameStatus.IN_PLAY, ResultGame, ResultMove);
             } break;
         }
-
+            /*
             synchronized (this) {
                 List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
                 if (moveListenersForGame != null) {
@@ -125,7 +140,8 @@ public class AI {
                     }
                 }
             }
-            return result;
+            */
+        return result;
     }
 
     public synchronized void registerListener(String gameId, MoveListener moveListener) {
@@ -138,4 +154,5 @@ public class AI {
     public synchronized void unregisterListeners(String gameId) {
         moveListeners.remove(gameId);
     }
+
 }

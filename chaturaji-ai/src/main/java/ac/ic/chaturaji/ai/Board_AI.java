@@ -169,6 +169,14 @@ public class Board_AI implements Cloneable{
 
     }
 
+    public long isGameOver() {
+        long enemy_king1 = BitBoards[GameConstants.KING + ((CurrentPlayer + 1) % 4)];
+        long enemy_king2 = BitBoards[GameConstants.KING + ((CurrentPlayer + 2) % 4)];
+        long enemy_king3 = BitBoards[GameConstants.KING + ((CurrentPlayer + 3) % 4)];
+
+        return (enemy_king1 + enemy_king2 + enemy_king3);
+    }
+
     // Look for the piece located on a specific square
     public int FindPieceColour(int square, int Colour){
         if ( ( BitBoards[ GameConstants.KING + Colour ] & GameConstants.SquareBits[ square ] ) != 0 )
