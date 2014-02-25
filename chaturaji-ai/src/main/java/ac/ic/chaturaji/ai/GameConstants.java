@@ -63,6 +63,16 @@ public class GameConstants {
 
     public static final int ALL_BITBOARDS = 32;
 
+    //Material value of each piece
+    public static final int PAWN_VALUE = 50;
+    public static final int KNIGHT_VALUE = 100;
+    public static final int BOAT_VALUE = 150;
+    public static final int ELEPHANT_VALUE = 200;
+    public static final int KING_VALUE = 300;
+
+
+
+
     // An array of bitfields, each of which contains the single bit associated
     // with a square in a bitboard
     public static long SquareBits[];

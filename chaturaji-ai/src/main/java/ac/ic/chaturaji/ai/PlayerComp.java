@@ -9,14 +9,19 @@ public class PlayerComp extends Player_AI {
         super(points, kingsCaptured);
         this.type = GameConstants.HUMAN;
         colour = col;
+        ValidMoves = new MoveGenerator_AI();
     }
+
+
+    public int GetPlayerType(){ return GameConstants.AI; }
 
     public Move_AI GetMove(Board_AI theBoard){
         //Generate all the moves
-        ValidMoves.ComputeMoves(theBoard);
+        Move_AI move;
+        move = ValidMoves.Search(theBoard);
 
         //Select the move
-        Move_AI move = (Move_AI)ValidMoves.GetMoves().get(0);
+        //Move_AI move = (Move_AI)ValidMoves.GetMoves().get(0);
 
         // Set the points if a capture occurred.
         setPoints(theBoard, move);

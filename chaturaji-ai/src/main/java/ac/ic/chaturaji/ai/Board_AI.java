@@ -11,7 +11,7 @@ package ac.ic.chaturaji.ai;
 import java.lang.System;
 
 
-public class Board_AI {
+public class Board_AI implements Cloneable{
 
     /*------ Data Members ------*/
 
@@ -30,18 +30,34 @@ public class Board_AI {
     public Board_AI()
     {
         BitBoards = new long[GameConstants.ALL_BITBOARDS];
-        MaterialValue = new int [4];
+        MaterialValue = new int[4];
 
-        //EvalMaterial();
         StartBoard();
+        EvalMaterial();
     }
 
+    public Board_AI clone(){
+
+        Board_AI cloned = new Board_AI();
+        cloned.BitBoards = BitBoards.clone();
+        cloned.MaterialValue = MaterialValue.clone();
+        cloned.CurrentPlayer = CurrentPlayer;
+        return cloned;
+
+    }
     public Board_AI(long[] bit_boards, int colour) {
         BitBoards = bit_boards;
         MaterialValue = new int [4];
+        EvalMaterial();
 
-        //EvalMaterial();
         CurrentPlayer = colour;
+    }
+
+    //Copy constructor
+    public Board_AI(Board_AI board){
+        BitBoards = board.BitBoards;
+        MaterialValue = board.MaterialValue;
+        CurrentPlayer = board.CurrentPlayer;
     }
 
     /* Accessors */
@@ -49,7 +65,8 @@ public class Board_AI {
     public int GetCurrentPlayer()  {return CurrentPlayer;}
     public long GetBitBoard(int which_one) {return BitBoards[which_one];}
     public long[] GetBitBoards() {return BitBoards;}
-
+    public int[] GetMaterialValue(){ return MaterialValue; }
+    public int GetMaterialValue(int colour) { return MaterialValue[colour]; }
     /* Functions */
 
     // Initialise the Board:
@@ -116,24 +133,42 @@ public class Board_AI {
         // Player to go first is always yellow
         CurrentPlayer = GameConstants.YELLOW;
     }
-    /*
-    private void EvalMaterial() {
-        int yellow_score = 0, blue_score = 0, red_score = 0, green_score = 0;
 
-        for (int i = 0; i < 64; i++) {
-            if ((GameConstants.SquareBits[i] & BitBoards[GameConstants.YELLOW_PAWNS]) != 0)
-                yellow_score++;
-            else if ((GameConstants.SquareBits[i] & BitBoards[GameConstants.BLUE_PAWNS]) != 0)
-                blue_score++;
-            else if ((GameConstants.SquareBits[i] & BitBoards[GameConstants.RED_PAWNS]) != 0)
-                red_score++
-            else if ((GameConstants.SquareBits[i] & BitBoards[GameConstants.GREEN_PAWNS]) != 0)
-                green_score++;
+    private void EvalMaterial() {
+        MaterialValue = new int[4];
+        for (int i = 0; i < 4; i++){
+            //Check for the pawns of that colour
+            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.KING_PAWNS]) != 0)
+                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+
+            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0)
+                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+
+            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.BOAT_PAWNS]) != 0)
+                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+
+            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0)
+                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+
+            //Check for the elephant
+            if((BitBoards[GameConstants.ELEPHANT+i]) != 0 )
+                MaterialValue[i]+=GameConstants.ELEPHANT_VALUE;
+
+            //Check for the boat
+            if((BitBoards[GameConstants.BOAT+i]) != 0 )
+                MaterialValue[i]+=GameConstants.BOAT_VALUE;
+
+            //Check for the knight
+            if((BitBoards[GameConstants.KNIGHT+i]) != 0 )
+                MaterialValue[i]+=GameConstants.KNIGHT_VALUE;
+
+            //Check for the king
+            if((BitBoards[GameConstants.KING+i]) != 0 )
+                MaterialValue[i]+=GameConstants.KING_VALUE;
         }
 
-
     }
-    */
+
     // Look for the piece located on a specific square
     public int FindPieceColour(int square, int Colour){
         if ( ( BitBoards[ GameConstants.KING + Colour ] & GameConstants.SquareBits[ square ] ) != 0 )
@@ -254,6 +289,7 @@ public class Board_AI {
                     break;
             }
         }
+        EvalMaterial();
 
         NextPlayer();
     }

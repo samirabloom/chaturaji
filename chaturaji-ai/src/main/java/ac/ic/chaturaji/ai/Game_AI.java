@@ -11,7 +11,7 @@ public class Game_AI {
 
     public Game_AI() {
         Initialise();
-        Run();
+        //Run();
     }
 
     public void Initialise()
@@ -28,8 +28,9 @@ public class Game_AI {
         Players[GameConstants.YELLOW] = new PlayerHuman(GameConstants.YELLOW, points, kings);
         Players[GameConstants.BLUE] = new PlayerHuman(GameConstants.BLUE, points, kings);
         Players[GameConstants.RED] = new PlayerHuman(GameConstants.RED, points, kings);
-        Players[GameConstants.GREEN] = new PlayerHuman(GameConstants.GREEN, points, kings);
+        Players[GameConstants.GREEN] = new PlayerComp(GameConstants.GREEN, points, kings);
     }
+
 
     public void Run()
     {
@@ -44,20 +45,21 @@ public class Game_AI {
             // Show the current game board
             board.Print();
 
-            CurrentPlayer = (PlayerHuman)Players[board.GetCurrentPlayer()];
-            move = GetMove(board, CurrentPlayer);
-            /*
-            if (Player.GetType() == GameConstants.HUMAN) {
+            //CurrentPlayer = (PlayerHuman)Players[board.GetCurrentPlayer()];
+            //move = GetMove(board, CurrentPlayer);
+
+            if (Player.GetPlayerType() == GameConstants.HUMAN) {
                 // Ask the next player for a move
                 CurrentPlayer = (PlayerHuman)Players[board.GetCurrentPlayer()];
                 move = GetMove(board, CurrentPlayer);
             }
             else {
                 // AI player, just generate a move.
-                //AIPlayer = (PlayerComp)Players[board.GetCurrentPlayer()];
-                //move = AIPlayer.GetMove(board);
+                AIPlayer = (PlayerComp)Players[board.GetCurrentPlayer()];
+                move = AIPlayer.GetMove(board);
+                board.Print();
             }
-            */
+
 
             // Update the bit boards.
             board.ApplyMove(move);

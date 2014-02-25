@@ -66,6 +66,8 @@ abstract public class Player_AI
 
     //public abstract Move_AI GetMove(Board_AI theBoard, int source, int dest);
 
+    public abstract int GetPlayerType();
+
     protected boolean checkKingsCaptured(int kingColour){
         KingsCaptured[kingColour] = 1;
         int totalKingsCaptured = 0;

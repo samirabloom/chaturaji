@@ -1,7 +1,5 @@
 package ac.ic.chaturaji.ai;
 
-import java.lang.System;
-
 
 public class PlayerHuman extends Player_AI {
 
@@ -18,6 +16,8 @@ public class PlayerHuman extends Player_AI {
         this.SetColour(colour);
         ValidMoves = new MoveGenerator_AI();
     }
+
+    public int GetPlayerType(){ return GameConstants.HUMAN; }
 
     // Functions
 
