@@ -1,9 +1,7 @@
 package ac.ic.chaturaji.ai;
 //import Project.Chaturaji.*;
 
-import ac.ic.chaturaji.model.Move;
-
-import java.util.*;
+import java.util.ArrayList;
 
 // MoveGenerator_AI contains methods used to generate all possible moves given a
 // certain board position. It is implemented by the 'Movelist' class.
@@ -64,7 +62,7 @@ public class MoveGenerator_AI
 
     public Board_AI[] Search_ply1(Board_AI board){
 
-        ComputeMoves(board, Moves);
+        ComputeMoves(board, Moves, false);
         Board_AI[] boards = new Board_AI[Moves.size()];
         for(int i = 0; i < Moves.size(); i++){
             boards[i] = board.clone();
@@ -80,7 +78,7 @@ public class MoveGenerator_AI
         int[] descendents = new int[boards.length];
         int sumOfDescendents = 0;
         for(int i = 0; i < boards.length; i++){
-            ComputeMoves(boards[i], Moves_2ply);
+            ComputeMoves(boards[i], Moves_2ply,true);
             descendents[i] = Moves_2ply.size()-sumOfDescendents;
             sumOfDescendents += descendents[i];
         }
@@ -94,18 +92,19 @@ public class MoveGenerator_AI
                 n++;
             }
             boards_ply2[i] = boards[n].clone();
-            MoveValue[i] = EvalMove(Moves_2ply.get(i),boards_ply2[i]);
+            boards_ply2[i].ApplyMove(Moves_2ply.get(i));
+            MoveValue[i] = EvalMove(boards_ply2[i], board);
         }
-        int maxEval = 0;
+        int maxEval = MoveValue[0];
         int maxIndex = 0;
-        for(int i = 0; i < boards_ply2.length; i++){
+        for(int i = 1; i < boards_ply2.length; i++){
             if(MoveValue[i] > maxEval){
                 maxEval = MoveValue[i];
                 maxIndex = i;
             }
         }
         n = 0;
-        maxIndex = maxIndex - descendents[n];
+        maxIndex = maxIndex - descendents[n]+1;
         while( maxIndex > 0){
             n++;
             maxIndex = maxIndex - descendents[n];
@@ -113,10 +112,9 @@ public class MoveGenerator_AI
         return n;
     }
 
-    protected int EvalMove(Move_AI move, Board_AI board){
+    protected int EvalMove( Board_AI board, Board_AI originalBoard){
         int CurrentPlayer = board.GetCurrentPlayer();
-        int[] MaterialValueBefore = board.GetMaterialValue();
-        board.ApplyMove(move);
+        int[] MaterialValueBefore = originalBoard.GetMaterialValue();
         int[] MaterialValueAfter = board.GetMaterialValue();
 
         int CurrentPlayerValueBefore = 0;
@@ -149,14 +147,15 @@ public class MoveGenerator_AI
 
     // Computes the possible moves for the given player:
     public void ComputeMoves(Board_AI board) {
-        GenerateMoves(board, Moves, board.GetCurrentPlayer());
+        GenerateMoves(board, Moves, board.GetCurrentPlayer(),false);
     }
-    public void ComputeMoves(Board_AI board, ArrayList<Move_AI> MovesList) {
-        GenerateMoves(board, MovesList, board.GetCurrentPlayer());
+    public void ComputeMoves(Board_AI board, ArrayList<Move_AI> MovesList,boolean search) {
+        GenerateMoves(board, MovesList, board.GetCurrentPlayer(),search);
     }
 
-    public void GenerateMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
-        Moves.clear();
+    public void GenerateMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour, boolean search) {
+        if(!search)
+            Moves.clear();
 
         GetKingMoves(board, Moves, colour);
         GetElephantMoves(board, Moves, colour);

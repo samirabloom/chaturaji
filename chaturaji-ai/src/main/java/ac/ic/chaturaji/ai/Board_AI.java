@@ -209,19 +209,19 @@ public class Board_AI implements Cloneable{
         // Check if the piece moved was a pawn. If so, determine its promotion piece and update
         // the relevant board.
 
-        if ((BitBoards[theMove.getPiece()] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0) {
+        if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.KNIGHT_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.KNIGHT_PAWNS);
         }
-        else if ((BitBoards[theMove.getPiece()] & BitBoards[GameConstants.BOAT_PAWNS]) != 0) {
+        else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.BOAT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.BOAT_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.BOAT_PAWNS);
         }
-        else if ((BitBoards[theMove.getPiece()] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0) {
+        else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.ELEPHANT_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.ELEPHANT_PAWNS);
         }
-        else if ((BitBoards[theMove.getPiece()] & BitBoards[GameConstants.KING_PAWNS]) != 0) {
+        else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KING_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.KING_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.KING_PAWNS);
         }

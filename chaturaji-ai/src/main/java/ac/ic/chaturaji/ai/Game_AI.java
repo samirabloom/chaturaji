@@ -25,8 +25,8 @@ public class Game_AI {
         int[] kings = new int[] {0,0,0,0};
 
         Players = new Player_AI[4];
-        Players[GameConstants.YELLOW] = new PlayerHuman(GameConstants.YELLOW, points, kings);
-        Players[GameConstants.BLUE] = new PlayerHuman(GameConstants.BLUE, points, kings);
+        Players[GameConstants.YELLOW] = new PlayerComp(GameConstants.YELLOW, points, kings);
+        Players[GameConstants.BLUE] = new PlayerComp(GameConstants.BLUE, points, kings);
         Players[GameConstants.RED] = new PlayerHuman(GameConstants.RED, points, kings);
         Players[GameConstants.GREEN] = new PlayerComp(GameConstants.GREEN, points, kings);
     }
@@ -57,7 +57,6 @@ public class Game_AI {
                 // AI player, just generate a move.
                 AIPlayer = (PlayerComp)Players[board.GetCurrentPlayer()];
                 move = AIPlayer.GetMove(board);
-                board.Print();
             }
 
 
