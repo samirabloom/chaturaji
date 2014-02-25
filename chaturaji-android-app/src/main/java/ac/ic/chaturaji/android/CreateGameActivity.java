@@ -1,7 +1,9 @@
 package ac.ic.chaturaji.android;
 
+import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 /**
  * Created by Haider on 18/02/14.
@@ -58,8 +61,28 @@ public class CreateGameActivity extends Activity {
         public void onClick(View theView) {
 
             Intent startGame = new Intent(CreateGameActivity.this, GameActivity.class);
-            startGame.putExtra("numberOfAI", numberOfAI);
-            startActivity(startGame);
+
+            PostGame postgame = new PostGame();
+
+            try {
+
+                postgame.execute(numberOfAI);
+                String state = postgame.get();
+                System.out.println(state);
+
+                if(state.equals("Error")){
+                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                }
+                else{
+
+                    startActivity(startGame);
+                }
+
+            }
+            catch(Exception e){
+
+                e.printStackTrace();
+            }
         }
     };
 
@@ -99,6 +122,16 @@ public class CreateGameActivity extends Activity {
         }
     };
 
+    private class PostGame extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... AIs) {
+            ChatuService chatuService = new ChatuService();
+            String state = chatuService.createGame(AIs[0]);
+            return state;
+        }
+
+    }
     /* End of Haider's code block */
 
     @Override

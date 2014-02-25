@@ -32,16 +32,6 @@ public class GameActivity extends Activity {
 
         setContentView(R.layout.in_game_blue);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.
-                ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        Intent intent =getIntent();
-        numberOfAIs = intent.getStringExtra("numberOfAI");
-        System.out.println(numberOfAIs);
-        PostGame postgame = new PostGame();
-        postgame.execute(numberOfAIs);
-
         /* Following code done by Kadir Sekha */
 
         set_pieces();
@@ -612,22 +602,5 @@ public class GameActivity extends Activity {
         Board[source_column][source_row].setImageResource(0);
     }
 
-    /* This makes the HTTP request thread safe - Haider's code */
 
-    private class PostGame extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected String doInBackground(String... AIs) {
-            ChatuService chatuService = new ChatuService();
-            String state = chatuService.createGame(AIs[0]);
-            return state;
-        }
-
-        protected void onPostExecute(String state) {
-            System.out.println(state);
-            if(state.equals("Error")){
-                Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 }

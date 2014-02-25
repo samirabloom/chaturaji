@@ -53,7 +53,7 @@ public class GameRoomAdapter extends BaseAdapter {
         Game current = gamesList.get(i);
         List<Player> players = current.getPlayers();
 
-        for (int j = 1; j < 4; j++) {
+        for (int j = 1; j < players.size(); j++) {
             if (players.get(j) != null) {
                 if (players.get(j).getType() == PlayerType.AI)
                     ais++;
