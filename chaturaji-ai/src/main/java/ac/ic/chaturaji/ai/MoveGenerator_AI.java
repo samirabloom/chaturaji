@@ -317,11 +317,10 @@ public class MoveGenerator_AI
     }
 
 
-    // Calculate the elephant moves. Slightly more involved as the number of possible moves may
-    // extend over a whole rank or file.
     private void GetElephantMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour)
     {
         long elephantBoard = board.GetBitBoard(GameConstants.ELEPHANT + colour);
+
         int eSquare;
         Move_AI newMove;
         int destination;
@@ -350,6 +349,10 @@ public class MoveGenerator_AI
                 newMove = new Move_AI(GameConstants.ELEPHANT + colour, eSquare, destination);
                 DetermineMove(board, colour, destination, newMove);
                 Moves.add(newMove);
+
+                // Check if the move added was a capture - if so, we cannot continue along this line of attack!
+                if (newMove.getCaptured() != GameConstants.EMPTY_SQUARE)
+                    break;
             }
     }
 

@@ -8,7 +8,6 @@ public class Chaturaji_AI
     public static void main(String[] args)
     {
         Game_AI game = new Game_AI();
-        game.Run();
         System.exit(0);
     }
 }
