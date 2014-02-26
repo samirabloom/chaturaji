@@ -32,7 +32,10 @@ public class GameActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.in_game_blue);
+        String colour = getIntent().getStringExtra("colour");
+        int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
+
+        setContentView(identifier);
 
         set_pieces();
         draw_pieces();
@@ -73,9 +76,17 @@ public class GameActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.in_game_blue);
+        String colour = getIntent().getStringExtra("colour");
+        int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
+        setContentView(identifier);
         draw_pieces();
         play_game();
+
+        if((selected_column != -1) && (selected_row != -1) && (!moved))
+        {
+            select_piece(selected_column, selected_row);
+            show_valid_moves(selected_column, selected_row);
+        }
     }
 
     public void set_pieces() {

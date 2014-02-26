@@ -39,6 +39,11 @@
                 android:name=".SignUpActivity"
                 android:label="Sign up" >
         </activity>
+        <activity
+                android:name=".ChooseColour"
+                android:label="Choose Colour">
+        </activity>
+
     </application>
 
 </manifest>

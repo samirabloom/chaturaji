@@ -56,7 +56,7 @@ public class MainMenu extends Activity {
         @Override
         public void onClick(View theView) {
 
-            Intent getSingleGame = new Intent(MainMenu.this, GameActivity.class);
+            Intent getSingleGame = new Intent(MainMenu.this, ChooseColour.class);
             PostGame postgame = new PostGame();
             startActivity(getSingleGame);
 

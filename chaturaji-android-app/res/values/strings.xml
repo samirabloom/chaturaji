@@ -12,6 +12,10 @@
     <string name="forgot_password">Forgot your password?</string>
     <string name="login">Login</string>
     <string name="chaturaji">Chaturaji</string>
+    <string name="blue">Blue</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="yellow">Yellow</string>
 
     <color name="main_colour">#2E2E2E</color>
     <color name="white">#FFFFFF</color>
