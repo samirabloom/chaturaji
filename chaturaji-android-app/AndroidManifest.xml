@@ -35,6 +35,10 @@
                 android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
                 android:label="In-Game" >
         </activity>
+        <activity
+                android:name=".SignUpActivity"
+                android:label="Sign up" >
+        </activity>
     </application>
 
 </manifest>

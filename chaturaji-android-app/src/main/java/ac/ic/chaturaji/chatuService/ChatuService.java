@@ -62,10 +62,12 @@ public class ChatuService{
             ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
             httpClient = new DefaultHttpClient(ccm, params);
+
             }
 
         catch (Exception e) {
             httpClient = new DefaultHttpClient();
+
         }
     }
 
@@ -80,6 +82,8 @@ public class ChatuService{
             HttpResponse response = httpClient.execute(request);
             HttpEntity entity = response.getEntity();
             games = org.apache.http.util.EntityUtils.toString(entity);
+            System.out.println(games);
+
 
         }
 
@@ -87,7 +91,9 @@ public class ChatuService{
 
         e.printStackTrace();
 
+
         }
+
 
         return games;
     }
