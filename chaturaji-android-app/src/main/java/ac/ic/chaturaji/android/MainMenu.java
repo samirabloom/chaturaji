@@ -58,8 +58,9 @@ public class MainMenu extends Activity {
 
             Intent getSingleGame = new Intent(MainMenu.this, GameActivity.class);
             PostGame postgame = new PostGame();
+            startActivity(getSingleGame);
 
-            try {
+            /*try {
 
                 postgame.execute("3");
                 String state = postgame.get();
@@ -77,7 +78,7 @@ public class MainMenu extends Activity {
             catch(Exception e){
 
                 e.printStackTrace();
-            }
+            }*/
 
         }
     };

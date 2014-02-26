@@ -16,7 +16,8 @@ import android.widget.Toast;
 public class GameActivity extends Activity {
 
     private final android.widget.ImageView[][] Board = new android.widget.ImageView[8][8];
-    private int[][] pieces = new int[8][8];
+    private int[][] pieces_colour = new int[8][8];
+    private int[][] pieces_type = new int[8][8];
     private int selected_column = -1; // -1 if nothing selected
     private int selected_row = -1; // -1 if nothing selected
     private boolean[][] valid_moves = new boolean[8][8];
@@ -36,6 +37,172 @@ public class GameActivity extends Activity {
 
         set_pieces();
         draw_pieces();
+        play_game();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable("pieces_colour", pieces_colour);
+        savedInstanceState.putSerializable("pieces_type", pieces_type);
+        savedInstanceState.putInt("selected_column", selected_column);
+        savedInstanceState.putInt("selected_row", selected_row);
+        savedInstanceState.putSerializable("valid_moves", valid_moves);
+        savedInstanceState.putBoolean("moved", moved);
+        savedInstanceState.putString("numberOfAIs", numberOfAIs);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        pieces_colour = (int[][]) savedInstanceState.getSerializable("pieces_colour");
+        pieces_type = (int[][]) savedInstanceState.getSerializable("pieces_type");
+        selected_column = savedInstanceState.getInt("selected_column");
+        selected_row = savedInstanceState.getInt("selected_row");
+        valid_moves = (boolean[][]) savedInstanceState.getSerializable("valid_moves");
+        moved = savedInstanceState.getBoolean("moved");
+        numberOfAIs = savedInstanceState.getString("numberOfAIs");
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.in_game_blue);
+        draw_pieces();
+        play_game();
+    }
+
+    public void set_pieces() {
+
+        //pieces_colour: 0 if empty, 1 if blue, 2 if red, 3 if green, 4 if yellow
+        //pieces_type: 0 if empty 1 if pawn, 2 if ship, 3 if knight, 4 if elephant, 5 if king
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+            {
+                pieces_colour[i][j] = 0;
+                pieces_type[i][j] = 0;
+            }
+
+        for(int i = 0; i <= 3; i++)
+            for(int j = 0; j <= 1; j++)
+            {
+                pieces_colour[i][j] = 1;
+
+                if(j == 1)
+                    pieces_type[i][j] = 1;
+            }
+
+        for(int i = 0; i <= 1; i++)
+            for(int j = 4; j <= 7; j++)
+            {
+                pieces_colour[i][j] = 2;
+
+                if(i == 1)
+                    pieces_type[i][j] = 1;
+            }
+
+        for(int i = 4; i <= 7; i++)
+            for(int j = 6; j <= 7; j++)
+            {
+                pieces_colour[i][j] = 3;
+
+                if(j == 6)
+                    pieces_type[i][j] = 1;
+            }
+
+        for(int i = 6; i <= 7; i++)
+            for(int j = 0; j <= 3; j++)
+            {
+                pieces_colour[i][j] = 4;
+
+                if(i == 6)
+                    pieces_type[i][j] = 1;
+            }
+
+        pieces_type[0][0] = 2;
+        pieces_type[0][7] = 2;
+        pieces_type[7][7] = 2;
+        pieces_type[7][0] = 2;
+
+        pieces_type[1][0] = 3;
+        pieces_type[0][6] = 3;
+        pieces_type[6][7] = 3;
+        pieces_type[7][1] = 3;
+
+        pieces_type[2][0] = 4;
+        pieces_type[0][5] = 4;
+        pieces_type[5][7] = 4;
+        pieces_type[7][2] = 4;
+
+        pieces_type[3][0] = 5;
+        pieces_type[0][4] = 5;
+        pieces_type[4][7] = 5;
+        pieces_type[7][3] = 5;
+
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                valid_moves[i][j] = false;
+    }
+
+    public void draw_pieces() {
+
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+            {
+                char column_letter = (char)('A' + i);
+                char row_number = (char)('1' + j);
+                String square = "" + column_letter + row_number;
+                int identifier = getResources().getIdentifier(square, "id", GameActivity.this.getPackageName());
+                Board[i][j] = (android.widget.ImageView) findViewById(identifier);
+            }
+
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+            {
+                if(pieces_colour[i][j] != 0)
+                {
+                    String colour;
+                    if(pieces_colour[i][j] == 1)
+                        colour = "blue";
+                    else if(pieces_colour[i][j] == 2)
+                        colour = "red";
+                    else if(pieces_colour[i][j] == 3)
+                        colour = "green";
+                    else if(pieces_colour[i][j] == 4)
+                        colour = "yellow";
+                    else
+                        colour = "";
+
+                    String piece_type;
+
+                    if(pieces_type[i][j] == 1)
+                        piece_type = "pawn";
+                    else if(pieces_type[i][j] == 2)
+                        piece_type = "boat";
+                    else if(pieces_type[i][j] == 3)
+                        piece_type = "knight";
+                    else if(pieces_type[i][j] == 4)
+                        piece_type = "elephant";
+                    else if(pieces_type[i][j] == 5)
+                        piece_type = "king";
+                    else
+                        piece_type = "";
+
+                    String piece = colour + piece_type;
+                    int identifier = getResources().getIdentifier(piece, "drawable", GameActivity.this.getPackageName());
+                    Board[i][j].setImageResource(identifier);
+                }
+            }
+    }
+
+    public void play_game() {
 
         int i;
         int j;
@@ -72,118 +239,9 @@ public class GameActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    //This method needs sorting out, need to find a way so the game doesn't restart
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.in_game_blue);
-        draw_pieces();
-    }
-
-    public void set_pieces() {
-
-        //0 if empty
-        //1 if blue
-        //2 if red
-        //3 if green
-        //4 if yellow
-
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
-                pieces[i][j] = 0;
-            }
-
-        for(int i = 0; i <= 3; i++)
-            for(int j = 0; j <= 1; j++)
-            {
-                pieces[i][j] = 1;
-            }
-
-        for(int i = 0; i <= 1; i++)
-            for(int j = 4; j <= 7; j++)
-            {
-                pieces[i][j] = 2;
-            }
-
-        for(int i = 4; i <= 7; i++)
-            for(int j = 6; j <= 7; j++)
-            {
-                pieces[i][j] = 3;
-            }
-
-        for(int i = 6; i <= 7; i++)
-            for(int j = 0; j <= 3; j++)
-            {
-                pieces[i][j] = 4;
-            }
-
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                valid_moves[i][j] = false;
-
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
-                char column_letter = (char)('A' + i);
-                char row_number = (char)('1' + j);
-                String square = "" + column_letter + row_number;
-                int identifier = getResources().getIdentifier(square, "id", GameActivity.this.getPackageName());
-                Board[i][j] = (android.widget.ImageView) findViewById(identifier);
-            }
-    }
-
-    public void draw_pieces() {
-
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
-                if(pieces[i][j] != 0)
-                {
-                    String colour;
-                    if(pieces[i][j] == 1)
-                        colour = "blue";
-                    else if(pieces[i][j] == 2)
-                        colour = "red";
-                    else if(pieces[i][j] == 3)
-                        colour = "green";
-                    else if(pieces[i][j] == 4)
-                        colour = "yellow";
-                    else
-                        colour = "";
-
-                    String piece_type;
-
-                    if(Board[i][j].getTag().equals("pawn"))
-                        piece_type = "pawn";
-                    else if(Board[i][j].getTag().equals("boat"))
-                        piece_type = "boat";
-                    else if(Board[i][j].getTag().equals("knight"))
-                        piece_type = "knight";
-                    else if(Board[i][j].getTag().equals("elephant"))
-                        piece_type = "elephant";
-                    else if(Board[i][j].getTag().equals("king"))
-                        piece_type = "king";
-                    else
-                        piece_type = "";
-
-                    String piece = colour + piece_type;
-                    int identifier = getResources().getIdentifier(piece, "drawable", GameActivity.this.getPackageName());
-                    Board[i][j].setImageResource(identifier);
-                }
-            }
-    }
-
     public boolean select_piece(int column, int row) {
 
-        if(pieces[column][row] != 0)
+        if(pieces_colour[column][row] != 0)
         {
             Board[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
             return true;
@@ -207,25 +265,25 @@ public class GameActivity extends Activity {
 
     public void show_valid_moves(int column, int row) {
 
-        if(Board[column][row].getTag().equals("pawn"))
+        if(pieces_type[column][row] == 1)
             pawn_valid_moves(column, row);
-        else if(Board[column][row].getTag().equals("boat"))
+        else if(pieces_type[column][row] == 2)
             boat_valid_moves(column, row);
-        else if(Board[column][row].getTag().equals("knight"))
+        else if(pieces_type[column][row] == 3)
             knight_valid_moves(column, row);
-        else if(Board[column][row].getTag().equals("elephant"))
+        else if(pieces_type[column][row] == 4)
             elephant_valid_moves(column, row);
-        else if(Board[column][row].getTag().equals("king"))
+        else if(pieces_type[column][row] == 5)
             king_valid_moves(column, row);
 
     }
 
     public void pawn_valid_moves(int column, int row) {
 
-        if(pieces[column][row] == 1 && (row <= 6))
+        if(pieces_colour[column][row] == 1 && (row <= 6))
         {
 
-            if(pieces[column][row + 1] == 0)
+            if(pieces_colour[column][row + 1] == 0)
             {
                 Board[column][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column][row + 1] = true;
@@ -233,7 +291,7 @@ public class GameActivity extends Activity {
 
             if(column <= 6)
             {
-                if((pieces[column + 1][row + 1] == 2) || (pieces[column + 1][row + 1] == 3) || (pieces[column + 1][row + 1] == 4))
+                if((pieces_colour[column + 1][row + 1] == 2) || (pieces_colour[column + 1][row + 1] == 3) || (pieces_colour[column + 1][row + 1] == 4))
                 {
                     Board[column + 1][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column + 1][row + 1] = true;
@@ -242,7 +300,7 @@ public class GameActivity extends Activity {
 
             if(column >= 1)
             {
-                if((pieces[column - 1][row + 1] == 2) || (pieces[column - 1][row + 1] == 3) || (pieces[column - 1][row + 1] == 4))
+                if((pieces_colour[column - 1][row + 1] == 2) || (pieces_colour[column - 1][row + 1] == 3) || (pieces_colour[column - 1][row + 1] == 4))
                 {
                     Board[column - 1][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column - 1][row + 1] = true;
@@ -250,9 +308,9 @@ public class GameActivity extends Activity {
             }
         }
 
-        if((pieces[column][row] == 2) && (column <= 6))
+        if((pieces_colour[column][row] == 2) && (column <= 6))
         {
-            if(pieces[column + 1][row] == 0)
+            if(pieces_colour[column + 1][row] == 0)
             {
                 Board[column + 1][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 1][row] = true;
@@ -260,7 +318,7 @@ public class GameActivity extends Activity {
 
             if(row <= 6)
             {
-                if((pieces[column + 1][row + 1] == 1) || (pieces[column + 1][row + 1] == 3) || (pieces[column + 1][row + 1] == 4))
+                if((pieces_colour[column + 1][row + 1] == 1) || (pieces_colour[column + 1][row + 1] == 3) || (pieces_colour[column + 1][row + 1] == 4))
                 {
                     Board[column + 1][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column + 1][row + 1] = true;
@@ -269,7 +327,7 @@ public class GameActivity extends Activity {
 
             if(row >= 1)
             {
-                if((pieces[column + 1][row - 1] == 1) || (pieces[column + 1][row - 1] == 3) || (pieces[column + 1][row - 1] == 4))
+                if((pieces_colour[column + 1][row - 1] == 1) || (pieces_colour[column + 1][row - 1] == 3) || (pieces_colour[column + 1][row - 1] == 4))
                 {
                     Board[column + 1][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column + 1][row - 1] = true;
@@ -277,9 +335,9 @@ public class GameActivity extends Activity {
             }
         }
 
-        if((pieces[column][row] == 3) && (row >= 1))
+        if((pieces_colour[column][row] == 3) && (row >= 1))
         {
-            if(pieces[column][row - 1] == 0)
+            if(pieces_colour[column][row - 1] == 0)
             {
                 Board[column][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column][row - 1] = true;
@@ -287,7 +345,7 @@ public class GameActivity extends Activity {
 
             if(column <= 6)
             {
-                if((pieces[column + 1][row - 1] == 1) || (pieces[column + 1][row - 1] == 2) || (pieces[column + 1][row - 1] == 4))
+                if((pieces_colour[column + 1][row - 1] == 1) || (pieces_colour[column + 1][row - 1] == 2) || (pieces_colour[column + 1][row - 1] == 4))
                 {
                     Board[column + 1][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column + 1][row - 1] = true;
@@ -296,7 +354,7 @@ public class GameActivity extends Activity {
 
             if(column >= 1)
             {
-                if((pieces[column - 1][row - 1] == 1) || (pieces[column - 1][row - 1] == 2) || (pieces[column - 1][row - 1] == 4))
+                if((pieces_colour[column - 1][row - 1] == 1) || (pieces_colour[column - 1][row - 1] == 2) || (pieces_colour[column - 1][row - 1] == 4))
                 {
                     Board[column - 1][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column - 1][row - 1] = true;
@@ -304,9 +362,9 @@ public class GameActivity extends Activity {
             }
         }
 
-        if((pieces[column][row] == 4) && (column >= 1))
+        if((pieces_colour[column][row] == 4) && (column >= 1))
         {
-            if(pieces[column - 1][row] == 0)
+            if(pieces_colour[column - 1][row] == 0)
             {
                 Board[column - 1][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 1][row] = true;
@@ -314,7 +372,7 @@ public class GameActivity extends Activity {
 
             if(row <= 6)
             {
-                if((pieces[column - 1][row + 1] == 1) || (pieces[column - 1][row + 1] == 2) || (pieces[column - 1][row + 1] == 3))
+                if((pieces_colour[column - 1][row + 1] == 1) || (pieces_colour[column - 1][row + 1] == 2) || (pieces_colour[column - 1][row + 1] == 3))
                 {
                     Board[column - 1][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column - 1][row + 1] = true;
@@ -323,7 +381,7 @@ public class GameActivity extends Activity {
 
             if(row >= 1)
             {
-                if((pieces[column - 1][row - 1] == 1) || (pieces[column - 1][row - 1] == 2) || (pieces[column - 1][row - 1] == 3))
+                if((pieces_colour[column - 1][row - 1] == 1) || (pieces_colour[column - 1][row - 1] == 2) || (pieces_colour[column - 1][row - 1] == 3))
                 {
                     Board[column - 1][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                     valid_moves[column - 1][row - 1] = true;
@@ -336,7 +394,7 @@ public class GameActivity extends Activity {
 
         if((column <= 5) && (row <= 5))
         {
-            if(pieces[column][row] != pieces[column + 2][row + 2])
+            if(pieces_colour[column][row] != pieces_colour[column + 2][row + 2])
             {
                 Board[column + 2][row + 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 2][row + 2] = true;
@@ -345,7 +403,7 @@ public class GameActivity extends Activity {
 
         if((column >= 2) && (row >= 2))
         {
-            if(pieces[column][row] != pieces[column - 2][row - 2])
+            if(pieces_colour[column][row] != pieces_colour[column - 2][row - 2])
             {
                 Board[column - 2][row - 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 2][row - 2] = true;
@@ -354,7 +412,7 @@ public class GameActivity extends Activity {
 
         if((column >= 2) && (row <= 5))
         {
-            if(pieces[column][row] != pieces[column - 2][row + 2])
+            if(pieces_colour[column][row] != pieces_colour[column - 2][row + 2])
             {
                 Board[column - 2][row + 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 2][row + 2] = true;
@@ -363,7 +421,7 @@ public class GameActivity extends Activity {
 
         if((column <= 5) && (row >= 2))
         {
-            if(pieces[column][row] != pieces[column + 2][row - 2])
+            if(pieces_colour[column][row] != pieces_colour[column + 2][row - 2])
             {
                 Board[column + 2][row - 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 2][row - 2] = true;
@@ -375,7 +433,7 @@ public class GameActivity extends Activity {
 
         if((column >= 1) && (row <= 5))
         {
-            if(pieces[column][row] != pieces[column - 1][row + 2])
+            if(pieces_colour[column][row] != pieces_colour[column - 1][row + 2])
             {
                 Board[column - 1][row + 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 1][row + 2] = true;
@@ -384,7 +442,7 @@ public class GameActivity extends Activity {
 
         if((column <= 6) && (row <= 5))
         {
-            if(pieces[column][row] != pieces[column + 1][row + 2])
+            if(pieces_colour[column][row] != pieces_colour[column + 1][row + 2])
             {
                 Board[column + 1][row + 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 1][row + 2] = true;
@@ -393,7 +451,7 @@ public class GameActivity extends Activity {
 
         if((column >= 1) && (row >= 2))
         {
-            if(pieces[column][row] != pieces[column - 1][row - 2])
+            if(pieces_colour[column][row] != pieces_colour[column - 1][row - 2])
             {
                 Board[column - 1][row - 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 1][row - 2] = true;
@@ -402,7 +460,7 @@ public class GameActivity extends Activity {
 
         if((column <= 6) && (row >= 2))
         {
-            if(pieces[column][row] != pieces[column + 1][row - 2])
+            if(pieces_colour[column][row] != pieces_colour[column + 1][row - 2])
             {
                 Board[column + 1][row - 2].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 1][row - 2] = true;
@@ -411,7 +469,7 @@ public class GameActivity extends Activity {
 
         if((column >= 2) && (row >= 1))
         {
-            if(pieces[column][row] != pieces[column - 2][row - 1])
+            if(pieces_colour[column][row] != pieces_colour[column - 2][row - 1])
             {
                 Board[column - 2][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 2][row - 1] = true;
@@ -420,7 +478,7 @@ public class GameActivity extends Activity {
 
         if((column <= 5) && (row >= 1))
         {
-            if(pieces[column][row] != pieces[column + 2][row - 1])
+            if(pieces_colour[column][row] != pieces_colour[column + 2][row - 1])
             {
                 Board[column + 2][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 2][row - 1] = true;
@@ -429,7 +487,7 @@ public class GameActivity extends Activity {
 
         if((column >= 2) && (row <= 6))
         {
-            if(pieces[column][row] != pieces[column - 2][row + 1])
+            if(pieces_colour[column][row] != pieces_colour[column - 2][row + 1])
             {
                 Board[column - 2][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 2][row + 1] = true;
@@ -438,7 +496,7 @@ public class GameActivity extends Activity {
 
         if((column <= 5) && (row <= 6))
         {
-            if(pieces[column][row] != pieces[column + 2][row + 1])
+            if(pieces_colour[column][row] != pieces_colour[column + 2][row + 1])
             {
                 Board[column + 2][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 2][row + 1] = true;
@@ -450,49 +508,49 @@ public class GameActivity extends Activity {
 
         for(int i = 1; i <= (7 - column); i++)
         {
-            if(pieces[column][row] == pieces[column + i][row])
+            if(pieces_colour[column][row] == pieces_colour[column + i][row])
                 break;
 
             Board[column + i][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
             valid_moves[column + i][row] = true;
 
-            if(pieces[column + i][row] != 0)
+            if(pieces_colour[column + i][row] != 0)
                 break;
         }
 
         for(int i = 1; i <= column; i++)
         {
-            if(pieces[column][row] == pieces[column - i][row])
+            if(pieces_colour[column][row] == pieces_colour[column - i][row])
                 break;
 
             Board[column - i][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
             valid_moves[column - i][row] = true;
 
-            if(pieces[column - i][row] != 0)
+            if(pieces_colour[column - i][row] != 0)
                 break;
         }
 
         for(int i = 1; i <= (7 - row); i++)
         {
-            if(pieces[column][row] == pieces[column][row + i])
+            if(pieces_colour[column][row] == pieces_colour[column][row + i])
                 break;
 
             Board[column][row + i].setBackgroundColor(getResources().getColor(R.color.light_blue));
             valid_moves[column][row + i] = true;
 
-            if(pieces[column][row + i] != 0)
+            if(pieces_colour[column][row + i] != 0)
                 break;
         }
 
         for(int i = 1; i <= row; i++)
         {
-            if(pieces[column][row] == pieces[column][row - i])
+            if(pieces_colour[column][row] == pieces_colour[column][row - i])
                 break;
 
             Board[column][row - i].setBackgroundColor(getResources().getColor(R.color.light_blue));
             valid_moves[column][row - i] = true;
 
-            if(pieces[column][row - i] != 0)
+            if(pieces_colour[column][row - i] != 0)
                 break;
         }
     }
@@ -501,7 +559,7 @@ public class GameActivity extends Activity {
 
         if(column >= 1)
         {
-            if(pieces[column][row] != pieces[column - 1][row])
+            if(pieces_colour[column][row] != pieces_colour[column - 1][row])
             {
                 Board[column - 1][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 1][row] = true;
@@ -510,7 +568,7 @@ public class GameActivity extends Activity {
 
         if(column <= 6)
         {
-            if(pieces[column][row] != pieces[column + 1][row])
+            if(pieces_colour[column][row] != pieces_colour[column + 1][row])
             {
                 Board[column + 1][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 1][row] = true;
@@ -519,7 +577,7 @@ public class GameActivity extends Activity {
 
         if(row >= 1)
         {
-            if(pieces[column][row] != pieces[column][row - 1])
+            if(pieces_colour[column][row] != pieces_colour[column][row - 1])
             {
                 Board[column][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column][row - 1] = true;
@@ -528,7 +586,7 @@ public class GameActivity extends Activity {
 
         if(row <= 6)
         {
-            if(pieces[column][row] != pieces[column][row + 1])
+            if(pieces_colour[column][row] != pieces_colour[column][row + 1])
             {
                 Board[column][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column][row + 1] = true;
@@ -537,7 +595,7 @@ public class GameActivity extends Activity {
 
         if((column >= 1) && (row >= 1))
         {
-            if(pieces[column][row] != pieces[column - 1][row - 1])
+            if(pieces_colour[column][row] != pieces_colour[column - 1][row - 1])
             {
                 Board[column - 1][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 1][row - 1] = true;
@@ -546,7 +604,7 @@ public class GameActivity extends Activity {
 
         if((column >= 1) && (row <= 6))
         {
-            if(pieces[column][row] != pieces[column - 1][row + 1])
+            if(pieces_colour[column][row] != pieces_colour[column - 1][row + 1])
             {
                 Board[column - 1][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column - 1][row + 1] = true;
@@ -555,7 +613,7 @@ public class GameActivity extends Activity {
 
         if((column <= 6) && (row <= 6))
         {
-            if(pieces[column][row] != pieces[column + 1][row + 1])
+            if(pieces_colour[column][row] != pieces_colour[column + 1][row + 1])
             {
                 Board[column + 1][row + 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 1][row + 1] = true;
@@ -564,7 +622,7 @@ public class GameActivity extends Activity {
 
         if((column <= 6) && (row >= 1))
         {
-            if(pieces[column][row] != pieces[column + 1][row - 1])
+            if(pieces_colour[column][row] != pieces_colour[column + 1][row - 1])
             {
                 Board[column + 1][row - 1].setBackgroundColor(getResources().getColor(R.color.light_blue));
                 valid_moves[column + 1][row - 1] = true;
@@ -574,16 +632,30 @@ public class GameActivity extends Activity {
 
     public void move(int source_column, int source_row, int destination_column, int destination_row) {
 
-        String source_tag = (String) Board[source_column][source_row].getTag();
+        String source_tag;
+
+        if(pieces_type[source_column][source_row] == 1)
+            source_tag = "pawn";
+        else if(pieces_type[source_column][source_row] == 2)
+            source_tag = "boat";
+        else if(pieces_type[source_column][source_row] == 3)
+            source_tag = "knight";
+        else if(pieces_type[source_column][source_row] == 4)
+            source_tag = "elephant";
+        else if(pieces_type[source_column][source_row] == 5)
+            source_tag = "king";
+        else
+            source_tag = "";
+
         String piece_colour;
 
-        if(pieces[source_column][source_row] == 1)
+        if(pieces_colour[source_column][source_row] == 1)
             piece_colour = "blue";
-        else if(pieces[source_column][source_row] == 2)
+        else if(pieces_colour[source_column][source_row] == 2)
             piece_colour = "red";
-        else if(pieces[source_column][source_row] == 3)
+        else if(pieces_colour[source_column][source_row] == 3)
             piece_colour = "green";
-        else if(pieces[source_column][source_row] == 4)
+        else if(pieces_colour[source_column][source_row] == 4)
             piece_colour = "yellow";
         else
             piece_colour = "empty";
@@ -592,11 +664,11 @@ public class GameActivity extends Activity {
 
         int identifier = getResources().getIdentifier(image, "drawable", GameActivity.this.getPackageName());
 
-        Board[destination_column][destination_row].setTag(source_tag);
-        Board[source_column][source_row].setTag("empty");
+        pieces_type[destination_column][destination_row] = pieces_type[source_column][source_row];
+        pieces_type[source_column][source_row] = 0;
 
-        pieces[destination_column][destination_row] = pieces[source_column][source_row];
-        pieces[source_column][source_row] = 0;
+        pieces_colour[destination_column][destination_row] = pieces_colour[source_column][source_row];
+        pieces_colour[source_column][source_row] = 0;
 
         Board[destination_column][destination_row].setImageResource(identifier);
         Board[source_column][source_row].setImageResource(0);
