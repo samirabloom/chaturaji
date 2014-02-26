@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.Window;
 import android.widget.Toast;
 
+/* Following code done by Kadir Sekha */
 
 public class GameActivity extends Activity {
 
@@ -32,8 +33,6 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.in_game_blue);
-
-        /* Following code done by Kadir Sekha */
 
         set_pieces();
         draw_pieces();
