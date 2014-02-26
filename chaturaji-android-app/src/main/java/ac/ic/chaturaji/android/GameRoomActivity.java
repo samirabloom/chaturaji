@@ -57,6 +57,7 @@ public class GameRoomActivity extends Activity {
 
         gameRooms = (ListView) findViewById(R.id.game_rooms_list);
 
+
         GetGames getgames = new GetGames();
         getgames.execute();
 
@@ -67,9 +68,13 @@ public class GameRoomActivity extends Activity {
 
         @Override
         protected String doInBackground(Void... voids) {
+
             ChatuService testService = new ChatuService();
+
             String test = testService.getGames();
+
             System.out.println(test);
+
             return test;
         }
 
@@ -79,23 +84,31 @@ public class GameRoomActivity extends Activity {
                 System.out.println(test);
                 System.out.println(gamesList.toString());
             }
+
             catch (JsonGenerationException e) {
                 Log.d("JsonGenerationException ",  e.toString());
                 e.printStackTrace();
 
-            } catch (JsonMappingException e) {
+            }
+
+            catch (JsonMappingException e) {
                 Log.d("JsonMappingException", e.toString());
                 e.printStackTrace();
 
-            } catch (IOException e) {
+            }
+
+            catch (IOException e) {
                 Log.d("IOException", e.toString());
                 e.printStackTrace();
 
             }
 
             if(gameRooms != null && gamesList != null){
+
                 gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));}
+
             else
+
                 Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
 
         }

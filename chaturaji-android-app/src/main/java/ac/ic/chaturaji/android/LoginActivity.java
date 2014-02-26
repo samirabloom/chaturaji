@@ -20,6 +20,7 @@ import android.content.Intent;
 public class LoginActivity extends Activity {
 
     Button login_button;
+    Button signup_button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,8 +32,10 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         login_button = (Button) findViewById(R.id.login_button);
+        signup_button = (Button) findViewById(R.id.signup_button);
 
         login_button.setOnClickListener(loginButtonListener);
+        signup_button.setOnClickListener(signupButtonListener);
 
 
     }
@@ -44,6 +47,16 @@ public class LoginActivity extends Activity {
 
             Intent getMainMenu = new Intent(LoginActivity.this, MainMenu.class);
             startActivity(getMainMenu);
+        }
+    };
+
+    public OnClickListener signupButtonListener = new OnClickListener(){
+
+        @Override
+        public void onClick(View theView) {
+
+            Intent getSignup = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(getSignup);
         }
     };
 
