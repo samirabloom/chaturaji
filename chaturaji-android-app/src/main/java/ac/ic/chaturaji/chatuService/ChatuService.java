@@ -4,10 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -84,13 +81,11 @@ public class ChatuService{
             games = org.apache.http.util.EntityUtils.toString(entity);
             System.out.println(games);
 
-
         }
 
         catch (Exception e){
 
         e.printStackTrace();
-
 
         }
 
@@ -106,6 +101,37 @@ public class ChatuService{
             HttpPost httpPost = new HttpPost(url);
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("numberOfAIPlayers", "3"));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            HttpResponse response = httpClient.execute(httpPost);
+            Log.d("Http Response:", Integer.toString(response.getStatusLine().getStatusCode()));
+            if(response.getStatusLine().getStatusCode() == 401)
+                return "Error";
+        }
+
+        catch (Exception e){
+
+            e.printStackTrace();
+            return "Error";
+
+        }
+
+        return "Success";
+    }
+
+    public String createAccount(String email, String password, String nickname){
+
+        String url = "https://" + localHost + ":8443/chaturaji-web-services/register";
+
+        try{
+
+            HttpPost httpPost = new HttpPost(url);
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
+            nameValuePairs.add(new BasicNameValuePair("email", email));
+            nameValuePairs.add(new BasicNameValuePair("password", password));
+            nameValuePairs.add(new BasicNameValuePair("nickname", nickname));
+
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             HttpResponse response = httpClient.execute(httpPost);

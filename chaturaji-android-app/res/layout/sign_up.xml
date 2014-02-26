@@ -57,6 +57,6 @@
             style="@style/btnStyleArsenic"
             android:gravity="center"
             android:text="Create Account"
-            android:id="@+id/button"/>
+            android:id="@+id/create_account_button"/>
 
 </LinearLayout>

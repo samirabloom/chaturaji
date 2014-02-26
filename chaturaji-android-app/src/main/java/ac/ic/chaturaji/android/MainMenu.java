@@ -51,7 +51,7 @@ public class MainMenu extends Activity {
         logout_button.setOnClickListener(logoutButttonListener);
     }
 
-    public View.OnClickListener singleButtonListener = new View.OnClickListener(){
+    private View.OnClickListener singleButtonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
@@ -82,7 +82,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    public View.OnClickListener multiButttonListener = new View.OnClickListener(){
+    private View.OnClickListener multiButttonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
@@ -92,7 +92,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    public View.OnClickListener settingsButttonListener = new View.OnClickListener(){
+    private View.OnClickListener settingsButttonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
@@ -102,7 +102,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    public View.OnClickListener logoutButttonListener = new View.OnClickListener(){
+    private View.OnClickListener logoutButttonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
