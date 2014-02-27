@@ -1111,11 +1111,28 @@
 
     <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
                   android:background="@color/main_colour"
+                  android:orientation="vertical"
                   android:layout_weight="2">
 
-        <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textColor="@color/white"
-                  android:id="@+id/testdisplay"/>
+                  android:id="@+id/blue_score"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textColor="@color/white"
+                  android:id="@+id/red_score"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textColor="@color/white"
+                  android:id="@+id/green_score"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textColor="@color/white"
+                  android:id="@+id/yellow_score"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textColor="@color/white"
+                  android:id="@+id/turn"/>
 
     </LinearLayout>
 </LinearLayout>

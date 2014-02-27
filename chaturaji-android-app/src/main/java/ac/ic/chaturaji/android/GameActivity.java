@@ -10,6 +10,7 @@ import android.os.StrictMode;
 import android.view.*;
 import android.view.Menu;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /* Following code done by Kadir Sekha */
@@ -24,6 +25,11 @@ public class GameActivity extends Activity {
     private boolean[][] valid_moves = new boolean[8][8];
     private boolean moved = false;
     private String numberOfAIs = "0";
+    private int blue_score = 0;
+    private int red_score = 0;
+    private int green_score = 0;
+    private int yellow_score = 0;
+    private int move_count = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,12 +40,12 @@ public class GameActivity extends Activity {
 
         String colour = getIntent().getStringExtra("colour");
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
-
         setContentView(identifier);
 
         set_pieces();
         draw_pieces();
         play_game();
+        set_scoreboard();
     }
 
     @Override
@@ -59,6 +65,11 @@ public class GameActivity extends Activity {
         savedInstanceState.putSerializable("valid_moves", valid_moves);
         savedInstanceState.putBoolean("moved", moved);
         savedInstanceState.putString("numberOfAIs", numberOfAIs);
+        savedInstanceState.putInt("blue_score", blue_score);
+        savedInstanceState.putInt("red_score", red_score);
+        savedInstanceState.putInt("green_score", green_score);
+        savedInstanceState.putInt("yellow_score", yellow_score);
+        savedInstanceState.putInt("move_count", move_count);
     }
 
     @Override
@@ -71,6 +82,11 @@ public class GameActivity extends Activity {
         valid_moves = (boolean[][]) savedInstanceState.getSerializable("valid_moves");
         moved = savedInstanceState.getBoolean("moved");
         numberOfAIs = savedInstanceState.getString("numberOfAIs");
+        blue_score = savedInstanceState.getInt("blue_score");
+        red_score = savedInstanceState.getInt("red_score");
+        green_score = savedInstanceState.getInt("green_score");
+        yellow_score = savedInstanceState.getInt("yellow_score");
+        move_count = savedInstanceState.getInt("move_count");
     }
 
     @Override
@@ -81,6 +97,7 @@ public class GameActivity extends Activity {
         setContentView(identifier);
         draw_pieces();
         play_game();
+        set_scoreboard();
 
         if((selected_column != -1) && (selected_row != -1) && (!moved))
         {
@@ -231,6 +248,8 @@ public class GameActivity extends Activity {
                         {
                             move(selected_column, selected_row, column, row);
                             moved = true;
+                            move_count++;
+                            set_scoreboard();
                         }
 
                         clear_selections();
@@ -249,9 +268,76 @@ public class GameActivity extends Activity {
         }
     }
 
+    public void set_scoreboard() {
+
+        TextView blue_score_text = (TextView) findViewById(R.id.blue_score);
+        TextView red_score_text = (TextView) findViewById(R.id.red_score);
+        TextView green_score_text = (TextView) findViewById(R.id.green_score);
+        TextView yellow_score_text = (TextView) findViewById(R.id.yellow_score);
+
+        String blue = "Blue: " + blue_score;
+        blue_score_text.setText(blue);
+
+        String red = "Red: " + red_score;
+        red_score_text.setText(red);
+
+        String green = "Green: " + green_score;
+        green_score_text.setText(green);
+
+        String yellow = "Yellow: " + yellow_score;
+        yellow_score_text.setText(yellow);
+
+        TextView show_turn = (TextView) findViewById(R.id.turn);
+        int turn = (move_count % 4) + 1;
+        String colour;
+
+        if(turn == 1)
+            colour = "Blue";
+        else if(turn == 2)
+            colour = "Red";
+        else if(turn == 3)
+            colour = "Green";
+        else if(turn == 4)
+            colour = "Yellow";
+        else
+            colour = "";
+
+        String turn_string = "It is " + colour + "'s turn to move";
+        show_turn.setText(turn_string);
+    }
+
+    public void adjust_scoreboard(int source_column, int source_row, int destination_column, int destination_row) {
+
+        int score;
+
+        if(pieces_type[destination_column][destination_row] == 1)
+            score = 1;
+        else if(pieces_type[destination_column][destination_row] == 2)
+            score = 2;
+        else if(pieces_type[destination_column][destination_row] == 3)
+            score = 3;
+        else if(pieces_type[destination_column][destination_row] == 4)
+            score = 4;
+        else if(pieces_type[destination_column][destination_row] == 5)
+            score = 5;
+        else
+            score = 0;
+
+        if(pieces_colour[source_column][source_row] == 1)
+            blue_score = blue_score + score;
+        else if(pieces_colour[source_column][source_row] == 2)
+            red_score = red_score + score;
+        else if(pieces_colour[source_column][source_row] == 3)
+            green_score = green_score + score;
+        else if(pieces_colour[source_column][source_row] == 4)
+            yellow_score = yellow_score + score;
+
+    }
+
     public boolean select_piece(int column, int row) {
 
-        if(pieces_colour[column][row] != 0)
+        int turn = (move_count % 4) + 1;
+        if((pieces_colour[column][row] != 0) && (pieces_colour[column][row] == turn))
         {
             Board[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
             return true;
@@ -671,8 +757,10 @@ public class GameActivity extends Activity {
             piece_colour = "empty";
 
         String image = piece_colour + source_tag;
-
         int identifier = getResources().getIdentifier(image, "drawable", GameActivity.this.getPackageName());
+
+        if((pieces_type[destination_column][destination_row] != 0) && (pieces_colour[destination_column][destination_row] != 0))
+            adjust_scoreboard(source_column, source_row, destination_column, destination_row);
 
         pieces_type[destination_column][destination_row] = pieces_type[source_column][source_row];
         pieces_type[source_column][source_row] = 0;
