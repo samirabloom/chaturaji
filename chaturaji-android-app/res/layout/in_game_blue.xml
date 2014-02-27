@@ -9,7 +9,7 @@
                   android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:background="@color/main_colour"
+                  android:background="@drawable/custom_border"
                   android:layout_weight="1"
                   android:id="@+id/board_layout">
 
