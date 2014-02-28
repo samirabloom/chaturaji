@@ -38,7 +38,6 @@ public class MainMenu extends Activity {
 
         setContentView(R.layout.main_menu);
 
-        /* Following code done by Haider Qazi */
 
         single_player_button = (Button) findViewById(R.id.single_player_button);
         multi_player_button = (Button) findViewById(R.id.multi_player_button);
@@ -113,7 +112,7 @@ public class MainMenu extends Activity {
         }
     };
 
-        /* This makes the HTTP request thread safe - Haider's code */
+
 
     private class PostGame extends AsyncTask<String, Void, String> {
 
@@ -126,7 +125,7 @@ public class MainMenu extends Activity {
 
     }
 
-       /* End of Haider's code block */
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

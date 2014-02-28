@@ -3,6 +3,7 @@ package ac.ic.chaturaji.android;
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.content.Intent;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by Haider on 12/02/14.
@@ -21,6 +24,11 @@ public class LoginActivity extends Activity {
 
     Button login_button;
     Button signup_button;
+    EditText email_edittext;
+    EditText password_edittext;
+
+    String email ="";
+    String password ="";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +41,8 @@ public class LoginActivity extends Activity {
 
         login_button = (Button) findViewById(R.id.login_button);
         signup_button = (Button) findViewById(R.id.signup_button);
+        email_edittext = (EditText) findViewById(R.id.email_login);
+        password_edittext = (EditText) findViewById(R.id.password_login);
 
         login_button.setOnClickListener(loginButtonListener);
         signup_button.setOnClickListener(signupButtonListener);
@@ -45,8 +55,36 @@ public class LoginActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
+            email = email_edittext.getText().toString();
+            password = password_edittext.getText().toString();
+
             Intent getMainMenu = new Intent(LoginActivity.this, MainMenu.class);
-            startActivity(getMainMenu);
+            PostGame postgame = new PostGame();
+
+            try {
+
+                postgame.execute("");
+                String state = postgame.get();
+                System.out.println(state);
+
+                if(state.equals("Error")){
+                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                }
+
+                else if(state.equals("Invalid")){
+                    Toast.makeText(getApplicationContext(), "There was a problem logging in. Have you entered the correct details?", Toast.LENGTH_LONG).show();
+                }
+
+                else{
+
+                    startActivity(getMainMenu);
+                }
+
+            }
+            catch(Exception e){
+
+                e.printStackTrace();
+            }
         }
     };
 
@@ -59,6 +97,19 @@ public class LoginActivity extends Activity {
             startActivity(getSignup);
         }
     };
+
+    private class PostGame extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... info) {
+            ChatuService chatuService = new ChatuService();
+
+            String state = chatuService.login(email, password);
+
+            return state;
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

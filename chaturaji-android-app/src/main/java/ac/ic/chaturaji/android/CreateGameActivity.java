@@ -37,7 +37,6 @@ public class CreateGameActivity extends Activity {
 
         setContentView(R.layout.create_game);
 
-        /* Following code done by Haider Qazi */
 
         start_game_button = (Button) findViewById(R.id.start_game_button);
         radioAI = (RadioGroup) findViewById(R.id.radioAI);
@@ -132,7 +131,6 @@ public class CreateGameActivity extends Activity {
         }
 
     }
-    /* End of Haider's code block */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -34,7 +34,6 @@ import java.util.List;
  * Created by Haider on 12/02/14.
  */
 
-/* Following code mostly done by Haider Qazi - except for a few lines*/
 
 public class GameRoomActivity extends Activity {
 
@@ -125,7 +124,6 @@ public class GameRoomActivity extends Activity {
         }
     };
 
-    /* End of Haider's code block */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

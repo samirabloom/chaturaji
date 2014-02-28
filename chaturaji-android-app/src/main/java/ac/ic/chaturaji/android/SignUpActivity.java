@@ -17,7 +17,6 @@ import android.widget.Toast;
  * Created by Haider on 26/02/14.
  */
 
-/* Following code done by Haider Qazi */
 
 public class SignUpActivity extends Activity {
 
@@ -70,6 +69,11 @@ public class SignUpActivity extends Activity {
                 if(state.equals("Error")){
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
                 }
+
+                else if(state.equals("Invalid")){
+                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem logging in.", Toast.LENGTH_LONG).show();
+                }
+
                 else{
 
                     startActivity(createAccountIntent);
@@ -90,12 +94,16 @@ public class SignUpActivity extends Activity {
         protected String doInBackground(String... info) {
             ChatuService chatuService = new ChatuService();
             String state = chatuService.createAccount(emailString, passwordString, nicknameString);
+
+            if(state.equals("Success"))
+                state = chatuService.login(emailString, passwordString);
+
             return state;
         }
 
     }
 
-    /* End of Haider's code block */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

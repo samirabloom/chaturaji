@@ -17,7 +17,6 @@ import java.util.List;
  * Created by Haider on 12/02/14.
  */
 
-/* Following code by Haider Qazi */
 
 public class GameRoomAdapter extends BaseAdapter {
 
