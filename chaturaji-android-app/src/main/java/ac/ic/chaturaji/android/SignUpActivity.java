@@ -3,6 +3,7 @@ package ac.ic.chaturaji.android;
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -53,9 +54,18 @@ public class SignUpActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
+            SharedPreferences settings = getSharedPreferences("main", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("sound", true);
+
             emailString = email.getText().toString();
             nicknameString = nickname.getText().toString();
             passwordString = password.getText().toString();
+
+            editor.putString("email", emailString);
+            editor.putString("password", passwordString);
+
+            editor.commit();
 
             Intent createAccountIntent = new Intent(SignUpActivity.this, MainMenu.class);
             PostGame postgame = new PostGame();

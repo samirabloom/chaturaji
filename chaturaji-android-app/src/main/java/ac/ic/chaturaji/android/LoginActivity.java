@@ -3,6 +3,7 @@ package ac.ic.chaturaji.android;
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -55,8 +56,17 @@ public class LoginActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
+            SharedPreferences settings = getSharedPreferences("main", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("sound", true);
+
             email = email_edittext.getText().toString();
             password = password_edittext.getText().toString();
+
+            editor.putString("email", email);
+            editor.putString("password", password);
+
+            editor.commit();
 
             Intent getMainMenu = new Intent(LoginActivity.this, MainMenu.class);
             PostGame postgame = new PostGame();

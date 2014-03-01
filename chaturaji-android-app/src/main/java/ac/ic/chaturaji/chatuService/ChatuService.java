@@ -20,8 +20,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -45,6 +44,8 @@ public class ChatuService{
 
     private String localHost = "192.168.2.2"; // Put your server address here...
     private HttpClient httpClient;
+    private String email = "";
+    private String password = "";
 
     public ChatuService(){
 
@@ -107,13 +108,65 @@ public class ChatuService{
         String url = "https://" + localHost + ":8443/chaturaji-web-services/game";
 
         try{
+
+            CredentialsProvider credsProvider = new BasicCredentialsProvider();
+
+            HttpClientContext context = HttpClientContext.create();
+
+            credsProvider.setCredentials(
+                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+                    new UsernamePasswordCredentials(email, password));
+
+            context.setCredentialsProvider(credsProvider);
+
             HttpPost httpPost = new HttpPost(url);
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("numberOfAIPlayers", "3"));
+            nameValuePairs.add(new BasicNameValuePair("numberOfAIPlayers", AIOpps));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-            HttpResponse response = httpClient.execute(httpPost);
-            Log.d("Http Response:", Integer.toString(response.getStatusLine().getStatusCode()));
+            HttpResponse response = httpClient.execute(httpPost, context);
+
+            System.out.println(response.getStatusLine().getStatusCode());
+
+            if(response.getStatusLine().getStatusCode() == 401)
+                return "Error";
+        }
+
+        catch (Exception e){
+
+            e.printStackTrace();
+            return "Error";
+
+        }
+
+        return "Success";
+    }
+
+    public String joinGame(String gameId){
+
+        String url = "https://" + localHost + ":8443/chaturaji-web-services/joinGame";
+
+        try{
+
+            CredentialsProvider credsProvider = new BasicCredentialsProvider();
+
+            HttpClientContext context = HttpClientContext.create();
+
+            credsProvider.setCredentials(
+                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+                    new UsernamePasswordCredentials(email, password));
+
+            context.setCredentialsProvider(credsProvider);
+
+            HttpPost httpPost = new HttpPost(url);
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair("gameId", gameId));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            HttpResponse response = httpClient.execute(httpPost, context);
+
+            System.out.println(response.getStatusLine().getStatusCode());
+
             if(response.getStatusLine().getStatusCode() == 401)
                 return "Error";
         }
@@ -209,6 +262,20 @@ public class ChatuService{
 
 
         return "Success";
+    }
+
+    public void setEmailPassword(String email, String password){
+
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public String getPassword(){
+        return password;
     }
 
 }
