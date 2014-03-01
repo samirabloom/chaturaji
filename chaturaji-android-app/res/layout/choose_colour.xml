@@ -1,10 +1,10 @@
-<LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/main_colour"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:weightSum="1">
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/main_colour"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
     <LinearLayout android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -30,62 +30,41 @@
                    android:src="@drawable/ic_launcher"/>
     </LinearLayout>
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:text="@string/user_pass"
-            android:textSize="15sp"
-            android:textColor="@color/white"/>
-
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Email Address"
-            android:ems="10"
-            android:textColor="@color/white"
-            android:id="@+id/email_login"/>
-
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:text="@string/password"
-            android:ems="10"
-            android:textColor="@color/white"
-            android:id="@+id/password_login"/>
-
     <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="218dp"
+                  android:layout_height="300dp"
                   android:orientation="vertical"
                   android:layout_gravity="center"
                   android:gravity="center" android:weightSum="1">
         <Button
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
-                android:text="@string/login"
+                android:text="@string/blue"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:gravity="center"
                 style="@style/btnStyleArsenic"
-                android:id="@+id/login_button"/>
+                android:id="@+id/blue_button"/>
 
 
         <Button
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="@string/signup"
-                android:id="@+id/signup_button"
+                android:text="@string/red"
+                android:id="@+id/red_button"
                 style="@style/btnStyleArsenic"/>
 
         <Button
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password"
-                android:id="@+id/forgot_button"
+                android:layout_marginBottom="10dp"
+                android:text="@string/green"
+                android:id="@+id/green_button"
+                style="@style/btnStyleArsenic"/>
+
+        <Button
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:text="@string/yellow"
+                android:id="@+id/yellow_button"
                 style="@style/btnStyleArsenic"/>
 
     </LinearLayout>

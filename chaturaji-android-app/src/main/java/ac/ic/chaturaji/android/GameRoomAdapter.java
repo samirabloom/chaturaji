@@ -17,7 +17,6 @@ import java.util.List;
  * Created by Haider on 12/02/14.
  */
 
-/* Following code by Haider Qazi */
 
 public class GameRoomAdapter extends BaseAdapter {
 
@@ -84,7 +83,7 @@ public class GameRoomAdapter extends BaseAdapter {
         }
 
         if (players.get(0) != null)
-            username.setText(players.get(0).getId());
+            username.setText(players.get(0).getUser().getNickname());
 
         String display_ais = "AIs: " + String.valueOf(ais);
         String display_humans = "HUMANs: " + String.valueOf(humans);

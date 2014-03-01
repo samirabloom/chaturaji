@@ -2,34 +2,32 @@ package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.view.View.OnClickListener;
-import android.view.View;
-import android.content.Intent;
 import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by Haider on 12/02/14.
+ * Created by Haider on 26/02/14.
  */
-public class LoginActivity extends Activity {
 
-    Button login_button;
-    Button signup_button;
-    EditText email_edittext;
-    EditText password_edittext;
 
-    String email ="";
-    String password ="";
+public class SignUpActivity extends Activity {
+
+    String emailString = "";
+    String nicknameString = "";
+    String passwordString = "";
+    EditText email;
+    EditText nickname;
+    EditText password;
+    Button createAccount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,20 +36,20 @@ public class LoginActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.sign_up);
 
-        login_button = (Button) findViewById(R.id.login_button);
-        signup_button = (Button) findViewById(R.id.signup_button);
-        email_edittext = (EditText) findViewById(R.id.email_login);
-        password_edittext = (EditText) findViewById(R.id.password_login);
+        email = (EditText)findViewById(R.id.email_edit_text);
+        nickname = (EditText)findViewById(R.id.nickname_edit_text);
+        password = (EditText)findViewById(R.id.password_edit_text);
 
-        login_button.setOnClickListener(loginButtonListener);
-        signup_button.setOnClickListener(signupButtonListener);
+        createAccount = (Button)findViewById(R.id.create_account_button);
+
+        createAccount.setOnClickListener(createAccountButtonListener);
 
 
     }
 
-    public OnClickListener loginButtonListener = new OnClickListener(){
+    private View.OnClickListener createAccountButtonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
@@ -60,15 +58,16 @@ public class LoginActivity extends Activity {
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("sound", true);
 
-            email = email_edittext.getText().toString();
-            password = password_edittext.getText().toString();
+            emailString = email.getText().toString();
+            nicknameString = nickname.getText().toString();
+            passwordString = password.getText().toString();
 
-            editor.putString("email", email);
-            editor.putString("password", password);
+            editor.putString("email", emailString);
+            editor.putString("password", passwordString);
 
             editor.commit();
 
-            Intent getMainMenu = new Intent(LoginActivity.this, MainMenu.class);
+            Intent createAccountIntent = new Intent(SignUpActivity.this, MainMenu.class);
             PostGame postgame = new PostGame();
 
             try {
@@ -82,12 +81,12 @@ public class LoginActivity extends Activity {
                 }
 
                 else if(state.equals("Invalid")){
-                    Toast.makeText(getApplicationContext(), "There was a problem logging in. Have you entered the correct details?", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem logging in.", Toast.LENGTH_LONG).show();
                 }
 
                 else{
 
-                    startActivity(getMainMenu);
+                    startActivity(createAccountIntent);
                 }
 
             }
@@ -95,16 +94,7 @@ public class LoginActivity extends Activity {
 
                 e.printStackTrace();
             }
-        }
-    };
 
-    public OnClickListener signupButtonListener = new OnClickListener(){
-
-        @Override
-        public void onClick(View theView) {
-
-            Intent getSignup = new Intent(LoginActivity.this, SignUpActivity.class);
-            startActivity(getSignup);
         }
     };
 
@@ -113,13 +103,16 @@ public class LoginActivity extends Activity {
         @Override
         protected String doInBackground(String... info) {
             ChatuService chatuService = new ChatuService();
+            String state = chatuService.createAccount(emailString, passwordString, nicknameString);
 
-            String state = chatuService.login(email, password);
+            if(state.equals("Success"))
+                state = chatuService.login(emailString, passwordString);
 
             return state;
         }
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

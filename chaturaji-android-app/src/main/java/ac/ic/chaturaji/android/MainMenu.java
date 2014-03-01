@@ -3,6 +3,7 @@ package ac.ic.chaturaji.android;
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -28,6 +29,8 @@ public class MainMenu extends Activity {
     Button multi_player_button;
     Button settings_button;
     Button logout_button;
+    String email;
+    String password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,10 @@ public class MainMenu extends Activity {
 
         setContentView(R.layout.main_menu);
 
-        /* Following code done by Haider Qazi */
+        SharedPreferences settings = getSharedPreferences("main", 0);
+        email = settings.getString("email", "unknown");
+        password = settings.getString("password", "unknown");
+
 
         single_player_button = (Button) findViewById(R.id.single_player_button);
         multi_player_button = (Button) findViewById(R.id.multi_player_button);
@@ -51,13 +57,14 @@ public class MainMenu extends Activity {
         logout_button.setOnClickListener(logoutButttonListener);
     }
 
-    public View.OnClickListener singleButtonListener = new View.OnClickListener(){
+    private View.OnClickListener singleButtonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
 
-            Intent getSingleGame = new Intent(MainMenu.this, GameActivity.class);
+            Intent getSingleGame = new Intent(MainMenu.this, ChooseColour.class);
             PostGame postgame = new PostGame();
+            startActivity(getSingleGame);
 
             try {
 
@@ -68,6 +75,11 @@ public class MainMenu extends Activity {
                 if(state.equals("Error")){
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
                 }
+
+                else if(state.equals("Invalid")){
+                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem logging in.", Toast.LENGTH_LONG).show();
+                }
+
                 else{
 
                     startActivity(getSingleGame);
@@ -82,7 +94,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    public View.OnClickListener multiButttonListener = new View.OnClickListener(){
+    private View.OnClickListener multiButttonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
@@ -92,7 +104,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    public View.OnClickListener settingsButttonListener = new View.OnClickListener(){
+    private View.OnClickListener settingsButttonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
@@ -102,7 +114,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    public View.OnClickListener logoutButttonListener = new View.OnClickListener(){
+    private View.OnClickListener logoutButttonListener = new View.OnClickListener(){
 
         @Override
         public void onClick(View theView) {
@@ -112,20 +124,26 @@ public class MainMenu extends Activity {
         }
     };
 
-        /* This makes the HTTP request thread safe - Haider's code */
+
 
     private class PostGame extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... AIs) {
             ChatuService chatuService = new ChatuService();
+
+            chatuService.setEmailPassword(email, password);
+
             String state = chatuService.createGame(AIs[0]);
+
+            System.out.println(state);
+
             return state;
         }
 
     }
 
-       /* End of Haider's code block */
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
