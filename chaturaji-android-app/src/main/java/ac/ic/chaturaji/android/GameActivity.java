@@ -275,20 +275,24 @@ public class GameActivity extends Activity {
 
     public void adjust_scoreboard(int source_column, int source_row, int destination_column, int destination_row) {
 
-        int score;
+        int score = 0;
 
-        if(Board[destination_column][destination_row] instanceof Pawn)
-            score = 1;
-        else if(Board[destination_column][destination_row] instanceof Boat)
-            score = 2;
-        else if(Board[destination_column][destination_row] instanceof Knight)
-            score = 3;
-        else if(Board[destination_column][destination_row] instanceof Elephant)
-            score = 4;
-        else if(Board[destination_column][destination_row] instanceof King)
-            score = 5;
-        else
-            score = 0;
+        if(Board[destination_column][destination_row] != null)
+        {
+            if(Board[destination_column][destination_row] instanceof Pawn)
+                score = 1;
+            else if(Board[destination_column][destination_row] instanceof Boat)
+                score = 2;
+            else if(Board[destination_column][destination_row] instanceof Knight)
+                score = 3;
+            else if(Board[destination_column][destination_row] instanceof Elephant)
+                score = 4;
+            else if(Board[destination_column][destination_row] instanceof King)
+                score = 5;
+        }
+
+        if(boat_triumph(destination_column, destination_row))
+            score = score + 6;
 
         if(Board[source_column][source_row].colour == 1)
             blue_score = blue_score + score;
@@ -389,8 +393,7 @@ public class GameActivity extends Activity {
         String image = piece_colour + source_tag;
         int identifier = getResources().getIdentifier(image, "drawable", GameActivity.this.getPackageName());
 
-        if(Board[destination_column][destination_row] != null)
-            adjust_scoreboard(source_column, source_row, destination_column, destination_row);
+        adjust_scoreboard(source_column, source_row, destination_column, destination_row);
 
         Board[destination_column][destination_row] = Board[source_column][source_row];
         Board[source_column][source_row] = null;
@@ -498,4 +501,51 @@ public class GameActivity extends Activity {
                     }
                 }
     }
+
+    public boolean boat_triumph(int column, int row) {
+
+        if(Board[column + 1][row] instanceof Boat && Board[column + 1][row + 1] instanceof Boat && Board[column][row + 1] instanceof Boat)
+        {
+            Board[column + 1][row] = null;
+            Board[column + 1][row + 1] = null;
+            Board[column][row + 1] = null;
+            BoardImage[column + 1][row].setImageResource(0);
+            BoardImage[column + 1][row + 1].setImageResource(0);
+            BoardImage[column][row + 1].setImageResource(0);
+            return true;
+        }
+        else if(Board[column + 1][row] instanceof Boat && Board[column + 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
+        {
+            Board[column + 1][row] = null;
+            Board[column + 1][row - 1] = null;
+            Board[column][row - 1] = null;
+            BoardImage[column + 1][row].setImageResource(0);
+            BoardImage[column + 1][row - 1].setImageResource(0);
+            BoardImage[column][row - 1].setImageResource(0);
+            return true;
+        }
+        else if(Board[column][row + 1] instanceof Boat && Board[column - 1][row] instanceof Boat && Board[column - 1][row + 1] instanceof Boat)
+        {
+            Board[column][row + 1] = null;
+            Board[column - 1][row] = null;
+            Board[column - 1][row + 1] = null;
+            BoardImage[column][row + 1].setImageResource(0);
+            BoardImage[column - 1][row].setImageResource(0);
+            BoardImage[column - 1][row + 1].setImageResource(0);
+            return true;
+        }
+        else if(Board[column - 1][row] instanceof Boat && Board[column - 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
+        {
+            Board[column - 1][row] = null;
+            Board[column - 1][row - 1] = null;
+            Board[column][row - 1] = null;
+            BoardImage[column - 1][row].setImageResource(0);
+            BoardImage[column - 1][row - 1].setImageResource(0);
+            BoardImage[column][row - 1].setImageResource(0);
+            return true;
+        }
+
+        return false;
+    }
+
 }
