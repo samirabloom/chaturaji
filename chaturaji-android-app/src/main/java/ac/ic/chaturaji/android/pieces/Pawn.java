@@ -5,8 +5,9 @@ package ac.ic.chaturaji.android.pieces;
  */
 public class Pawn extends Pieces {
 
-    public Pawn(int colour) {
+    public Pawn(int colour, int promotion) {
         this.colour = colour;
+        this.promotion = promotion;
     }
 
     public boolean[][] valid_moves(int column, int row, Pieces[][] Board) {

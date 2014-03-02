@@ -108,16 +108,16 @@ public class GameActivity extends Activity {
     public void set_pieces() {
 
         for(int i = 0; i <= 3; i++)
-            Board[i][1] = new Pawn(1);
+            Board[i][1] = new Pawn(1, (i + 2));
 
         for(int i = 4; i <= 7; i++)
-            Board[1][i] = new Pawn(2);
+            Board[1][i] = new Pawn(2, (9 - i));
 
         for(int i = 4; i <= 7; i++)
-            Board[i][6] = new Pawn(3);
+            Board[i][6] = new Pawn(3, (9 - i));
 
         for(int i = 0; i <= 3; i++)
-            Board[6][i] = new Pawn(4);
+            Board[6][i] = new Pawn(4, (i + 2));
 
         Board[0][0] = new Boat(1);
         Board[0][7] = new Boat(2);
@@ -211,6 +211,7 @@ public class GameActivity extends Activity {
                             move(selected_column, selected_row, column, row);
                             moved = true;
                             move_count++;
+                            pawn_promotion();
 
                             if(!check_valid_moves())
                                 move_count++;
@@ -398,5 +399,103 @@ public class GameActivity extends Activity {
         BoardImage[source_column][source_row].setImageResource(0);
     }
 
+    public boolean check_promotion(int column, int row, int piece_type, int colour)
+    {
+        if(colour == 1 && row != 7)
+            return false;
+        else if(colour == 2 && column != 7)
+            return false;
+        else if(colour == 3 && row != 0)
+            return false;
+        else if(colour == 4 && column != 0)
+            return false;
 
+        if(piece_type == 2)
+            for(int i = 0; i < 8; i++)
+                for(int j = 0; j < 8; j++)
+                {
+                    if((Board[i][j] instanceof Boat) && (Board[i][j].colour == colour))
+                        return false;
+                }
+        else if(piece_type == 3)
+            for(int i = 0; i < 8; i++)
+                for(int j = 0; j < 8; j++)
+                {
+                    if((Board[i][j] instanceof Knight) && (Board[i][j].colour == colour))
+                        return false;
+                }
+        else if(piece_type == 4)
+            for(int i = 0; i < 8; i++)
+                for(int j = 0; j < 8; j++)
+                {
+                    if((Board[i][j] instanceof Elephant) && (Board[i][j].colour == colour))
+                        return false;
+                }
+        else if(piece_type == 5)
+            for(int i = 0; i < 8; i++)
+                for(int j = 0; j < 8; j++)
+                {
+                    if((Board[i][j] instanceof King) && (Board[i][j].colour == colour))
+                        return false;
+                }
+
+        return true;
+    }
+
+    public void pawn_promotion() {
+
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                if(i == 0 || j == 0 || i == 7 || j == 7)
+                {
+                    if(Board[i][j] instanceof Pawn)
+                    {
+                        if(check_promotion(i, j, Board[i][j].promotion, Board[i][j].colour))
+                        {
+                            String type;
+
+                            if(Board[i][j].promotion == 2)
+                            {
+                                Board[i][j] = new Boat(Board[i][j].colour);
+                                type = "boat";
+                            }
+                            else if(Board[i][j].promotion == 3)
+                            {
+                                Board[i][j] = new Knight(Board[i][j].colour);
+                                type = "knight";
+                            }
+                            else if(Board[i][j].promotion == 4)
+                            {
+                                Board[i][j] = new Elephant(Board[i][j].colour);
+                                type = "elephant";
+                            }
+                            else if(Board[i][j].promotion == 5)
+                            {
+                                Board[i][j] = new King(Board[i][j].colour);
+                                type = "king";
+                            }
+                            else
+                                type = "";
+
+                            String colour;
+
+                            if(Board[i][j].colour == 1)
+                                colour = "blue";
+                            else if(Board[i][j].colour == 2)
+                                colour = "red";
+                            else if(Board[i][j].colour == 3)
+                                colour = "green";
+                            else if(Board[i][j].colour == 4)
+                                colour = "yellow";
+                            else
+                                colour = "";
+
+                            String image = colour + type;
+
+                            int identifier = getResources().getIdentifier(image, "drawable", GameActivity.this.getPackageName());
+                            BoardImage[i][j].setImageResource(identifier);
+                        }
+                    }
+                }
+    }
 }

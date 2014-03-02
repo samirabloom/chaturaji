@@ -6,5 +6,6 @@ package ac.ic.chaturaji.android.pieces;
 public abstract class Pieces {
 
     public int colour;
+    public int promotion;
     public abstract boolean[][] valid_moves(int column, int row, Pieces[][] Board);
 }
