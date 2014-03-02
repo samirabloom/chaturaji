@@ -130,7 +130,7 @@ public class MainMenu extends Activity {
 
         @Override
         protected String doInBackground(String... AIs) {
-            ChatuService chatuService = new ChatuService();
+            ChatuService chatuService = ChatuService.getInstance();
 
             chatuService.setEmailPassword(email, password);
 

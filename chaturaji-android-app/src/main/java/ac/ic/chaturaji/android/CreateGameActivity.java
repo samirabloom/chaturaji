@@ -59,7 +59,7 @@ public class CreateGameActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
-            Intent startGame = new Intent(CreateGameActivity.this, GameActivity.class);
+            Intent startGame = new Intent(CreateGameActivity.this, ChooseColour.class);
 
             PostGame postgame = new PostGame();
 
@@ -125,7 +125,7 @@ public class CreateGameActivity extends Activity {
 
         @Override
         protected String doInBackground(String... AIs) {
-            ChatuService chatuService = new ChatuService();
+            ChatuService chatuService = ChatuService.getInstance();
             String state = chatuService.createGame(AIs[0]);
             return state;
         }

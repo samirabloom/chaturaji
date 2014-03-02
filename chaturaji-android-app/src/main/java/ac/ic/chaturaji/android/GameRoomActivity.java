@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import ac.ic.chaturaji.model.Game;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -55,6 +56,44 @@ public class GameRoomActivity extends Activity {
         create_game_button.setOnClickListener(createGameButtonListener);
 
         gameRooms = (ListView) findViewById(R.id.game_rooms_list);
+        gameRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String gameId = view.getTag().toString();
+
+                JoinGame joinGame = new JoinGame();
+
+                Intent gotoGame = new Intent(GameRoomActivity.this, ChooseColour.class);
+
+                try {
+
+                    joinGame.execute(gameId);
+                    String state = joinGame.get();
+                    System.out.println(state);
+
+                    if(state.equals("Error")){
+                        Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                    }
+
+                    else if(state.equals("Success")){
+                        startActivity(gotoGame);
+                    }
+
+                    else{
+
+                        Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+                catch(Exception e){
+
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
 
         GetGames getgames = new GetGames();
@@ -68,7 +107,7 @@ public class GameRoomActivity extends Activity {
         @Override
         protected String doInBackground(Void... voids) {
 
-            ChatuService testService = new ChatuService();
+            ChatuService testService = ChatuService.getInstance();
 
             String test = testService.getGames();
 
@@ -78,7 +117,9 @@ public class GameRoomActivity extends Activity {
         }
 
         protected void onPostExecute(String test) {
+
             try {
+
                 gamesList = new ObjectMapper().readValue(test, Game[].class);
                 System.out.println(test);
                 System.out.println(gamesList.toString());
@@ -124,6 +165,18 @@ public class GameRoomActivity extends Activity {
         }
     };
 
+    private class JoinGame extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... info) {
+            ChatuService chatuService = ChatuService.getInstance();
+
+            String state = chatuService.joinGame(info[0]);
+
+            return state;
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

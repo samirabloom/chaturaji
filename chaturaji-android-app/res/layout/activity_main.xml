@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:text="@string/password"
+            android:hint="@string/password"
             android:ems="10"
             android:textColor="@color/white"
             android:id="@+id/password_login"/>
