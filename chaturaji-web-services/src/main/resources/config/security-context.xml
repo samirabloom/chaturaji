@@ -6,12 +6,13 @@
                                  http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
     <!-- http security config -->
-    <security:http create-session="never" use-expressions="true" auto-config="true">
+    <security:http use-expressions="true" auto-config="true">
         <security:http-basic/>
 
         <security:port-mappings>
             <security:port-mapping http="8080" https="8443"/>
         </security:port-mappings>
+        <security:session-management session-fixation-protection="newSession"/>
 
         <!-- ALL -->
         <security:intercept-url pattern="/games" access="permitAll()" requires-channel="https"/>

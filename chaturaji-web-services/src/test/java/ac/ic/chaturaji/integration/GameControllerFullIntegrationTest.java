@@ -13,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustStrategy;
@@ -32,6 +33,7 @@ import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertEquals;
@@ -183,6 +185,10 @@ public class GameControllerFullIntegrationTest {
 
     private CloseableHttpClient createApacheClient() throws Exception {
         return HttpClients.custom()
+                // make sure the tests don't block when server fails to start up
+                .setDefaultSocketConfig(SocketConfig.custom()
+                        .setSoTimeout((int) TimeUnit.SECONDS.toMillis(4))
+                        .build())
                 .setSslcontext(
                         SSLContexts
                                 .custom()
