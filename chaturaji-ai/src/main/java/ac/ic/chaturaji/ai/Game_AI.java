@@ -1,19 +1,9 @@
 package ac.ic.chaturaji.ai;
 
-import java.util.*;
-import java.lang.*;
+import ac.ic.chaturaji.model.*;
 
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.GameStatus;
-
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.GameStatus;
-import ac.ic.chaturaji.model.Move;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.Result;
-import ac.ic.chaturaji.model.PlayerType;
+import java.util.List;
+import java.util.Scanner;
 
 public class Game_AI {
     AI api;
@@ -22,14 +12,14 @@ public class Game_AI {
     Game game;
 
     public Game_AI () {
-
-        boolean move_complete = false;
-        int source, dest, colour;
-        char ch;
         game = new Game();
         api = new AI();
         input = new char[20];
         read = new Scanner(System.in);
+
+        boolean move_complete = false;
+        int source, dest, colour;
+        char ch;
         Move move = new Move();
         Result result;
 

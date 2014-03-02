@@ -2,9 +2,6 @@ package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.config.RootConfiguration;
 import ac.ic.chaturaji.dao.GameDAO;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.web.config.WebMvcConfiguration;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,16 +18,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
@@ -66,7 +58,7 @@ public class GameControllerMockMVCIntegrationTest {
         mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    @Test
+   /* @Test
     public void shouldLoadListOfGames() throws Exception {
         // given
         when(gameDAO.getAll()).thenReturn(Arrays.asList(
@@ -102,7 +94,7 @@ public class GameControllerMockMVCIntegrationTest {
 
         assertEquals("", result.getResponse().getContentAsString());
     }
-
+*/
     @Test
     public void shouldValidateNumberOfPlayersNotTooSmall() throws Exception {
         // when
