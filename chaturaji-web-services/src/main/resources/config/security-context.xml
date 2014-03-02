@@ -13,12 +13,14 @@
             <security:port-mapping http="8080" https="8443"/>
         </security:port-mappings>
         <security:session-management session-fixation-protection="newSession"/>
+        <security:logout logout-url="/logout" delete-cookies="JSESSIONID"/>
 
         <!-- ALL -->
         <security:intercept-url pattern="/games" access="permitAll()" requires-channel="https"/>
         <security:intercept-url pattern="/echo" access="permitAll()" requires-channel="any"/>
         <!-- NOT LOGGED IN -->
         <security:intercept-url pattern="/register" access="isAnonymous()" requires-channel="https"/>
+        <security:intercept-url pattern="/logout" access="isAnonymous()" requires-channel="https"/>
         <!-- ANY USER -->
         <security:intercept-url pattern="/login" access="isAuthenticated()" requires-channel="https"/>
         <security:intercept-url pattern="/game" access="isAuthenticated()" requires-channel="https"/>

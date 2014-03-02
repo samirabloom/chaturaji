@@ -1,0 +1,23 @@
+# 401 Unauthorized
+curl -vvv -k 'https://localhost:8443/chaturaji-web-services/game' -X POST -H 'Cookie: JSESSIONID=57470AB5170F291B7F4BB4A6714AC20B' --data "numberOfAIPlayers=3"
+
+# 202 Accepted
+curl -vvv -k 'https://user_one%40email.com:password_one@localhost:8443/chaturaji-web-services/login' -X POST
+
+# 201 Created
+curl -vvv -k 'https://localhost:8443/chaturaji-web-services/game' -X POST -H 'Cookie: JSESSIONID=57470AB5170F291B7F4BB4A6714AC20B' --data "numberOfAIPlayers=3"
+
+# 403 Forbidden
+curl -vvv -k 'https://localhost:8443/chaturaji-web-services/register' -X POST -H 'Cookie: JSESSIONID=57470AB5170F291B7F4BB4A6714AC20B' --data "nickname=silly_name&password=qazQAZ1232&email=test1@email.com"
+
+# 302 Found
+curl -vvv -k 'https://localhost:8443/chaturaji-web-services/logout' -X POST -H 'Cookie: JSESSIONID=57470AB5170F291B7F4BB4A6714AC20B'
+
+# 201 Created
+curl -vvv -k 'https://localhost:8443/chaturaji-web-services/register' -X POST -H 'Cookie: JSESSIONID=57470AB5170F291B7F4BB4A6714AC20B' --data "nickname=silly_name&password=qazQAZ1232&email=test1@email.com"
+
+# 202 Accepted
+curl -vvv -k 'https://test1%40email.com:qazQAZ1232@localhost:8443/chaturaji-web-services/login' -X POST
+
+# 405 Method Not Allowed
+curl -vvv -k 'https://user_one%40email.com:password_one@localhost:8443/chaturaji-web-services/login' -X GET
