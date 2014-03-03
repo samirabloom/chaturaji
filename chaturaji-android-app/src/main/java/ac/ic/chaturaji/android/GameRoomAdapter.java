@@ -63,6 +63,7 @@ public class GameRoomAdapter extends BaseAdapter {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.game_room_item, viewGroup, false);
+        row.setTag(current.getId());
         TextView username = (TextView) row.findViewById(R.id.game_username);
         TextView ais_text = (TextView) row.findViewById(R.id.game_ais);
         TextView human_text = (TextView) row.findViewById(R.id.game_humans);

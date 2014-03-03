@@ -112,7 +112,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected String doInBackground(String... info) {
-            ChatuService chatuService = new ChatuService();
+            ChatuService chatuService = ChatuService.getInstance();
 
             String state = chatuService.login(email, password);
 

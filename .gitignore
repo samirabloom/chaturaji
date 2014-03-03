@@ -42,3 +42,6 @@ gen
 
 ## Maven Build Files
 target
+
+## Tomcat Integration Test Files
+tomcat

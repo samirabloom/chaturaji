@@ -19,6 +19,7 @@
 
     <color name="main_colour">#2E2E2E</color>
     <color name="white">#FFFFFF</color>
+    <color name="light_grey">#444444</color>
     <color name="grey">#222222</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="light_brown">#FCDCB6</color>
@@ -33,5 +34,7 @@
     <string name="elephant">elephant</string>
     <string name="king">king</string>
     <string name="empty">empty</string>
+
+    <string name="movelist">Move List</string>
 
 </resources>

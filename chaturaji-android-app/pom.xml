@@ -40,12 +40,6 @@
             <artifactId>jackson-mapper-asl</artifactId>
         </dependency>
 
-        <!-- HTTP Client -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3-beta1</version>
-        </dependency>
 
         <!-- unit testing -->
         <dependency>
