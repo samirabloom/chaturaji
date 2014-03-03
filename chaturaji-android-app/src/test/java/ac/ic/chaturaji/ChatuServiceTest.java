@@ -21,6 +21,8 @@ import static org.junit.Assert.assertThat;
  */
 public class ChatuServiceTest {
 
+    /*
+
     @Test
     public void shouldRegisterUser() throws Exception {
 
@@ -108,5 +110,7 @@ public class ChatuServiceTest {
         // this is the test account that was previously registered, therefore should be able to log in
         assertNotNull(gamesList);
     }
+
+    */
 
 }
