@@ -230,7 +230,6 @@ public class ChatuService{
             if(response.getStatusLine().getStatusCode() != 201)
                 return "Error";
 
-            Log.d("Http Response:", response.toString());
         }
 
         catch (Exception e){
@@ -287,7 +286,6 @@ public class ChatuService{
             if(response.getStatusLine().getStatusCode() != 202)
                 return "Invalid";
 
-            Log.d("Http Response:", response.toString());
         }
 
         catch (Exception e){
@@ -313,6 +311,13 @@ public class ChatuService{
 
     public String getPassword(){
         return password;
+    }
+
+    public void clearCookieCred(){
+
+        credsProviderLocal = null;
+        cookieStoreLocal = null;
+
     }
 
 }
