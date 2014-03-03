@@ -102,6 +102,8 @@ public class ChatuService{
 
     public String getGames(){
 
+        setupClient();
+
         String games = "Error";
         String url = "https://" + localHost + ":8443/chaturaji-web-services/games";
 
@@ -127,6 +129,8 @@ public class ChatuService{
     }
 
     public String createGame(String AIOpps){
+
+        setupClient();
 
         String url = "https://" + localHost + ":8443/chaturaji-web-services/game";
 
@@ -165,6 +169,8 @@ public class ChatuService{
 
     public String joinGame(String gameId){
 
+        setupClient();
+
         String url = "https://" + localHost + ":8443/chaturaji-web-services/joinGame";
 
         try{
@@ -202,6 +208,8 @@ public class ChatuService{
 
     public String createAccount(String email, String password, String nickname){
 
+        setupClient();
+
         String url = "https://" + localHost + ":8443/chaturaji-web-services/register";
 
         try{
@@ -235,6 +243,8 @@ public class ChatuService{
     }
 
     public String login(String emailString, String password){
+
+        setupClient();
 
         String email = null;
 
