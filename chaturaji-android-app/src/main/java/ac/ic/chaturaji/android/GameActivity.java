@@ -254,16 +254,16 @@ public class GameActivity extends Activity {
         TextView green_score_text = (TextView) findViewById(R.id.green_score);
         TextView yellow_score_text = (TextView) findViewById(R.id.yellow_score);
 
-        String blue = "Blue: " + blue_score;
+        String blue = "Blue Score: " + blue_score;
         blue_score_text.setText(blue);
 
-        String red = "Red: " + red_score;
+        String red = "Red Score: " + red_score;
         red_score_text.setText(red);
 
-        String green = "Green: " + green_score;
+        String green = "Green Score: " + green_score;
         green_score_text.setText(green);
 
-        String yellow = "Yellow: " + yellow_score;
+        String yellow = "Yellow Score: " + yellow_score;
         yellow_score_text.setText(yellow);
 
         TextView show_turn = (TextView) findViewById(R.id.turn);
