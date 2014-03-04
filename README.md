@@ -117,9 +117,10 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
 
 ## How to install MySQL to compile the latest DAO code:
  
- 
- First install MySQL typing this in the terminal
- 
+
+### Ubuntu Instructions
+
+First install MySQL typing this in the terminal
 
 --------------------
 
@@ -128,7 +129,7 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
 --------------------
 
 
- Install mysql client, server and the jdbc connector:
+Install mysql client, server and the jdbc connector:
  
 
 --------------------
@@ -140,4 +141,8 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
 --------------------
 
 Then you can do mvn clean install as usual
+
+### Other OSes
+
+Go to http://dev.mysql.com/downloads/mysql/ and download the correct installer
      
