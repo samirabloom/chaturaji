@@ -1,16 +1,6 @@
 package ac.ic.chaturaji.ai;
 
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.GameStatus;
-
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.GameStatus;
-import ac.ic.chaturaji.model.Move;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.Result;
-import ac.ic.chaturaji.model.ResultType;
+import ac.ic.chaturaji.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -33,6 +23,7 @@ public class AI {
         board.Print();
 
         game.setBitboards(board.GetBitBoards());
+        // TODO remove this line as the game always starts with yellow so this is not needed
         game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
 
         return game;
@@ -60,7 +51,7 @@ public class AI {
 
                 theMove = humanPlayer.GetMove(board, source, dest);
 
-                if (theMove == null){
+                if (theMove == null) {
                     result = new Result(GameStatus.IN_PLAY, game, move);
                     result.setType(ResultType.NOT_VALID);
                     return result;
@@ -79,14 +70,15 @@ public class AI {
                 else
                     result = new Result(GameStatus.IN_PLAY, game, move);
 
-                if(theMove.getTriumph())
+                if (theMove.getTriumph())
                     result.setType(ResultType.BOAT_TRIUMPH);
-                else if(theMove.getType() > 0)
+                else if (theMove.getType() > 0)
                     result.setType(ResultType.PIECE_TAKEN);
                 else
                     result.setType(ResultType.NONE_TAKEN);
 
-            } break;
+            }
+            break;
 
             case AI: {
                 playerAI = new PlayerComp(colour, player.getPoints(), player.getKingsCaptured());
@@ -95,7 +87,7 @@ public class AI {
                 // If it's the AI's turn just generate a move:
                 theMove = playerAI.GetMove(board);
 
-                if (theMove == null){
+                if (theMove == null) {
                     result = new Result(GameStatus.IN_PLAY, game, move);
                     result.setType(ResultType.NOT_VALID);
                     return result;
@@ -123,24 +115,23 @@ public class AI {
                     result = new Result(GameStatus.IN_PLAY, game, move);
 
                 //Set the type of the move
-                if(theMove.getTriumph())
+                if (theMove.getTriumph())
                     result.setType(ResultType.BOAT_TRIUMPH);
-                else if(theMove.getType() > 0)
+                else if (theMove.getType() > 0)
                     result.setType(ResultType.PIECE_TAKEN);
                 else
                     result.setType(ResultType.NONE_TAKEN);
-            } break;
+            }
+            break;
         }
-            /*
-            synchronized (this) {
-                List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
-                if (moveListenersForGame != null) {
-                    for (MoveListener moveListener : moveListenersForGame) {
-                        moveListener.pieceMoved(result);
-                    }
+        synchronized (this) {
+            List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
+            if (moveListenersForGame != null) {
+                for (MoveListener moveListener : moveListenersForGame) {
+                    moveListener.pieceMoved(result);
                 }
             }
-            */
+        }
         return result;
     }
 

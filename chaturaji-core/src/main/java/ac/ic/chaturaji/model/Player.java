@@ -9,6 +9,7 @@ public class Player extends EqualsHashCodeToString {
     private Colour colour;
     private User user;
     private int points;
+    // TODO why is this an array?  what do the different values in the array represent?
     private int[] KingsCaptured;
 
     // Dummy constructor needed to map JSON string back to Java object

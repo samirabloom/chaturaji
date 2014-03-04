@@ -13,9 +13,10 @@ public class Game extends EqualsHashCodeToString {
     private String id;
     private Date startDate;
     private List<Player> players = new ArrayList<>();
+    private List<Move> moves = new ArrayList<>();
     @JsonIgnore
     private long[] bitboards;
-    private Colour currentPlayer;
+    private Colour currentPlayer = Colour.YELLOW;
 
     // Dummy constructor needed to map JSON string back to Java object
     public Game() {
@@ -48,6 +49,14 @@ public class Game extends EqualsHashCodeToString {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public List<Move> getMoves() {
+        return moves;
+    }
+
+    public void setMoves(List<Move> moves) {
+        this.moves = moves;
     }
 
     /**
