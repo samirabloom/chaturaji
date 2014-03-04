@@ -119,6 +119,7 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
  
  
  1. First install MySQL typing this in the terminal
+ 
 
 --------------------
 
