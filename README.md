@@ -113,3 +113,29 @@ $ANDROID_HOME/platform-tools/adb devices
 -----
 
 For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html)
+
+
+## How to install MySQL to compile the latest DAO code:
+ 
+ 
+ 1. First install MySQL typing this in the terminal
+
+--------------------
+
+    sudo apt-get install mysql-server
+
+--------------------
+
+ 2. Install mysql client, server and the jdbc connector:
+ 
+
+--------------------
+
+    sudo apt-get install mysql-server
+    sudo apt-get install mysql-client
+    sudo apt-get install libmysql-java
+
+--------------------
+
+Then you can do mvn clean install as usual
+     
