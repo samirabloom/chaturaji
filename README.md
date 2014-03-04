@@ -118,7 +118,7 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
 ## How to install MySQL to compile the latest DAO code:
  
  
- 1. First install MySQL typing this in the terminal
+ First install MySQL typing this in the terminal
  
 
 --------------------
@@ -128,7 +128,7 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
 --------------------
 
 
- 2. Install mysql client, server and the jdbc connector:
+ Install mysql client, server and the jdbc connector:
  
 
 --------------------
