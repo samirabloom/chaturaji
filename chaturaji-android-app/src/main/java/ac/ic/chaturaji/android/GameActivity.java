@@ -225,7 +225,7 @@ public class GameActivity extends Activity {
                             move_count++;
                             pawn_promotion();
 
-                            if(!check_valid_moves())
+                            while(!check_valid_moves())
                                 move_count++;
 
                             set_scoreboard();
@@ -311,13 +311,13 @@ public class GameActivity extends Activity {
                 else if(Board[destination_column][destination_row].colour == 4)
                     yellow_king_captured_by = Board[source_column][source_row].colour;
 
-                if(red_king_captured_by == 1 && green_king_captured_by == 1 && yellow_king_captured_by == 1)
+                if(blue_king_captured_by == 0 && red_king_captured_by == 1 && green_king_captured_by == 1 && yellow_king_captured_by == 1)
                     score = score + 54;
-                else if(blue_king_captured_by == 2 && green_king_captured_by == 2 && yellow_king_captured_by == 2)
+                else if(blue_king_captured_by == 2 && red_king_captured_by == 0 &&green_king_captured_by == 2 && yellow_king_captured_by == 2)
                     score = score + 54;
-                else if(blue_king_captured_by == 3 && red_king_captured_by == 3 && yellow_king_captured_by == 3)
+                else if(blue_king_captured_by == 3 && red_king_captured_by == 3 && green_king_captured_by == 0 &&yellow_king_captured_by == 3)
                     score = score + 54;
-                else if(blue_king_captured_by == 4 && red_king_captured_by == 4 && green_king_captured_by == 4)
+                else if(blue_king_captured_by == 4 && red_king_captured_by == 4 && green_king_captured_by == 4 && yellow_king_captured_by == 0)
                     score = score + 54;
             }
         }
@@ -545,57 +545,48 @@ public class GameActivity extends Activity {
 
     public boolean boat_triumph(int column, int row) {
 
-        if(column <= 6 && row <= 6)
+        if(column <= 6 && row <= 6 && Board[column + 1][row] instanceof Boat && Board[column + 1][row + 1] instanceof Boat && Board[column][row + 1] instanceof Boat)
         {
-            if(Board[column + 1][row] instanceof Boat && Board[column + 1][row + 1] instanceof Boat && Board[column][row + 1] instanceof Boat)
-            {
-                Board[column + 1][row] = null;
-                Board[column + 1][row + 1] = null;
-                Board[column][row + 1] = null;
-                BoardImage[column + 1][row].setImageResource(0);
-                BoardImage[column + 1][row + 1].setImageResource(0);
-                BoardImage[column][row + 1].setImageResource(0);
-                return true;
-            }
+            Board[column + 1][row] = null;
+            Board[column + 1][row + 1] = null;
+            Board[column][row + 1] = null;
+            BoardImage[column + 1][row].setImageResource(0);
+            BoardImage[column + 1][row + 1].setImageResource(0);
+            BoardImage[column][row + 1].setImageResource(0);
+            return true;
         }
-        else if(column <= 6 && row >= 1)
+
+        else if(column <= 6 && row >= 1 && Board[column + 1][row] instanceof Boat && Board[column + 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
         {
-            if(Board[column + 1][row] instanceof Boat && Board[column + 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
-            {
-                Board[column + 1][row] = null;
-                Board[column + 1][row - 1] = null;
-                Board[column][row - 1] = null;
-                BoardImage[column + 1][row].setImageResource(0);
-                BoardImage[column + 1][row - 1].setImageResource(0);
-                BoardImage[column][row - 1].setImageResource(0);
-                return true;
-            }
+            Board[column + 1][row] = null;
+            Board[column + 1][row - 1] = null;
+            Board[column][row - 1] = null;
+            BoardImage[column + 1][row].setImageResource(0);
+            BoardImage[column + 1][row - 1].setImageResource(0);
+            BoardImage[column][row - 1].setImageResource(0);
+            return true;
         }
-        else if(column >= 1 && row <= 6)
+
+        else if(column >= 1 && row <= 6 && Board[column][row + 1] instanceof Boat && Board[column - 1][row] instanceof Boat && Board[column - 1][row + 1] instanceof Boat)
         {
-            if(Board[column][row + 1] instanceof Boat && Board[column - 1][row] instanceof Boat && Board[column - 1][row + 1] instanceof Boat)
-            {
-                Board[column][row + 1] = null;
-                Board[column - 1][row] = null;
-                Board[column - 1][row + 1] = null;
-                BoardImage[column][row + 1].setImageResource(0);
-                BoardImage[column - 1][row].setImageResource(0);
-                BoardImage[column - 1][row + 1].setImageResource(0);
-                return true;
-            }
+            Board[column][row + 1] = null;
+            Board[column - 1][row] = null;
+            Board[column - 1][row + 1] = null;
+            BoardImage[column][row + 1].setImageResource(0);
+            BoardImage[column - 1][row].setImageResource(0);
+            BoardImage[column - 1][row + 1].setImageResource(0);
+            return true;
         }
-        else if(column >= 1 && row >= 1)
+
+        else if(column >= 1 && row >= 1 && Board[column - 1][row] instanceof Boat && Board[column - 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
         {
-            if(Board[column - 1][row] instanceof Boat && Board[column - 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
-            {
-                Board[column - 1][row] = null;
-                Board[column - 1][row - 1] = null;
-                Board[column][row - 1] = null;
-                BoardImage[column - 1][row].setImageResource(0);
-                BoardImage[column - 1][row - 1].setImageResource(0);
-                BoardImage[column][row - 1].setImageResource(0);
-                return true;
-            }
+            Board[column - 1][row] = null;
+            Board[column - 1][row - 1] = null;
+            Board[column][row - 1] = null;
+            BoardImage[column - 1][row].setImageResource(0);
+            BoardImage[column - 1][row - 1].setImageResource(0);
+            BoardImage[column][row - 1].setImageResource(0);
+            return true;
         }
 
         return false;
