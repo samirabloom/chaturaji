@@ -126,6 +126,7 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
 
 --------------------
 
+
  2. Install mysql client, server and the jdbc connector:
  
 
