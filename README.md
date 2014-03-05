@@ -13,8 +13,8 @@ Android application for Chaturaji - a four player chess-like game meaning "four 
 For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
 
 ##To compile project:
- 1. Install [mvn](http://maven.apache.org/)
- 2. Add the bin directory inside the location where you unzipped your maven download to your **PATH** environment variable, in the terminal as follows:
+1. Install [mvn](http://maven.apache.org/)
+2. Add the bin directory inside the location where you unzipped your maven download to your **PATH** environment variable, in the terminal as follows:
 
 --------------------
 
@@ -26,8 +26,8 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 **Note:** *~/Downloads/apache-maven-3.1.1-bin* must be replaced by the location where you unzipped your maven download.
 
- 3. Install [Android SDK](http://developer.android.com/sdk/index.html)
- 4. Set **ANDROID_HOME** environment variable to point to sdk folder, in the terminal as follows:
+3. Install [Android SDK](http://developer.android.com/sdk/index.html)
+4. Set **ANDROID_HOME** environment variable to point to sdk folder, in the terminal as follows:
 
 --------------------
 
@@ -39,7 +39,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 **Note:** *~/Downloads/adt-bundle-mac-x86_64-20131030-2* must be replaced by the location where you downloaded the Android SDK.
 
- 5. Create android emulator, in the terminal as follows (or plugin an Android device via USB):
+5. Create android emulator, in the terminal as follows (or plugin an Android device via USB):
 
 --------------------
 
@@ -47,8 +47,8 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 --------------------
 
- 7. Start an Android emulator using the Android Virtual Device Manager
- 6. Run the build, in the terminal as follows:
+7. Start an Android emulator using the Android Virtual Device Manager
+6. Run the build, in the terminal as follows:
 
 --------------------
 
@@ -57,9 +57,9 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 --------------------
 
 ##To add a new library:
- 1. Go to http://search.maven.org/
- 2. Search for the library you want to use, it may help to look at the website for the library to know what to search for
- 3. Click on the version you want and find the section on the page that looks like the follow:
+1. Go to http://search.maven.org/
+2. Search for the library you want to use, it may help to look at the website for the library to know what to search for
+3. Click on the version you want and find the section on the page that looks like the follow:
 
 --------------------
 
@@ -71,7 +71,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
     
 --------------------
 
- 4. Add this section to the pom.xml file as follows:
+4. Add this section to the pom.xml file as follows:
 
 --------------------
 
@@ -98,7 +98,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 ### Ubuntu Instructions
 
- 1. First install MySQL typing this in the terminal
+1. First install MySQL typing this in the terminal
 
 --------------------
 
@@ -106,8 +106,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 --------------------
 
-
- 2. Install mysql client, server and the jdbc connector:
+2. Install mysql client, server and the jdbc connector:
 
 --------------------
 
@@ -116,7 +115,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 --------------------
 
- 4. Create the database and database user
+4. Create the database and database user
 
 --------------------
 
@@ -129,7 +128,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 --------------------
 
- 5. Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
+5. Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
 
 --------------------
 
@@ -137,13 +136,13 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 --------------------
 
- 4. Now you can do mvn clean install as usual
+4. Now you can do mvn clean install as usual
 
 ### Other OSes
 
- 1. Go to http://dev.mysql.com/downloads/mysql/ and download the correct installer
+1. Go to http://dev.mysql.com/downloads/mysql/ and download the correct installer
 
- 2. Create the database and database user
+2. Create the database and database user
 
 --------------------
 
@@ -156,7 +155,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 --------------------
 
- 3. Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
+3. Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
 
 --------------------
 
@@ -164,11 +163,11 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 --------------------
 
- 4. Now you can do mvn clean install as usual
+4. Now you can do mvn clean install as usual
 
 ## Add SSL (HTTPS) Support To Tomcat
 
- 1. Edit server.xml inside the **conf** directory in the tomcat installation location to add the following section:
+1. Edit server.xml inside the **conf** directory in the tomcat installation location to add the following section:
 
 -----
     <!-- Define a SSL Coyote HTTP/1.1 Connector on port 8443 -->
