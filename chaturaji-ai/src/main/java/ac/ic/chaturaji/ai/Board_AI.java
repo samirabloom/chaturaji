@@ -43,8 +43,8 @@ public class Board_AI implements Cloneable{
         cloned.MaterialValue = MaterialValue.clone();
         cloned.CurrentPlayer = CurrentPlayer;
         return cloned;
-
     }
+
     public Board_AI(long[] bit_boards, int colour) {
         BitBoards = bit_boards;
         MaterialValue = new int [4];
@@ -193,18 +193,18 @@ public class Board_AI implements Cloneable{
     }
 
     public int FindColourPieceInSquare(int square){
-        if( ( BitBoards[GameConstants.RED] & square ) != 0)
+        if( ( BitBoards[GameConstants.ALL_RED_PIECES] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.RED;
-        if( ( BitBoards[GameConstants.BLUE] & square )!= 0)
+        if( ( BitBoards[GameConstants.ALL_BLUE_PIECES] & GameConstants.SquareBits[square])!= 0)
             return GameConstants.BLUE;
-        if( ( BitBoards[GameConstants.GREEN] & square )!= 0)
+        if( ( BitBoards[GameConstants.ALL_GREEN_PIECES] & GameConstants.SquareBits[square])!= 0)
             return GameConstants.GREEN;
-        if( ( BitBoards[GameConstants.YELLOW] & square )!= 0)
+        if( ( BitBoards[GameConstants.ALL_YELLOW_PIECES] & GameConstants.SquareBits[square])!= 0)
             return GameConstants.YELLOW;
         return -1;
     }
 
-    private void NextPlayer() {
+    public void NextPlayer() {
         CurrentPlayer = (CurrentPlayer + 1) % 4;
     }
 

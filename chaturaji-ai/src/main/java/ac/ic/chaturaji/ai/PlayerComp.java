@@ -18,13 +18,14 @@ public class PlayerComp extends Player_AI {
     public Move_AI GetMove(Board_AI theBoard){
         //Generate all the moves
         Move_AI move;
-        move = ValidMoves.Search(theBoard);
+        MaxN maxn = new MaxN();
+        AlphaBeta alphabeta  = new AlphaBeta();
 
-        //Select the move
-        //Move_AI move = (Move_AI)ValidMoves.GetMoves().get(0);
+        move = alphabeta.Search(theBoard, theBoard.GetCurrentPlayer(), 7);
 
         // Set the points if a capture occurred.
-        setPoints(theBoard, move);
+        if (move != null)
+            setPoints(theBoard, move);
 
         //Return the move
         return move;

@@ -20,6 +20,7 @@ public class Game_AI {
         boolean move_complete = false;
         int source, dest, colour;
         char ch;
+        int[] kings = new int[] {0, 0, 0, 0};
         Move move = new Move();
         Result result;
 
@@ -38,13 +39,15 @@ public class Game_AI {
                 player.setType(PlayerType.AI);
                 game.addPlayer(player);
             }
+            player.setKingsCaptured(kings);
         }
+
         // Initialise the game:
         api.startGame(game);
 
         do{
-            System.out.println("Press 'c' to continue");
-            ch = read.next().charAt(0);
+            //System.out.println("Press 'c' to continue");
+            //ch = read.next().charAt(0);
 
 
             // Select the player about to make a move.

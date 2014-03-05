@@ -28,4 +28,27 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- dependency analysis -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>break-on-dependency-warnings</id>
+                        <goals>
+                            <goal>analyze-only</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <failOnWarning>false</failOnWarning>
+                            <ignoreNonCompile>true</ignoreNonCompile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

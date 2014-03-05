@@ -60,6 +60,7 @@ public class MoveGenerator_AI
         }
     }
 
+/*
     public Board_AI[] Search_ply1(Board_AI board){
 
         ComputeMoves(board, Moves, false);
@@ -144,18 +145,13 @@ public class MoveGenerator_AI
         return Moves.get(moveIndex);
 
     }
-
+*/
     // Computes the possible moves for the given player:
     public void ComputeMoves(Board_AI board) {
-        GenerateMoves(board, Moves, board.GetCurrentPlayer(),false);
-    }
-    public void ComputeMoves(Board_AI board, ArrayList<Move_AI> MovesList,boolean search) {
-        GenerateMoves(board, MovesList, board.GetCurrentPlayer(),search);
+        GenerateMoves(board, Moves, board.GetCurrentPlayer());
     }
 
-    public void GenerateMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour, boolean search) {
-        if(!search)
-            Moves.clear();
+    public void GenerateMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
 
         GetKingMoves(board, Moves, colour);
         GetElephantMoves(board, Moves, colour);
@@ -389,7 +385,6 @@ public class MoveGenerator_AI
                         newMove.SetType(GameConstants.NORMAL_MOVE);
                         newMove.SetCaptured(GameConstants.EMPTY_SQUARE);
                         Moves.add(newMove);
-                        CheckDoublePush(allPieces, square, destination, colour, Moves);
                     }
                     // If the above if statement is true then we have a promotion.
                     else {
@@ -417,7 +412,7 @@ public class MoveGenerator_AI
                             destination = square - 7;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    }; break;
+                    } break;
                     case 2: {
                         if (square < 8) {
                             destination = square + 7;
@@ -433,7 +428,7 @@ public class MoveGenerator_AI
                             destination = square - 9;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    }; break;
+                    } break;
                     case 1: {
                         if ((square % 8) == 0) {
                             destination = square + 9;
@@ -449,7 +444,7 @@ public class MoveGenerator_AI
                             destination = square + 7;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    }; break;
+                    } break;
                     case 3: {
                         if ((square % 8) == 0) {
                             destination = square - 7;
@@ -465,57 +460,9 @@ public class MoveGenerator_AI
                             destination = square - 9;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    }; break;
+                    } break;
                 }
             }
-        }
-    }
-
-    private void CheckDoublePush(long allPieces, int square, int destination, int colour, ArrayList<Move_AI> Moves)
-    {
-        Move_AI newMove;
-
-        switch(colour) {
-            case 0:
-                if (square == 1 || square == 9 || square == 17 | square == 25) {
-                    destination++;
-                    if ((allPieces & GameConstants.SquareBits[destination]) == 0) {
-                        newMove = new Move_AI(GameConstants.YELLOW_PAWN, square, destination);
-                        newMove.SetType(GameConstants.NORMAL_MOVE);
-                        newMove.SetCaptured(GameConstants.EMPTY_SQUARE);
-                        Moves.add(newMove);
-                    }
-                }; break;
-            case 1:
-                if (square <= 15) {
-                    destination += 8;
-                    if ((allPieces & GameConstants.SquareBits[destination]) == 0) {
-                        newMove = new Move_AI(GameConstants.BLUE_PAWN, square, destination);
-                        newMove.SetType(GameConstants.NORMAL_MOVE);
-                        newMove.SetCaptured(GameConstants.EMPTY_SQUARE);
-                        Moves.add(newMove);
-                    }
-                }; break;
-            case 2:
-                if (square == 38 || square == 46 || square == 54 | square == 62) {
-                    destination--;
-                    if ((allPieces & GameConstants.SquareBits[destination]) == 0) {
-                        newMove = new Move_AI(GameConstants.RED_PAWN, square, destination);
-                        newMove.SetType(GameConstants.NORMAL_MOVE);
-                        newMove.SetCaptured(GameConstants.EMPTY_SQUARE);
-                        Moves.add(newMove);
-                    }
-                }; break;
-            case 3:
-                if (square >= 48) {
-                    destination -= 8;
-                    if ((allPieces & GameConstants.SquareBits[destination]) == 0) {
-                        newMove = new Move_AI(GameConstants.GREEN_PAWN, square, destination);
-                        newMove.SetType(GameConstants.NORMAL_MOVE);
-                        newMove.SetCaptured(GameConstants.EMPTY_SQUARE);
-                        Moves.add(newMove);
-                    }
-                }; break;
         }
     }
 

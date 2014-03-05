@@ -1,5 +1,7 @@
 package ac.ic.chaturaji.ai;
 
+import java.io.File;
+
 public class Chaturaji_AI
 {
     public Chaturaji_AI() {}

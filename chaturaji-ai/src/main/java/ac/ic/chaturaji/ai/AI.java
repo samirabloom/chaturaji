@@ -23,8 +23,6 @@ public class AI {
         board.Print();
 
         game.setBitboards(board.GetBitBoards());
-        // TODO remove this line as the game always starts with yellow so this is not needed
-        game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
 
         return game;
     }
@@ -72,40 +70,38 @@ public class AI {
 
                 if (theMove.getTriumph())
                     result.setType(ResultType.BOAT_TRIUMPH);
-                else if (theMove.getType() > 0)
+                else if(theMove.getType() > 0)
                     result.setType(ResultType.PIECE_TAKEN);
                 else
                     result.setType(ResultType.NONE_TAKEN);
 
-            }
-            break;
+            } break;
 
             case AI: {
                 playerAI = new PlayerComp(colour, player.getPoints(), player.getKingsCaptured());
 
-
                 // If it's the AI's turn just generate a move:
                 theMove = playerAI.GetMove(board);
 
-                if (theMove == null) {
-                    result = new Result(GameStatus.IN_PLAY, game, move);
-                    result.setType(ResultType.NOT_VALID);
-                    return result;
-                }
+                if (theMove != null) {
+                    board.ApplyMove(theMove);
+                    board.Print();
+                    theMove.Print();
 
-                board.ApplyMove(theMove);
-                board.Print();
-                theMove.Print();
+                    //Create Move and Game to return in a result object
+                    //Move ResultMove = new Move();
+                    move.setSource(theMove.getSource());
+                    move.setDestination(theMove.getDest());
+                    move.setColour(game.getCurrentPlayer());
+                }
+                else {
+                    // If the AI returns a null move, it is because the current player cannot make one - either because the player's
+                    // pieces are blocked or because they have been eliminated. If so, move on to the next player.
+                    board.NextPlayer();
+                }
+                //Game ResultGame = new Game();
 
                 game.getPlayer(colour).setPoints(playerAI.GetPoints());
-
-                //Create Move and Game to return in a result object
-                //Move ResultMove = new Move();
-                move.setSource(theMove.getSource());
-                move.setDestination(theMove.getDest());
-                move.setColour(game.getCurrentPlayer());
-
-                //Game ResultGame = new Game();
                 game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
                 game.setBitboards(board.GetBitBoards());
 
@@ -114,15 +110,16 @@ public class AI {
                 else
                     result = new Result(GameStatus.IN_PLAY, game, move);
 
-                //Set the type of the move
-                if (theMove.getTriumph())
-                    result.setType(ResultType.BOAT_TRIUMPH);
-                else if (theMove.getType() > 0)
-                    result.setType(ResultType.PIECE_TAKEN);
-                else
-                    result.setType(ResultType.NONE_TAKEN);
-            }
-            break;
+                if (theMove != null) {
+                    //Set the type of the move
+                    if(theMove.getTriumph())
+                        result.setType(ResultType.BOAT_TRIUMPH);
+                    else if(theMove.getType() > 0)
+                        result.setType(ResultType.PIECE_TAKEN);
+                    else
+                        result.setType(ResultType.NONE_TAKEN);
+                }
+            } break;
         }
         synchronized (this) {
             List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
