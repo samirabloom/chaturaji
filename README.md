@@ -166,10 +166,6 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
  4. Now you can do mvn clean install as usual
 
-## Useful Commands
-
-$ANDROID_HOME/platform-tools/adb devices
-
 ## Add SSL (HTTPS) Support To Tomcat
 
  1. Edit server.xml inside the **conf** directory in the tomcat installation location to add the following section:
@@ -185,5 +181,15 @@ $ANDROID_HOME/platform-tools/adb devices
 -----
 
 For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html)
+
+## Other Useful Commands
+
+- List devices available for Android Debugger
+
+$ANDROID_HOME/platform-tools/adb devices
+
+- Backup MySQL scheme
+
+mysqldump --single-transaction -u dao_user -h localhost --password=Chaturaji4 chaturaji > "chaturaji-web-services/src/main/sql/backup/chaturaji_backup_$(/bin/date +%y-%m-%d_%H-%M-%S).sql"
 
      
