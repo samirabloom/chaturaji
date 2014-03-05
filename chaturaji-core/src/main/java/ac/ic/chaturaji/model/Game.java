@@ -17,14 +17,17 @@ public class Game extends EqualsHashCodeToString {
     @JsonIgnore
     private long[] bitboards;
     private Colour currentPlayer = Colour.YELLOW;
+    private int stalemateCount;
 
     // Dummy constructor needed to map JSON string back to Java object
     public Game() {
+        stalemateCount = 0;
     }
 
     public Game(String id, Player player) {
         this.id = id;
         players.add(player);
+        stalemateCount = 0;
     }
 
     public String getId() {
@@ -77,6 +80,11 @@ public class Game extends EqualsHashCodeToString {
     public void setCurrentPlayer(Colour currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
+
+    public int getStalemateCount() { return stalemateCount; }
+
+    public void incrementStalemateCount() { stalemateCount++; }
+    public void resetStalemateCount() { stalemateCount = 0; }
 
     public Player getPlayer(int index) {
         return players.get(index);

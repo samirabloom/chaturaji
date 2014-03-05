@@ -5,5 +5,6 @@ package ac.ic.chaturaji.model;
  */
 public enum GameStatus {
     GAME_OVER,
+    STALEMATE,
     IN_PLAY
 }
