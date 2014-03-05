@@ -63,18 +63,28 @@ public class AI {
                 game.getPlayer(colour).setPoints(humanPlayer.GetPoints());
                 game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
 
-                if (board.isGameOver() == 0)
+                if (board.isGameOver() == 0 || game.getStalemateCount() == 10)
                     result = new Result(GameStatus.GAME_OVER, game, move);
                 else
                     result = new Result(GameStatus.IN_PLAY, game, move);
 
-                if (theMove.getTriumph())
+                if (theMove.getTriumph()) {
                     result.setType(ResultType.BOAT_TRIUMPH);
-                else if(theMove.getType() > 0)
+                    game.resetStalemateCount();
+                }
+                else if(theMove.getType() > 0) {
                     result.setType(ResultType.PIECE_TAKEN);
-                else
+                    game.resetStalemateCount();
+                }
+                else {
                     result.setType(ResultType.NONE_TAKEN);
+                    game.incrementStalemateCount();
+                }
 
+                // Finally we check if a stalemate has occured:
+                if (result.getGameStatus() != GameStatus.GAME_OVER)
+                    if (game.getStalemateCount() >= 10)
+                        result.setGameStatus(GameStatus.STALEMATE);
             } break;
 
             case AI: {
@@ -105,22 +115,34 @@ public class AI {
                 game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
                 game.setBitboards(board.GetBitBoards());
 
-                if (board.isGameOver() == 0)
+                if (board.isGameOver() <= 1)
                     result = new Result(GameStatus.GAME_OVER, game, move);
                 else
                     result = new Result(GameStatus.IN_PLAY, game, move);
 
                 if (theMove != null) {
                     //Set the type of the move
-                    if(theMove.getTriumph())
+                    if(theMove.getTriumph()) {
                         result.setType(ResultType.BOAT_TRIUMPH);
-                    else if(theMove.getType() > 0)
+                        game.resetStalemateCount();
+                    }
+                    else if(theMove.getType() > 0) {
                         result.setType(ResultType.PIECE_TAKEN);
-                    else
+                        game.resetStalemateCount();
+                    }
+                    else {
                         result.setType(ResultType.NONE_TAKEN);
+                        game.incrementStalemateCount();
+                    }
                 }
+
+                // Check for stalemate:
+                if (result.getGameStatus() != GameStatus.GAME_OVER)
+                    if (game.getStalemateCount() >= 10)
+                        result.setGameStatus(GameStatus.STALEMATE);
             } break;
         }
+        /*
         synchronized (this) {
             List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
             if (moveListenersForGame != null) {
@@ -129,6 +151,7 @@ public class AI {
                 }
             }
         }
+        */
         return result;
     }
 
@@ -142,5 +165,4 @@ public class AI {
     public synchronized void unregisterListeners(String gameId) {
         moveListeners.remove(gameId);
     }
-
 }

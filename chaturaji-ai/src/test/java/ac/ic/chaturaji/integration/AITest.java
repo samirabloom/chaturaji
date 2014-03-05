@@ -1,11 +1,19 @@
 package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.ai.AI;
+import ac.ic.chaturaji.ai.Board_AI;
+import ac.ic.chaturaji.ai.Move_AI;
+import ac.ic.chaturaji.model.Colour;
 import ac.ic.chaturaji.model.Game;
+
 import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.File;
-
+import java.io.FileReader;
+import java.io.IOException;
 /**
  * Created by dg3213 on 04/03/14.
  */

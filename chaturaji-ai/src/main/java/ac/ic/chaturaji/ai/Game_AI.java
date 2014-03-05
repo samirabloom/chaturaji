@@ -22,7 +22,7 @@ public class Game_AI {
         char ch;
         int[] kings = new int[] {0, 0, 0, 0};
         Move move = new Move();
-        Result result;
+        Result result = null;
 
         List<Player> players = game.getPlayers();
 
@@ -59,7 +59,7 @@ public class Game_AI {
             else {
                 move.setColour(game.getCurrentPlayer());
                 result = api.submitMove(game, move);
-                if (result.getGameStatus() == GameStatus.GAME_OVER)
+                if (result.getGameStatus() == GameStatus.GAME_OVER || result.getGameStatus() == GameStatus.STALEMATE)
                     move_complete = true;
                 continue;
             }
@@ -90,11 +90,16 @@ public class Game_AI {
 
             result = api.submitMove(game, move);
 
-            if (result.getGameStatus() == GameStatus.GAME_OVER)
+            if (result.getGameStatus() == GameStatus.GAME_OVER || result.getGameStatus() == GameStatus.STALEMATE)
                 move_complete = true;
 
         } while (!move_complete);
 
-        System.out.println("Game over! Thank you for playing");
+        if (result != null) {
+            if (result.getGameStatus() == GameStatus.GAME_OVER)
+                System.out.println("Game over! Thank you for playing");
+            else
+                System.out.println("Stalemate! Thank you for playing");
+        }
     }
 }
