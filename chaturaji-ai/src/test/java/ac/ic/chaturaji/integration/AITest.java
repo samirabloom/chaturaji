@@ -1,16 +1,10 @@
 package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.ai.AI;
-import ac.ic.chaturaji.ai.Board_AI;
-import ac.ic.chaturaji.ai.Move_AI;
-import ac.ic.chaturaji.model.*;
+import ac.ic.chaturaji.model.Game;
 import org.junit.Before;
 
-import org.junit.Test;
-
-import java.io.*;
-
-import static org.junit.Assert.assertEquals;
+import java.io.File;
 
 /**
  * Created by dg3213 on 04/03/14.
@@ -29,7 +23,7 @@ public class AITest{
 
     /*------ HELPER FUNCTIONS ------*/
 
-    private long ConvertToBinary(String word) {
+  /*  private long ConvertToBinary(String word) {
         int length = word.length();
         long bitboard = 0;
         long count = 1;
@@ -121,7 +115,7 @@ public class AITest{
 
     }
 
-    /*------ TESTS -------*/
+    /*------ TESTS -------
 
     @Test
     public void startGameTest() {
@@ -164,5 +158,5 @@ public class AITest{
         Result result = ai.submitMove(game, move);
 
         assertEquals(GameStatus.IN_PLAY, result.getGameStatus());
-    }
+    }*/
 }

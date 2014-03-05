@@ -1,19 +1,10 @@
 package ac.ic.chaturaji.integration;
 
-import ac.ic.chaturaji.ai.Move_AI;
-import org.junit.Test;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by dg3213 on 04/03/14.
  */
 public class Move_AITest {
-
+/*
     private Move_AI GetMove(String filename) {
         BufferedReader reader = null;
         int[] move = new int[6];
@@ -76,5 +67,5 @@ public class Move_AITest {
         assertEquals(0, theMove.getPromoType());
         assertEquals(0, theMove.getType());
         assertEquals(false, theMove.getTriumph());
-    }
+    }*/
 }
