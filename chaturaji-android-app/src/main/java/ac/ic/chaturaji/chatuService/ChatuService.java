@@ -125,6 +125,9 @@ public class ChatuService{
 
     public String createGame(String AIOpps){
 
+        if(Integer.parseInt(AIOpps) > 3 || Integer.parseInt(AIOpps) < 0)
+            return "Invalid AI count";
+
         setupClient();
 
         String url = "https://" + localHost + ":8443/chaturaji-web-services/game";
@@ -134,9 +137,6 @@ public class ChatuService{
             HttpContext localContext = new BasicHttpContext();
             localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
             localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
-
-            System.out.println(cookieStoreLocal.toString());
-            System.out.println(credsProviderLocal.toString());
 
             HttpPost httpPost = new HttpPost(url);
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
