@@ -29,6 +29,12 @@ CREATE TABLE game
   PRIMARY KEY (game_id)
 );
 
+CREATE TABLE user
+(
+  user_id VARCHAR(80) NOT NULL,
+  PRIMARY KEY (user_id)
+);
+
 CREATE TABLE player
 (
   player_id VARCHAR(80) NOT NULL,
@@ -37,12 +43,6 @@ CREATE TABLE player
   PRIMARY KEY (player_id),
   FOREIGN KEY (game_id) REFERENCES game (game_id),
   FOREIGN KEY (user_id) REFERENCES user (user_id)
-);
-
-CREATE TABLE user
-(
-  user_id VARCHAR(80) NOT NULL,
-  PRIMARY KEY (user_id)
 );
 
 CREATE TABLE move

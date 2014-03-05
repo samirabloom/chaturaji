@@ -94,6 +94,78 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 **Note:** The Java JDK standard API is automatically added to Maven projects so you only need to add additional libraries such as Apache Http Client or the Android JDK.
 
+## To install MySQL
+
+### Ubuntu Instructions
+
+ 1. First install MySQL typing this in the terminal
+
+--------------------
+
+    sudo apt-get install mysql-server
+
+--------------------
+
+
+ 2. Install mysql client, server and the jdbc connector:
+
+--------------------
+
+    sudo apt-get install mysql-client
+    sudo apt-get install libmysql-java
+
+--------------------
+
+ 4. Create the database and database user
+
+--------------------
+
+    mysql -u root
+    CREATE DATABASE chaturaji;
+    CREATE USER 'dao_user'@'localhost' IDENTIFIED BY 'mypass';
+    SET PASSWORD FOR 'dao_user'@'localhost' = PASSWORD('Chaturaji4');
+    GRANT ALL ON chaturaji.* TO 'dao_user'@'localhost';
+    FLUSH PRIVILEGES;
+
+--------------------
+
+ 5. Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
+
+--------------------
+
+    mysql -u dao_user -h localhost -D chaturaji --password=Chaturaji4 < chaturaji-web-services/src/main/sql/create_scheme.sql
+
+--------------------
+
+ 4. Now you can do mvn clean install as usual
+
+### Other OSes
+
+ 1. Go to http://dev.mysql.com/downloads/mysql/ and download the correct installer
+
+ 2. Create the database and database user
+
+--------------------
+
+    mysql -u root
+    CREATE DATABASE chaturaji;
+    CREATE USER 'dao_user'@'localhost' IDENTIFIED BY 'mypass';
+    SET PASSWORD FOR 'dao_user'@'localhost' = PASSWORD('Chaturaji4');
+    GRANT ALL ON chaturaji.* TO 'dao_user'@'localhost';
+    FLUSH PRIVILEGES;
+
+--------------------
+
+ 3. Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
+
+--------------------
+
+    mysql -u dao_user -h localhost -D chaturaji --password=Chaturaji4 < chaturaji-web-services/src/main/sql/create_scheme.sql
+
+--------------------
+
+ 4. Now you can do mvn clean install as usual
+
 ## Useful Commands
 
 $ANDROID_HOME/platform-tools/adb devices
@@ -114,35 +186,4 @@ $ANDROID_HOME/platform-tools/adb devices
 
 For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html)
 
-
-## How to install MySQL to compile the latest DAO code:
- 
-
-### Ubuntu Instructions
-
-First install MySQL typing this in the terminal
-
---------------------
-
-    sudo apt-get install mysql-server
-
---------------------
-
-
-Install mysql client, server and the jdbc connector:
- 
-
---------------------
-
-    sudo apt-get install mysql-server
-    sudo apt-get install mysql-client
-    sudo apt-get install libmysql-java
-
---------------------
-
-Then you can do mvn clean install as usual
-
-### Other OSes
-
-Go to http://dev.mysql.com/downloads/mysql/ and download the correct installer
      
