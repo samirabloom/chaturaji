@@ -37,7 +37,7 @@ public class Elephant extends Pieces {
 
         for(int i = 1; i <= (7 - row); i++)
         {
-            if(Board[column][row + 1] != null && this.colour == Board[column][row + i].colour)
+            if(Board[column][row + i] != null && this.colour == Board[column][row + i].colour)
                 break;
 
             valid_moves[column][row + i] = true;

@@ -1,7 +1,6 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.android.pieces.*;
-import ac.ic.chaturaji.android.pieces.Pieces;
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.method.ScrollingMovementMethod;
 import android.view.*;
 import android.view.Menu;
 import android.view.Window;
@@ -25,6 +25,7 @@ public class GameActivity extends Activity {
     private int selected_row = -1; // -1 if nothing selected
     private boolean[][] valid_moves = new boolean[8][8];
     private boolean moved = false;
+    private String movelist = "";
     private String numberOfAIs = "0";
     private int blue_score = 0;
     private int red_score = 0;
@@ -68,6 +69,7 @@ public class GameActivity extends Activity {
         savedInstanceState.putInt("selected_row", selected_row);
         savedInstanceState.putSerializable("valid_moves", valid_moves);
         savedInstanceState.putBoolean("moved", moved);
+        savedInstanceState.putString("movelist", movelist);
         savedInstanceState.putString("numberOfAIs", numberOfAIs);
         savedInstanceState.putInt("blue_score", blue_score);
         savedInstanceState.putInt("red_score", red_score);
@@ -88,6 +90,7 @@ public class GameActivity extends Activity {
         selected_row = savedInstanceState.getInt("selected_row");
         valid_moves = (boolean[][]) savedInstanceState.getSerializable("valid_moves");
         moved = savedInstanceState.getBoolean("moved");
+        movelist = savedInstanceState.getString("movelist");
         numberOfAIs = savedInstanceState.getString("numberOfAIs");
         blue_score = savedInstanceState.getInt("blue_score");
         red_score = savedInstanceState.getInt("red_score");
@@ -113,6 +116,7 @@ public class GameActivity extends Activity {
         if((selected_column != -1) && (selected_row != -1) && (!moved))
         {
             select_piece(selected_column, selected_row);
+            BoardImage[selected_column][selected_row].setBackgroundColor(getResources().getColor(R.color.light_blue));
             show_valid_moves(selected_column, selected_row);
         }
     }
@@ -218,7 +222,9 @@ public class GameActivity extends Activity {
 
                     public void onClick(View v) {
 
-                        if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
+                        if(selected_column == column && selected_row == row)
+                            clear_selections();
+                        else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
                         {
                             move(selected_column, selected_row, column, row);
                             moved = true;
@@ -229,12 +235,12 @@ public class GameActivity extends Activity {
                                 move_count++;
 
                             set_scoreboard();
+                            clear_selections();
                         }
-
-                        clear_selections();
-
-                        if ((!moved) && select_piece(column, row))
+                        else if ((!moved) && select_piece(column, row))
                         {
+                            clear_selections();
+                            BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
                             selected_column = column;
                             selected_row = row;
                             show_valid_moves(column, row);
@@ -253,6 +259,7 @@ public class GameActivity extends Activity {
         TextView red_score_text = (TextView) findViewById(R.id.red_score);
         TextView green_score_text = (TextView) findViewById(R.id.green_score);
         TextView yellow_score_text = (TextView) findViewById(R.id.yellow_score);
+        TextView move_list = (TextView) findViewById(R.id.movelist);
 
         String blue = "Blue Score: " + blue_score;
         blue_score_text.setText(blue);
@@ -265,6 +272,9 @@ public class GameActivity extends Activity {
 
         String yellow = "Yellow Score: " + yellow_score;
         yellow_score_text.setText(yellow);
+
+        move_list.setMovementMethod(new ScrollingMovementMethod());
+        move_list.setText(movelist);
 
         TextView show_turn = (TextView) findViewById(R.id.turn);
         int turn = (move_count % 4) + 1;
@@ -288,20 +298,36 @@ public class GameActivity extends Activity {
     public void adjust_scoreboard(int source_column, int source_row, int destination_column, int destination_row) {
 
         int score = 0;
+        boolean boattriumph = false;
+        String taken_type = "";
+        String taken_colour = "";
 
         if(Board[destination_column][destination_row] != null)
         {
             if(Board[destination_column][destination_row] instanceof Pawn)
+            {
                 score = 1;
+                taken_type = "Pawn";
+            }
             else if(Board[destination_column][destination_row] instanceof Boat)
+            {
                 score = 2;
+                taken_type = "Boat";
+            }
             else if(Board[destination_column][destination_row] instanceof Knight)
+            {
                 score = 3;
+                taken_type = "Knight";
+            }
             else if(Board[destination_column][destination_row] instanceof Elephant)
+            {
                 score = 4;
+                taken_type = "Elephant";
+            }
             else if(Board[destination_column][destination_row] instanceof King)
             {
                 score = 5;
+                taken_type = "King";
                 if(Board[destination_column][destination_row].colour == 1)
                     blue_king_captured_by = Board[source_column][source_row].colour;
                 else if(Board[destination_column][destination_row].colour == 2)
@@ -320,11 +346,25 @@ public class GameActivity extends Activity {
                 else if(blue_king_captured_by == 4 && red_king_captured_by == 4 && green_king_captured_by == 4 && yellow_king_captured_by == 0)
                     score = score + 54;
             }
+
+            if(Board[destination_column][destination_row].colour == 1)
+                taken_colour = "Blue";
+            else if(Board[destination_column][destination_row].colour == 2)
+                taken_colour = "Red";
+            else if(Board[destination_column][destination_row].colour == 3)
+                taken_colour = "Green";
+            else if(Board[destination_column][destination_row].colour == 4)
+                taken_colour = "Yellow";
+            else
+                taken_colour = "";
         }
 
         if(Board[source_column][source_row] instanceof Boat)
             if(boat_triumph(destination_column, destination_row))
+            {
                 score = score + 6;
+                boattriumph = true;
+            }
 
         if(Board[source_column][source_row].colour == 1)
             blue_score = blue_score + score;
@@ -335,18 +375,18 @@ public class GameActivity extends Activity {
         else if(Board[source_column][source_row].colour == 4)
             yellow_score = yellow_score + score;
 
+        if(!boattriumph && Board[destination_column][destination_row] == null)
+            movelist = movelist + (move_count + 1) + ". " + (char)(source_column + 65) + (source_row + 1) + " to " + (char)(destination_column + 65) + (destination_row + 1) + "\n";
+        else if(boattriumph)
+            movelist = movelist + (move_count + 1) + ". " + (char)(source_column + 65) + (source_row + 1) + " to " + (char)(destination_column + 65) + (destination_row + 1) + " Boat Triumph!\n";
+        else if(Board[destination_column][destination_row] != null)
+            movelist = movelist + (move_count + 1) + ". " + (char)(source_column + 65) + (source_row + 1) + " to " + (char)(destination_column + 65) + (destination_row + 1) + " taking " + taken_colour + "'s " + taken_type + "\n";
     }
 
     public boolean select_piece(int column, int row) {
 
         int turn = (move_count % 4) + 1;
-        if((Board[column][row] != null) && (Board[column][row].colour == turn))
-        {
-            BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
-            return true;
-        }
-
-        return false;
+        return ((Board[column][row] != null) && (Board[column][row].colour == turn));
     }
 
     public void clear_selections() {
