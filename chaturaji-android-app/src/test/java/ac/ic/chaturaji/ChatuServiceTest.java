@@ -57,7 +57,7 @@ public class ChatuServiceTest {
         ChatuService chatuService = ChatuService.getInstance();
         String state = chatuService.login("randomguy@gmail.com", "randomness");
 
-        // this guy does not exist on the database, therefore should return an Invalid when tryin to log in
+        // this guy does not exist on the database, therefore should return an Invalid when trying to log in
         assertEquals("Invalid", state);
     }
 
