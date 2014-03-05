@@ -157,11 +157,11 @@ For more information see [tomcat instruction](http://tomcat.apache.org/tomcat-8.
 
 ## Other Useful Commands
 
-- List devices available for Android Debugger
+List devices available for Android Debugger
 
     $ANDROID_HOME/platform-tools/adb devices
 
-- Backup MySQL scheme
+Backup MySQL scheme
 
     mysqldump --single-transaction -u dao_user -h localhost --password=Chaturaji4 chaturaji > "chaturaji-web-services/src/main/sql/backup/chaturaji_backup_$(/bin/date +%y-%m-%d_%H-%M-%S).sql"
      
