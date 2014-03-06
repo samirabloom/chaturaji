@@ -69,20 +69,20 @@ public class GameRoomActivity extends Activity {
                 try {
 
                     joinGame.execute(gameId);
-                    String state = joinGame.get();
+                    String[] state = joinGame.get();
                     System.out.println(state);
 
-                    if(state.equals("Error")){
+                    if(state[1].equals("Error")){
                         Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
                     }
 
-                    else if(state.equals("Success")){
+                    else if(state[1].equals("Success")){
                         startActivity(gotoGame);
                     }
 
-                    else{
+                    else if(state[1].equals("Bad request")) {
 
-                        Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), state[0], Toast.LENGTH_LONG).show();
 
                     }
 
@@ -165,13 +165,13 @@ public class GameRoomActivity extends Activity {
         }
     };
 
-    private class JoinGame extends AsyncTask<String, Void, String> {
+    private class JoinGame extends AsyncTask<String, Void, String[]> {
 
         @Override
-        protected String doInBackground(String... info) {
+        protected String[] doInBackground(String... info) {
             ChatuService chatuService = ChatuService.getInstance();
 
-            String state = chatuService.joinGame(info[0]);
+            String[] state = chatuService.joinGame(info[0]);
 
             return state;
         }

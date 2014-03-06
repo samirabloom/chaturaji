@@ -18,8 +18,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class ChatuServiceTest {
 
-
-
+    /*
     @Test
     public void shouldRegisterUser() throws Exception {
 
@@ -183,7 +182,7 @@ public class ChatuServiceTest {
 
 /*
     @Test
-    public void shouldJoinGame() throws Exception {
+         public void shouldJoinGame() throws Exception {
 
         ChatuService chatuService = ChatuService.getInstance();
 
@@ -201,7 +200,7 @@ public class ChatuServiceTest {
 
         assertEquals("Success", state);
 
-        state = chatuService.login("test@test.com", "testpass");
+        state = chatuService.login("test2@test.com", "testpass");
 
         assertEquals("Success", state);
 
@@ -236,14 +235,210 @@ public class ChatuServiceTest {
         // this is the test account that was previously registered, therefore should be able to log in
         assertNotNull(gamesList);
 
-        String id = gamesList[gamesList.length-1].getId();
+        String id = "";
+        for(int i = 0; i < gamesList.length; i++){
 
-        state = chatuService.joinGame(id);
+            if(gamesList[i].getPlayers().size() < 4){
+
+                id = gamesList[i].getId();
+
+            }
+        }
+
+
+        String[] joinstate = chatuService.joinGame(id);
 
         // successfully joined a game
+        assertEquals("Success", joinstate[1]);
+
+
+    }
+
+    @Test
+    public void fullGame() throws Exception {
+
+        ChatuService chatuService = ChatuService.getInstance();
+
+        chatuService.clearCookieCred();
+
+        String state = chatuService.createAccount("test2@test.com", "testpass", "testman2");
+
+        state = chatuService.login("test2@test.com", "testpass");
+
         assertEquals("Success", state);
+
+        state = chatuService.getGames();
+
+        Game[] gamesList = null;
+
+        try {
+
+            gamesList = new ObjectMapper().readValue(state, Game[].class);
+
+        }
+
+        catch (JsonGenerationException e) {
+            Log.d("JsonGenerationException ", e.toString());
+            e.printStackTrace();
+
+        }
+
+        catch (JsonMappingException e) {
+            Log.d("JsonMappingException", e.toString());
+            e.printStackTrace();
+
+        }
+
+        catch (IOException e) {
+            Log.d("IOException", e.toString());
+            e.printStackTrace();
+
+        }
+
+        // this is the test account that was previously registered, therefore should be able to log in
+        assertNotNull(gamesList);
+
+        String id = " ";
+        for(int i = 0; i < gamesList.length && id.equals(" "); i++){
+
+            if(gamesList[i].getPlayers().size() > 3){
+
+                id = gamesList[i].getId();
+
+            }
+        }
+
+
+        String[] joinstate = chatuService.joinGame(id);
+
+        // successfully joined a game
+        assertEquals("Bad request", joinstate[1]);
+
+
+    }
+
+    @Test
+    public void invalidGameId() throws Exception {
+
+        ChatuService chatuService = ChatuService.getInstance();
+
+        String state = chatuService.login("test2@test.com", "testpass");
+
+        assertEquals("Success", state);
+
+        state = chatuService.getGames();
+
+        Game[] gamesList = null;
+
+        try {
+
+            gamesList = new ObjectMapper().readValue(state, Game[].class);
+
+        }
+
+        catch (JsonGenerationException e) {
+            Log.d("JsonGenerationException ", e.toString());
+            e.printStackTrace();
+
+        }
+
+        catch (JsonMappingException e) {
+            Log.d("JsonMappingException", e.toString());
+            e.printStackTrace();
+
+        }
+
+        catch (IOException e) {
+            Log.d("IOException", e.toString());
+            e.printStackTrace();
+
+        }
+
+        // this is the test account that was previously registered, therefore should be able to log in
+        assertNotNull(gamesList);
+
+        String id = " ";
+
+        String[] joinstate = chatuService.joinGame(id);
+
+        // successfully joined a game
+        assertEquals("Bad request", joinstate[1]);
+
+
+    }
+
+    @Test
+    public void cannotJoinOwnGame() throws Exception {
+
+        ChatuService chatuService = ChatuService.getInstance();
+
+        String email = "unique1@test.com";
+
+        String state = chatuService.createAccount(email, "testpass", "testman2");
+
+        state = chatuService.login(email, "testpass");
+
+        assertEquals("Success", state);
+
+        state = chatuService.createGame("0");
+
+        assertEquals("Success", state);
+
+        state = chatuService.getGames();
+
+        Game[] gamesList = null;
+
+        try {
+
+            gamesList = new ObjectMapper().readValue(state, Game[].class);
+
+        }
+
+        catch (JsonGenerationException e) {
+            Log.d("JsonGenerationException ", e.toString());
+            e.printStackTrace();
+
+        }
+
+        catch (JsonMappingException e) {
+            Log.d("JsonMappingException", e.toString());
+            e.printStackTrace();
+
+        }
+
+        catch (IOException e) {
+            Log.d("IOException", e.toString());
+            e.printStackTrace();
+
+        }
+
+        // this is the test account that was previously registered, therefore should be able to log in
+        assertNotNull(gamesList);
+
+        String id = " ";
+        for(int i = 0; i < gamesList.length && id.equals(" "); i++){
+
+            if(gamesList[i].getPlayers().size() > 0){
+
+                if(!(gamesList[i].getPlayers().get(0).getUser().getEmail() == null))
+
+                    if(gamesList[i].getPlayers().get(0).getUser().getEmail().equals(email)){
+
+                        id = gamesList[i].getId();
+
+                }
+            }
+        }
+
+
+        String[] joinstate = chatuService.joinGame(id);
+
+        // successfully joined a game
+        assertEquals("Bad request", joinstate[1]);
 
 
     }*/
+
+    */
 
 }

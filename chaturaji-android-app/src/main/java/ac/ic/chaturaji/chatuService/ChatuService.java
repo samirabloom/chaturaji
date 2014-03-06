@@ -29,6 +29,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -162,8 +163,9 @@ public class ChatuService{
         return "Success";
     }
 
-    public String joinGame(String gameId){
+    public String[] joinGame(String gameId){
 
+        String[] reply = {"Good", "Success"};
         setupClient();
 
         String url = "https://" + localHost + ":8443/chaturaji-web-services/joinGame";
@@ -184,21 +186,39 @@ public class ChatuService{
             System.out.println(response.getStatusLine().getStatusCode());
 
 
-            if(response.getStatusLine().getStatusCode() == 400)
-                return response.getStatusLine().getReasonPhrase();
+            if(response.getStatusLine().getStatusCode() == 400){
 
-            else if(response.getStatusLine().getStatusCode() != 201)
-                return "Error";
+                HttpEntity entity = response.getEntity();
+                String responseBody = EntityUtils.toString(entity);
+
+                reply[0] = responseBody;
+                reply[1] = "Bad request";
+
+                return reply;
+
+            }
+
+            else if(response.getStatusLine().getStatusCode() != 201){
+
+                reply[0] = "Not 201 or 400";
+                reply[1] = "Error";
+
+                return reply;
+            }
         }
 
         catch (Exception e){
 
             e.printStackTrace();
-            return "Error";
+
+            reply[0] = "Catch Exception";
+            reply[1] = "Error";
+
+            return reply;
 
         }
 
-        return "Success";
+        return reply;
     }
 
     public String createAccount(String email, String password, String nickname){
