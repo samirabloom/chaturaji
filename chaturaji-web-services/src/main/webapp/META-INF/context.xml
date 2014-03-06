@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context crossContext="true">
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <Resource name="jdbc/chaturaji-dao" auth="Container"
+              type="javax.sql.DataSource"
+              maxActive="100" maxIdle="30" maxWait="10000"
+              username="dao_user"
+              password="Chaturaji4"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost/chaturaji"/>
+</Context>

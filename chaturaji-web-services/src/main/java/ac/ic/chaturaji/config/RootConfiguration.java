@@ -1,7 +1,5 @@
 package ac.ic.chaturaji.config;
 
-import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -13,7 +11,7 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("classpath:/config/security-context.xml")
 @ComponentScan(basePackages = {"ac.ic.chaturaji.dao", "ac.ic.chaturaji.security", "ac.ic.chaturaji.ai"})
 public class RootConfiguration {
-
+/*
     @Bean
     public BasicDataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
@@ -36,5 +34,5 @@ public class RootConfiguration {
         basicDataSource.setLogAbandoned(true);
         basicDataSource.setMinEvictableIdleTimeMillis(30000);
         return basicDataSource;
-    }
+    }*/
 }

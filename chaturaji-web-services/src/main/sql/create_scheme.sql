@@ -1,10 +1,10 @@
 -- first time run the lines below by logging into mysql as root (i.e. mysql -uroot)
 -- this will create the initial user and initial database
-# CREATE DATABASE chaturaji;
-# CREATE USER 'dao_user'@'localhost' IDENTIFIED BY 'mypass';
-# SET PASSWORD FOR 'dao_user'@'localhost' = PASSWORD('Chaturaji4');
-# GRANT ALL ON chaturaji.* TO 'dao_user'@'localhost';
-# FLUSH PRIVILEGES;
+#CREATE DATABASE chaturaji;
+#CREATE USER 'dao_user'@'localhost' IDENTIFIED BY 'mypass';
+#SET PASSWORD FOR 'dao_user'@'localhost' = PASSWORD('Chaturaji4');
+#GRANT ALL ON chaturaji.* TO 'dao_user'@'localhost';
+#FLUSH PRIVILEGES;
 
 -- once the lines above have been run once then create the tables in the database as below
 
