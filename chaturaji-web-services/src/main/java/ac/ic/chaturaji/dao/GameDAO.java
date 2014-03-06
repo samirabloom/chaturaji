@@ -6,25 +6,17 @@ import ac.ic.chaturaji.model.User;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
  * @author samirarabbanian
  */
-
-//@ImportResource("classpath:/config/dao-context.xml")
 @Component
 public class GameDAO {
 
-   @Resource
-   private DataSource dataSource;
+    @Resource
+    private DataSource dataSource;
 
     private Map<String, Game> games = new HashMap<>();
 
@@ -38,6 +30,11 @@ public class GameDAO {
         for (Game game : games) {
             save(game);
         }
+        try {
+            System.out.println(dataSource);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -47,12 +44,11 @@ public class GameDAO {
 
     public Game get(String id) {
         return games.get(id);
-
+//        String sql = "SELECT * FROM game WHERE id=?";
+//
+//        ResultSet result = null;
 //
 //        try (Connection connection = dataSource.getConnection()) {
-//            String sql = "SELECT * FROM game WHERE game_id=?";
-//
-//            ResultSet result = null;
 //            PreparedStatement ps = null;
 //
 //            ps = connection.prepareStatement(sql);
@@ -77,33 +73,41 @@ public class GameDAO {
             games.remove(game.getId());
         }
         games.put(game.getId(), game);
-        String sql = "INSERT game VALUES (?,?,?)";
-
-
-        try {
-            Context envContext = new InitialContext();
-            DataSource dataSource = (DataSource)envContext.lookup("java:/comp/env/jdbc/chaturaji-dao");
-            Connection connection = dataSource.getConnection();
-            PreparedStatement ps = null;
-
-            ps = connection.prepareStatement(sql);
-
-            ps.setString(1, game.getId());
-
-            ps.setDate(2, new java.sql.Date(new java.util.Date().getTime()));
-            ps.setInt(3, game.getCurrentPlayer().ordinal());
-            int i = ps.executeUpdate();
-            if (i != 1)
-                throw new RuntimeException();
-
-            ps.close();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }  catch (NamingException e) {
-            e.printStackTrace();
-        }
-
+//        String sql = "INSERT game VALUES (?,?,?)";
+//
+//
+//        try {
+//            RootConfiguration rootConfiguration = new RootConfiguration();
+//            dataSource = rootConfiguration.dataSource();
+//            Connection connection = dataSource.getConnection();
+//            PreparedStatement ps = null;
+//
+//            ps = connection.prepareStatement(sql);
+//
+//            ps.setString(1, game.getId());
+//            ps.setDate(2, java.sql.Date.valueOf("2014-03-02"));
+//            ps.setInt(3, game.getCurrentPlayer().ordinal());
+//            //ps.setString(3,game.getPlayer(0).getId());
+//            //String player_id = game.getPlayer(1).getId();
+//            //ps.setString(4,game.getPlayer(1).getId());
+//            //ps.setString(5,game.getPlayer(2).getId());
+//            //ps.setString(6,game.getPlayer(3).getId());
+//            int i = ps.executeUpdate();
+//            if (i != 1)
+//                throw new RuntimeException();
+//
+//            ps.close();
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        if (games.containsKey(game.getId())) {
+//            games.remove(game.getId());
+//        }
+//        games.put(game.getId(), game);
+//
+//        //String sql = "INSERT INTO game(ID) VALUES (?,?,?,?,?,?,?)";
     }
 
 }
