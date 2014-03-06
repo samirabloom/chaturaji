@@ -16,43 +16,34 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 1 - Install [mvn](http://maven.apache.org/)
 2 - Add the bin directory inside the location where you unzipped your maven download to your **PATH** environment variable, in the terminal as follows:
 
-
     export PATH=$PATH:~/Downloads/apache-maven-3.1.1-bin/bin
     echo "export PATH=$PATH:~/Downloads/apache-maven-3.1.1-bin/bin" >> ~/.bash_profile
     echo $PATH
-
 
 **Note:** *~/Downloads/apache-maven-3.1.1-bin* must be replaced by the location where you unzipped your maven download.
 
 3 - Install [Android SDK](http://developer.android.com/sdk/index.html)
 4 - Set **ANDROID_HOME** environment variable to point to sdk folder, in the terminal as follows:
 
-
     export ANDROID_HOME=~/Downloads/adt-bundle-mac-x86_64-20131030-2/sdk
     echo "export ANDROID_HOME=~/Downloads/adt-bundle-mac-x86_64-20131030-2/sdk" >> ~/.bash_profile
     echo $ANDROID_HOME
-
 
 **Note:** *~/Downloads/adt-bundle-mac-x86_64-20131030-2* must be replaced by the location where you downloaded the Android SDK.
 
 5 - Create android emulator, in the terminal as follows (or plugin an Android device via USB):
 
-
     $ANDROID_HOME/tools/android avd
-
 
 7 - Start an Android emulator using the Android Virtual Device Manager
 6 - Run the build, in the terminal as follows:
 
-
     mvn clean install
-
 
 ##To add a new library:
 1 - Go to http://search.maven.org/
 2 - Search for the library you want to use, it may help to look at the website for the library to know what to search for
 3 - Click on the version you want and find the section on the page that looks like the follow:
-
 
     <dependency>
         <groupId>org.apache.httpcomponents</groupId>
@@ -60,9 +51,7 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
         <version>4.3.2</version>
     </dependency>
 
-
 4 - Add this section to the pom.xml file as follows:
-
 
     <dependencies>
 
@@ -79,7 +68,6 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
     </dependencies>
 
-
 **Note:** The Java JDK standard API is automatically added to Maven projects so you only need to add additional libraries such as Apache Http Client or the Android JDK.
 
 ## To install MySQL
@@ -88,19 +76,14 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 1 - First install MySQL typing this in the terminal
 
-
     sudo apt-get install mysql-server
 
-
 2 - Install mysql client, server and the jdbc connector:
-
 
     sudo apt-get install mysql-client
     sudo apt-get install libmysql-java
 
-
 4 - Create the database and database user
-
 
     mysql -u root
     CREATE DATABASE chaturaji;
@@ -109,12 +92,9 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
     GRANT ALL ON chaturaji.* TO 'dao_user'@'localhost';
     FLUSH PRIVILEGES;
 
-
 5 - Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
 
-
     mysql -u dao_user -h localhost -D chaturaji --password=Chaturaji4 < chaturaji-web-services/src/main/sql/create_scheme.sql
-
 
 4 - Now you can do mvn clean install as usual
 
@@ -124,7 +104,6 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
 
 2 - Create the database and database user
 
-
     mysql -u root
     CREATE DATABASE chaturaji;
     CREATE USER 'dao_user'@'localhost' IDENTIFIED BY 'mypass';
@@ -132,12 +111,9 @@ For an introduction to Maven see [Maven in 5 Minutes](http://maven.apache.org/gu
     GRANT ALL ON chaturaji.* TO 'dao_user'@'localhost';
     FLUSH PRIVILEGES;
 
-
 3 - Setup the scheme (run this from the root of the chaturaji project OR update the location of the create_scheme.sql in the command below)
 
-
     mysql -u dao_user -h localhost -D chaturaji --password=Chaturaji4 < chaturaji-web-services/src/main/sql/create_scheme.sql
-
 
 4 - Now you can do mvn clean install as usual
 

@@ -1,31 +1,36 @@
 package ac.ic.chaturaji.config;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
+
+import javax.annotation.Resource;
 
 /**
  * @author samirarabbanian
  */
 @Configuration
+@PropertySource({"classpath:database-mysql.properties"})
 @ImportResource("classpath:/config/security-context.xml")
 @ComponentScan(basePackages = {"ac.ic.chaturaji.dao", "ac.ic.chaturaji.security", "ac.ic.chaturaji.ai"})
 public class RootConfiguration {
 
+    @Resource
+    private Environment environment;
+
     @Bean
     public BasicDataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUrl("jdbc:mysql://localhost:3306/chaturaji");
-        basicDataSource.setUsername("dao_user");
-        basicDataSource.setPassword("Chaturaji4");
+        basicDataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
+        basicDataSource.setUrl(environment.getProperty("jdbc.url"));
+        basicDataSource.setUsername(environment.getProperty("jdbc.username"));
+        basicDataSource.setPassword(environment.getProperty("jdbc.password"));
 
         // properties below are to improve performance
         basicDataSource.setTestWhileIdle(true);
         basicDataSource.setTestOnBorrow(true);
         basicDataSource.setTestOnReturn(false);
-        basicDataSource.setValidationQuery("SELECT 1");
+        basicDataSource.setValidationQuery(environment.getProperty("jdbc.validationQuery"));
         basicDataSource.setTimeBetweenEvictionRunsMillis(30000);
         basicDataSource.setMaxActive(100);
         basicDataSource.setMinIdle(10);

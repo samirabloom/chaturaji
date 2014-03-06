@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `game`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `game` (
   `game_id` varchar(80) NOT NULL,
-  `startDate` date NOT NULL,
+  `createdDate` date NOT NULL,
   `currentPlayer` int(11) NOT NULL,
   PRIMARY KEY (`game_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

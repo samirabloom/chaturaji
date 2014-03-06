@@ -1,9 +1,9 @@
 package ac.ic.chaturaji.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Game extends EqualsHashCodeToString {
     private String id;
-    private Date startDate;
+    private LocalDateTime createdDate;
     private List<Player> players = new ArrayList<>();
     private List<Move> moves = new ArrayList<>();
     @JsonIgnore
@@ -21,13 +21,19 @@ public class Game extends EqualsHashCodeToString {
 
     // Dummy constructor needed to map JSON string back to Java object
     public Game() {
-        stalemateCount = 0;
+        LocalDateTime localDateTime = new LocalDateTime();
+        createdDate = new LocalDateTime(localDateTime.getYear(), localDateTime.getMonthOfYear(), localDateTime.getDayOfMonth(), localDateTime.getHourOfDay(), localDateTime.getMinuteOfHour());
     }
 
     public Game(String id, Player player) {
+        this();
         this.id = id;
         players.add(player);
-        stalemateCount = 0;
+    }
+
+    protected String[] fieldsExcludedFromEqualsAndHashCode() {
+        // TODO - REMOVE THIS EXCLUSION ONCE PLAYERS ARE SAVED IN THE DB CORRECTLY
+        return new String[]{"players"};
     }
 
     public String getId() {
@@ -38,12 +44,12 @@ public class Game extends EqualsHashCodeToString {
         this.id = id;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
     public List<Player> getPlayers() {

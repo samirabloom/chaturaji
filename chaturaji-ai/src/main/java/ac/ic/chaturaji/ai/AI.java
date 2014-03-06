@@ -71,12 +71,10 @@ public class AI {
                 if (theMove.getTriumph()) {
                     result.setType(ResultType.BOAT_TRIUMPH);
                     game.resetStalemateCount();
-                }
-                else if(theMove.getType() > 0) {
+                } else if (theMove.getType() > 0) {
                     result.setType(ResultType.PIECE_TAKEN);
                     game.resetStalemateCount();
-                }
-                else {
+                } else {
                     result.setType(ResultType.NONE_TAKEN);
                     game.incrementStalemateCount();
                 }
@@ -85,7 +83,8 @@ public class AI {
                 if (result.getGameStatus() != GameStatus.GAME_OVER)
                     if (game.getStalemateCount() >= 10)
                         result.setGameStatus(GameStatus.STALEMATE);
-            } break;
+            }
+            break;
 
             case AI: {
                 playerAI = new PlayerComp(colour, player.getPoints(), player.getKingsCaptured());
@@ -103,8 +102,7 @@ public class AI {
                     move.setSource(theMove.getSource());
                     move.setDestination(theMove.getDest());
                     move.setColour(game.getCurrentPlayer());
-                }
-                else {
+                } else {
                     // If the AI returns a null move, it is because the current player cannot make one - either because the player's
                     // pieces are blocked or because they have been eliminated. If so, move on to the next player.
                     board.NextPlayer();
@@ -122,15 +120,13 @@ public class AI {
 
                 if (theMove != null) {
                     //Set the type of the move
-                    if(theMove.getTriumph()) {
+                    if (theMove.getTriumph()) {
                         result.setType(ResultType.BOAT_TRIUMPH);
                         game.resetStalemateCount();
-                    }
-                    else if(theMove.getType() > 0) {
+                    } else if (theMove.getType() > 0) {
                         result.setType(ResultType.PIECE_TAKEN);
                         game.resetStalemateCount();
-                    }
-                    else {
+                    } else {
                         result.setType(ResultType.NONE_TAKEN);
                         game.incrementStalemateCount();
                     }
@@ -140,9 +136,10 @@ public class AI {
                 if (result.getGameStatus() != GameStatus.GAME_OVER)
                     if (game.getStalemateCount() >= 10)
                         result.setGameStatus(GameStatus.STALEMATE);
-            } break;
+            }
+            break;
         }
-        /*
+        // DO NOT COMMENT THIS OUT THIS IS THE WAY THE SERVER INTEGRATES TO AI
         synchronized (this) {
             List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
             if (moveListenersForGame != null) {
@@ -151,7 +148,6 @@ public class AI {
                 }
             }
         }
-        */
         return result;
     }
 
