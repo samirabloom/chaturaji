@@ -180,7 +180,6 @@ public class ChatuServiceTest {
         assertEquals("Invalid AI count", state);
     }
 
-/*
     @Test
          public void shouldJoinGame() throws Exception {
 
@@ -439,6 +438,5 @@ public class ChatuServiceTest {
 
     }*/
 
-    */
 
 }
