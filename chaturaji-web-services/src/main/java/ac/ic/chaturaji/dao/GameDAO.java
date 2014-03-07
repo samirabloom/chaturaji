@@ -32,11 +32,6 @@ public class GameDAO {
 
     @PostConstruct
     public void setupDefaultData() {
-
-        // create scheme
-        JdbcTestUtils.executeSqlScript(new JdbcTemplate(dataSource), new ClassPathResource("/sql/create_scheme.sql"), false);
-
-        // add "test" data to the scheme
         List<Game> games = Arrays.asList(
                 new Game(UUID.randomUUID().toString(), new Player(new User())),
                 new Game(UUID.randomUUID().toString(), new Player(new User())),

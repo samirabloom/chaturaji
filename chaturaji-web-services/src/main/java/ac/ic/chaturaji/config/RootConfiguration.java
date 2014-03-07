@@ -3,6 +3,9 @@ package ac.ic.chaturaji.config;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.annotation.Resource;
 
@@ -18,7 +21,7 @@ public class RootConfiguration {
     @Resource
     private Environment environment;
 
-    @Bean
+    @Bean()
     public BasicDataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
@@ -40,6 +43,9 @@ public class RootConfiguration {
         basicDataSource.setRemoveAbandoned(true);
         basicDataSource.setLogAbandoned(true);
         basicDataSource.setMinEvictableIdleTimeMillis(30000);
+
+        // create scheme
+        JdbcTestUtils.executeSqlScript(new JdbcTemplate(basicDataSource), new ClassPathResource("/sql/create_scheme.sql"), false);
         return basicDataSource;
     }
 }
