@@ -121,6 +121,16 @@ public class GameActivity extends Activity {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     public void set_pieces() {
 
         for(int i = 0; i <= 3; i++)
