@@ -1,7 +1,10 @@
 package ac.ic.chaturaji.android;
 
+import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import ac.ic.chaturaji.android.pieces.*;
+import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * This is a simple framework for a test of an Application.  See
@@ -16,27 +19,30 @@ import ac.ic.chaturaji.android.pieces.*;
 public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
 
     public GameTest() {
-        super("ac.ic.chaturaji.android", GameActivity.class);
+        super(GameActivity.class);
     }
 
     private GameActivity game;
-    private Pieces[][] Board = new Pieces[8][8];
+    private Pieces[][] Board;
+    private ImageView A1;
 
     @Override
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
         super.setUp();
+        setActivityInitialTouchMode(false);
         game = getActivity();
-        game.setBoard(Board);
-        game.setPieces();
         Board = game.getBoard();
-        //game.setBoard();
-        //game.drawPieces();
-        //game.playGame();
-        //game.setScoreboard();
+        A1 = (ImageView) game.findViewById(R.id.A1);
     }
 
-    public void testselectPiece() {
-        //assertNotNull(Board[0][0]);
+    public void testPreconditions() {
+
+        assertTrue(A1 != null);
+    }
+
+    public void testBoard() {
+
+        assertNotNull(Board[0][0]);
     }
 
 }

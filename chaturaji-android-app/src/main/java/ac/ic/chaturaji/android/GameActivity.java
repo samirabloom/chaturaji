@@ -45,8 +45,8 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         String colour = getIntent().getStringExtra("colour");
-        int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
-        setContentView(identifier);
+        //int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
+        setContentView(R.layout.in_game_blue);
 
         setPieces();
         setBoard();
@@ -577,5 +577,13 @@ public class GameActivity extends Activity {
 
     public void setBoard(Pieces[][] Board) {
         this.Board = Board;
+    }
+
+    public int getBlue_score() {
+        return blue_score;
+    }
+
+    public void setBlue_score(int blue_score) {
+        this.blue_score = blue_score;
     }
 }
