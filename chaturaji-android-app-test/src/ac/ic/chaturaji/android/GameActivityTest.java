@@ -9,6 +9,8 @@ import junit.framework.Assert;
 /**
  * Created by Kadir on March 8.
  */
+
+/*
 public class GameActivityTest {
 
     public void setUp() {
@@ -30,3 +32,4 @@ public class GameActivityTest {
         Assert.assertTrue(game.selectPiece(2, 2));
     }
 }
+*/
