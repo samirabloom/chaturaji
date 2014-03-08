@@ -3,10 +3,7 @@ package ac.ic.chaturaji.ai;
 import ac.ic.chaturaji.model.*;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,7 +17,7 @@ public class AI {
 
         //Create a new board and set up the bitboards within the Game class:
         Board_AI board = new Board_AI();
-        board.Print();
+        //board.Print();
 
         game.setBitboards(board.GetBitBoards());
 
@@ -56,8 +53,8 @@ public class AI {
                 }
 
                 board.ApplyMove(theMove);
-                board.Print();
-                theMove.Print();
+                //board.Print();
+                //theMove.Print();
 
                 game.setBitboards(board.GetBitBoards());
                 game.getPlayer(colour).setPoints(humanPlayer.GetPoints());
@@ -89,13 +86,16 @@ public class AI {
             case AI: {
                 playerAI = new PlayerComp(colour, player.getPoints(), player.getKingsCaptured());
 
+                Random randomGenerator = new Random();
+                int random = randomGenerator.nextInt();
+
                 // If it's the AI's turn just generate a move:
-                theMove = playerAI.GetMove(board);
+                theMove = playerAI.GetMove(board, (random % 2));
 
                 if (theMove != null) {
                     board.ApplyMove(theMove);
-                    board.Print();
-                    theMove.Print();
+                    //board.Print();
+                    //theMove.Print();
 
                     //Create Move and Game to return in a result object
                     //Move ResultMove = new Move();
@@ -140,7 +140,9 @@ public class AI {
             break;
         }
         // DO NOT COMMENT THIS OUT THIS IS THE WAY THE SERVER INTEGRATES TO AI
+
         synchronized (this) {
+            if (!moveListeners.isEmpty()) {
             List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
             if (moveListenersForGame != null) {
                 for (MoveListener moveListener : moveListenersForGame) {
@@ -148,6 +150,8 @@ public class AI {
                 }
             }
         }
+        }
+
         return result;
     }
 

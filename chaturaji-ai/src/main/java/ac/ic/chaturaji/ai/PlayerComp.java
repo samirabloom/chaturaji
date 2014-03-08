@@ -15,13 +15,16 @@ public class PlayerComp extends Player_AI {
 
     public int GetPlayerType(){ return GameConstants.AI; }
 
-    public Move_AI GetMove(Board_AI theBoard){
+    public Move_AI GetMove(Board_AI theBoard, int searchType){
         //Generate all the moves
         Move_AI move;
         MaxN maxn = new MaxN();
         AlphaBeta alphabeta  = new AlphaBeta();
 
-        move = alphabeta.Search(theBoard, theBoard.GetCurrentPlayer(), 5);
+        if (searchType == 0)
+            move = alphabeta.Search(theBoard, theBoard.GetCurrentPlayer(), 2);
+        else
+            move = maxn.Search(theBoard, theBoard.GetCurrentPlayer(), 2);
 
         // Set the points if a capture occurred.
         if (move != null)

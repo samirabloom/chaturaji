@@ -123,6 +123,11 @@ public class Board_AI implements Cloneable{
             BitBoards[GameConstants.GREEN_END_SQUARES] |= GameConstants.SquareBits[i];
         }
 
+        for (int i = 0; i < 4; i++) {
+            BitBoards[GameConstants.ALL_YELLOW_PIECES + i] = (BitBoards[GameConstants.YELLOW_PAWN + i] | BitBoards[GameConstants.YELLOW_BOAT + i]
+                    | BitBoards[GameConstants.YELLOW_KNIGHT + i] | BitBoards[GameConstants.YELLOW_ELEPHANT + i] | BitBoards[GameConstants.YELLOW_KING + i]);
+        }
+
         // These bitboards represent the different types of pawn promotion. For example, the bitboard BOAT_PAWNS contains all pawns that
         // may promote to a boat piece upon reaching their end squares.
         BitBoards[GameConstants.BOAT_PAWNS] = (GameConstants.SquareBits[1] | GameConstants.SquareBits[15] | GameConstants.SquareBits[48] | GameConstants.SquareBits[62]);

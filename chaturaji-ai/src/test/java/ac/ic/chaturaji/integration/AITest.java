@@ -2,9 +2,9 @@ package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.ai.AI;
 import ac.ic.chaturaji.ai.Board_AI;
+import ac.ic.chaturaji.ai.GameConstants;
 import ac.ic.chaturaji.ai.Move_AI;
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.model.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,101 +29,7 @@ public class AITest{
         filepath = new File("").getAbsolutePath();
     }
 
-    /*------ HELPER FUNCTIONS ------*/
-
-  /*  private long ConvertToBinary(String word) {
-        int length = word.length();
-        long bitboard = 0;
-        long count = 1;
-
-        assertEquals(64, length);
-
-        int[] results = new int[length];
-
-        for (int i = 0; i < length; i++)
-            results[i] = word.charAt(i) - '0';
-
-        for (int i = 0; i < 64; i++, count <<= 1) {
-            if (results[i] == 1)
-                bitboard |= count;
-        }
-        return bitboard;
-    }
-
-    private void CheckBitBoardsEqual(long[] theBoard, long[] trueBoard, int start, int end) {
-
-        for (int i = start; i <= end; i++) {
-            assertEquals(trueBoard[i - start], theBoard[i]);
-        }
-    }
-
-    private long[] GetBoards(String filename) {
-        BufferedReader reader = null;
-        long[] trueBoards = new long[32];
-
-        for (int i = 0; i < 32; i++) {
-            trueBoards[i] = 0;
-        }
-
-        try {
-            reader = new BufferedReader(new FileReader(filename));
-            String line = reader.readLine();
-            int count = 0;
-
-            while (line != null && count < 32) {
-                trueBoards[count] = ConvertToBinary(line);
-                count++;
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return trueBoards;
-    }
-
-    private Move_AI GetMove(String filename) {
-        BufferedReader reader = null;
-        int[] move = new int[6];
-        Move_AI theMove = null;
-        boolean triumph = false;
-
-        for (int i = 0; i < 6; i++) {
-            move[i] = 0;
-        }
-
-        try {
-            reader = new BufferedReader(new FileReader(filename));
-            String line = reader.readLine();
-            int count = 0;
-
-            while (line != null && count < 6) {
-                move[count] = Integer.parseInt(line);
-                count++;
-                line = reader.readLine();
-            }
-            triumph = Boolean.parseBoolean(line);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        int dest = move[0];
-        int source = move[1];
-        int piece = move[2];
-        int captured = move[3];
-        int type = move[4];
-        int promo = move[5];
-
-        theMove = new Move_AI(piece, source, dest);
-        theMove.SetCaptured(captured);
-        theMove.SetType(type);
-        theMove.SetPromotion(promo);
-        theMove.SetBoatTriumph(triumph);
-
-        return theMove;
-
-    }
-
-    /*------ TESTS -------
+    /*------ TESTS ------- */
 
     @Test
     public void startGameTest() {
@@ -132,25 +38,14 @@ public class AITest{
         long[] trueBoards;
 
         assertEquals(Colour.YELLOW, game.getCurrentPlayer());
-
-        Board_AI board = new Board_AI(game.getBitboards(), game.getCurrentPlayer().ordinal());
-        Board_AI cloneBoard = board.clone();
-
-        String testPath = filepath.concat("/chaturaji-ai/src/test/java/ac/ic/chaturaji/integration/TestCases/DefaultBoard.txt");
-
-        trueBoards = GetBoards(testPath);
-
-        CheckBitBoardsEqual(board.GetBitBoards(), trueBoards, 20, 23);
-        CheckBitBoardsEqual(board.GetBitBoards(), cloneBoard.GetBitBoards(), 0, 31);
+        System.out.println("startGameTest: succeeded");
     }
 
     @Test
-    public void submitMoveTest() {
+    public void submitMoveHumanTest() {
         Game game = new Game();
         Move move = new Move();
         game = ai.startGame(game);
-
-        String testPath = filepath.concat("/chaturaji-ai/src/test/java/ac/ic/chaturaji/integration/TestCases/Move2.txt");
 
         for (int i = 0; i < 4; i++) {
             Player player = new Player();
@@ -158,13 +53,258 @@ public class AITest{
             game.addPlayer(player);
         }
 
-        Move_AI theMove = GetMove(testPath);
-        move.setSource(theMove.getSource());
-        move.setDestination(theMove.getDest());
+        move.setSource(0);
+        move.setDestination(18);
         move.setColour(game.getCurrentPlayer());
 
-        Result result = ai.submitMove(game, move);
+        assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
+        System.out.println("submitMoveHumanTest: succeeded");
+    }
+    @Test
+    public void submitMoveAITest() {
+        Game game = new Game();
+        Move move = new Move();
+        game = ai.startGame(game);
 
-        assertEquals(GameStatus.IN_PLAY, result.getGameStatus());
-    }*/
+        for (int i = 0; i < 4; i++) {
+            Player player = new Player();
+            player.setType(PlayerType.AI);
+            game.addPlayer(player);
+        }
+
+        move.setSource(0);
+        move.setDestination(18);
+        move.setColour(game.getCurrentPlayer());
+
+        assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
+        System.out.println("submitMoveAITest: succeeded");
+    }
+
+    @Test
+    public void gameTest() {
+        Game game = new Game();
+        Move move = new Move();
+        Result result;
+        game = ai.startGame(game);
+        boolean move_complete = false;
+
+        for (int i = 0; i < 4; i++) {
+            Player player = new Player();
+            player.setType(PlayerType.AI);
+            game.addPlayer(player);
+        }
+
+        while (!move_complete) {
+        move.setColour(game.getCurrentPlayer());
+        result = ai.submitMove(game, move);
+        if (result.getGameStatus() == GameStatus.GAME_OVER || result.getGameStatus() == GameStatus.STALEMATE)
+            move_complete = true;
+        }
+        System.out.println("gameTest: succeeded");
+    }
+
+    @Test
+    public void boatTriumphTest() {
+        int[][] boatTriumph = TestCases.BoatTriumphGame;
+        Game game = new Game();
+        Move move = new Move();
+        Result result = null;
+        game = ai.startGame(game);
+
+        for (int i = 0; i < 4; i++) {
+            Player player = new Player();
+            player.setType(PlayerType.HUMAN);
+            game.addPlayer(player);
+        }
+
+        for (int[] moves: boatTriumph) {
+            int source = moves[0];
+            int dest = moves[1];
+
+            move.setColour(game.getCurrentPlayer());
+            move.setSource(source);
+            move.setDestination(dest);
+
+            result = ai.submitMove(game, move);
+
+            assertEquals(GameStatus.IN_PLAY, result.getGameStatus());
+        }
+        assertFalse(result == null);
+
+        assertEquals(ResultType.BOAT_TRIUMPH, result.getType());
+        System.out.println("boatTriumphTest: succeeded");
+    }
+
+    @Test
+    public void promotionTestYellowRed() {
+        Game game = new Game();
+        game = ai.startGame(game);
+
+        long[] PawnBoards = new long [32];
+
+        for (int i = 0; i < 4; i++) {
+            Player player = new Player();
+            if ((i % 2) == 0)
+                player.setType(PlayerType.HUMAN);
+            else
+                player.setType(PlayerType.AI);
+            game.addPlayer(player);
+        }
+
+        for (int i = 0; i < 32; i++) {
+            PawnBoards[i] = (TestCases.YellowPawns[i] | TestCases.RedPawns[i]);
+        }
+
+        game.setBitboards(PawnBoards);
+        checkPromo(game);
+        System.out.println("promotionTestYellowRed: succeeded");
+    }
+
+    @Test
+    public void promotionTestBlueGreen() {
+        Game game = new Game();
+        game = ai.startGame(game);
+
+        long[] PawnBoards = new long [32];
+
+        for (int i = 0; i < 4; i++) {
+            Player player = new Player();
+            if ((i % 2) == 0)
+                player.setType(PlayerType.AI);
+            else
+                player.setType(PlayerType.HUMAN);
+            game.addPlayer(player);
+        }
+
+        for (int i = 0; i < 32; i++) {
+            PawnBoards[i] = (TestCases.BluePawns[i] | TestCases.GreenPawns[i]);
+        }
+
+        game.setBitboards(PawnBoards);
+        checkPromo(game);
+        System.out.println("promotionTestBlueGreen: succeeded");
+    }
+
+    private void checkPromo(Game game) {
+
+        int source, dest;
+
+        int[][] BoatTest = TestCases.BoatPromo;
+        int[][] KnightTest = TestCases.KnightPromo;
+        int[][] ElephantTest = TestCases.ElephantPromo;
+        int[][] KingTest = TestCases.KingPromo;
+
+        Move move = new Move();
+        Result result = null;
+
+        for (int k = 0; k < 5; k++) {
+            for (int i = 0; i < 4; i++) {
+                source = BoatTest[i + (k * 4)][0];
+                dest = BoatTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+            }
+            for (int i = 0; i < 4; i++) {
+                source = KnightTest[i + (k * 4)][0];
+                dest = KnightTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+            }
+            for (int i = 0; i < 4; i++) {
+                source = ElephantTest[i + (k * 4)][0];
+                dest = ElephantTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+            }
+            for (int i = 0; i < 4; i++) {
+                source = KingTest[i + (k * 4)][0];
+                dest = KingTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+            }
+        }
+
+        for (int k = 5; k < 6; k++) {
+            for (int i = 0; i < 4; i++) {
+                source = BoatTest[i + (k * 4)][0];
+                dest = BoatTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+
+                long boatCount = game.getBitboards()[GameConstants.BOAT + i];
+
+                if (game.getPlayer(i).getType() != PlayerType.AI) {
+                    assertTrue(boatCount != 0);
+                }
+            }
+            for (int i = 0; i < 4; i++) {
+                source = KnightTest[i + (k * 4)][0];
+                dest = KnightTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+
+                long knightCount = game.getBitboards()[GameConstants.KNIGHT + i];
+
+                if (game.getPlayer(i).getType() != PlayerType.AI) {
+                    assertTrue(knightCount != 0);
+                }
+            }
+            for (int i = 0; i < 4; i++) {
+                source = ElephantTest[i + (k * 4)][0];
+                dest = ElephantTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+
+                long elephantCount = game.getBitboards()[GameConstants.ELEPHANT + i];
+
+                if (game.getPlayer(i).getType() != PlayerType.AI) {
+                    assertTrue(elephantCount != 0);
+                }
+            }
+            for (int i = 0; i < 4; i++) {
+                source = KingTest[i + (k * 4)][0];
+                dest = KingTest[i + (k * 4)][1];
+
+                move.setColour(game.getCurrentPlayer());
+                move.setSource(source);
+                move.setDestination(dest);
+
+                ai.submitMove(game, move);
+
+                long kingCount = game.getBitboards()[GameConstants.KING + i];
+
+                if (game.getPlayer(i).getType() != PlayerType.AI) {
+                    assertTrue(kingCount != 0);
+                }
+            }
+        }
+    }
 }
