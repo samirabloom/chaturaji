@@ -1,14 +1,8 @@
 package ac.ic.chaturaji.dao;
 
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.model.*;
 import org.joda.time.LocalDateTime;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -27,6 +21,9 @@ public class GameDAO {
 
     @Resource
     private DataSource dataSource;
+
+    @Resource
+    UserDAO userDAO;
 
     private Map<String, Game> games = new HashMap<>();
 
@@ -95,8 +92,134 @@ public class GameDAO {
             games.remove(game.getId());
         }
         games.put(game.getId(), game);
-
-        //String sql = "INSERT INTO game(ID) VALUES (?,?,?,?,?,?,?)";
     }
 
+    public void saveMove(Move move, Game game){
+        String sql = "SELECT MAX(MOVE_ID) AS PREVIOUS_ID FROM MOVE GROUP BY GAME_ID HAVING GAME_ID=?";
+
+        try{
+            Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, game.getId());
+            ResultSet result = ps.executeQuery();
+            int previous_id = 0;
+            while (result.next()) {
+                previous_id = result.getInt("PREVIOUS_ID");
+            }
+
+            sql = "INSERT INTO MOVE(MOVE_ID,GAME_ID,SOURCE,DESTINATION) VALUES (?,?,?,?)";
+
+            ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, previous_id + 1);
+            ps.setString(2, game.getId());
+            ps.setInt(3, move.getSource());
+            ps.setInt(4, move.getDestination());
+            int i = ps.executeUpdate();
+            if (i != 1) {
+                throw new RuntimeException();
+            }
+            ps.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Move getMove(Game game, int move_no){
+        String sql = "SELECT * FROM MOVE WHERE GAME_ID=?";
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, game.getId());
+            ResultSet result = ps.executeQuery();
+            Move move = null;
+            result.next();
+            move = new Move();
+            move.setColour(Colour.values()[move_no%4-1]);
+            move.setSource(result.getInt("SOURCE"));
+            move.setDestination(result.getInt("DESTINATION"));
+            return move;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Move> getAllMoves(Game game){
+        String sql = "SELECT * FROM MOVE WHERE GAME_ID=?";
+        ArrayList<Move> Moves = new ArrayList<>();
+        try  {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, game.getId());
+            ResultSet result = ps.executeQuery();
+            Move move = null;
+            while(result.next()){
+                move = new Move();
+
+                move.setColour(Colour.values()[(result.getInt("MOVE_ID")-1)%4]);
+                move.setSource(result.getInt("SOURCE"));
+                move.setDestination(result.getInt("DESTINATION"));
+                Moves.add(move);
+            }
+            return Moves;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void savePlayers(Game game, List<Player>  Players){
+        String sql = "INSERT INTO PLAYER(PLAYER_ID,GAME_ID, USER_ID,COLOUR,TYPE) VALUES (?,?,?,?,?)";
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            for(Player player: Players){
+                ps.setString(1,player.getId());
+                ps.setString(2, game.getId());
+                ps.setString(3, player.getUser().getId());
+                ps.setInt(4, player.getColour().ordinal());
+                if(player.getType() == PlayerType.AI)
+                    ps.setString(5,"AI");
+                else
+                    ps.setString(5,"HUMAN");
+                int i = ps.executeUpdate();
+                if (i != 1) {
+                    throw new RuntimeException();
+                }
+            }
+            ps.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Player> getPlayers(Game game){
+        String sql = "SELECT * FROM PLAYER WHERE GAME_ID=?";
+        List<Player> Players = new ArrayList<Player>();
+        try  {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, game.getId());
+            ResultSet result = ps.executeQuery();
+            Player player = null;
+            while(result.next()){
+                player = new Player();
+                String id = result.getString("PLAYER_ID");
+                player.setId(id);
+                player.setUser(userDAO.get(result.getString("USER_ID")));
+                player.setColour(Colour.values()[result.getInt("COLOUR")]);
+                if(result.getString("TYPE") == "AI")
+                    player.setType(PlayerType.AI);
+                else
+                    player.setType(PlayerType.HUMAN);
+                Players.add(player);
+            }
+            return Players;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

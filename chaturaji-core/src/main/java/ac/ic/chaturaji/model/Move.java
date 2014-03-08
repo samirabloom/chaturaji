@@ -9,6 +9,13 @@ public class Move extends EqualsHashCodeToString {
     private int source;
     private int destination;
 
+    public Move(){}
+    public Move(Colour colour, int source, int destination){
+        setColour(colour);
+        setSource(source);
+        setDestination(destination);
+    }
+
     public int getDestination() {
         return destination;
     }
