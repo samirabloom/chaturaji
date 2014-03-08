@@ -12,6 +12,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.*;
 import android.view.Menu;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -571,19 +572,69 @@ public class GameActivity extends Activity {
         return false;
     }
 
+    /* Get functions for testing */
+
+    public ImageView[][] getBoardImage() {
+        return BoardImage;
+    }
+
     public Pieces[][] getBoard() {
         return Board;
     }
 
-    public void setBoard(Pieces[][] Board) {
-        this.Board = Board;
+    public int getSelected_column() {
+        return selected_column;
+    }
+
+    public int getSelected_row() {
+        return selected_row;
     }
 
     public int getBlue_score() {
         return blue_score;
     }
 
-    public void setBlue_score(int blue_score) {
-        this.blue_score = blue_score;
+    public int getRed_score() {
+        return red_score;
+    }
+
+    public int getGreen_score() {
+        return green_score;
+    }
+
+    public int getYellow_score() {
+        return yellow_score;
+    }
+
+    public int getMove_count() {
+        return move_count;
+    }
+
+    public int getBlue_king_captured_by() {
+        return blue_king_captured_by;
+    }
+
+    public int getRed_king_captured_by() {
+        return red_king_captured_by;
+    }
+
+    public int getGreen_king_captured_by() {
+        return green_king_captured_by;
+    }
+
+    public int getYellow_king_captured_by() {
+        return yellow_king_captured_by;
+    }
+
+    public boolean[][] getValid_moves() {
+        return valid_moves;
+    }
+
+    public boolean getMoved() {
+        return moved;
+    }
+
+    public String getMovelist() {
+        return movelist;
     }
 }
