@@ -49,6 +49,7 @@ public class GameActivity extends Activity {
         setContentView(identifier);
 
         set_pieces();
+        set_board();
         draw_pieces();
         play_game();
         set_scoreboard();
@@ -109,6 +110,7 @@ public class GameActivity extends Activity {
         String colour = getIntent().getStringExtra("colour");
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
         setContentView(identifier);
+        set_board();
         draw_pieces();
         play_game();
         set_scoreboard();
@@ -166,7 +168,7 @@ public class GameActivity extends Activity {
         Board[7][3] = new King(4);
     }
 
-    public void draw_pieces() {
+    public void set_board() {
 
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -177,6 +179,9 @@ public class GameActivity extends Activity {
                 int identifier = getResources().getIdentifier(square, "id", GameActivity.this.getPackageName());
                 BoardImage[i][j] = (android.widget.ImageView) findViewById(identifier);
             }
+    }
+
+    public void draw_pieces() {
 
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -214,6 +219,8 @@ public class GameActivity extends Activity {
                     int identifier = getResources().getIdentifier(piece, "drawable", GameActivity.this.getPackageName());
                     BoardImage[i][j].setImageResource(identifier);
                 }
+                else
+                    BoardImage[i][j].setImageResource(0);
             }
     }
 
@@ -246,6 +253,7 @@ public class GameActivity extends Activity {
 
                             set_scoreboard();
                             clear_selections();
+                            draw_pieces();
                         }
                         else if ((!moved) && select_piece(column, row))
                         {
@@ -444,48 +452,14 @@ public class GameActivity extends Activity {
 
     public void move(int source_column, int source_row, int destination_column, int destination_row) {
 
-        String source_tag;
-
-        if(Board[source_column][source_row] instanceof Pawn)
-            source_tag = "pawn";
-        else if(Board[source_column][source_row] instanceof Boat)
-            source_tag = "boat";
-        else if(Board[source_column][source_row] instanceof Knight)
-            source_tag = "knight";
-        else if(Board[source_column][source_row] instanceof Elephant)
-            source_tag = "elephant";
-        else if(Board[source_column][source_row] instanceof King)
-            source_tag = "king";
-        else
-            source_tag = "";
-
-        String piece_colour;
-
-        if(Board[source_column][source_row].colour == 1)
-            piece_colour = "blue";
-        else if(Board[source_column][source_row].colour == 2)
-            piece_colour = "red";
-        else if(Board[source_column][source_row].colour == 3)
-            piece_colour = "green";
-        else if(Board[source_column][source_row].colour == 4)
-            piece_colour = "yellow";
-        else
-            piece_colour = "empty";
-
-        String image = piece_colour + source_tag;
-        int identifier = getResources().getIdentifier(image, "drawable", GameActivity.this.getPackageName());
-
         adjust_scoreboard(source_column, source_row, destination_column, destination_row);
 
         Board[destination_column][destination_row] = Board[source_column][source_row];
         Board[source_column][source_row] = null;
-
-        BoardImage[destination_column][destination_row].setImageResource(identifier);
-        BoardImage[source_column][source_row].setImageResource(0);
     }
 
-    public boolean check_promotion(int column, int row, int piece_type, int colour)
-    {
+    public boolean check_promotion(int column, int row, int piece_type, int colour) {
+
         if(colour == 1 && row != 7)
             return false;
         else if(colour == 2 && column != 7)
@@ -537,23 +511,12 @@ public class GameActivity extends Activity {
                     {
                         if(check_promotion(i, j, Board[i][j].promotion, Board[i][j].colour))
                         {
-                            String type;
-
                             if(Board[i][j].promotion == 2)
-                            {
                                 Board[i][j] = new Boat(Board[i][j].colour);
-                                type = "boat";
-                            }
                             else if(Board[i][j].promotion == 3)
-                            {
                                 Board[i][j] = new Knight(Board[i][j].colour);
-                                type = "knight";
-                            }
                             else if(Board[i][j].promotion == 4)
-                            {
                                 Board[i][j] = new Elephant(Board[i][j].colour);
-                                type = "elephant";
-                            }
                             else if(Board[i][j].promotion == 5)
                             {
                                 Board[i][j] = new King(Board[i][j].colour);
@@ -565,29 +528,7 @@ public class GameActivity extends Activity {
                                     green_king_captured_by = 0;
                                 else if(Board[i][j].colour == 4)
                                     yellow_king_captured_by = 0;
-
-                                type = "king";
                             }
-                            else
-                                type = "";
-
-                            String colour;
-
-                            if(Board[i][j].colour == 1)
-                                colour = "blue";
-                            else if(Board[i][j].colour == 2)
-                                colour = "red";
-                            else if(Board[i][j].colour == 3)
-                                colour = "green";
-                            else if(Board[i][j].colour == 4)
-                                colour = "yellow";
-                            else
-                                colour = "";
-
-                            String image = colour + type;
-
-                            int identifier = getResources().getIdentifier(image, "drawable", GameActivity.this.getPackageName());
-                            BoardImage[i][j].setImageResource(identifier);
                         }
                     }
                 }
@@ -600,9 +541,6 @@ public class GameActivity extends Activity {
             Board[column + 1][row] = null;
             Board[column + 1][row + 1] = null;
             Board[column][row + 1] = null;
-            BoardImage[column + 1][row].setImageResource(0);
-            BoardImage[column + 1][row + 1].setImageResource(0);
-            BoardImage[column][row + 1].setImageResource(0);
             return true;
         }
 
@@ -611,9 +549,6 @@ public class GameActivity extends Activity {
             Board[column + 1][row] = null;
             Board[column + 1][row - 1] = null;
             Board[column][row - 1] = null;
-            BoardImage[column + 1][row].setImageResource(0);
-            BoardImage[column + 1][row - 1].setImageResource(0);
-            BoardImage[column][row - 1].setImageResource(0);
             return true;
         }
 
@@ -622,9 +557,6 @@ public class GameActivity extends Activity {
             Board[column][row + 1] = null;
             Board[column - 1][row] = null;
             Board[column - 1][row + 1] = null;
-            BoardImage[column][row + 1].setImageResource(0);
-            BoardImage[column - 1][row].setImageResource(0);
-            BoardImage[column - 1][row + 1].setImageResource(0);
             return true;
         }
 
@@ -633,13 +565,9 @@ public class GameActivity extends Activity {
             Board[column - 1][row] = null;
             Board[column - 1][row - 1] = null;
             Board[column][row - 1] = null;
-            BoardImage[column - 1][row].setImageResource(0);
-            BoardImage[column - 1][row - 1].setImageResource(0);
-            BoardImage[column][row - 1].setImageResource(0);
             return true;
         }
 
         return false;
     }
-
 }
