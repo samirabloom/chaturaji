@@ -7,6 +7,7 @@ import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -33,6 +34,8 @@ public class GameControllerTest {
     @Mock
     private ObjectMapper objectMapper;
     @Mock
+    private ObjectWriter objectWriter;
+    @Mock
     private AI ai;
     @Mock
     private SpringSecurityUserContext springSecurityUserContext;
@@ -51,7 +54,8 @@ public class GameControllerTest {
         // given
         List<Game> games = Arrays.asList(new Game("a", new Player(new User())));
         when(gameDAO.getAll()).thenReturn(games);
-        when(objectMapper.writeValueAsString(games)).thenReturn("json");
+        when(objectMapper.writerWithDefaultPrettyPrinter()).thenReturn(objectWriter);
+        when(objectWriter.writeValueAsString(games)).thenReturn("json");
 
         // when
         String result = gameController.getGameList();
@@ -60,7 +64,7 @@ public class GameControllerTest {
         assertEquals("json", result);
 
         verify(gameDAO).getAll();
-        verify(objectMapper).writeValueAsString(Arrays.asList(new Game("a", new Player(new User()))));
+        verify(objectWriter).writeValueAsString(Arrays.asList(new Game("a", new Player(new User()))));
     }
 
     @Test
