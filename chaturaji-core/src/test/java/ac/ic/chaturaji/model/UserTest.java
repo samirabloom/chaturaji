@@ -16,8 +16,8 @@ public class UserTest {
         // then
         assertEquals("some id", user.getId());
         assertEquals("some email", user.getEmail());
-        assertEquals("some password", user.getPassword());
         assertEquals("some nickname", user.getNickname());
+        assertEquals("some password", user.getPassword());
     }
 
     @Test
@@ -27,10 +27,12 @@ public class UserTest {
         user.setId("some id");
         user.setEmail("some email");
         user.setNickname("some nickname");
+        user.setPassword("some password");
 
         // then
         assertEquals("some id", user.getId());
         assertEquals("some email", user.getEmail());
         assertEquals("some nickname", user.getNickname());
+        assertEquals("some password", user.getPassword());
     }
 }
