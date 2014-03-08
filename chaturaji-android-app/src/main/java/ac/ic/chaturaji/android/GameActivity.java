@@ -48,11 +48,11 @@ public class GameActivity extends Activity {
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
         setContentView(identifier);
 
-        set_pieces();
-        set_board();
-        draw_pieces();
-        play_game();
-        set_scoreboard();
+        setPieces();
+        setBoard();
+        drawPieces();
+        playGame();
+        setScoreboard();
     }
 
     @Override
@@ -110,16 +110,16 @@ public class GameActivity extends Activity {
         String colour = getIntent().getStringExtra("colour");
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
         setContentView(identifier);
-        set_board();
-        draw_pieces();
-        play_game();
-        set_scoreboard();
+        setBoard();
+        drawPieces();
+        playGame();
+        setScoreboard();
 
         if((selected_column != -1) && (selected_row != -1) && (!moved))
         {
-            select_piece(selected_column, selected_row);
+            selectPiece(selected_column, selected_row);
             BoardImage[selected_column][selected_row].setBackgroundColor(getResources().getColor(R.color.light_blue));
-            show_valid_moves(selected_column, selected_row);
+            showValidMoves(selected_column, selected_row);
         }
     }
 
@@ -133,7 +133,7 @@ public class GameActivity extends Activity {
         super.onResume();
     }
 
-    public void set_pieces() {
+    public void setPieces() {
 
         for(int i = 0; i <= 3; i++)
             Board[i][1] = new Pawn(1, (i + 2));
@@ -168,7 +168,7 @@ public class GameActivity extends Activity {
         Board[7][3] = new King(4);
     }
 
-    public void set_board() {
+    public void setBoard() {
 
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -181,7 +181,7 @@ public class GameActivity extends Activity {
             }
     }
 
-    public void draw_pieces() {
+    public void drawPieces() {
 
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -224,7 +224,7 @@ public class GameActivity extends Activity {
             }
     }
 
-    public void play_game() {
+    public void playGame() {
 
         int i;
         int j;
@@ -240,28 +240,28 @@ public class GameActivity extends Activity {
                     public void onClick(View v) {
 
                         if(selected_column == column && selected_row == row)
-                            clear_selections();
+                            clearSelections();
                         else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
                         {
                             move(selected_column, selected_row, column, row);
                             moved = true;
                             move_count++;
-                            pawn_promotion();
+                            pawnPromotion();
 
-                            while(!check_valid_moves())
+                            while(!checkValidMoves())
                                 move_count++;
 
-                            set_scoreboard();
-                            clear_selections();
-                            draw_pieces();
+                            setScoreboard();
+                            clearSelections();
+                            drawPieces();
                         }
-                        else if ((!moved) && select_piece(column, row))
+                        else if ((!moved) && selectPiece(column, row))
                         {
-                            clear_selections();
+                            clearSelections();
                             BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
                             selected_column = column;
                             selected_row = row;
-                            show_valid_moves(column, row);
+                            showValidMoves(column, row);
                         }
 
                         moved = false;
@@ -271,7 +271,7 @@ public class GameActivity extends Activity {
         }
     }
 
-    public void set_scoreboard() {
+    public void setScoreboard() {
 
         TextView blue_score_text = (TextView) findViewById(R.id.blue_score);
         TextView red_score_text = (TextView) findViewById(R.id.red_score);
@@ -313,7 +313,7 @@ public class GameActivity extends Activity {
         show_turn.setText(turn_string);
     }
 
-    public void adjust_scoreboard(int source_column, int source_row, int destination_column, int destination_row) {
+    public void adjustScoreboard(int source_column, int source_row, int destination_column, int destination_row) {
 
         int score = 0;
         boolean boattriumph = false;
@@ -378,7 +378,7 @@ public class GameActivity extends Activity {
         }
 
         if(Board[source_column][source_row] instanceof Boat)
-            if(boat_triumph(destination_column, destination_row))
+            if(boatTriumph(destination_column, destination_row))
             {
                 score = score + 6;
                 boattriumph = true;
@@ -401,13 +401,13 @@ public class GameActivity extends Activity {
             movelist = movelist + (move_count + 1) + ". " + (char)(source_column + 65) + (source_row + 1) + " to " + (char)(destination_column + 65) + (destination_row + 1) + " taking " + taken_colour + "'s " + taken_type + "\n";
     }
 
-    public boolean select_piece(int column, int row) {
+    public boolean selectPiece(int column, int row) {
 
         int turn = (move_count % 4) + 1;
         return ((Board[column][row] != null) && (Board[column][row].colour == turn));
     }
 
-    public void clear_selections() {
+    public void clearSelections() {
 
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -420,7 +420,7 @@ public class GameActivity extends Activity {
         selected_column = -1;
     }
 
-    public boolean check_valid_moves() {
+    public boolean checkValidMoves() {
 
         int turn = (move_count % 4) + 1;
         boolean[][] check_moves;
@@ -439,7 +439,7 @@ public class GameActivity extends Activity {
         return false;
     }
 
-    public void show_valid_moves(int column, int row) {
+    public void showValidMoves(int column, int row) {
 
         valid_moves = Board[column][row].valid_moves(column, row, Board);
 
@@ -452,13 +452,13 @@ public class GameActivity extends Activity {
 
     public void move(int source_column, int source_row, int destination_column, int destination_row) {
 
-        adjust_scoreboard(source_column, source_row, destination_column, destination_row);
+        adjustScoreboard(source_column, source_row, destination_column, destination_row);
 
         Board[destination_column][destination_row] = Board[source_column][source_row];
         Board[source_column][source_row] = null;
     }
 
-    public boolean check_promotion(int column, int row, int piece_type, int colour) {
+    public boolean checkPromotion(int column, int row, int piece_type, int colour) {
 
         if(colour == 1 && row != 7)
             return false;
@@ -501,7 +501,7 @@ public class GameActivity extends Activity {
         return true;
     }
 
-    public void pawn_promotion() {
+    public void pawnPromotion() {
 
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -509,7 +509,7 @@ public class GameActivity extends Activity {
                 {
                     if(Board[i][j] instanceof Pawn)
                     {
-                        if(check_promotion(i, j, Board[i][j].promotion, Board[i][j].colour))
+                        if(checkPromotion(i, j, Board[i][j].promotion, Board[i][j].colour))
                         {
                             if(Board[i][j].promotion == 2)
                                 Board[i][j] = new Boat(Board[i][j].colour);
@@ -534,7 +534,7 @@ public class GameActivity extends Activity {
                 }
     }
 
-    public boolean boat_triumph(int column, int row) {
+    public boolean boatTriumph(int column, int row) {
 
         if(column <= 6 && row <= 6 && Board[column + 1][row] instanceof Boat && Board[column + 1][row + 1] instanceof Boat && Board[column][row + 1] instanceof Boat)
         {
