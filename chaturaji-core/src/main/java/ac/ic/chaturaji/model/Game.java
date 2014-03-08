@@ -17,6 +17,7 @@ public class Game extends EqualsHashCodeToString {
     @JsonIgnore
     private long[] bitboards;
     private Colour currentPlayer = Colour.YELLOW;
+    @JsonIgnore
     private int stalemateCount;
 
     // Dummy constructor needed to map JSON string back to Java object
