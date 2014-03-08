@@ -56,7 +56,7 @@ public class LoginActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
-            SharedPreferences settings = getSharedPreferences("main", 0);
+            /*SharedPreferences settings = getSharedPreferences("main", 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("sound", true);
 
@@ -66,12 +66,12 @@ public class LoginActivity extends Activity {
             editor.putString("email", email);
             editor.putString("password", password);
 
-            editor.commit();
+            editor.commit();*/
 
             Intent getMainMenu = new Intent(LoginActivity.this, MainMenu.class);
-            PostGame postgame = new PostGame();
+            //PostGame postgame = new PostGame();
 
-            try {
+/*            try {
 
                 postgame.execute("");
                 String state = postgame.get();
@@ -85,16 +85,16 @@ public class LoginActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "There was a problem logging in. Have you entered the correct details?", Toast.LENGTH_LONG).show();
                 }
 
-                else{
+                else{*/
 
                     startActivity(getMainMenu);
-                }
+                /*}
 
             }
             catch(Exception e){
 
                 e.printStackTrace();
-            }
+            }*/
         }
     };
 

@@ -570,4 +570,12 @@ public class GameActivity extends Activity {
 
         return false;
     }
+
+    public Pieces[][] getBoard() {
+        return Board;
+    }
+
+    public void setBoard(Pieces[][] Board) {
+        this.Board = Board;
+    }
 }

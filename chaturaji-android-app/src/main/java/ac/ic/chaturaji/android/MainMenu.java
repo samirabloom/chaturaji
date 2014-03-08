@@ -63,10 +63,10 @@ public class MainMenu extends Activity {
         public void onClick(View theView) {
 
             Intent getSingleGame = new Intent(MainMenu.this, ChooseColour.class);
-            PostGame postgame = new PostGame();
+            //PostGame postgame = new PostGame();
             startActivity(getSingleGame);
 
-            try {
+            /*try {
 
                 postgame.execute("3");
                 String state = postgame.get();
@@ -89,7 +89,7 @@ public class MainMenu extends Activity {
             catch(Exception e){
 
                 e.printStackTrace();
-            }
+            }*/
 
         }
     };
