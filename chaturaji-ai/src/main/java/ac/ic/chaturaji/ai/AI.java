@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AI {
     Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
 
-    public Game startGame(Game game) {
+    public Game createGame(Game game) {
 
         //Create a new board and set up the bitboards within the Game class:
         Board_AI board = new Board_AI();
@@ -143,13 +143,13 @@ public class AI {
 
         synchronized (this) {
             if (!moveListeners.isEmpty()) {
-            List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
-            if (moveListenersForGame != null) {
-                for (MoveListener moveListener : moveListenersForGame) {
-                    moveListener.pieceMoved(result);
+                List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
+                if (moveListenersForGame != null) {
+                    for (MoveListener moveListener : moveListenersForGame) {
+                        moveListener.pieceMoved(result);
+                    }
                 }
             }
-        }
         }
 
         return result;

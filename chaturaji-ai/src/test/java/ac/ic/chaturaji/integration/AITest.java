@@ -1,19 +1,15 @@
 package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.ai.AI;
-import ac.ic.chaturaji.ai.Board_AI;
 import ac.ic.chaturaji.ai.GameConstants;
-import ac.ic.chaturaji.ai.Move_AI;
 import ac.ic.chaturaji.model.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+
 /**
  * Created by dg3213 on 04/03/14.
  */
@@ -34,7 +30,7 @@ public class AITest{
     @Test
     public void startGameTest() {
         //Game game = new Game();
-        game = ai.startGame(game);
+        game = ai.createGame(game);
         long[] trueBoards;
 
         assertEquals(Colour.YELLOW, game.getCurrentPlayer());
@@ -45,7 +41,7 @@ public class AITest{
     public void submitMoveHumanTest() {
         Game game = new Game();
         Move move = new Move();
-        game = ai.startGame(game);
+        game = ai.createGame(game);
 
         for (int i = 0; i < 4; i++) {
             Player player = new Player();
@@ -64,7 +60,7 @@ public class AITest{
     public void submitMoveAITest() {
         Game game = new Game();
         Move move = new Move();
-        game = ai.startGame(game);
+        game = ai.createGame(game);
 
         for (int i = 0; i < 4; i++) {
             Player player = new Player();
@@ -85,7 +81,7 @@ public class AITest{
         Game game = new Game();
         Move move = new Move();
         Result result;
-        game = ai.startGame(game);
+        game = ai.createGame(game);
         boolean move_complete = false;
 
         for (int i = 0; i < 4; i++) {
@@ -109,7 +105,7 @@ public class AITest{
         Game game = new Game();
         Move move = new Move();
         Result result = null;
-        game = ai.startGame(game);
+        game = ai.createGame(game);
 
         for (int i = 0; i < 4; i++) {
             Player player = new Player();
@@ -138,7 +134,7 @@ public class AITest{
     @Test
     public void promotionTestYellowRed() {
         Game game = new Game();
-        game = ai.startGame(game);
+        game = ai.createGame(game);
 
         long[] PawnBoards = new long [32];
 
@@ -163,7 +159,7 @@ public class AITest{
     @Test
     public void promotionTestBlueGreen() {
         Game game = new Game();
-        game = ai.startGame(game);
+        game = ai.createGame(game);
 
         long[] PawnBoards = new long [32];
 

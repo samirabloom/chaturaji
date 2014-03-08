@@ -50,7 +50,6 @@ public class GameController {
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, false);
         objectMapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
-        objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, false);
         // relax parsing
         objectMapper.configure(DeserializationConfig.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         objectMapper.configure(DeserializationConfig.Feature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
@@ -90,9 +89,10 @@ public class GameController {
         }
         User currentUser = springSecurityUserContext.getCurrentUser();
         try {
-            String id = UUID.randomUUID().toString();
-            gameDAO.save(new Game(id, new Player(currentUser)));
-            ai.registerListener(id, new MoveListener() {
+            Game game = new Game(UUID.randomUUID().toString(), new Player(currentUser));
+            gameDAO.save(game);
+            ai.createGame(game);
+            ai.registerListener(game.getId(), new MoveListener() {
                 @Override
                 public void pieceMoved(Result result) {
                     System.out.println("result = " + result);
