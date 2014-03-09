@@ -1,6 +1,5 @@
 package ac.ic.chaturaji.websockets;
 
-import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.model.Result;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import io.netty.channel.Channel;

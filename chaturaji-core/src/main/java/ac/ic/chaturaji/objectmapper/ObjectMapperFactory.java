@@ -1,6 +1,5 @@
 package ac.ic.chaturaji.objectmapper;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;

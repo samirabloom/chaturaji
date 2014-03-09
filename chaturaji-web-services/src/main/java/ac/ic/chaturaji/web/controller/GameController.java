@@ -1,9 +1,11 @@
 package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.ai.AI;
-import ac.ic.chaturaji.ai.MoveListener;
 import ac.ic.chaturaji.dao.GameDAO;
-import ac.ic.chaturaji.model.*;
+import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.model.Move;
+import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;

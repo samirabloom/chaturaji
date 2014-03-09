@@ -58,43 +58,43 @@ public class GameControllerMockMVCIntegrationTest {
         mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-   /* @Test
-    public void shouldLoadListOfGames() throws Exception {
-        // given
-        when(gameDAO.getAll()).thenReturn(Arrays.asList(
-                new Game("1", new Player(new User())),
-                new Game("2", new Player(new User())),
-                new Game("3", new Player(new User())),
-                new Game("4", new Player(new User()))
-        ));
+    /* @Test
+     public void shouldLoadListOfGames() throws Exception {
+         // given
+         when(gameDAO.getAll()).thenReturn(Arrays.asList(
+                 new Game("1", new Player(new User())),
+                 new Game("2", new Player(new User())),
+                 new Game("3", new Player(new User())),
+                 new Game("4", new Player(new User()))
+         ));
 
-        // when
-        mockMvc.perform(
-                get("/games")
-                        .accept(MediaType.APPLICATION_JSON)
-        )
-                // then
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
-                .andExpect(jsonPath("$", hasSize(4)));
-    }
+         // when
+         mockMvc.perform(
+                 get("/games")
+                         .accept(MediaType.APPLICATION_JSON)
+         )
+                 // then
+                 .andExpect(status().isOk())
+                 .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
+                 .andExpect(jsonPath("$", hasSize(4)));
+     }
 
-    @Test
-    public void shouldCreateGame() throws Exception {
-        // when
-        MvcResult result = mockMvc.perform(
-                post("/game")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("numberOfAIPlayers", "0")
-        )
-                // then
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
-                .andReturn();
+     @Test
+     public void shouldCreateGame() throws Exception {
+         // when
+         MvcResult result = mockMvc.perform(
+                 post("/game")
+                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                         .param("numberOfAIPlayers", "0")
+         )
+                 // then
+                 .andExpect(status().isCreated())
+                 .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
+                 .andReturn();
 
-        assertEquals("", result.getResponse().getContentAsString());
-    }
-*/
+         assertEquals("", result.getResponse().getContentAsString());
+     }
+ */
     @Test
     public void shouldValidateNumberOfPlayersNotTooSmall() throws Exception {
         // when
