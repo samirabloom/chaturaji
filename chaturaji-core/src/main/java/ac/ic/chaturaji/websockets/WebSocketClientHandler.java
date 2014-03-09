@@ -1,5 +1,7 @@
-package ac.ic.chaturaji.integration;
+package ac.ic.chaturaji.websockets;
 
+import ac.ic.chaturaji.model.Result;
+import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -8,25 +10,24 @@ import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.codehaus.jackson.map.ObjectMapper;
 
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 
     private final WebSocketClientHandshaker handshaker;
-    private final String clientId;
+    private final GameMoveListener gameMoveListener;
+    private final String playerId;
+    private ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
 
-    public WebSocketClientHandler(WebSocketClientHandshaker handshaker, String clientId) {
+    public WebSocketClientHandler(WebSocketClientHandshaker handshaker, GameMoveListener gameMoveListener, String playerId) {
         this.handshaker = handshaker;
-        this.clientId = clientId;
+        this.gameMoveListener = gameMoveListener;
+        this.playerId = playerId;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         handshaker.handshake(ctx.channel());
-    }
-
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("WebSocket Client disconnected!");
     }
 
     @Override
@@ -37,9 +38,9 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         if (!handshaker.isHandshakeComplete()) {
             handshaker.finishHandshake(channel, (FullHttpResponse) msg);
 
-            channel.writeAndFlush(new TextWebSocketFrame(clientId));
+            channel.writeAndFlush(new TextWebSocketFrame(playerId));
             for (int i = 0; i < 10; i++) {
-                channel.writeAndFlush(new TextWebSocketFrame("Client " + clientId + " to server message #" + i));
+                channel.writeAndFlush(new TextWebSocketFrame("Client " + playerId + " to server message #" + i));
             }
             return;
         }
@@ -48,9 +49,13 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         WebSocketFrame frame = (WebSocketFrame) msg;
         if (frame instanceof TextWebSocketFrame) {
             TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
-            System.out.println("WebSocket Client " + clientId + " received message: " + textFrame.text());
+            // todo remove the system out debugging line below
+            System.out.println("WebSocket Client " + playerId + " received message: " + textFrame.text());
+            Result result = objectMapper.readValue(textFrame.text(), Result.class);
+            gameMoveListener.onMoveCompleted(result);
         } else if (frame instanceof CloseWebSocketFrame) {
-            System.out.println("WebSocket Client " + clientId + " received closing");
+            // todo remove the system out debugging
+            System.out.println("WebSocket Client " + playerId + " received closing");
             channel.close();
         } else {
             throw new RuntimeException("Unexpected response [" + msg + "]");

@@ -13,10 +13,13 @@ public class Game extends EqualsHashCodeToString {
     private String id;
     private LocalDateTime createdDate;
     private List<Player> players = new ArrayList<>();
+    private Colour currentPlayer = Colour.YELLOW;
+    /* JsonIgnore the following fields to prevent them from being sent down to the client,
+    this is important otherwise the performance will be ridiculously slow and unresponsive */
+    @JsonIgnore
     private List<Move> moves = new ArrayList<>();
     @JsonIgnore
     private long[] bitboards;
-    private Colour currentPlayer = Colour.YELLOW;
     @JsonIgnore
     private int stalemateCount;
 
@@ -88,10 +91,17 @@ public class Game extends EqualsHashCodeToString {
         this.currentPlayer = currentPlayer;
     }
 
-    public int getStalemateCount() { return stalemateCount; }
+    public int getStalemateCount() {
+        return stalemateCount;
+    }
 
-    public void incrementStalemateCount() { stalemateCount++; }
-    public void resetStalemateCount() { stalemateCount = 0; }
+    public void incrementStalemateCount() {
+        stalemateCount++;
+    }
+
+    public void resetStalemateCount() {
+        stalemateCount = 0;
+    }
 
     public Player getPlayer(int index) {
         return players.get(index);

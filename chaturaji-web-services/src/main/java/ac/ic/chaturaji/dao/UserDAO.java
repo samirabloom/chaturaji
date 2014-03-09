@@ -11,8 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -21,13 +19,10 @@ import java.util.UUID;
 @Component
 public class UserDAO {
 
-    private Map<String, User> usersById = new HashMap<>();
-    private Map<String, User> usersByEmail = new HashMap<>();
-    @Resource
-    private PasswordEncoder passwordEncoder;
-
     @Resource
     DataSource dataSource;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void setupTestData() {
@@ -35,7 +30,6 @@ public class UserDAO {
     }
 
     public User findByEmail(String email) {
-//        return usersByEmail.get(email);
         String sql = "SELECT * FROM USER WHERE EMAIL=?";
 
         try (Connection connection = dataSource.getConnection()) {
@@ -80,7 +74,6 @@ public class UserDAO {
     }
 
     public User get(String id) {
-//        return usersById.get(id);
         String sql = "SELECT * FROM USER WHERE USER_ID=?";
 
         try (Connection connection = dataSource.getConnection()) {
@@ -105,8 +98,6 @@ public class UserDAO {
     }
 
     public void save(User user) {
-        usersByEmail.put(user.getEmail(), user);
-        usersById.put(user.getId(), user);
         String sql = "INSERT INTO USER (USER_ID,EMAIL,NICKNAME,PASSWORD) VALUES (?,?,?,?)";
         try {
             Connection connection = dataSource.getConnection();

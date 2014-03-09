@@ -6,6 +6,7 @@ import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
+import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.junit.Before;
@@ -15,8 +16,11 @@ import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.ServletContext;
 import java.io.IOException;
+import java.nio.channels.Channel;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -38,6 +42,8 @@ public class GameControllerTest {
     @Mock
     private AI ai;
     @Mock
+    private ServletContext servletContext;
+    @Mock
     private SpringSecurityUserContext springSecurityUserContext;
     @InjectMocks
     private GameController gameController;
@@ -52,7 +58,7 @@ public class GameControllerTest {
     @Test
     public void shouldGetGamesFromDAOAndCreateJSON() throws IOException {
         // given
-        List<Game> games = Arrays.asList(new Game("a", new Player(new User())));
+        List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User())));
         when(gameDAO.getAll()).thenReturn(games);
         when(objectMapper.writerWithDefaultPrettyPrinter()).thenReturn(objectWriter);
         when(objectWriter.writeValueAsString(games)).thenReturn("json");
@@ -64,12 +70,13 @@ public class GameControllerTest {
         assertEquals("json", result);
 
         verify(gameDAO).getAll();
-        verify(objectWriter).writeValueAsString(Arrays.asList(new Game("a", new Player(new User()))));
+        verify(objectWriter).writeValueAsString(Arrays.asList(new Game("a", new Player("player id", new User()))));
     }
 
     @Test
     public void shouldSaveGameToDAOSuccessfully() throws IOException {
         // when
+        when(servletContext.getAttribute(WebSocketServletContextListener.WEB_SOCKET_CLIENT_ATTRIBUTE_NAME)).thenReturn(new HashMap<String, Channel>());
         ResponseEntity<String> result = gameController.createGame(0);
 
         // then
