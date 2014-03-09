@@ -1,10 +1,14 @@
-package ac.ic.chaturaji.android;
+package ac.ic.chaturaji.android.test;
 
+import ac.ic.chaturaji.android.MainMenu;
+import ac.ic.chaturaji.android.R;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 
 /**
- * Created by Haider on 08/03/14.
+ * @author haider
  */
 public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
 

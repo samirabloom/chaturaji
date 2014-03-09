@@ -1,5 +1,8 @@
-package ac.ic.chaturaji.android;
+package ac.ic.chaturaji.android.test;
 
+import ac.ic.chaturaji.android.GameActivity;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
 import ac.ic.chaturaji.android.pieces.*;
 import android.widget.ImageView;

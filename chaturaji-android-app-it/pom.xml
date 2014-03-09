@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.chaturaji</groupId>
+        <artifactId>chaturaji</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>chaturaji-android-app-it</artifactId>
+    <packaging>apk</packaging>
+    <name>Chaturaji Android Application Integration tests</name>
+
+    <properties>
+        <skip-android-it>true</skip-android-it>
+    </properties>
+
+    <dependencies>
+        <!-- android application -->
+        <dependency>
+            <groupId>org.chaturaji</groupId>
+            <artifactId>chaturaji-android-app</artifactId>
+            <type>apk</type>
+            <scope>provided</scope>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.chaturaji</groupId>
+            <artifactId>chaturaji-android-app</artifactId>
+            <type>jar</type>
+            <scope>provided</scope>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- unit testing -->
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android-test</artifactId>
+            <version>4.1.1.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>it</id>
+            <properties>
+                <skip-android-it>false</skip-android-it>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <configuration>
+                    <test>
+                        <skip>${skip-android-it}</skip>
+                        <coverage>true</coverage>
+                        <createReport>true</createReport>
+                        <!--<instrumentationPackage>packageName</instrumentationPackage> -->
+                        <!--<instrumentationRunner>className</instrumentationRunner> -->
+                        <!--<debug>true|false</debug> -->
+                        <!-- <classes>
+                            <class>your.package.name.YourTestClass</class>
+                        </classes> -->
+                        <!-- <packages>
+                            <package>your.package.name</package>
+                        </packages> -->
+                    </test>
+                </configuration>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
