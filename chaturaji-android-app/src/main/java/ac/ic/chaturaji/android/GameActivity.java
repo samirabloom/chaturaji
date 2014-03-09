@@ -1,20 +1,15 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.android.pieces.*;
-import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.method.ScrollingMovementMethod;
 import android.view.*;
 import android.view.Menu;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /* Following code done by Kadir Sekha */
 
