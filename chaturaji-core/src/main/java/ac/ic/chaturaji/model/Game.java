@@ -1,6 +1,10 @@
 package ac.ic.chaturaji.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateTimeSerializer;
 import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -11,6 +15,8 @@ import java.util.List;
  */
 public class Game extends EqualsHashCodeToString {
     private String id;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdDate;
     private List<Player> players = new ArrayList<>();
     private Colour currentPlayer = Colour.YELLOW;

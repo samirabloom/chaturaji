@@ -52,8 +52,6 @@ public class UserControllerMockMVCIntegrationTest {
     @Resource
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
-    @Resource
-    private UserDAO userDAO;
 
     @Before
     public void setupFixture() {
@@ -72,7 +70,7 @@ public class UserControllerMockMVCIntegrationTest {
         )
                 // then
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
+                .andExpect(content().contentType(MediaType.TEXT_PLAIN + ";charset=" + StandardCharsets.UTF_8))
                 .andReturn();
 
         assertEquals("", result.getResponse().getContentAsString());

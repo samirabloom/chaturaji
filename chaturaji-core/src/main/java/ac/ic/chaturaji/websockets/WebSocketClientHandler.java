@@ -2,6 +2,7 @@ package ac.ic.chaturaji.websockets;
 
 import ac.ic.chaturaji.model.Result;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -10,7 +11,6 @@ import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import org.codehaus.jackson.map.ObjectMapper;
 
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 

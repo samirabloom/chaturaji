@@ -145,8 +145,19 @@ public class AI {
             if (!moveListeners.isEmpty()) {
                 List<MoveListener> moveListenersForGame = moveListeners.get(game.getId());
                 if (moveListenersForGame != null) {
-                    for (MoveListener moveListener : moveListenersForGame) {
+                    for (MoveListener moveListener : new ArrayList<>(moveListenersForGame)) {
                         moveListener.pieceMoved(result);
+                        // clean-up map of move listeners when the game is over
+                        if (result.getGameStatus() == GameStatus.GAME_OVER) {
+                            if (moveListeners.get(game.getId()) != null) {
+                                // remove this listener from list for game
+                                moveListeners.get(game.getId()).remove(moveListener);
+                                if (moveListeners.get(game.getId()).size() == 0) {
+                                    // if no more listeners for this game remove list of listeners for this game
+                                    moveListeners.remove(game.getId());
+                                }
+                            }
+                        }
                     }
                 }
             }

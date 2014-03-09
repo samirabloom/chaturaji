@@ -1,11 +1,12 @@
 package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.ai.MoveListener;
+import ac.ic.chaturaji.model.GameStatus;
 import ac.ic.chaturaji.model.Result;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,9 @@ public class NotifyPlayer implements MoveListener {
                 channel.writeAndFlush(new TextWebSocketFrame(jsonResult));
             } else {
                 logger.warn("No channel found for player [" + playerId + "] therefore result [" + result + "] not being sent to that player");
+            }
+            if (result.getGameStatus() == GameStatus.GAME_OVER) {
+                clients.remove(playerId);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

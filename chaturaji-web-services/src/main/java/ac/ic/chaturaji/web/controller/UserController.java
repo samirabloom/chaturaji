@@ -32,7 +32,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @ResponseBody
-    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> register(@Valid User user, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> login() {
         return new ResponseEntity<>("", HttpStatus.ACCEPTED);
     }

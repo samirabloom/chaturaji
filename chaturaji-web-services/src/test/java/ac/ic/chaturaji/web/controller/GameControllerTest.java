@@ -7,8 +7,8 @@ import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -22,6 +22,7 @@ import java.nio.channels.Channel;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -60,17 +61,13 @@ public class GameControllerTest {
         // given
         List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User())));
         when(gameDAO.getAll()).thenReturn(games);
-        when(objectMapper.writerWithDefaultPrettyPrinter()).thenReturn(objectWriter);
-        when(objectWriter.writeValueAsString(games)).thenReturn("json");
 
         // when
-        String result = gameController.getGameList();
+        List<Game> result = gameController.getGameList();
 
         // then
-        assertEquals("json", result);
-
         verify(gameDAO).getAll();
-        verify(objectWriter).writeValueAsString(Arrays.asList(new Game("a", new Player("player id", new User()))));
+        assertEquals(games, result);
     }
 
     @Test
@@ -80,7 +77,8 @@ public class GameControllerTest {
         ResponseEntity<String> result = gameController.createGame(0);
 
         // then
-        assertEquals("", result.getBody());
+        // check valid id is returned
+        UUID.fromString(result.getBody());
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
 
         verify(gameDAO).save(any(Game.class));

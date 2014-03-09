@@ -1,6 +1,7 @@
 package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Service;
@@ -21,7 +22,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -125,7 +125,8 @@ public class GameControllerFullIntegrationTest {
         HttpGet getGames = new HttpGet("https://127.0.0.1:8443/games");
         HttpResponse getGamesResponse = httpClient.execute(getGames);
         HttpEntity entity = getGamesResponse.getEntity();
-        Game[] games = new ObjectMapper().readValue(EntityUtils.toString(entity), Game[].class);
+        String content = EntityUtils.toString(entity);
+        Game[] games = new ObjectMapperFactory().createObjectMapper().readValue(content, Game[].class);
 
         // then
         assertEquals(4, games.length);
@@ -208,6 +209,6 @@ public class GameControllerFullIntegrationTest {
         HttpGet request = new HttpGet("https://127.0.0.1:8443/games");
         HttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
-        return new ObjectMapper().readValue(EntityUtils.toString(entity), Game[].class).length;
+        return new ObjectMapperFactory().createObjectMapper().readValue(EntityUtils.toString(entity), Game[].class).length;
     }
 }

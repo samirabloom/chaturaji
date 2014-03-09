@@ -1,6 +1,7 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,9 +16,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -111,7 +111,7 @@ public class GameRoomActivity extends Activity {
 
             try {
 
-                gamesList = new ObjectMapper().readValue(test, Game[].class);
+                gamesList = new ObjectMapperFactory().createObjectMapper().readValue(test, Game[].class);
                 System.out.println(test);
                 System.out.println(gamesList.toString());
             }

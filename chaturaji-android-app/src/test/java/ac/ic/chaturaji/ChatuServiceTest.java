@@ -2,10 +2,10 @@ package ac.ic.chaturaji;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
 import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.util.Log;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -95,7 +95,7 @@ public class ChatuServiceTest {
 
         try {
 
-            gamesList = new ObjectMapper().readValue(test, Game[].class);
+            gamesList = new ObjectMapperFactory().createObjectMapper().readValue(test, Game[].class);
 
         }
 
@@ -209,7 +209,7 @@ public class ChatuServiceTest {
 
         try {
 
-            gamesList = new ObjectMapper().readValue(state, Game[].class);
+            gamesList = new ObjectMapperFactory().createObjectMapper().readValue(state, Game[].class);
 
         }
 
@@ -272,7 +272,7 @@ public class ChatuServiceTest {
 
         try {
 
-            gamesList = new ObjectMapper().readValue(state, Game[].class);
+            gamesList = new ObjectMapperFactory().createObjectMapper().readValue(state, Game[].class);
 
         }
 
@@ -331,7 +331,7 @@ public class ChatuServiceTest {
 
         try {
 
-            gamesList = new ObjectMapper().readValue(state, Game[].class);
+            gamesList = new ObjectMapperFactory().createObjectMapper().readValue(state, Game[].class);
 
         }
 
@@ -389,7 +389,7 @@ public class ChatuServiceTest {
 
         try {
 
-            gamesList = new ObjectMapper().readValue(state, Game[].class);
+            gamesList = new ObjectMapperFactory().createObjectMapper().readValue(state, Game[].class);
 
         }
 

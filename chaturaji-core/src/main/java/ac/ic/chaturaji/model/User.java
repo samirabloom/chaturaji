@@ -1,6 +1,6 @@
 package ac.ic.chaturaji.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Size;

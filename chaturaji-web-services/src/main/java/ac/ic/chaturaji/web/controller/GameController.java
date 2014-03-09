@@ -9,8 +9,8 @@ import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -56,7 +56,7 @@ public class GameController {
 
     @ResponseBody
     @RequestMapping(value = "/games", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
-    public String getGameList() throws IOException {
+    public List<Game> getGameList() throws IOException {
         User currentUser = springSecurityUserContext.getCurrentUser();
         List<Game> notYourGames = new ArrayList<>();
         for (Game game : gameDAO.getAll()) {
@@ -64,7 +64,7 @@ public class GameController {
                 notYourGames.add(game);
             }
         }
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(notYourGames);
+        return notYourGames;
     }
 
     @ResponseBody
@@ -74,22 +74,22 @@ public class GameController {
             return new ResponseEntity<>("Invalid numberOfAIPlayers: " + numberOfAIPlayers + " is not between 0 and 3 inclusive", HttpStatus.BAD_REQUEST);
         }
         User currentUser = springSecurityUserContext.getCurrentUser();
+        // create new player
+        Player player = new Player(UUID.randomUUID().toString(), currentUser);
+        // create game
+        Game game = new Game(UUID.randomUUID().toString(), player);
+        ai.createGame(game);
         try {
-            // create new player
-            Player player = new Player(UUID.randomUUID().toString(), currentUser);
-            // create game and save
-            Game game = new Game(UUID.randomUUID().toString(), player);
-            ai.createGame(game);
+            // save game
             gameDAO.save(game);
             games.put(game.getId(), game);
             // register web socket listener
-            NotifyPlayer moveListener = new NotifyPlayer(player.getId(), (Map<String, Channel>) servletContext.getAttribute(WebSocketServletContextListener.WEB_SOCKET_CLIENT_ATTRIBUTE_NAME));
-            ai.registerListener(game.getId(), moveListener);
+            registerMoveListener(game.getId(), player);
         } catch (Exception e) {
             logger.warn("Exception while saving game", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("", HttpStatus.CREATED);
+        return new ResponseEntity<>(game.getId(), HttpStatus.CREATED);
     }
 
     @ResponseBody
@@ -114,13 +114,20 @@ public class GameController {
             game.addPlayer(player);
             gameDAO.save(game);
             // register web socket listener
-            NotifyPlayer moveListener = new NotifyPlayer(player.getId(), (Map<String, Channel>) servletContext.getAttribute(WebSocketServletContextListener.WEB_SOCKET_CLIENT_ATTRIBUTE_NAME));
-            ai.registerListener(gameId, moveListener);
+            registerMoveListener(gameId, player);
         } catch (Exception e) {
             logger.warn("Exception while saving game", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(player), HttpStatus.CREATED);
+    }
+
+    // Note: request must have a Content-Type: application/json; charset=UTF-8
+    @ResponseBody
+    @RequestMapping(value = "/submitMove", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public ResponseEntity<String> submitMove(Move move) {
+        ai.submitMove(games.get(move.getGameId()), move);
+        return new ResponseEntity<>("", HttpStatus.ACCEPTED);
     }
 
     public boolean alreadyJoinedGame(Game game, User user) {
@@ -134,10 +141,8 @@ public class GameController {
         return false;
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/submitMove", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-    public void submitMove(Move move) {
-        // make sure we set id of move object
+    private void registerMoveListener(String gameId, Player player) {
+        ai.registerListener(gameId, new NotifyPlayer(player.getId(), (Map<String, Channel>) servletContext.getAttribute(WebSocketServletContextListener.WEB_SOCKET_CLIENT_ATTRIBUTE_NAME)));
     }
 
 }

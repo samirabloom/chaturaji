@@ -107,7 +107,7 @@ public class GameControllerMockMVCIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertEquals("Invalid numberOfAIPlayers: -1 is not between 0 and 3 inclusive", result.getResponse().getContentAsString());
+        assertEquals("\"Invalid numberOfAIPlayers: -1 is not between 0 and 3 inclusive\"", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class GameControllerMockMVCIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertEquals("Invalid numberOfAIPlayers: 5 is not between 0 and 3 inclusive", result.getResponse().getContentAsString());
+        assertEquals("\"Invalid numberOfAIPlayers: 5 is not between 0 and 3 inclusive\"", result.getResponse().getContentAsString());
     }
 
     @Configuration
