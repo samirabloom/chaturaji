@@ -2,12 +2,8 @@ package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.View;
 import android.content.Intent;
 import android.widget.EditText;
-import android.widget.Toast;
 
 /**
  * Created by Haider on 12/02/14.

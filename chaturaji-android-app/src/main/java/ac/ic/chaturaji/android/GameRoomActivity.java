@@ -1,15 +1,10 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.PlayerType;
 import android.app.Activity;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -23,13 +18,9 @@ import android.widget.Toast;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Haider on 12/02/14.
