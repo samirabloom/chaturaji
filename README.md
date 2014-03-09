@@ -137,6 +137,10 @@ List devices available for Android Debugger
 
     $ANDROID_HOME/platform-tools/adb devices
 
+To run emulator tool
+
+    $ANDROID_HOME/tools/android avd
+
 Backup MySQL scheme
 
     mysqldump --single-transaction -u dao_user -h localhost --password=Chaturaji4 chaturaji > "chaturaji-web-services/src/main/sql/backup/chaturaji_backup_$(/bin/date +%y-%m-%d_%H-%M-%S).sql"
