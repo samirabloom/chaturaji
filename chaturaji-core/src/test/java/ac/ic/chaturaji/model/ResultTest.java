@@ -31,10 +31,12 @@ public class ResultTest {
         result.setMove(move);
         result.setGame(game);
         result.setGameStatus(GameStatus.GAME_OVER);
+        result.setType(ResultType.BOAT_TRIUMPH);
 
         // then
         assertEquals(GameStatus.GAME_OVER, result.getGameStatus());
         assertSame(game, result.getGame());
         assertSame(move, result.getMove());
+        assertSame(ResultType.BOAT_TRIUMPH, result.getType());
     }
 }

@@ -3,6 +3,7 @@ package ac.ic.chaturaji.model;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 /**
  * @author samirarabbanian
@@ -24,10 +25,19 @@ public class PlayerTest {
         User user = new User();
         Player player = new Player();
         player.setId("some id");
+        player.setType(PlayerType.HUMAN);
+        player.setColour(Colour.RED);
+        player.setPoints(10);
+        int[] kingsCaptured = {1, 2, 3};
+        player.setKingsCaptured(kingsCaptured);
         player.setUser(user);
 
         // then
         assertEquals("some id", player.getId());
-        assertEquals(user, player.getUser());
+        assertSame(user, player.getUser());
+        assertEquals(PlayerType.HUMAN, player.getType());
+        assertEquals(Colour.RED, player.getColour());
+        assertEquals(10, player.getPoints());
+        assertSame(kingsCaptured, player.getKingsCaptured());
     }
 }
