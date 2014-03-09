@@ -1,4 +1,4 @@
-package ac.ic.chaturaji.integration;
+package ac.ic.chaturaji.websockets;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static io.netty.handler.codec.http.HttpHeaders.Names.HOST;
 
@@ -38,7 +39,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
     private void handleHttpRequest(ChannelHandlerContext ctx, FullHttpRequest req) throws Exception {
         // socket handshake
-        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory("ws://" + req.headers().get(HOST) + "/websocket", null, false);
+        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory("ws://" + req.headers().get(HOST) + "/movelistener", null, false);
         handshaker = wsFactory.newHandshaker(req);
         if (handshaker == null) {
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
@@ -60,12 +61,21 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
         // Send the uppercase string back.
         String request = ((TextWebSocketFrame) frame).text();
-        System.out.println(String.format("%s received %s", ctx.channel(), request));
 
         if (request.startsWith("ID")) {
             clients.put(request, ctx.channel());
-        }
 
+            try {
+                TimeUnit.SECONDS.sleep(10);
+                if (clients.get("ID_1") != null) {
+                    for (int i = 0; i < 10; i++) {
+                        clients.get("ID_1").writeAndFlush(new TextWebSocketFrame("RESPOND AFTER CONNECT #" + i));
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

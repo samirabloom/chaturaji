@@ -5,23 +5,45 @@ package ac.ic.chaturaji.model;
  */
 public class Move extends EqualsHashCodeToString {
 
+    private String id;
+    private String gameId;
     private Colour colour;
     private int source;
     private int destination;
 
-    public Move(){}
-    public Move(Colour colour, int source, int destination){
-        setColour(colour);
-        setSource(source);
-        setDestination(destination);
+    public Move() {
     }
 
-    public int getDestination() {
-        return destination;
-    }
-
-    public void setDestination(int destination) {
+    public Move(String id, String gameId, Colour colour, int source, int destination) {
+        this.id = id;
+        this.gameId = gameId;
+        this.colour = colour;
+        this.source = source;
         this.destination = destination;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
+
+    public Colour getColour() {
+        return colour;
+    }
+
+    public void setColour(Colour colour) {
+        this.colour = colour;
     }
 
     public int getSource() {
@@ -32,11 +54,11 @@ public class Move extends EqualsHashCodeToString {
         this.source = source;
     }
 
-    public Colour getColour() {
-        return colour;
+    public int getDestination() {
+        return destination;
     }
 
-    public void setColour(Colour colour) {
-        this.colour = colour;
+    public void setDestination(int destination) {
+        this.destination = destination;
     }
 }

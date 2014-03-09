@@ -2,6 +2,8 @@ package ac.ic.chaturaji.model;
 
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -13,9 +15,10 @@ public class PlayerTest {
     public void shouldReturnFieldsSetInConstructor() {
         // when
         User user = new User();
-        Player player = new Player(user);
+        Player player = new Player("player id", user);
 
         // then
+        assertEquals("player id", player.getId());
         assertEquals(user, player.getUser());
     }
 
@@ -24,7 +27,7 @@ public class PlayerTest {
         // when
         User user = new User();
         Player player = new Player();
-        player.setId("some id");
+        player.setId("player id");
         player.setType(PlayerType.HUMAN);
         player.setColour(Colour.RED);
         player.setPoints(10);
@@ -33,7 +36,7 @@ public class PlayerTest {
         player.setUser(user);
 
         // then
-        assertEquals("some id", player.getId());
+        assertEquals("player id", player.getId());
         assertSame(user, player.getUser());
         assertEquals(PlayerType.HUMAN, player.getType());
         assertEquals(Colour.RED, player.getColour());
