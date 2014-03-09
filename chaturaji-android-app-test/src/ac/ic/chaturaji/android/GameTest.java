@@ -24,7 +24,7 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
     private int green_king_captured_by;
     private int yellow_king_captured_by;
 
-    public GameTest() {
+    public GameTest() throws Exception {
         super(GameActivity.class);
     }
 
@@ -75,11 +75,42 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
         assertEquals(0, yellow_king_captured_by);
     }
 
-    public void testBoard() {
+    public void testSet_pieces() {
 
-        assertNotNull(Board[0][0]);
-        assertNotNull(Board[0][1]);
-        assertNull(Board[0][2]);
+        game.setPieces();
+        Board = game.getBoard();
+
+        for(int i = 0; i <= 3; i++)
+            assertTrue(Board[i][1] instanceof Pawn);
+
+        for(int i = 4; i <= 7; i++)
+            assertTrue(Board[1][i] instanceof Pawn);
+
+        for(int i = 4; i <= 7; i++)
+            assertTrue(Board[i][6] instanceof Pawn);
+
+        for(int i = 0; i <= 3; i++)
+            assertTrue(Board[6][i] instanceof Pawn);
+
+        assertTrue(Board[0][0] instanceof Boat);
+        assertTrue(Board[0][7] instanceof Boat);
+        assertTrue(Board[7][7] instanceof Boat);
+        assertTrue(Board[7][0] instanceof Boat);
+
+        assertTrue(Board[1][0] instanceof Knight);
+        assertTrue(Board[0][6] instanceof Knight);
+        assertTrue(Board[6][7] instanceof Knight);
+        assertTrue(Board[7][1] instanceof Knight);
+
+        assertTrue(Board[2][0] instanceof Elephant);
+        assertTrue(Board[0][5] instanceof Elephant);
+        assertTrue(Board[5][7] instanceof Elephant);
+        assertTrue(Board[7][2] instanceof Elephant);
+
+        assertTrue(Board[3][0] instanceof King);
+        assertTrue(Board[0][4] instanceof King);
+        assertTrue(Board[4][7] instanceof King);
+        assertTrue(Board[7][3] instanceof King);
     }
 
 }
