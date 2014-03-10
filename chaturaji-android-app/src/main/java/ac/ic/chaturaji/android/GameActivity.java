@@ -41,8 +41,8 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         String colour = getIntent().getStringExtra("colour");
-        //int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
-        setContentView(R.layout.in_game_blue);
+        int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
+        setContentView(identifier);
 
         setPieces();
         setBoard();

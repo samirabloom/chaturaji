@@ -1,8 +1,10 @@
 package ac.ic.chaturaji.android.test;
 
 import ac.ic.chaturaji.android.GameActivity;
-import android.annotation.TargetApi;
-import android.os.Build;
+import ac.ic.chaturaji.android.R;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.test.ActivityInstrumentationTestCase2;
 import ac.ic.chaturaji.android.pieces.*;
 import android.widget.ImageView;
@@ -35,6 +37,11 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
     protected void setUp() throws Exception {
         super.setUp();
         setActivityInitialTouchMode(false);
+        Intent i = new Intent(Intent.ACTION_SEARCH);
+        i.setClassName("ac.ic.chaturaji.android", "ac.ic.chaturaji.android.GameActivity");
+        i.putExtra("colour", "in_game_blue");
+        setActivityIntent(i);
+
         game = getActivity();
         Board = game.getBoard();
         BoardImage = game.getBoardImage();
@@ -78,7 +85,7 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
         assertEquals(0, yellow_king_captured_by);
     }
 
-    public void testSet_pieces() {
+    public void testSetPieces() {
 
         game.setPieces();
         Board = game.getBoard();
@@ -116,4 +123,19 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
         assertTrue(Board[7][3] instanceof King);
     }
 
+    public void testSetBoard() {
+        game.setBoard();
+        BoardImage = game.getBoardImage();
+
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                assertTrue(BoardImage[i][j] instanceof ImageView);
+    }
+
+    public void testDrawPieces() {
+        game.drawPieces();
+        BoardImage = game.getBoardImage();
+        assertTrue(BoardImage[0][0].getDrawable() != null);
+        assertTrue(BoardImage[0][2].getDrawable() == null);
+    }
 }
