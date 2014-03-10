@@ -44,7 +44,7 @@ import java.util.List;
 public class ChatuService{
 
     private static ChatuService instance;
-    private String localHost = "192.168.1.110"; // Put your server address here...
+    private String localHost = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com"; // Put your server address here...
     private DefaultHttpClient httpClient;
     private String email = "";
     private String password = "";
