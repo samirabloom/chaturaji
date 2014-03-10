@@ -40,7 +40,7 @@ public class PlayerDaoTest {
         for (int i = 0; i < 4; i++) {
             User user = new User(UUID.randomUUID().toString(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
             userDAO.save(user);
-            Player player = new Player(UUID.randomUUID().toString(), user, Colour.BLUE);
+            Player player = new Player(UUID.randomUUID().toString(), user, Colour.BLUE, PlayerType.HUMAN);
             player.setType(PlayerType.AI);
             player.setId(UUID.randomUUID().toString());
             players.add(player);

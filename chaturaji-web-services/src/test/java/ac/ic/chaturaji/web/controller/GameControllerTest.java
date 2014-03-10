@@ -2,10 +2,7 @@ package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.ai.AI;
 import ac.ic.chaturaji.dao.GameDAO;
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.model.*;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,9 +20,10 @@ import java.nio.channels.Channel;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -60,7 +58,7 @@ public class GameControllerTest {
     @Test
     public void shouldGetGamesFromDAOAndCreateJSON() throws IOException {
         // given
-        List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User(), Colour.YELLOW)));
+        List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User(), Colour.YELLOW, PlayerType.HUMAN)));
         when(gameDAO.getAll()).thenReturn(games);
 
         // when
@@ -75,11 +73,11 @@ public class GameControllerTest {
     public void shouldSaveGameToDAOSuccessfully() throws IOException {
         // when
         when(servletContext.getAttribute(WebSocketServletContextListener.WEB_SOCKET_CLIENT_ATTRIBUTE_NAME)).thenReturn(new HashMap<String, Channel>());
-        ResponseEntity<String> result = gameController.createGame(0);
+        ResponseEntity result = gameController.createGame(0);
 
         // then
         // check valid id is returned
-        UUID.fromString(result.getBody());
+        assertThat(result.getBody(), instanceOf(Player.class));
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
 
         verify(gameDAO).save(any(Game.class));
@@ -88,7 +86,7 @@ public class GameControllerTest {
     @Test
     public void shouldValidateNumberOfAIPlayerNotTooLarge() throws IOException {
         // when
-        ResponseEntity<String> result = gameController.createGame(5);
+        ResponseEntity result = gameController.createGame(5);
 
         // then
         assertEquals("Invalid numberOfAIPlayers: 5 is not between 0 and 3 inclusive", result.getBody());
@@ -100,7 +98,7 @@ public class GameControllerTest {
     @Test
     public void shouldValidateNumberOfAIPlayerNotTooSmall() throws IOException {
         // when
-        ResponseEntity<String> result = gameController.createGame(-1);
+        ResponseEntity result = gameController.createGame(-1);
 
         // then
         assertEquals("Invalid numberOfAIPlayers: -1 is not between 0 and 3 inclusive", result.getBody());
@@ -115,7 +113,7 @@ public class GameControllerTest {
         doThrow(new RuntimeException("test exception")).when(gameDAO).save(any(Game.class));
 
         // when
-        ResponseEntity<String> result = gameController.createGame(0);
+        ResponseEntity result = gameController.createGame(0);
 
         // then
         assertEquals("test exception", result.getBody());

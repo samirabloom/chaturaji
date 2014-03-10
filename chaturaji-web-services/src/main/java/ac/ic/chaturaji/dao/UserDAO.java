@@ -20,7 +20,7 @@ import java.util.UUID;
 public class UserDAO {
 
     @Resource
-    DataSource dataSource;
+    private DataSource dataSource;
     @Resource
     private PasswordEncoder passwordEncoder;
 
@@ -99,8 +99,7 @@ public class UserDAO {
 
     public void save(User user) {
         String sql = "INSERT INTO USER (USER_ID,EMAIL,NICKNAME,PASSWORD) VALUES (?,?,?,?)";
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, user.getId());

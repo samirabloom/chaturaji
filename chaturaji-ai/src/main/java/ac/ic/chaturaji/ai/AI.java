@@ -49,7 +49,7 @@ public class AI {
                 if (theMove == null) {
                     result = new Result(GameStatus.IN_PLAY, game, move);
                     result.setType(ResultType.NOT_VALID);
-                    return result;
+                    break;
                 }
 
                 board.ApplyMove(theMove);

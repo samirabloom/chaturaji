@@ -21,7 +21,7 @@ public class RootConfiguration {
     @Resource
     private Environment environment;
 
-    @Bean()
+    @Bean
     public BasicDataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));

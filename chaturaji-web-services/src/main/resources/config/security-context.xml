@@ -2,22 +2,24 @@
 <beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:security="http://www.springframework.org/schema/security"
+             xmlns:context="http://www.springframework.org/schema/context"
              xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-                                 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+                                 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder system-properties-mode="OVERRIDE"/>
 
     <!-- http security config -->
     <security:http use-expressions="true" auto-config="true">
         <security:http-basic/>
 
         <security:port-mappings>
-            <security:port-mapping http="8080" https="8443"/>
+            <security:port-mapping http="${http.port:8080}" https="${https.port:8443}"/>
         </security:port-mappings>
         <security:session-management session-fixation-protection="newSession"/>
         <security:logout logout-url="/logout" delete-cookies="JSESSIONID"/>
 
         <!-- ALL -->
         <security:intercept-url pattern="/games" access="permitAll()" requires-channel="https"/>
-        <security:intercept-url pattern="/echo" access="permitAll()" requires-channel="any"/>
         <!-- NOT LOGGED IN -->
         <security:intercept-url pattern="/register" access="isAnonymous()" requires-channel="https"/>
         <security:intercept-url pattern="/logout" access="isAnonymous()" requires-channel="https"/>
@@ -25,6 +27,7 @@
         <security:intercept-url pattern="/login" access="isAuthenticated()" requires-channel="https"/>
         <security:intercept-url pattern="/game" access="isAuthenticated()" requires-channel="https"/>
         <security:intercept-url pattern="/joinGame" access="isAuthenticated()" requires-channel="https"/>
+        <security:intercept-url pattern="/submitMove" access="isAuthenticated()" requires-channel="https"/>
         <!-- cover all remaining pages -->
         <security:intercept-url pattern="/**" access="denyAll()" requires-channel="https"/>
     </security:http>

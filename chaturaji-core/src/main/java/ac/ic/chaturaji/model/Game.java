@@ -38,6 +38,7 @@ public class Game extends EqualsHashCodeToString {
     public Game(String id, Player player) {
         this();
         this.id = id;
+        player.setGameId(id);
         players.add(player);
     }
 
@@ -66,12 +67,15 @@ public class Game extends EqualsHashCodeToString {
         return players;
     }
 
-    public int getPlayerCount() {
-        return players.size();
+    public void setPlayers(List<Player> players) {
+        for (Player player : players) {
+            player.setGameId(id);
+        }
+        this.players = players;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
+    public int getPlayerCount() {
+        return players.size();
     }
 
     public List<Move> getMoves() {
@@ -119,6 +123,7 @@ public class Game extends EqualsHashCodeToString {
 
     public void addPlayer(Player player) {
         if (players.size() < 4) {
+            player.setGameId(id);
             players.add(player);
         } else {
             throw new RuntimeException("Game already has four players");

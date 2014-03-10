@@ -24,8 +24,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.http.HttpStatus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,19 +34,25 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * @author samirarabbanian
  */
 public class GameControllerFullIntegrationTest {
 
-    private static Tomcat tomcat;
-    private static KeyStore trustStore;
-    private static int numberOfGames = 4;
+    protected static Tomcat tomcat;
+    protected static KeyStore trustStore;
+    protected static int numberOfGames;
+    protected static int httpPort;
+    protected static int httpsPort;
 
     @BeforeClass
     public static void setupFixture() throws Exception {
+        System.setProperty("http.port", "" + PortFactory.findFreePort());
+        httpPort = Integer.parseInt(System.getProperty("http.port"));
+
+        System.setProperty("https.port", "" + PortFactory.findFreePort());
+        httpsPort = Integer.parseInt(System.getProperty("https.port"));
+
         String classLocation = GameControllerFullIntegrationTest.class.getCanonicalName().replace(".", "/") + ".class";
         String projectBase = GameControllerFullIntegrationTest.class.getClassLoader().getResource(classLocation).toString().replace(classLocation, "../../").replace("file:", "");
 
@@ -57,11 +61,11 @@ public class GameControllerFullIntegrationTest {
         tomcat.setBaseDir(new File(".").getCanonicalPath() + File.separatorChar + "tomcat");
 
         // add http port
-        tomcat.setPort(8080);
+        tomcat.setPort(httpPort);
 
         // add https port
         Connector httpsConnector = new Connector();
-        httpsConnector.setPort(8443);
+        httpsConnector.setPort(httpsPort);
         httpsConnector.setSecure(true);
         httpsConnector.setScheme("https");
         httpsConnector.setAttribute("keystorePass", "changeit");
@@ -89,149 +93,18 @@ public class GameControllerFullIntegrationTest {
         try (FileInputStream fileInputStream = new FileInputStream(new File(projectBase + "../keystore"))) {
             trustStore.load(fileInputStream, "changeit".toCharArray());
         }
+        numberOfGames = 4;
     }
 
     @AfterClass
-    public static void shutdownFixture() throws LifecycleException {
+    public static void shutdownFixture() throws LifecycleException, InterruptedException {
         // stop server
         tomcat.stop();
     }
 
-    @Test
-    public void shouldRegisterUser() throws Exception {
-        // given
+    protected void registerUser(String email, String password) throws Exception {
         HttpClient httpClient = createApacheClient();
-
-        // when
-        HttpPost register = new HttpPost("https://127.0.0.1:8443/register");
-        register.setEntity(new UrlEncodedFormEntity(Arrays.asList(
-                new BasicNameValuePair("email", "user_three@example.com"),
-                new BasicNameValuePair("password", "password_three"),
-                new BasicNameValuePair("nickname", "my_nickname")
-        )));
-        HttpResponse createGameResponse = httpClient.execute(register);
-
-        // then
-        assertEquals(HttpStatus.CREATED.value(), createGameResponse.getStatusLine().getStatusCode());
-    }
-
-    @Test
-    public void shouldRetrieveListOfCurrentGamesAndCreateGame() throws Exception {
-        // given
-        HttpClient httpClient = createApacheClient();
-
-        // --- get list of games ---
-
-        // when
-        HttpGet getGames = new HttpGet("https://127.0.0.1:8443/games");
-        HttpResponse getGamesResponse = httpClient.execute(getGames);
-        HttpEntity entity = getGamesResponse.getEntity();
-        String content = EntityUtils.toString(entity);
-        Game[] games = new ObjectMapperFactory().createObjectMapper().readValue(content, Game[].class);
-
-        // then
-        assertEquals(numberOfGames, games.length);
-
-        // --- login ---
-
-        // given
-        registerUser("user_two@example.com", "password_two");
-
-        // when
-        HttpPost login = new HttpPost("https://user_two%40example.com:password_two@127.0.0.1:8443/login");
-        HttpResponse loginResponse = httpClient.execute(login);
-
-        // then
-        assertEquals(HttpStatus.ACCEPTED.value(), loginResponse.getStatusLine().getStatusCode());
-
-        // --- create game ---
-
-        // when
-        HttpPost createGame = new HttpPost("https://127.0.0.1:8443/game");
-        createGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
-                new BasicNameValuePair("numberOfAIPlayers", "3")
-        )));
-        HttpResponse createGameResponse = httpClient.execute(createGame);
-        numberOfGames++;
-
-        // then
-        assertEquals(HttpStatus.CREATED.value(), createGameResponse.getStatusLine().getStatusCode());
-        assertEquals(games.length + 1, numberOfGames());
-    }
-
-
-    @Test
-    public void shouldCreateGameAndJoinGame() throws Exception {
-        // given
-        HttpClient httpClient = createApacheClient();
-
-        // --- login ---
-
-        // given
-        registerUser("user_two@example.com", "password_two");
-
-        // when
-        HttpPost login = new HttpPost("https://user_two%40example.com:password_two@127.0.0.1:8443/login");
-        HttpResponse loginResponse = httpClient.execute(login);
-
-        // then
-        assertEquals(HttpStatus.ACCEPTED.value(), loginResponse.getStatusLine().getStatusCode());
-
-        // --- create game ---
-
-        // when
-        HttpPost createGame = new HttpPost("https://127.0.0.1:8443/game");
-        createGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
-                new BasicNameValuePair("numberOfAIPlayers", "3")
-        )));
-        HttpResponse createGameResponse = httpClient.execute(createGame);
-        numberOfGames++;
-
-        // then
-        assertEquals(HttpStatus.CREATED.value(), createGameResponse.getStatusLine().getStatusCode());
-        String gameId = EntityUtils.toString(createGameResponse.getEntity());
-        assertEquals(numberOfGames, numberOfGames());
-
-        // --- logout ---
-
-        // when
-        HttpPost logout = new HttpPost("https://127.0.0.1:8443/logout");
-        HttpResponse logoutResponse = httpClient.execute(logout);
-
-        // then
-        assertEquals(HttpStatus.FOUND.value(), logoutResponse.getStatusLine().getStatusCode());
-        assertEquals("https://127.0.0.1:8443/", logoutResponse.getFirstHeader("Location").getValue());
-
-        httpClient = createApacheClient();
-
-        // --- login another user ---
-
-        // given
-        registerUser("user_three@example.com", "password_three");
-
-        // when
-        login = new HttpPost("https://user_three%40example.com:password_three@127.0.0.1:8443/login");
-        loginResponse = httpClient.execute(login);
-
-        // then
-        assertEquals(HttpStatus.ACCEPTED.value(), loginResponse.getStatusLine().getStatusCode());
-
-        // --- join game ---
-
-        // when
-        HttpPost joinGame = new HttpPost("https://127.0.0.1:8443/joinGame");
-        joinGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
-                new BasicNameValuePair("gameId", gameId)
-        )));
-        HttpResponse joinGameResponse = httpClient.execute(joinGame);
-
-        // then
-        assertEquals(HttpStatus.CREATED.value(), joinGameResponse.getStatusLine().getStatusCode());
-    }
-
-    public void registerUser(String email, String password) throws Exception {
-        HttpClient httpClient = createApacheClient();
-        HttpPost register = new HttpPost("https://127.0.0.1:8443/register");
+        HttpPost register = new HttpPost("https://127.0.0.1:" + httpsPort + "/register");
         register.setEntity(new UrlEncodedFormEntity(Arrays.asList(
                 new BasicNameValuePair("email", email),
                 new BasicNameValuePair("nickname", "some_nickname"),
@@ -240,27 +113,11 @@ public class GameControllerFullIntegrationTest {
         httpClient.execute(register);
     }
 
-    @Test
-    public void shouldNotAllowGameCreationIfNotLoggedIn() throws Exception {
-        // given
-        HttpClient httpClient = createApacheClient();
-
-        // when
-        HttpPost createGame = new HttpPost("https://127.0.0.1:8443/game");
-        createGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
-                new BasicNameValuePair("numberOfAIPlayers", "3")
-        )));
-        HttpResponse createGameResponse = httpClient.execute(createGame);
-
-        // then
-        assertEquals(HttpStatus.UNAUTHORIZED.value(), createGameResponse.getStatusLine().getStatusCode());
-    }
-
-    private CloseableHttpClient createApacheClient() throws Exception {
+    protected CloseableHttpClient createApacheClient() throws Exception {
         return HttpClients.custom()
                 // make sure the tests don't block when server fails to start up
                 .setDefaultSocketConfig(SocketConfig.custom()
-                        .setSoTimeout((int) TimeUnit.SECONDS.toMillis(40))
+                        .setSoTimeout((int) TimeUnit.SECONDS.toMillis(40000000))
                         .build())
                 .setSslcontext(
                         SSLContexts
@@ -276,9 +133,9 @@ public class GameControllerFullIntegrationTest {
                 .build();
     }
 
-    public int numberOfGames() throws Exception {
+    protected int numberOfGames() throws Exception {
         HttpClient httpClient = createApacheClient();
-        HttpGet request = new HttpGet("https://127.0.0.1:8443/games");
+        HttpGet request = new HttpGet("https://127.0.0.1:" + httpsPort + "/games");
         HttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
         return new ObjectMapperFactory().createObjectMapper().readValue(EntityUtils.toString(entity), Game[].class).length;

@@ -34,7 +34,8 @@ public class MoveDaoTest {
     public void shouldSaveMoveAndGetMove() {
         //given
         String gameId = UUID.randomUUID().toString();
-        Move move = new Move(UUID.randomUUID().toString(), gameId, YELLOW, 34, 45);
+        Move move = new Move(gameId, YELLOW, 34, 45);
+        move.setId(UUID.randomUUID().toString());
 
         //when
         moveDAO.saveMove(move, gameId);
@@ -49,10 +50,18 @@ public class MoveDaoTest {
         String gameId = UUID.randomUUID().toString();
         gameDAO.save(new Game(gameId, new Player()));
         ArrayList<Move> moves = new ArrayList<>();
-        moves.add(new Move(UUID.randomUUID().toString(), gameId, YELLOW, 1, 2));
-        moves.add(new Move(UUID.randomUUID().toString(), gameId, Colour.BLUE, 3, 4));
-        moves.add(new Move(UUID.randomUUID().toString(), gameId, Colour.RED, 5, 6));
-        moves.add(new Move(UUID.randomUUID().toString(), gameId, Colour.GREEN, 7, 8));
+        Move moveOne = new Move(gameId, YELLOW, 1, 2);
+        moveOne.setId(UUID.randomUUID().toString());
+        moves.add(moveOne);
+        Move moveTwo = new Move(gameId, Colour.BLUE, 3, 4);
+        moveTwo.setId(UUID.randomUUID().toString());
+        moves.add(moveTwo);
+        Move moveThree = new Move(gameId, Colour.RED, 5, 6);
+        moveThree.setId(UUID.randomUUID().toString());
+        moves.add(moveThree);
+        Move moveFour = new Move(gameId, Colour.GREEN, 7, 8);
+        moveFour.setId(UUID.randomUUID().toString());
+        moves.add(moveFour);
 
         //when
         moveDAO.saveMove(moves.get(0), gameId);

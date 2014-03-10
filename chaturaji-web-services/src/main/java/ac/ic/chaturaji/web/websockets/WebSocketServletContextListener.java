@@ -15,7 +15,7 @@ public class WebSocketServletContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        webSocketsServer.startServer(9090);
+        webSocketsServer.startServer(WebSocketsServer.DEFAULT_WEB_SOCKET_PORT);
         servletContextEvent.getServletContext().setAttribute(WEB_SOCKET_CLIENT_ATTRIBUTE_NAME, webSocketsServer.getClients());
     }
 

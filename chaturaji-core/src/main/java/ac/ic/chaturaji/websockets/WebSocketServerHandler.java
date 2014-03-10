@@ -7,7 +7,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static io.netty.handler.codec.http.HttpHeaders.Names.HOST;
 
@@ -16,6 +15,7 @@ import static io.netty.handler.codec.http.HttpHeaders.Names.HOST;
  */
 public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
 
+    public final static String WEB_SOCKET_PATH = "movelistener";
     private final Map<String, Channel> clients;
     private WebSocketServerHandshaker handshaker;
 
@@ -39,7 +39,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
     private void handleHttpRequest(ChannelHandlerContext ctx, FullHttpRequest req) throws Exception {
         // socket handshake
-        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory("ws://" + req.headers().get(HOST) + "/movelistener", null, false);
+        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory("ws://" + req.headers().get(HOST) + "/" + WEB_SOCKET_PATH, null, false);
         handshaker = wsFactory.newHandshaker(req);
         if (handshaker == null) {
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
@@ -59,22 +59,10 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             throw new UnsupportedOperationException(String.format("%s frame types not supported", frame.getClass().getName()));
         }
 
-        // Send the uppercase string back.
+        // store client channel against client id
         String request = ((TextWebSocketFrame) frame).text();
-
         if (request.startsWith("ID")) {
             clients.put(request, ctx.channel());
-
-            try {
-                TimeUnit.SECONDS.sleep(10);
-                if (clients.get("ID_1") != null) {
-                    for (int i = 0; i < 10; i++) {
-                        clients.get("ID_1").writeAndFlush(new TextWebSocketFrame("RESPOND AFTER CONNECT #" + i));
-                    }
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 

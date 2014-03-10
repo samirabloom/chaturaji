@@ -1,9 +1,6 @@
 package ac.ic.chaturaji.dao;
 
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.model.*;
 import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +26,10 @@ public class GameDAO {
     @PostConstruct
     public void setupDefaultData() {
         List<Game> games = Arrays.asList(
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW)),
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW)),
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW)),
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW))
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN))
         );
         for (Game game : games) {
             save(game);

@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -69,15 +66,19 @@ public class GameController {
 
     @ResponseBody
     @RequestMapping(value = "/game", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-    public ResponseEntity<String> createGame(@RequestParam("numberOfAIPlayers") int numberOfAIPlayers) throws IOException {
+    public ResponseEntity createGame(@RequestParam("numberOfAIPlayers") int numberOfAIPlayers) throws IOException {
         if (numberOfAIPlayers < 0 || numberOfAIPlayers > 3) {
             return new ResponseEntity<>("Invalid numberOfAIPlayers: " + numberOfAIPlayers + " is not between 0 and 3 inclusive", HttpStatus.BAD_REQUEST);
         }
         User currentUser = springSecurityUserContext.getCurrentUser();
         // create new player
-        Player player = new Player(UUID.randomUUID().toString(), currentUser, Colour.values()[0]);
+        Player player = new Player(UUID.randomUUID().toString(), currentUser, Colour.values()[0], PlayerType.HUMAN);
         // create game
         Game game = new Game(UUID.randomUUID().toString(), player);
+        // add AI players
+        for (int i = 1; i <= numberOfAIPlayers; i++) {
+            game.addPlayer(new Player(UUID.randomUUID().toString(), currentUser, Colour.values()[i], PlayerType.AI));
+        }
         ai.createGame(game);
         try {
             // save game
@@ -89,15 +90,13 @@ public class GameController {
             logger.warn("Exception while saving game", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(game.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(player, HttpStatus.CREATED);
     }
 
     @ResponseBody
     @RequestMapping(value = "/joinGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-    public ResponseEntity<String> joinGame(@RequestParam("gameId") String gameId) throws IOException {
-        // remove any quotes added by JacksonMessageConverter
-        gameId = gameId.replace("\"", "");
-        Game game = gameDAO.get(gameId);
+    public ResponseEntity joinGame(@RequestParam("gameId") String gameId) throws IOException {
+        Game game = games.get(gameId);
         if (game == null) {
             return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
         }
@@ -110,7 +109,7 @@ public class GameController {
         }
 
         // create new player
-        Player player = new Player(UUID.randomUUID().toString(), currentUser, Colour.values()[game.getPlayerCount()]);
+        Player player = new Player(UUID.randomUUID().toString(), currentUser, Colour.values()[game.getPlayerCount()], PlayerType.HUMAN);
         try {
             // update game and save
             game.addPlayer(player);
@@ -121,13 +120,13 @@ public class GameController {
             logger.warn("Exception while saving game", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(player), HttpStatus.CREATED);
+        return new ResponseEntity<>(player, HttpStatus.CREATED);
     }
 
     // Note: request must have a Content-Type: application/json; charset=UTF-8
     @ResponseBody
     @RequestMapping(value = "/submitMove", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> submitMove(Move move) {
+    public ResponseEntity<String> submitMove(@RequestBody Move move) {
         ai.submitMove(games.get(move.getGameId()), move);
         return new ResponseEntity<>("", HttpStatus.ACCEPTED);
     }

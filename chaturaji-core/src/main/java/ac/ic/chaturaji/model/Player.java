@@ -5,25 +5,38 @@ package ac.ic.chaturaji.model;
  */
 public class Player extends EqualsHashCodeToString {
     private String id;
+    private String gameId;
     private PlayerType type;
     private Colour colour;
     private User user;
     private int points;
-    // TODO why is this an array?  what do the different values in the array represent?
-    private int[] KingsCaptured;
+    private int[] kingsCaptured;
 
     // Dummy constructor needed to map JSON string back to Java object
     public Player() {
     }
 
-    public Player(String id, User user, Colour colour) {
+    public Player(String id, User user, Colour colour, PlayerType type) {
         this.id = id;
         this.user = user;
         this.colour = colour;
+        this.type = type;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
     public PlayerType getType() {
@@ -32,10 +45,6 @@ public class Player extends EqualsHashCodeToString {
 
     public void setType(PlayerType type) {
         this.type = type;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Colour getColour() {
@@ -58,15 +67,15 @@ public class Player extends EqualsHashCodeToString {
         return points;
     }
 
-    public void setPoints(int Points) {
-        points = Points;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public int[] getKingsCaptured() {
-        return KingsCaptured;
+        return kingsCaptured;
     }
 
-    public void setKingsCaptured(int[] kings) {
-        KingsCaptured = kings;
+    public void setKingsCaptured(int[] kingsCaptured) {
+        this.kingsCaptured = kingsCaptured;
     }
 }

@@ -23,9 +23,9 @@ public class WebSocketsClient {
 
     private final URI uri;
 
-    public WebSocketsClient() {
+    public WebSocketsClient(String hostName) {
         try {
-            uri = new URI("ws://192.168.1.110:8080/movelistener");
+            uri = new URI("ws://" + hostName + ":" + WebSocketsServer.DEFAULT_WEB_SOCKET_PORT + "/" + WebSocketServerHandler.WEB_SOCKET_PATH);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

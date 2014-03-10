@@ -1,4 +1,4 @@
-package ac.ic.chaturaji.integration;
+package ac.ic.chaturaji.mockmvc;
 
 import ac.ic.chaturaji.config.RootConfiguration;
 import ac.ic.chaturaji.dao.UserDAO;

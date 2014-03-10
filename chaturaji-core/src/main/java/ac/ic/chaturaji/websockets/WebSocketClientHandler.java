@@ -38,10 +38,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         if (!handshaker.isHandshakeComplete()) {
             handshaker.finishHandshake(channel, (FullHttpResponse) msg);
 
-            channel.writeAndFlush(new TextWebSocketFrame(playerId));
-            for (int i = 0; i < 10; i++) {
-                channel.writeAndFlush(new TextWebSocketFrame("Client " + playerId + " to server message #" + i));
-            }
+            channel.writeAndFlush(new TextWebSocketFrame("ID_" + playerId));
             return;
         }
 
@@ -49,13 +46,9 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         WebSocketFrame frame = (WebSocketFrame) msg;
         if (frame instanceof TextWebSocketFrame) {
             TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
-            // todo remove the system out debugging line below
-            System.out.println("WebSocket Client " + playerId + " received message: " + textFrame.text());
             Result result = objectMapper.readValue(textFrame.text(), Result.class);
             gameMoveListener.onMoveCompleted(result);
         } else if (frame instanceof CloseWebSocketFrame) {
-            // todo remove the system out debugging
-            System.out.println("WebSocket Client " + playerId + " received closing");
             channel.close();
         } else {
             throw new RuntimeException("Unexpected response [" + msg + "]");

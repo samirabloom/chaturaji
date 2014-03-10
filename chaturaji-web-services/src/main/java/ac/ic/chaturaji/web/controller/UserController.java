@@ -51,7 +51,7 @@ public class UserController {
         try {
             userDAO.save(new User(UUID.randomUUID().toString(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getNickname()));
         } catch (Exception e) {
-            logger.warn("Exception while saving game", e);
+            logger.warn("Exception while saving user", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("", HttpStatus.CREATED);

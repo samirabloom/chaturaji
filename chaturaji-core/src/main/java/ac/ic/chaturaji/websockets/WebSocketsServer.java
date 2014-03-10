@@ -19,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WebSocketsServer {
 
+    public static final int DEFAULT_WEB_SOCKET_PORT = 9090;
+
     private final Map<String, Channel> clients = new ConcurrentHashMap<>();
 
     private EventLoopGroup bossGroup;

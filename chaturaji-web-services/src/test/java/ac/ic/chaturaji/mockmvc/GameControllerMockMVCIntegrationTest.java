@@ -1,7 +1,9 @@
-package ac.ic.chaturaji.integration;
+package ac.ic.chaturaji.mockmvc;
 
 import ac.ic.chaturaji.config.RootConfiguration;
 import ac.ic.chaturaji.dao.GameDAO;
+import ac.ic.chaturaji.model.*;
+import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import ac.ic.chaturaji.web.config.WebMvcConfiguration;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,11 +20,17 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.UUID;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
@@ -58,43 +66,45 @@ public class GameControllerMockMVCIntegrationTest {
         mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    /* @Test
-     public void shouldLoadListOfGames() throws Exception {
-         // given
-         when(gameDAO.getAll()).thenReturn(Arrays.asList(
-                 new Game("1", new Player(new User())),
-                 new Game("2", new Player(new User())),
-                 new Game("3", new Player(new User())),
-                 new Game("4", new Player(new User()))
-         ));
+    @Test
+    public void shouldLoadListOfGames() throws Exception {
+        // given
+        when(gameDAO.getAll()).thenReturn(Arrays.asList(
+                new Game("1", new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game("2", new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game("3", new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game("4", new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW, PlayerType.HUMAN))
+        ));
 
-         // when
-         mockMvc.perform(
-                 get("/games")
-                         .accept(MediaType.APPLICATION_JSON)
-         )
-                 // then
-                 .andExpect(status().isOk())
-                 .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
-                 .andExpect(jsonPath("$", hasSize(4)));
-     }
+        // when
+        mockMvc.perform(
+                get("/games")
+                        .accept(MediaType.APPLICATION_JSON)
+        )
+                // then
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
+                .andExpect(jsonPath("$", hasSize(4)));
+    }
 
-     @Test
-     public void shouldCreateGame() throws Exception {
-         // when
-         MvcResult result = mockMvc.perform(
-                 post("/game")
-                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                         .param("numberOfAIPlayers", "0")
-         )
-                 // then
-                 .andExpect(status().isCreated())
-                 .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
-                 .andReturn();
+    @Test
+    public void shouldCreateGame() throws Exception {
+        // when
+        MvcResult result = mockMvc.perform(
+                post("/game")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("numberOfAIPlayers", "0")
+        )
+                // then
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON + ";charset=" + StandardCharsets.UTF_8))
+                .andReturn();
 
-         assertEquals("", result.getResponse().getContentAsString());
-     }
- */
+        Player player = new ObjectMapperFactory().createObjectMapper().readValue(result.getResponse().getContentAsString(), Player.class);
+        assertEquals(Colour.YELLOW, player.getColour());
+        assertEquals(PlayerType.HUMAN, player.getType());
+    }
+
     @Test
     public void shouldValidateNumberOfPlayersNotTooSmall() throws Exception {
         // when

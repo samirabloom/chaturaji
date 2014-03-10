@@ -13,12 +13,13 @@ public class PlayerTest {
     public void shouldReturnFieldsSetInConstructor() {
         // when
         User user = new User();
-        Player player = new Player("player id", user, Colour.BLUE);
+        Player player = new Player("player id", user, Colour.BLUE, PlayerType.AI);
 
         // then
         assertEquals("player id", player.getId());
         assertEquals(user, player.getUser());
         assertEquals(Colour.BLUE, player.getColour());
+        assertEquals(PlayerType.AI, player.getType());
     }
 
     @Test

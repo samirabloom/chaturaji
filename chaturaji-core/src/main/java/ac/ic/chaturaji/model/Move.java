@@ -1,5 +1,7 @@
 package ac.ic.chaturaji.model;
 
+import java.util.UUID;
+
 /**
  * @author samirarabbanian
  */
@@ -14,8 +16,8 @@ public class Move extends EqualsHashCodeToString {
     public Move() {
     }
 
-    public Move(String id, String gameId, Colour colour, int source, int destination) {
-        this.id = id;
+    public Move(String gameId, Colour colour, int source, int destination) {
+        this.id = UUID.randomUUID().toString();
         this.gameId = gameId;
         this.colour = colour;
         this.source = source;
