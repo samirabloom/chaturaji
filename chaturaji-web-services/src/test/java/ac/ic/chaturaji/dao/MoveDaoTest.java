@@ -33,7 +33,7 @@ public class MoveDaoTest {
     /*@Test
     public void shouldSaveMoveAndGetMove() {
         //given
-        String gameId = "gameId";
+        String gameId = UUID.randomUUID().toString();
         Move move = new Move(UUID.randomUUID().toString(), gameId, YELLOW, 34, 45);
 
         //when
@@ -46,7 +46,7 @@ public class MoveDaoTest {
     @Test
     public void shouldReturnListOfMoves() {
         //given
-        String gameId = "gameId";
+        String gameId = UUID.randomUUID().toString();
         gameDAO.save(new Game(gameId, new Player()));
         ArrayList<Move> moves = new ArrayList<>();
         moves.add(new Move(UUID.randomUUID().toString(), gameId, YELLOW, 1, 2));

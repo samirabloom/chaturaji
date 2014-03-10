@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,12 +29,13 @@ public class GameDaoTest {
     @Test
     public void shouldSaveAndGetGame() {
         // given
-        Game game = new Game("test_id", new Player());
+        String gameId = UUID.randomUUID().toString();
+        Game game = new Game(gameId, new Player());
 
         // when
         gameDAO.save(game);
 
         // then
-        assertEquals(game, gameDAO.get("test_id"));
+        assertEquals(game, gameDAO.get(gameId));
     }
 }

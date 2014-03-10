@@ -33,7 +33,7 @@ public class PlayerDaoTest {
     @Test
     public void shouldAddPlayers() {
         //given
-        String gameId = "gameId";
+        String gameId = UUID.randomUUID().toString();
         gameDAO.save(new Game(gameId, new Player()));
 
         List<Player> players = new ArrayList<>();

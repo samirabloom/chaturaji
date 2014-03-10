@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,12 +28,13 @@ public class UserDaoTest {
     @Test
     public void shouldSaveAndGetGame() {
         // given
-        User user = new User("test_id", "user_one@email.com", passwordEncoder.encode("password_one"), "my_nickname");
+        String userId = UUID.randomUUID().toString();
+        User user = new User(userId, "user_one@email.com", passwordEncoder.encode("password_one"), "my_nickname");
 
         // when
         userDAO.save(user);
 
         // then
-        assertEquals(user, userDAO.get("test_id"));
+        assertEquals(user, userDAO.get(userId));
     }
 }
