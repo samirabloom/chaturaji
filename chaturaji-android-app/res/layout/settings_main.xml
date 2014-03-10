@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"
-            android:id="@+id/editText"/>
+            android:id="@+id/newPassword"/>
     <Button
             android:layout_width="150sp"
             android:layout_height="wrap_content"
@@ -63,6 +63,6 @@
             style="@style/btnStyleArsenic"
             android:gravity="center"
             android:text="Update"
-            android:id="@+id/button"/>
+            android:id="@+id/updateButton"/>
 
 </LinearLayout>
