@@ -25,23 +25,21 @@ public class PlayerDAO {
     @Resource
     private DataSource dataSource;
 
-    public void save(String gameId, List<Player> Players) {
+    public void save(String gameId, Player player) {
         String sql = "INSERT INTO PLAYER(PLAYER_ID,GAME_ID, USER_ID,COLOUR,TYPE) VALUES (?,?,?,?,?)";
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
-            for (Player player : Players) {
-                ps.setString(1, player.getId());
-                ps.setString(2, gameId);
-                ps.setString(3, player.getUser().getId());
-                ps.setInt(4, player.getColour().ordinal());
-                if (player.getType() == PlayerType.AI)
-                    ps.setString(5, "AI");
-                else
-                    ps.setString(5, "HUMAN");
-                int i = ps.executeUpdate();
-                if (i != 1) {
-                    throw new RuntimeException();
-                }
+            ps.setString(1, player.getId());
+            ps.setString(2, gameId);
+            ps.setString(3, player.getUser().getId());
+            ps.setInt(4, player.getColour().ordinal());
+            if (player.getType() == PlayerType.AI) {
+                ps.setString(5, "AI");
+            } else {
+                ps.setString(5, "HUMAN");
+            }
+            if (ps.executeUpdate() != 1) {
+                throw new RuntimeException();
             }
             ps.close();
         } catch (SQLException e) {
@@ -63,10 +61,11 @@ public class PlayerDAO {
                 player.setId(id);
                 player.setUser(userDAO.get(result.getString("USER_ID")));
                 player.setColour(Colour.values()[result.getInt("COLOUR")]);
-                if (result.getString("TYPE").equals("AI"))
+                if (result.getString("TYPE").equals("AI")) {
                     player.setType(PlayerType.AI);
-                else
+                } else {
                     player.setType(PlayerType.HUMAN);
+                }
                 players.add(player);
             }
             return players;

@@ -31,8 +31,7 @@ public class MoveDAO {
             ps.setInt(3, move.getColour().ordinal());
             ps.setInt(4, move.getSource());
             ps.setInt(5, move.getDestination());
-            int i = ps.executeUpdate();
-            if (i != 1) {
+            if (ps.executeUpdate() != 1) {
                 throw new RuntimeException();
             }
             ps.close();

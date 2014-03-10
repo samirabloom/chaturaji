@@ -2,6 +2,7 @@ package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.ai.AI;
 import ac.ic.chaturaji.dao.GameDAO;
+import ac.ic.chaturaji.model.Colour;
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.User;
@@ -59,7 +60,7 @@ public class GameControllerTest {
     @Test
     public void shouldGetGamesFromDAOAndCreateJSON() throws IOException {
         // given
-        List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User())));
+        List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User(), Colour.YELLOW)));
         when(gameDAO.getAll()).thenReturn(games);
 
         // when

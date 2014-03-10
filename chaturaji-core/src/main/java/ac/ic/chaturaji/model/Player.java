@@ -16,9 +16,10 @@ public class Player extends EqualsHashCodeToString {
     public Player() {
     }
 
-    public Player(String id, User user) {
+    public Player(String id, User user, Colour colour) {
         this.id = id;
         this.user = user;
+        this.colour = colour;
     }
 
     public String getId() {

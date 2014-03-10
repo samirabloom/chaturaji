@@ -108,8 +108,7 @@ public class UserDAO {
             ps.setString(3, user.getNickname());
             ps.setString(4, user.getPassword());
 
-            int i = ps.executeUpdate();
-            if (i != 1) {
+            if (ps.executeUpdate() != 1) {
                 throw new RuntimeException();
             }
             ps.close();

@@ -35,23 +35,24 @@ public class PlayerDaoTest {
     public void shouldAddPlayers() {
         //given
         String gameId = "gameId";
-        List<Player> Players = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
             User user = new User(UUID.randomUUID().toString(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
             userDAO.save(user);
-            Player player = new Player(UUID.randomUUID().toString(), user);
+            Player player = new Player(UUID.randomUUID().toString(), user, Colour.BLUE);
             player.setType(PlayerType.AI);
-            player.setColour(Colour.YELLOW);
             player.setId(UUID.randomUUID().toString());
-            Players.add(player);
+            players.add(player);
         }
 
         //when
-        playerDAO.save(gameId, Players);
+        for (Player player : players) {
+            playerDAO.save(gameId, player);
+        }
 
         //then
-        assertEquals(Players, playerDAO.getAll(gameId));
+        assertEquals(players, playerDAO.getAll(gameId));
 
     }
 }

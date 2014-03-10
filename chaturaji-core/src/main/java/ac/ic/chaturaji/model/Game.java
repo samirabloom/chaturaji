@@ -66,6 +66,10 @@ public class Game extends EqualsHashCodeToString {
         return players;
     }
 
+    public int getPlayerCount() {
+        return players.size();
+    }
+
     public void setPlayers(List<Player> players) {
         this.players = players;
     }

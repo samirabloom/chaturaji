@@ -29,10 +29,10 @@ public class GameDAO {
     @PostConstruct
     public void setupDefaultData() {
         List<Game> games = Arrays.asList(
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User())),
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User())),
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User())),
-                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User()))
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW)),
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW)),
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW)),
+                new Game(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString(), new User(), Colour.YELLOW))
         );
         for (Game game : games) {
             save(game);
@@ -72,8 +72,7 @@ public class GameDAO {
             ps.setString(1, game.getId());
             ps.setDate(2, new java.sql.Date(game.getCreatedDate().toDate().getTime()));
             ps.setInt(3, game.getCurrentPlayer().ordinal());
-            int i = ps.executeUpdate();
-            if (i != 1) {
+            if (ps.executeUpdate() != 1) {
                 throw new RuntimeException();
             }
             ps.close();

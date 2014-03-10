@@ -2,10 +2,8 @@ package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.ai.AI;
 import ac.ic.chaturaji.dao.GameDAO;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.Move;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.dao.PlayerDAO;
+import ac.ic.chaturaji.model.*;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;
@@ -41,6 +39,8 @@ public class GameController {
     @Resource
     private GameDAO gameDAO;
     @Resource
+    private PlayerDAO playerDAO;
+    @Resource
     private AI ai;
     @Resource
     private SpringSecurityUserContext springSecurityUserContext;
@@ -75,7 +75,7 @@ public class GameController {
         }
         User currentUser = springSecurityUserContext.getCurrentUser();
         // create new player
-        Player player = new Player(UUID.randomUUID().toString(), currentUser);
+        Player player = new Player(UUID.randomUUID().toString(), currentUser, Colour.values()[0]);
         // create game
         Game game = new Game(UUID.randomUUID().toString(), player);
         ai.createGame(game);
@@ -95,6 +95,8 @@ public class GameController {
     @ResponseBody
     @RequestMapping(value = "/joinGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public ResponseEntity<String> joinGame(@RequestParam("gameId") String gameId) throws IOException {
+        // remove any quotes added by JacksonMessageConverter
+        gameId = gameId.replace("\"", "");
         Game game = gameDAO.get(gameId);
         if (game == null) {
             return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
@@ -108,11 +110,11 @@ public class GameController {
         }
 
         // create new player
-        Player player = new Player(UUID.randomUUID().toString(), currentUser);
+        Player player = new Player(UUID.randomUUID().toString(), currentUser, Colour.values()[game.getPlayerCount()]);
         try {
             // update game and save
             game.addPlayer(player);
-            gameDAO.save(game);
+            playerDAO.save(game.getId(), player);
             // register web socket listener
             registerMoveListener(gameId, player);
         } catch (Exception e) {
