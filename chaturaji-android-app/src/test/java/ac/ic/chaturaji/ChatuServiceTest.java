@@ -12,13 +12,17 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Haider on 03/03/14.
  */
 public class ChatuServiceTest {
 
-    /*
+    private long maxRequestTime = 5000;
+
+
+
     @Test
     public void shouldRegisterUser() throws Exception {
 
@@ -28,6 +32,49 @@ public class ChatuServiceTest {
         // if state is successful then it was a 201
         assertEquals("Success", state);
     }
+
+
+    @Test
+    public void requestSpeed() throws Exception {
+
+        ChatuService chatuService = ChatuService.getInstance();
+
+        long startTime = System.currentTimeMillis();
+
+        String state = chatuService.createAccount("test@test.com", "testpass", "testman");
+
+        long elapsedTime = System.currentTimeMillis() - startTime;
+
+        System.out.println(elapsedTime);
+
+        assertTrue(elapsedTime < maxRequestTime);
+
+        startTime = System.currentTimeMillis();
+
+        state = chatuService.login("test@test.com", "testpass");
+
+        elapsedTime = System.currentTimeMillis() - startTime;
+
+        assertTrue(elapsedTime < maxRequestTime);
+
+        startTime = System.currentTimeMillis();
+
+        state = chatuService.getGames();
+
+        elapsedTime = System.currentTimeMillis() - startTime;
+
+        assertTrue(elapsedTime < maxRequestTime);
+
+        startTime = System.currentTimeMillis();
+
+        state = chatuService.createGame("0");
+
+        elapsedTime = System.currentTimeMillis() - startTime;
+
+        assertTrue(elapsedTime < maxRequestTime);
+    }
+
+
 
     @Test
     public void shouldNotRegister() throws Exception {
@@ -321,7 +368,7 @@ public class ChatuServiceTest {
 
         ChatuService chatuService = ChatuService.getInstance();
 
-        String state = chatuService.login("test2@test.com", "testpass");
+        String state = chatuService.login("test@test.com", "testpass");
 
         assertEquals("Success", state);
 
@@ -436,7 +483,7 @@ public class ChatuServiceTest {
         assertEquals("Bad request", joinstate[1]);
 
 
-    }*/
+    }
 
 
 }

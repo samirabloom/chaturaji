@@ -117,6 +117,11 @@ public class MainMenu extends Activity {
         public void onClick(View theView) {
 
             Intent logOut = new Intent(MainMenu.this, LoginActivity.class);
+
+            ChatuService chatuService = ChatuService.getInstance();
+
+            chatuService.clearCookieCred();
+
             startActivity(logOut);
         }
     };
