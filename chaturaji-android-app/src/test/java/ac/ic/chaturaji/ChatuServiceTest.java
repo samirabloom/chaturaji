@@ -19,10 +19,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class ChatuServiceTest {
 
+
+
     private long maxRequestTime = 5000;
 
 
-
+/*
     @Test
     public void shouldRegisterUser() throws Exception {
 
@@ -299,6 +301,30 @@ public class ChatuServiceTest {
 
 
     }
+*/
+    @Test
+    public void testGettersAndSetters() throws Exception{
+
+        String email = "testman@testman.com";
+
+        String password = "randomness";
+
+        ChatuService chatuService = ChatuService.getInstance();
+
+        chatuService.setEmailPassword(email, password);
+
+        String gotEmail = chatuService.getEmail();
+
+        String gotPassword = chatuService.getPassword();
+
+        assertEquals(email, gotEmail);
+
+        assertEquals(password, gotPassword);
+
+
+    }
+
+    /*
 
     @Test
     public void fullGame() throws Exception {
@@ -413,12 +439,13 @@ public class ChatuServiceTest {
 
     }
 
+    /*
     @Test
     public void cannotJoinOwnGame() throws Exception {
 
         ChatuService chatuService = ChatuService.getInstance();
 
-        String email = "unique1@test.com";
+        String email = "unqi@test.com";
 
         String state = chatuService.createAccount(email, "testpass", "testman2");
 
@@ -484,6 +511,5 @@ public class ChatuServiceTest {
 
 
     }
-
-
+*/
 }
