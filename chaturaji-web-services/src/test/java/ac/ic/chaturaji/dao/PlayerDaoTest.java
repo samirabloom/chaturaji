@@ -1,10 +1,7 @@
 package ac.ic.chaturaji.dao;
 
 import ac.ic.chaturaji.config.RootConfiguration;
-import ac.ic.chaturaji.model.Colour;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.PlayerType;
-import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +24,8 @@ public class PlayerDaoTest {
     @Resource
     PasswordEncoder passwordEncoder;
     @Resource
+    private GameDAO gameDAO;
+    @Resource
     private PlayerDAO playerDAO;
     @Resource
     private UserDAO userDAO;
@@ -35,8 +34,9 @@ public class PlayerDaoTest {
     public void shouldAddPlayers() {
         //given
         String gameId = "gameId";
-        List<Player> players = new ArrayList<>();
+        gameDAO.save(new Game(gameId, new Player()));
 
+        List<Player> players = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             User user = new User(UUID.randomUUID().toString(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
             userDAO.save(user);
