@@ -30,6 +30,11 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
+    <!-- web socket support -->
+    <listener>
+        <listener-class>ac.ic.chaturaji.web.websockets.WebSocketServletContextListener</listener-class>
+    </listener>
+
     <!-- spring security filter -->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
