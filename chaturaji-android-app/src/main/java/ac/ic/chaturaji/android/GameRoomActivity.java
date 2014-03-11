@@ -136,7 +136,9 @@ public class GameRoomActivity extends Activity {
 
             if(gameRooms != null && gamesList != null){
 
-                gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));}
+                gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
+
+            }
 
             else
 

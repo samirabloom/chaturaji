@@ -1,8 +1,8 @@
 package ac.ic.chaturaji.android.test;
 
-import ac.ic.chaturaji.android.MainMenu;
-import ac.ic.chaturaji.android.R;
+import ac.ic.chaturaji.android.*;
 import android.annotation.TargetApi;
+import android.app.Instrumentation;
 import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
@@ -44,5 +44,97 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
         assertTrue(multi_player_button != null);
         assertTrue(settings_button != null);
         assertTrue(logout_button != null);
+    }
+
+    public void testTClickSinglePlayer(){
+
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(ChooseColour.class.getName(), null, false);
+
+        MainMenu myActivity = getActivity();
+
+        final Button singlePlayer = (Button) myActivity.findViewById(R.id.single_player_button);
+
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                singlePlayer.performClick();
+            }
+        });
+
+        ChooseColour nextActivity = (ChooseColour) getInstrumentation().waitForMonitor(activityMonitor);
+
+        assertNotNull(nextActivity);
+        nextActivity.finish();
+
+    }
+
+    public void testTClickMultiPlayer(){
+
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(GameRoomActivity.class.getName(), null, false);
+
+        MainMenu myActivity = getActivity();
+
+        final Button mPlayer = (Button) myActivity.findViewById(R.id.multi_player_button);
+
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                mPlayer.performClick();
+            }
+        });
+
+        GameRoomActivity nextActivity = (GameRoomActivity) getInstrumentation().waitForMonitor(activityMonitor);
+
+        assertNotNull(nextActivity);
+        nextActivity.finish();
+
+    }
+
+    public void testTClickSettings(){
+
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(SettingsActivity.class.getName(), null, false);
+
+        MainMenu myActivity = getActivity();
+
+        final Button settings = (Button) myActivity.findViewById(R.id.settings_button);
+
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                settings.performClick();
+            }
+        });
+
+        SettingsActivity nextActivity = (SettingsActivity) getInstrumentation().waitForMonitor(activityMonitor);
+
+        assertNotNull(nextActivity);
+        nextActivity.finish();
+
+    }
+
+    public void testTClickLogout(){
+
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(LoginActivity.class.getName(), null, false);
+
+        MainMenu myActivity = getActivity();
+
+        final Button logout = (Button) myActivity.findViewById(R.id.log_out_button);
+
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                logout.performClick();
+            }
+        });
+
+        LoginActivity nextActivity = (LoginActivity) getInstrumentation().waitForMonitor(activityMonitor);
+
+        assertNotNull(nextActivity);
+        nextActivity.finish();
+
     }
 }
