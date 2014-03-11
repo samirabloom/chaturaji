@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -130,6 +131,9 @@ public class WebSocketIntegrationTest extends GameControllerFullIntegrationTest 
             }
         }
 
+        // wait for web socket connections to be established
+        TimeUnit.SECONDS.sleep(3);
+
         // --- submit move ---
 
         // when
@@ -141,7 +145,11 @@ public class WebSocketIntegrationTest extends GameControllerFullIntegrationTest 
 
         // then -- each web socket client has been updated
         assertEquals(HttpStatus.ACCEPTED.value(), submitMoveResponse.getStatusLine().getStatusCode());
-        for (GameMoveListener mockGameMoveListener : mockGameMoveListeners) {
+        // wait for web socket message to be received
+        TimeUnit.SECONDS.sleep(3);
+        for (int i = 0; i < mockGameMoveListeners.length; i++) {
+            System.out.println("i = " + i);
+            GameMoveListener mockGameMoveListener = mockGameMoveListeners[i];
             verify(mockGameMoveListener).onMoveCompleted(any(Result.class));
         }
     }
