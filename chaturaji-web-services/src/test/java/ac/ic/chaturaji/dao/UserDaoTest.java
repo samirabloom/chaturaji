@@ -26,7 +26,7 @@ public class UserDaoTest {
     PasswordEncoder passwordEncoder;
 
     @Test
-    public void shouldSaveAndGetGame() {
+    public void shouldSaveAndGetUser() {
         // given
         String userId = UUID.randomUUID().toString();
         User user = new User(userId, "user_one@email.com", passwordEncoder.encode("password_one"), "my_nickname");
@@ -36,5 +36,29 @@ public class UserDaoTest {
 
         // then
         assertEquals(user, userDAO.get(userId));
+    }
+    @Test
+    public void shouldSaveAndGetUserByEmail() {
+        // given
+        String userId = UUID.randomUUID().toString();
+        User user = new User(userId, "user_three@email.com", passwordEncoder.encode("password_three"), "my_nickname3");
+
+        // when
+        userDAO.save(user);
+
+        // then
+        assertEquals(user, userDAO.findByEmail("user_three@email.com"));
+    }
+    @Test
+    public void shouldSaveAndGetUserByNickname() {
+        // given
+        String userId = UUID.randomUUID().toString();
+        User user = new User(userId, "user_four@email.com", passwordEncoder.encode("password_four"), "my_nickname4");
+
+        // when
+        userDAO.save(user);
+
+        // then
+        assertEquals(user, userDAO.findByNickname("my_nickname4"));
     }
 }

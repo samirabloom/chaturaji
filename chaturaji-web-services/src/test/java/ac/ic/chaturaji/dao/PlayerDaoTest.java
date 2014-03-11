@@ -37,11 +37,19 @@ public class PlayerDaoTest {
         gameDAO.save(new Game(gameId, new Player()));
 
         List<Player> players = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
             User user = new User(UUID.randomUUID().toString(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
             userDAO.save(user);
             Player player = new Player(UUID.randomUUID().toString(), user, Colour.BLUE, PlayerType.HUMAN);
             player.setType(PlayerType.AI);
+            player.setId(UUID.randomUUID().toString());
+            players.add(player);
+        }
+        for (int i = 0; i < 2; i++) {
+            User user = new User(UUID.randomUUID().toString(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
+            userDAO.save(user);
+            Player player = new Player(UUID.randomUUID().toString(), user, Colour.BLUE, PlayerType.HUMAN);
+            player.setType(PlayerType.HUMAN);
             player.setId(UUID.randomUUID().toString());
             players.add(player);
         }
