@@ -1,9 +1,6 @@
 package ac.ic.chaturaji.chatuService;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
@@ -39,25 +36,45 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Haider on 06/02/14.
+ * @author haider
  */
-public class ChatuService{
+public class ChatuService {
 
     private static ChatuService instance;
-    private String localHost = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com"; // Put your server address here...
+    private String serverHost = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com";
+    private int serverPort = 8443;
     private DefaultHttpClient httpClient;
     private String email = "";
     private String password = "";
     private CookieStore cookieStoreLocal;
     private CredentialsProvider credsProviderLocal;
 
-    private ChatuService(){}
+    private ChatuService() {
+    }
 
-    private void setupClient(){
+    public static synchronized ChatuService getInstance() {
+
+        if (instance == null) {
+            instance = new ChatuService();
+            instance.setupClient();
+        }
+
+        return instance;
+    }
+
+    public void setServerHost(String serverHost) {
+        this.serverHost = serverHost;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    private void setupClient() {
 
         // Acknowledgment to http://madurangasblogs.blogspot.co.uk/2013/08/avoiding-javaxnetsslsslpeerunverifiedex.html
 
-        try{
+        try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
 
@@ -77,34 +94,21 @@ public class ChatuService{
 
             httpClient = new DefaultHttpClient(ccm, params);
 
-            }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             httpClient = new DefaultHttpClient();
 
         }
     }
 
-    public static synchronized  ChatuService getInstance(){
-
-        if(instance==null){
-            instance = new ChatuService();
-            instance.setupClient();
-
-        }
-
-        return instance;
-    }
-
-    public String getGames(){
+    public String getGames() {
 
         setupClient();
 
         String games = "Error";
-        String url = "https://" + localHost + ":8443/chaturaji-web-services/games";
+        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/games";
 
 
-        try{
+        try {
 
             HttpGet request = new HttpGet(url);
             HttpResponse response = httpClient.execute(request);
@@ -112,11 +116,9 @@ public class ChatuService{
             games = org.apache.http.util.EntityUtils.toString(entity);
             System.out.println(games);
 
-        }
+        } catch (Exception e) {
 
-        catch (Exception e){
-
-        e.printStackTrace();
+            e.printStackTrace();
 
         }
 
@@ -124,16 +126,16 @@ public class ChatuService{
         return games;
     }
 
-    public String createGame(String AIOpps){
+    public String createGame(String AIOpps) {
 
-        if(Integer.parseInt(AIOpps) > 3 || Integer.parseInt(AIOpps) < 0)
+        if (Integer.parseInt(AIOpps) > 3 || Integer.parseInt(AIOpps) < 0)
             return "Invalid AI count";
 
         setupClient();
 
-        String url = "https://" + localHost + ":8443/chaturaji-web-services/game";
+        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/game";
 
-        try{
+        try {
 
             HttpContext localContext = new BasicHttpContext();
             localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
@@ -149,28 +151,25 @@ public class ChatuService{
 
             System.out.println(response.getStatusLine().getStatusCode());
 
-            if(response.getStatusLine().getStatusCode() != 201)
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
                 return "Error";
-        }
-
-        catch (Exception e){
-
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error";
-
         }
 
         return "Success";
     }
 
-    public String[] joinGame(String gameId){
+    public String[] joinGame(String gameId) {
 
         String[] reply = {"Good", "Success"};
         setupClient();
 
-        String url = "https://" + localHost + ":8443/chaturaji-web-services/joinGame";
+        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/joinGame";
 
-        try{
+        try {
 
             HttpContext localContext = new BasicHttpContext();
             localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
@@ -186,7 +185,7 @@ public class ChatuService{
             System.out.println(response.getStatusLine().getStatusCode());
 
 
-            if(response.getStatusLine().getStatusCode() == 400){
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST) {
 
                 HttpEntity entity = response.getEntity();
                 String responseBody = EntityUtils.toString(entity);
@@ -196,18 +195,14 @@ public class ChatuService{
 
                 return reply;
 
-            }
-
-            else if(response.getStatusLine().getStatusCode() != 201){
+            } else if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
 
                 reply[0] = "Not 201 or 400";
                 reply[1] = "Error";
 
                 return reply;
             }
-        }
-
-        catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
 
@@ -221,16 +216,15 @@ public class ChatuService{
         return reply;
     }
 
-    public String createAccount(String email, String password, String nickname){
+    public String createAccount(String email, String password, String nickname) {
 
         setupClient();
 
-        String url = "https://" + localHost + ":8443/chaturaji-web-services/register";
+        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/register";
 
-        try{
+        try {
 
             HttpPost httpPost = new HttpPost(url);
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
             httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(
                     new BasicNameValuePair("email", email),
@@ -242,12 +236,11 @@ public class ChatuService{
 
             System.out.println(response.getStatusLine().getStatusCode());
 
-            if(response.getStatusLine().getStatusCode() != 201)
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
                 return "Error";
+            }
 
-        }
-
-        catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
             return "Error";
@@ -256,7 +249,7 @@ public class ChatuService{
         return "Success";
     }
 
-    public String login(String emailString, String password){
+    public String login(String emailString, String password) {
 
         setupClient();
 
@@ -269,11 +262,11 @@ public class ChatuService{
 
             e.printStackTrace();
         }
-        String url = "https://" + localHost + ":8443/chaturaji-web-services/login";
+        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/login";
 
         System.out.println(url);
 
-        try{
+        try {
 
             HttpContext localContext = new BasicHttpContext();
 
@@ -298,12 +291,11 @@ public class ChatuService{
 
             System.out.println(response.getStatusLine().getStatusCode());
 
-            if(response.getStatusLine().getStatusCode() != 202)
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_ACCEPTED) {
                 return "Invalid";
+            }
 
-        }
-
-        catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
             return "Error";
@@ -314,21 +306,21 @@ public class ChatuService{
         return "Success";
     }
 
-    public void setEmailPassword(String email, String password){
+    public void setEmailPassword(String email, String password) {
 
         this.email = email;
         this.password = password;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
-    public void clearCookieCred(){
+    public void clearCookieCred() {
 
         credsProviderLocal = null;
         cookieStoreLocal = null;

@@ -2,6 +2,7 @@ package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
+import ac.ic.chaturaji.web.PortFactory;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Service;
@@ -53,8 +54,8 @@ public class GameControllerFullIntegrationTest {
         System.setProperty("https.port", "" + PortFactory.findFreePort());
         httpsPort = Integer.parseInt(System.getProperty("https.port"));
 
-        String classLocation = GameControllerFullIntegrationTest.class.getCanonicalName().replace(".", "/") + ".class";
-        String projectBase = GameControllerFullIntegrationTest.class.getClassLoader().getResource(classLocation).toString().replace(classLocation, "../../").replace("file:", "");
+        String classLocation = PortFactory.class.getCanonicalName().replace(".", "/") + ".class";
+        String projectBase = PortFactory.class.getClassLoader().getResource(classLocation).toString().replace(classLocation, "../../").replace("file:", "");
 
         // start proxy (in tomcat)
         tomcat = new Tomcat();

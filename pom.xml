@@ -17,6 +17,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <spring.version>4.0.1.RELEASE</spring.version>
         <jackson-version>2.3.2</jackson-version>
+        <tomcat.version>7.0.47</tomcat.version>
     </properties>
 
     <modules>
@@ -103,6 +104,20 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>4.3.1.Final</version>
+            </dependency>
+
+            <!-- Tomcat Server (Integration Testing) -->
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-logging-juli</artifactId>
+                <version>${tomcat.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <!-- testing -->
