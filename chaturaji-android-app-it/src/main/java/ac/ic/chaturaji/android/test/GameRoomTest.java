@@ -3,6 +3,7 @@ package ac.ic.chaturaji.android.test;
 import ac.ic.chaturaji.android.GameRoomActivity;
 import ac.ic.chaturaji.android.GameRoomAdapter;
 import ac.ic.chaturaji.android.R;
+import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
@@ -42,6 +43,15 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
 
         assertTrue(localAdapter == null);
 
+    }
+
+    public void testList(){
+
+        mActivity.onCreate(new Bundle());
+
+        localListView = (ListView) mActivity.findViewById(R.id.game_rooms_list);
+
+        localAdapter = (GameRoomAdapter) localListView.getAdapter();
     }
 
 }
