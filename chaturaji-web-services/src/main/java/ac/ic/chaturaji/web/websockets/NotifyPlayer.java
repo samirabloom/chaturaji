@@ -1,4 +1,4 @@
-package ac.ic.chaturaji.web.controller;
+package ac.ic.chaturaji.web.websockets;
 
 import ac.ic.chaturaji.ai.MoveListener;
 import ac.ic.chaturaji.model.GameStatus;

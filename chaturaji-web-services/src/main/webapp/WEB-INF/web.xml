@@ -9,11 +9,6 @@
         <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
     </context-param>
 
-    <context-param>
-        <param-name>spring.profiles.active</param-name>
-        <param-value>backend, apacheClient</param-value>
-    </context-param>
-
     <!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
