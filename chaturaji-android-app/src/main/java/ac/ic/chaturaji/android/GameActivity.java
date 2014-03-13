@@ -39,7 +39,6 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     private int red_king_captured_by = 0;
     private int green_king_captured_by = 0;
     private int yellow_king_captured_by = 0;
-    private SubmitMove submit_move = new SubmitMove();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +47,8 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //ChatuService chatuService = ChatuService.getInstance();
-
-        //chatuService.setupSocketClient(GameActivity.this);
+        ChatuService chatuService = ChatuService.getInstance();
+        chatuService.setupSocketClient(GameActivity.this);
 
         String colour = getIntent().getStringExtra("colour");
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
@@ -89,7 +87,6 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         savedInstanceState.putInt("red_king_captured_by", red_king_captured_by);
         savedInstanceState.putInt("green_king_captured_by", green_king_captured_by);
         savedInstanceState.putInt("yellow_king_captured_by", yellow_king_captured_by);
-        savedInstanceState.putSerializable("submit_move", submit_move);
     }
 
     @Override
@@ -111,7 +108,6 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         red_king_captured_by = savedInstanceState.getInt("red_king_captured_by");
         green_king_captured_by = savedInstanceState.getInt("green_king_captured_by");
         yellow_king_captured_by = savedInstanceState.getInt("yellow_king_captured_by");
-        submit_move = (SubmitMove) savedInstanceState.getSerializable("submit_move");
     }
 
     @Override
@@ -254,6 +250,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                         else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
                         {
                             String state = "Error";
+                            SubmitMove submit_move = new SubmitMove();
 
                             while(state.equals("Error"))
                             {
@@ -263,6 +260,8 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
                                     if(state.equals("Error"))
                                         Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
+                                    else
+                                        Toast.makeText(getApplicationContext(), "Move submission successful", Toast.LENGTH_LONG).show();
                                 }
                                 catch (Exception e) {
                                     e.printStackTrace();
@@ -602,6 +601,14 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         return ((7 - row)*8 + column);
     }
 
+    public int getColumn(int move) {
+        return (move/8);
+    }
+
+    public int getRow(int move) {
+        return (7 - (move%8));
+    }
+
     // This method gets called by the server every time a new move is made, including your current player's move
 
     public void updateGame(Result result){
@@ -611,7 +618,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     // This is for making a submit move request to the server, you just need to pass in the source and destination of the move
 
-    private class SubmitMove extends AsyncTask<Integer, Void, String> implements Serializable {
+    private class SubmitMove extends AsyncTask<Integer, Void, String> {
 
         @Override
         protected String doInBackground(Integer... info) {
