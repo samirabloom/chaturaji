@@ -601,22 +601,29 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     }
 
     public int getColumn(int move) {
-        return (move/8);
+        return (move%8);
     }
 
     public int getRow(int move) {
-        return (7 - (move%8));
+        return (7 - (move/8));
     }
 
     // This method gets called by the server every time a new move is made, including your current player's move
 
     public void updateGame(Result result){
 
+        //System.out.println("Source: " + result.getMove().getSource());
+
         int colSrc = getColumn(result.getMove().getSource());
         int rowSrc = getRow(result.getMove().getSource());
 
         int colDest = getColumn(result.getMove().getDestination());
         int rowDest = getRow(result.getMove().getDestination());
+
+        /*System.out.println("ColSrc: " + colSrc);
+        System.out.println("RowSrc: " + rowSrc);
+        System.out.println("ColDest: " + colDest);
+        System.out.println("RowDest: " + rowDest);*/
 
         move(colSrc, rowSrc, colDest, rowDest);
         moved = true;
@@ -629,8 +636,6 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         setScoreboard();
         clearSelections();
         drawPieces();
-
-        System.out.println(result.getMove());
     }
 
     // This is for making a submit move request to the server, you just need to pass in the source and destination of the move
