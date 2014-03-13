@@ -268,19 +268,16 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                                 }
                             }
 
-                            /*
-                            move(selected_column, selected_row, column, row);
-                            moved = true;
+                            /*moved = true;
                             move_count++;
                             pawnPromotion();
-                            */
 
                             while(!checkValidMoves())
                                 move_count++;
 
                             setScoreboard();
                             clearSelections();
-                            drawPieces();
+                            drawPieces();*/
                         }
                         else if ((!moved) && selectPiece(column, row))
                         {
@@ -625,6 +622,9 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         moved = true;
         move_count++;
         pawnPromotion();
+
+        while(!checkValidMoves())
+            move_count++;
 
         setScoreboard();
         clearSelections();
