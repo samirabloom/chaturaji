@@ -1,5 +1,13 @@
 package ac.ic.chaturaji.chatuService;
 
+import ac.ic.chaturaji.model.Colour;
+import ac.ic.chaturaji.model.Move;
+import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
+import ac.ic.chaturaji.websockets.GameMoveListener;
+import ac.ic.chaturaji.websockets.WebSocketsClient;
+import android.app.Activity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -14,6 +22,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -41,6 +50,7 @@ import java.util.List;
 public class ChatuService {
 
     private static ChatuService instance;
+    private final ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
     private String serverHost = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com";
     private int serverPort = 8443;
     private DefaultHttpClient httpClient;
@@ -48,6 +58,9 @@ public class ChatuService {
     private String password = "";
     private CookieStore cookieStoreLocal;
     private CredentialsProvider credsProviderLocal;
+    private WebSocketsClient webSocketsClient;
+    private Player player;
+    private GameMoveListener gameMoveListener;
 
     private ChatuService() {
     }
@@ -99,6 +112,28 @@ public class ChatuService {
 
         }
     }
+
+    public void setupSocketClient(Activity activity){
+
+        try{
+
+        webSocketsClient = new WebSocketsClient(serverHost);
+
+        gameMoveListener = new ClientGameMoveListener(activity);
+
+        webSocketsClient.registerGameMoveListener(gameMoveListener, player.getId());
+
+        }
+
+        catch(Exception e){
+
+            System.out.println("Device not compatible");
+        }
+
+        System.out.println(player.getId());
+
+    }
+
 
     public String getGames() {
 
@@ -154,6 +189,9 @@ public class ChatuService {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
                 return "Error";
             }
+
+            player = objectMapper.readValue(EntityUtils.toString(response.getEntity()), Player.class);
+
         } catch (Exception e) {
             e.printStackTrace();
             return "Error";
@@ -202,6 +240,9 @@ public class ChatuService {
 
                 return reply;
             }
+
+            player = objectMapper.readValue(EntityUtils.toString(response.getEntity()), Player.class);
+
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -214,6 +255,42 @@ public class ChatuService {
         }
 
         return reply;
+    }
+
+    public String submitMove(int source, int destination){
+
+        setupClient();
+
+        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/submitMove";
+
+        try{
+
+            HttpContext localContext = new BasicHttpContext();
+            localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
+            localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
+
+            HttpPost submitMove = new HttpPost(url);
+            StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(player.getGameId(), player.getColour(), source, destination)));
+            entity.setContentType("application/json;charset=UTF-8");
+            submitMove.setEntity(entity);
+            HttpResponse submitMoveResponse = httpClient.execute(submitMove, localContext);
+
+            System.out.println(submitMoveResponse.getStatusLine().getStatusCode());
+
+            if (submitMoveResponse.getStatusLine().getStatusCode() != HttpStatus.SC_ACCEPTED) {
+                return "Error";
+            }
+
+        }
+
+        catch (Exception e) {
+
+            e.printStackTrace();
+            return "Error";
+
+        }
+
+        return "Success";
     }
 
     public String createAccount(String email, String password, String nickname) {
@@ -324,6 +401,12 @@ public class ChatuService {
 
         credsProviderLocal = null;
         cookieStoreLocal = null;
+
+    }
+
+    public Colour getPlayerColour(){
+
+        return player.getColour();
 
     }
 

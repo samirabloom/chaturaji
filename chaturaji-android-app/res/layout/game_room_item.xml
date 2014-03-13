@@ -17,7 +17,7 @@
             android:src="@drawable/oneplayer"/>
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
@@ -25,13 +25,13 @@
             android:textColor="@color/white"
             android:textSize="15dip"
             android:textStyle="bold"
-            android:text="USERNAME"
+            android:text="No Name"
             android:id="@+id/game_username"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             android:textColor="@color/white"

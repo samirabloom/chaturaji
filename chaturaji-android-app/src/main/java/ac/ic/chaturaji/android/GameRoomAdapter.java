@@ -86,8 +86,11 @@ public class GameRoomAdapter extends BaseAdapter {
         if (players.get(0) != null)
             username.setText(players.get(0).getUser().getNickname());
 
-        String display_ais = "AIs: " + String.valueOf(ais);
-        String display_humans = "HUMANs: " + String.valueOf(humans);
+        if(username.getText().length() < 1)
+            username.setText("No Name");
+
+        String display_ais = String.valueOf(ais);
+        String display_humans = String.valueOf(humans);
         ais_text.setText(display_ais);
         human_text.setText(display_humans);
 

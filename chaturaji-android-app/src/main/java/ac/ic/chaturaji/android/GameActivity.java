@@ -1,8 +1,12 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.android.pieces.*;
+import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.chatuService.OnMoveCompleteListener;
+import ac.ic.chaturaji.model.Result;
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.*;
@@ -13,7 +17,7 @@ import android.widget.TextView;
 
 /* Following code done by Kadir Sekha */
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     private final android.widget.ImageView[][] BoardImage = new android.widget.ImageView[8][8];
     private Pieces[][] Board = new Pieces[8][8];
@@ -39,6 +43,20 @@ public class GameActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //ChatuService chatuService = ChatuService.getInstance();
+
+        //chatuService.setupSocketClient(GameActivity.this);
+
+        SubmitMove submitMove = new SubmitMove();
+        submitMove.execute(0, 1);
+
+        try{
+        String state = submitMove.get();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         String colour = getIntent().getStringExtra("colour");
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
@@ -565,6 +583,28 @@ public class GameActivity extends Activity {
         }
 
         return false;
+    }
+
+    // This method gets called by the server every time a new move is made, including your current player's move
+
+    public void updateGame(Result result){
+
+        System.out.println(result.getMove());
+    }
+
+    // This is for making a submit move request to the server, you just need to pass in the source and destination of the move
+
+    private class SubmitMove extends AsyncTask<Integer, Void, String> {
+
+        @Override
+        protected String doInBackground(Integer... info) {
+            ChatuService chatuService = ChatuService.getInstance();
+
+            String state = chatuService.submitMove(info[0], info[1]);
+
+            return state;
+        }
+
     }
 
     /* Get functions for testing */
