@@ -14,6 +14,9 @@ import android.view.Menu;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.Serializable;
 
 /* Following code done by Kadir Sekha */
 
@@ -36,6 +39,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     private int red_king_captured_by = 0;
     private int green_king_captured_by = 0;
     private int yellow_king_captured_by = 0;
+    private SubmitMove submit_move = new SubmitMove();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,16 +51,6 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         //ChatuService chatuService = ChatuService.getInstance();
 
         //chatuService.setupSocketClient(GameActivity.this);
-
-        SubmitMove submitMove = new SubmitMove();
-        submitMove.execute(0, 1);
-
-        try{
-        String state = submitMove.get();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
 
         String colour = getIntent().getStringExtra("colour");
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
@@ -95,6 +89,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         savedInstanceState.putInt("red_king_captured_by", red_king_captured_by);
         savedInstanceState.putInt("green_king_captured_by", green_king_captured_by);
         savedInstanceState.putInt("yellow_king_captured_by", yellow_king_captured_by);
+        savedInstanceState.putSerializable("submit_move", submit_move);
     }
 
     @Override
@@ -116,6 +111,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         red_king_captured_by = savedInstanceState.getInt("red_king_captured_by");
         green_king_captured_by = savedInstanceState.getInt("green_king_captured_by");
         yellow_king_captured_by = savedInstanceState.getInt("yellow_king_captured_by");
+        submit_move = (SubmitMove) savedInstanceState.getSerializable("submit_move");
     }
 
     @Override
@@ -257,6 +253,22 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                             clearSelections();
                         else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
                         {
+                            String state = "Error";
+
+                            while(state.equals("Error"))
+                            {
+                                submit_move.execute(convertMove(selected_column, selected_row), convertMove(column, row));
+                                try {
+                                    state = submit_move.get();
+
+                                    if(state.equals("Error"))
+                                        Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
+                                }
+                                catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                             move(selected_column, selected_row, column, row);
                             moved = true;
                             move_count++;
@@ -585,6 +597,11 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         return false;
     }
 
+    public int convertMove(int column, int row) {
+
+        return ((7 - row)*8 + column);
+    }
+
     // This method gets called by the server every time a new move is made, including your current player's move
 
     public void updateGame(Result result){
@@ -594,7 +611,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     // This is for making a submit move request to the server, you just need to pass in the source and destination of the move
 
-    private class SubmitMove extends AsyncTask<Integer, Void, String> {
+    private class SubmitMove extends AsyncTask<Integer, Void, String> implements Serializable {
 
         @Override
         protected String doInBackground(Integer... info) {
@@ -604,7 +621,6 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
             return state;
         }
-
     }
 
     /* Get functions for testing */
