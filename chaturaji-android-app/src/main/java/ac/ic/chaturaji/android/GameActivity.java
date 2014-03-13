@@ -268,10 +268,12 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                                 }
                             }
 
+                            /*
                             move(selected_column, selected_row, column, row);
                             moved = true;
                             move_count++;
                             pawnPromotion();
+                            */
 
                             while(!checkValidMoves())
                                 move_count++;
@@ -612,6 +614,21 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     // This method gets called by the server every time a new move is made, including your current player's move
 
     public void updateGame(Result result){
+
+        int colSrc = getColumn(result.getMove().getSource());
+        int rowSrc = getRow(result.getMove().getSource());
+
+        int colDest = getColumn(result.getMove().getDestination());
+        int rowDest = getRow(result.getMove().getDestination());
+
+        move(colSrc, rowSrc, colDest, rowDest);
+        moved = true;
+        move_count++;
+        pawnPromotion();
+
+        setScoreboard();
+        clearSelections();
+        drawPieces();
 
         System.out.println(result.getMove());
     }
