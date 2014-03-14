@@ -260,24 +260,12 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
                                     if(state.equals("Error"))
                                         Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
-                                    else
-                                        Toast.makeText(getApplicationContext(), "Move submission successful", Toast.LENGTH_LONG).show();
                                 }
                                 catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
 
-                            /*moved = true;
-                            move_count++;
-                            pawnPromotion();
-
-                            while(!checkValidMoves())
-                                move_count++;
-
-                            setScoreboard();
-                            clearSelections();
-                            drawPieces();*/
                         }
                         else if ((!moved) && selectPiece(column, row))
                         {
@@ -297,11 +285,15 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void setScoreboard() {
 
+        System.out.println("Inside scoreboard");
+
         TextView blue_score_text = (TextView) findViewById(R.id.blue_score);
         TextView red_score_text = (TextView) findViewById(R.id.red_score);
         TextView green_score_text = (TextView) findViewById(R.id.green_score);
         TextView yellow_score_text = (TextView) findViewById(R.id.yellow_score);
         TextView move_list = (TextView) findViewById(R.id.movelist);
+
+        System.out.println(movelist);
 
         String blue = "Blue Score: " + blue_score;
         blue_score_text.setText(blue);
@@ -612,30 +604,47 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void updateGame(Result result){
 
-        //System.out.println("Source: " + result.getMove().getSource());
-
         int colSrc = getColumn(result.getMove().getSource());
         int rowSrc = getRow(result.getMove().getSource());
 
         int colDest = getColumn(result.getMove().getDestination());
         int rowDest = getRow(result.getMove().getDestination());
 
-        /*System.out.println("ColSrc: " + colSrc);
-        System.out.println("RowSrc: " + rowSrc);
-        System.out.println("ColDest: " + colDest);
-        System.out.println("RowDest: " + rowDest);*/
-
         move(colSrc, rowSrc, colDest, rowDest);
         moved = true;
         move_count++;
-        pawnPromotion();
 
-        while(!checkValidMoves())
-            move_count++;
+        updateGameThread();
 
-        setScoreboard();
-        clearSelections();
-        drawPieces();
+    }
+
+    // this makes sure the server callback updates happen on the main UI thread
+
+    private void updateGameThread() {
+
+        new Thread() {
+            public void run() {
+                    try {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                pawnPromotion();
+
+                                while(!checkValidMoves())
+                                    move_count++;
+
+                                setScoreboard();
+                                clearSelections();
+                                drawPieces();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+            }
+        }.start();
     }
 
     // This is for making a submit move request to the server, you just need to pass in the source and destination of the move
