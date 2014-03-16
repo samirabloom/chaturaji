@@ -2,6 +2,7 @@ package ac.ic.chaturaji.dao;
 
 import ac.ic.chaturaji.config.RootConfiguration;
 import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,14 +22,15 @@ public class UserDaoTest {
 
     @Resource
     private UserDAO userDAO;
-
     @Resource
-    PasswordEncoder passwordEncoder;
+    private UUIDFactory uuidFactory;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Test
     public void shouldSaveAndGetUser() {
         // given
-        String userId = UUID.randomUUID().toString();
+        String userId = uuidFactory.generateUUID();
         User user = new User(userId, "user_one@email.com", passwordEncoder.encode("password_one"), "my_nickname");
 
         // when
@@ -40,7 +42,7 @@ public class UserDaoTest {
     @Test
     public void shouldSaveAndGetUserByEmail() {
         // given
-        String userId = UUID.randomUUID().toString();
+        String userId = uuidFactory.generateUUID();
         User user = new User(userId, "user_three@email.com", passwordEncoder.encode("password_three"), "my_nickname3");
 
         // when
@@ -52,7 +54,7 @@ public class UserDaoTest {
     @Test
     public void shouldSaveAndGetUserByNickname() {
         // given
-        String userId = UUID.randomUUID().toString();
+        String userId = uuidFactory.generateUUID();
         User user = new User(userId, "user_four@email.com", passwordEncoder.encode("password_four"), "my_nickname4");
 
         // when

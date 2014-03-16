@@ -4,6 +4,7 @@ import ac.ic.chaturaji.ai.AI;
 import ac.ic.chaturaji.dao.GameDAO;
 import ac.ic.chaturaji.model.*;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -24,6 +25,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -45,14 +47,21 @@ public class GameControllerTest {
     private ServletContext servletContext;
     @Mock
     private SpringSecurityUserContext springSecurityUserContext;
+    @Mock
+    private UUIDFactory uuidFactory;
     @InjectMocks
     private GameController gameController;
+    private HashMap<String,Game> games;
 
     @Before
     public void setupMocks() {
         gameController = new GameController();
 
         initMocks(this);
+
+        when(uuidFactory.generateUUID()).thenReturn("randomId");
+        games = new HashMap<String, Game>();
+        when(servletContext.getAttribute(InMemoryGamesContextListener.IN_MEMORY_GAMES_ATTRIBUTE_NAME)).thenReturn(games);
     }
 
     @Test
@@ -81,6 +90,7 @@ public class GameControllerTest {
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
 
         verify(gameDAO).save(any(Game.class));
+        assertTrue(games.containsKey(uuidFactory.generateUUID()));
     }
 
     @Test

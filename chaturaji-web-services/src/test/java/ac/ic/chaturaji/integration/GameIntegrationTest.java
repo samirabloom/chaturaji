@@ -56,7 +56,7 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
         // --- create game ---
 
         // when
-        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/game");
+        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/createGame");
         createGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
                 new BasicNameValuePair("numberOfAIPlayers", "3")
         )));
@@ -89,7 +89,7 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
         // --- create game ---
 
         // when
-        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/game");
+        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/createGame");
         createGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
                 new BasicNameValuePair("numberOfAIPlayers", "2")
         )));
@@ -147,7 +147,7 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
         HttpClient httpClient = createApacheClient();
 
         // when
-        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/game");
+        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/createGame");
         createGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
                 new BasicNameValuePair("numberOfAIPlayers", "3")
         )));

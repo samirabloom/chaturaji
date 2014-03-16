@@ -1,6 +1,7 @@
 package ac.ic.chaturaji.dao;
 
 import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +23,13 @@ public class UserDAO {
     @Resource
     private DataSource dataSource;
     @Resource
+    private UUIDFactory uuidFactory;
+    @Resource
     private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void setupTestData() {
-        save(new User(UUID.randomUUID().toString(), "user_one@email.com", passwordEncoder.encode("password_one"), "my_nickname"));
+        save(new User(uuidFactory.generateUUID(), "user_one@email.com", passwordEncoder.encode("password_one"), "my_nickname"));
     }
 
     public User findByEmail(String email) {

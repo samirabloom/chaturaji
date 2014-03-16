@@ -17,10 +17,12 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
     public final static String WEB_SOCKET_PATH = "movelistener";
     private final Map<String, Channel> clients;
+    private final Map<String, ClientRegistrationListener> clientRegistrationListeners;
     private WebSocketServerHandshaker handshaker;
 
-    public WebSocketServerHandler(Map<String, Channel> clients) {
+    public WebSocketServerHandler(Map<String, Channel> clients, Map<String, ClientRegistrationListener> clientRegistrationListeners) {
         this.clients = clients;
+        this.clientRegistrationListeners = clientRegistrationListeners;
     }
 
     @Override
@@ -63,6 +65,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         String request = ((TextWebSocketFrame) frame).text();
         if (request.startsWith("ID")) {
             clients.put(request, ctx.channel());
+            if(clientRegistrationListeners.containsKey(request)) {
+                clientRegistrationListeners.get(request).onRegister(ctx.channel());
+            }
         }
     }
 

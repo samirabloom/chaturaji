@@ -2,6 +2,7 @@ package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.dao.UserDAO;
 import ac.ic.chaturaji.model.User;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,8 @@ public class UserController {
     @Resource
     private UserDAO userDAO;
     @Resource
+    private UUIDFactory uuidFactory;
+    @Resource
     private PasswordEncoder passwordEncoder;
 
     @ResponseBody
@@ -49,7 +52,7 @@ public class UserController {
             return new ResponseEntity<>(errorMessage.toString(), HttpStatus.BAD_REQUEST);
         }
         try {
-            userDAO.save(new User(UUID.randomUUID().toString(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getNickname()));
+            userDAO.save(new User(uuidFactory.generateUUID(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getNickname()));
         } catch (Exception e) {
             logger.warn("Exception while saving user", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

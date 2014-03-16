@@ -121,12 +121,13 @@ public class Game extends EqualsHashCodeToString {
         return players.get(index);
     }
 
-    public void addPlayer(Player player) {
+    public Game addPlayer(Player player) {
         if (players.size() < 4) {
             player.setGameId(id);
             players.add(player);
         } else {
             throw new RuntimeException("Game already has four players");
         }
+        return this;
     }
 }

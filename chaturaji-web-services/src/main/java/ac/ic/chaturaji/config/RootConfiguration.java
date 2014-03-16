@@ -1,10 +1,13 @@
 package ac.ic.chaturaji.config;
 
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.annotation.Resource;
@@ -14,12 +17,22 @@ import javax.annotation.Resource;
  */
 @Configuration
 @PropertySource({"classpath:database-mysql.properties"})
-@ImportResource("classpath:/config/security-context.xml")
-@ComponentScan(basePackages = {"ac.ic.chaturaji.dao", "ac.ic.chaturaji.security", "ac.ic.chaturaji.ai"})
+@Import(SecurityConfig.class)
+@ComponentScan(basePackages = {"ac.ic.chaturaji.dao", "ac.ic.chaturaji.ai"})
 public class RootConfiguration {
 
     @Resource
     private Environment environment;
+
+    @Bean
+    protected UUIDFactory uuidFactory() {
+        return new UUIDFactory();
+    }
+
+    @Bean
+    protected PasswordEncoder passwordEncoder() {
+        return new StandardPasswordEncoder("GMbO8etVKRFDEC8mZ1nCLxodpEd3BrrTn4Ju62R5");
+    }
 
     @Bean
     public BasicDataSource dataSource() {

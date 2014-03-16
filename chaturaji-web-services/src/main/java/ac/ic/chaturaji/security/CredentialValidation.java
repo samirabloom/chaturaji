@@ -2,6 +2,7 @@ package ac.ic.chaturaji.security;
 
 import ac.ic.chaturaji.dao.UserDAO;
 import ac.ic.chaturaji.model.User;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class CredentialValidation {
     public User validateUsernameAndPassword(String username, CharSequence password) {
         User user = userDAO.findByEmail(decodeURL(username));
         if (!credentialsMatch(password, user)) {
-            throw new UsernameNotFoundException("Invalid username and password combination");
+            throw new BadCredentialsException("Invalid username and password combination");
         }
         return user;
     }

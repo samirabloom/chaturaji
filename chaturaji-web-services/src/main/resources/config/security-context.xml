@@ -25,7 +25,7 @@
         <security:intercept-url pattern="/logout" access="isAnonymous()" requires-channel="https"/>
         <!-- ANY USER -->
         <security:intercept-url pattern="/login" access="isAuthenticated()" requires-channel="https"/>
-        <security:intercept-url pattern="/game" access="isAuthenticated()" requires-channel="https"/>
+        <security:intercept-url pattern="/createGame" access="isAuthenticated()" requires-channel="https"/>
         <security:intercept-url pattern="/joinGame" access="isAuthenticated()" requires-channel="https"/>
         <security:intercept-url pattern="/submitMove" access="isAuthenticated()" requires-channel="https"/>
         <!-- cover all remaining pages -->

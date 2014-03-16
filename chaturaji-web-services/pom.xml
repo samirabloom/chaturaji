@@ -140,6 +140,13 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- goggle guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>13.0.1</version>
+        </dependency>
+
         <!-- Java Database Connector (JDBC) -->
         <dependency>
             <groupId>mysql</groupId>

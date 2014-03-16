@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -31,7 +32,7 @@ public class SpringSecurityAuthenticationProvider implements AuthenticationProvi
             user = credentialValidation.validateUsernameAndPassword(token.getName(), (CharSequence) token.getCredentials());
         }
         springSecurityUserContext.setCurrentUser(user);
-        return new UsernamePasswordAuthenticationToken(user, user.getPassword());
+        return new UsernamePasswordAuthenticationToken(user, user.getPassword(), AuthorityUtils.createAuthorityList("USER"));
     }
 
     @Override

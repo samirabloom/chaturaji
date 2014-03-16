@@ -16,8 +16,8 @@ public class Move extends EqualsHashCodeToString {
     public Move() {
     }
 
-    public Move(String gameId, Colour colour, int source, int destination) {
-        this.id = UUID.randomUUID().toString();
+    public Move(String id, String gameId, Colour colour, int source, int destination) {
+        this.id = id;
         this.gameId = gameId;
         this.colour = colour;
         this.source = source;

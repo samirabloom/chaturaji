@@ -11,9 +11,10 @@ public class MoveTest {
     @Test
     public void shouldReturnFieldsSetInConstructor() {
         // when
-        Move move = new Move("game id", Colour.GREEN, 1, 2);
+        Move move = new Move("move id", "game id", Colour.GREEN, 1, 2);
 
         // then
+        assertEquals("move id", move.getId());
         assertEquals("game id", move.getGameId());
         assertEquals(Colour.GREEN, move.getColour());
         assertEquals(1, move.getSource());

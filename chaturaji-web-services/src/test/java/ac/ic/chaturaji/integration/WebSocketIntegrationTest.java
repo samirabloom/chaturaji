@@ -5,6 +5,7 @@ import ac.ic.chaturaji.model.Move;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.Result;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import ac.ic.chaturaji.websockets.GameMoveListener;
 import ac.ic.chaturaji.websockets.WebSocketsClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,9 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -32,6 +35,7 @@ import static org.mockito.Mockito.verify;
 public class WebSocketIntegrationTest extends GameControllerFullIntegrationTest {
 
     private final ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
+    private UUIDFactory uuidFactory = new UUIDFactory();
 
     @Test
     public void shouldCreateGameAndJoinGame() throws Exception {
@@ -63,7 +67,7 @@ public class WebSocketIntegrationTest extends GameControllerFullIntegrationTest 
         // --- create game ---
 
         // when
-        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/game");
+        HttpPost createGame = new HttpPost("https://127.0.0.1:" + httpsPort + "/createGame");
         createGame.setEntity(new UrlEncodedFormEntity(Arrays.asList(
                 new BasicNameValuePair("numberOfAIPlayers", "0")
         )));
@@ -138,7 +142,7 @@ public class WebSocketIntegrationTest extends GameControllerFullIntegrationTest 
 
         // when
         HttpPost submitMove = new HttpPost("https://127.0.0.1:" + httpsPort + "/submitMove");
-        StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(player.getGameId(), Colour.YELLOW, 0, 1)));
+        StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(uuidFactory.generateUUID(), player.getGameId(), Colour.YELLOW, 0, 1)));
         entity.setContentType("application/json;charset=UTF-8");
         submitMove.setEntity(entity);
         HttpResponse submitMoveResponse = httpClient.execute(submitMove);

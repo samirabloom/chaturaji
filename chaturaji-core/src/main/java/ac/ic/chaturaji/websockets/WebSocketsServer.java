@@ -22,6 +22,7 @@ public class WebSocketsServer {
     public static final int DEFAULT_WEB_SOCKET_PORT = 9090;
 
     private final Map<String, Channel> clients = new ConcurrentHashMap<>();
+    private final Map<String, ClientRegistrationListener> clientRegistrationListeners = new ConcurrentHashMap<>();
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
@@ -42,7 +43,7 @@ public class WebSocketsServer {
                                     ChannelPipeline pipeline = socketChannel.pipeline();
                                     pipeline.addLast("codec-http", new HttpServerCodec());
                                     pipeline.addLast("aggregator", new HttpObjectAggregator(65536));
-                                    pipeline.addLast("handler", new WebSocketServerHandler(clients));
+                                    pipeline.addLast("handler", new WebSocketServerHandler(clients, clientRegistrationListeners));
                                 }
                             });
 
@@ -65,5 +66,8 @@ public class WebSocketsServer {
 
     public Map<String, Channel> getClients() {
         return clients;
+    }
+    public Map<String, ClientRegistrationListener> getClientRegistrationListeners() {
+        return clientRegistrationListeners;
     }
 }

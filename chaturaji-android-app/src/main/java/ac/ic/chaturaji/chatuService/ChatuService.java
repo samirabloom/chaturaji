@@ -4,6 +4,7 @@ import ac.ic.chaturaji.model.Colour;
 import ac.ic.chaturaji.model.Move;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import ac.ic.chaturaji.websockets.GameMoveListener;
 import ac.ic.chaturaji.websockets.WebSocketsClient;
 import android.app.Activity;
@@ -51,6 +52,7 @@ public class ChatuService {
 
     private static ChatuService instance;
     private final ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
+    private final UUIDFactory uuidFactory = new UUIDFactory();
     private String serverHost = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com";
     private int serverPort = 8443;
     private DefaultHttpClient httpClient;
@@ -58,9 +60,7 @@ public class ChatuService {
     private String password = "";
     private CookieStore cookieStoreLocal;
     private CredentialsProvider credsProviderLocal;
-    private WebSocketsClient webSocketsClient;
     private Player player;
-    private GameMoveListener gameMoveListener;
 
     private ChatuService() {
     }
@@ -113,19 +113,17 @@ public class ChatuService {
         }
     }
 
-    public void setupSocketClient(Activity activity){
+    public void setupSocketClient(Activity activity) {
 
-        try{
+        try {
 
-        webSocketsClient = new WebSocketsClient(serverHost);
+            WebSocketsClient webSocketsClient = new WebSocketsClient(serverHost);
 
-        gameMoveListener = new ClientGameMoveListener(activity);
+            GameMoveListener gameMoveListener = new ClientGameMoveListener(activity);
 
-        webSocketsClient.registerGameMoveListener(gameMoveListener, player.getId());
+            webSocketsClient.registerGameMoveListener(gameMoveListener, player.getId());
 
-        }
-
-        catch(Exception e){
+        } catch (Exception e) {
 
             System.out.println("Device not compatible");
         }
@@ -140,7 +138,7 @@ public class ChatuService {
         setupClient();
 
         String games = "Error";
-        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/games";
+        String url = "https://" + serverHost + ":" + serverPort + "/games";
 
 
         try {
@@ -168,7 +166,7 @@ public class ChatuService {
 
         setupClient();
 
-        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/game";
+        String url = "https://" + serverHost + ":" + serverPort + "/createGame";
 
         try {
 
@@ -205,7 +203,7 @@ public class ChatuService {
         String[] reply = {"Good", "Success"};
         setupClient();
 
-        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/joinGame";
+        String url = "https://" + serverHost + ":" + serverPort + "/joinGame";
 
         try {
 
@@ -257,20 +255,20 @@ public class ChatuService {
         return reply;
     }
 
-    public String submitMove(int source, int destination){
+    public String submitMove(int source, int destination) {
 
         setupClient();
 
-        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/submitMove";
+        String url = "https://" + serverHost + ":" + serverPort + "/submitMove";
 
-        try{
+        try {
 
             HttpContext localContext = new BasicHttpContext();
             localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
             localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
 
             HttpPost submitMove = new HttpPost(url);
-            StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(player.getGameId(), player.getColour(), source, destination)));
+            StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(uuidFactory.generateUUID(), player.getGameId(), player.getColour(), source, destination)));
             entity.setContentType("application/json;charset=UTF-8");
             submitMove.setEntity(entity);
             HttpResponse submitMoveResponse = httpClient.execute(submitMove, localContext);
@@ -281,9 +279,7 @@ public class ChatuService {
                 return "Error";
             }
 
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
             return "Error";
@@ -297,7 +293,7 @@ public class ChatuService {
 
         setupClient();
 
-        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/register";
+        String url = "https://" + serverHost + ":" + serverPort + "/register";
 
         try {
 
@@ -339,7 +335,7 @@ public class ChatuService {
 
             e.printStackTrace();
         }
-        String url = "https://" + serverHost + ":" + serverPort + "/chaturaji-web-services/login";
+        String url = "https://" + serverHost + ":" + serverPort + "/login";
 
         System.out.println(url);
 
@@ -404,7 +400,7 @@ public class ChatuService {
 
     }
 
-    public Colour getPlayerColour(){
+    public Colour getPlayerColour() {
 
         return player.getColour();
 

@@ -3,6 +3,7 @@ package ac.ic.chaturaji.dao;
 import ac.ic.chaturaji.config.RootConfiguration;
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,8 @@ public class GameDaoTest {
 
     @Resource
     private GameDAO gameDAO;
+    @Resource
+    private UUIDFactory uuidFactory;
 
     @Resource
     PasswordEncoder passwordEncoder;
@@ -29,7 +32,7 @@ public class GameDaoTest {
     @Test
     public void shouldSaveAndGetGame() {
         // given
-        String gameId = UUID.randomUUID().toString();
+        String gameId = uuidFactory.generateUUID();
         Game game = new Game(gameId, new Player());
 
         // when

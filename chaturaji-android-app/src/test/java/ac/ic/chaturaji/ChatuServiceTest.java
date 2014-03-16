@@ -68,7 +68,7 @@ public class ChatuServiceTest {
         service.addConnector(httpsConnector);
 
         // add servlet
-        Context ctx = tomcat.addContext("/chaturaji-web-services", new File(".").getAbsolutePath());
+        Context ctx = tomcat.addContext("/", new File(".").getAbsolutePath());
         ContextConfig contextConfig = new ContextConfig();
         ctx.addLifecycleListener(contextConfig);
         contextConfig.setDefaultWebXml(projectBase + "../chaturaji-web-services/src/main/webapp/WEB-INF/web.xml");

@@ -2,6 +2,7 @@ package ac.ic.chaturaji.dao;
 
 import ac.ic.chaturaji.config.RootConfiguration;
 import ac.ic.chaturaji.model.*;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,28 +30,30 @@ public class PlayerDaoTest {
     private PlayerDAO playerDAO;
     @Resource
     private UserDAO userDAO;
+    @Resource
+    private UUIDFactory uuidFactory;
 
     @Test
     public void shouldAddPlayers() {
         //given
-        String gameId = UUID.randomUUID().toString();
+        String gameId = uuidFactory.generateUUID();
         gameDAO.save(new Game(gameId, new Player()));
 
         List<Player> players = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            User user = new User(UUID.randomUUID().toString(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
+            User user = new User(uuidFactory.generateUUID(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
             userDAO.save(user);
-            Player player = new Player(UUID.randomUUID().toString(), user, Colour.BLUE, PlayerType.HUMAN);
+            Player player = new Player(uuidFactory.generateUUID(), user, Colour.BLUE, PlayerType.HUMAN);
             player.setType(PlayerType.AI);
-            player.setId(UUID.randomUUID().toString());
+            player.setId(uuidFactory.generateUUID());
             players.add(player);
         }
         for (int i = 0; i < 2; i++) {
-            User user = new User(UUID.randomUUID().toString(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
+            User user = new User(uuidFactory.generateUUID(), "user_" + i + "@email.com", passwordEncoder.encode("password_" + i), "my_nickname" + i);
             userDAO.save(user);
-            Player player = new Player(UUID.randomUUID().toString(), user, Colour.BLUE, PlayerType.HUMAN);
+            Player player = new Player(uuidFactory.generateUUID(), user, Colour.BLUE, PlayerType.HUMAN);
             player.setType(PlayerType.HUMAN);
-            player.setId(UUID.randomUUID().toString());
+            player.setId(uuidFactory.generateUUID());
             players.add(player);
         }
 

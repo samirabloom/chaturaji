@@ -5,6 +5,7 @@ import ac.ic.chaturaji.model.Colour;
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.model.Move;
 import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,15 +28,17 @@ public class MoveDaoTest {
     private GameDAO gameDAO;
     @Resource
     private MoveDAO moveDAO;
+    @Resource
+    private UUIDFactory uuidFactory;
 
 
     // TODO Remove this method as there is no need for this functionality
     /*@Test
     public void shouldSaveMoveAndGetMove() {
         //given
-        String gameId = UUID.randomUUID().toString();
+        String gameId = uuidFactory.generateUUID();
         Move move = new Move(gameId, YELLOW, 34, 45);
-        move.setId(UUID.randomUUID().toString());
+        move.setId(uuidFactory.generateUUID());
 
         //when
         moveDAO.saveMove(move, gameId);
@@ -47,20 +50,20 @@ public class MoveDaoTest {
     @Test
     public void shouldReturnListOfMoves() {
         //given
-        String gameId = UUID.randomUUID().toString();
+        String gameId = uuidFactory.generateUUID();
         gameDAO.save(new Game(gameId, new Player()));
         ArrayList<Move> moves = new ArrayList<>();
-        Move moveOne = new Move(gameId, YELLOW, 1, 2);
-        moveOne.setId(UUID.randomUUID().toString());
+        Move moveOne = new Move(uuidFactory.generateUUID(), gameId, YELLOW, 1, 2);
+        moveOne.setId(uuidFactory.generateUUID());
         moves.add(moveOne);
-        Move moveTwo = new Move(gameId, Colour.BLUE, 3, 4);
-        moveTwo.setId(UUID.randomUUID().toString());
+        Move moveTwo = new Move(uuidFactory.generateUUID(), gameId, Colour.BLUE, 3, 4);
+        moveTwo.setId(uuidFactory.generateUUID());
         moves.add(moveTwo);
-        Move moveThree = new Move(gameId, Colour.RED, 5, 6);
-        moveThree.setId(UUID.randomUUID().toString());
+        Move moveThree = new Move(uuidFactory.generateUUID(), gameId, Colour.RED, 5, 6);
+        moveThree.setId(uuidFactory.generateUUID());
         moves.add(moveThree);
-        Move moveFour = new Move(gameId, Colour.GREEN, 7, 8);
-        moveFour.setId(UUID.randomUUID().toString());
+        Move moveFour = new Move(uuidFactory.generateUUID(), gameId, Colour.GREEN, 7, 8);
+        moveFour.setId(uuidFactory.generateUUID());
         moves.add(moveFour);
 
         //when
