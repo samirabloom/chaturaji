@@ -3,12 +3,6 @@ package ac.ic.chaturaji.integration;
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import ac.ic.chaturaji.web.PortFactory;
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.Service;
-import org.apache.catalina.connector.Connector;
-import org.apache.catalina.startup.ContextConfig;
-import org.apache.catalina.startup.Tomcat;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -23,24 +17,28 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 /**
  * @author samirarabbanian
  */
 public class GameControllerFullIntegrationTest {
 
-    protected static Tomcat tomcat;
+    protected static Server server;
     protected static KeyStore trustStore;
     protected static int numberOfGames;
     protected static int httpPort;
@@ -54,40 +52,20 @@ public class GameControllerFullIntegrationTest {
         System.setProperty("https.port", "" + PortFactory.findFreePort());
         httpsPort = Integer.parseInt(System.getProperty("https.port"));
 
-        String classLocation = PortFactory.class.getCanonicalName().replace(".", "/") + ".class";
-        String projectBase = PortFactory.class.getClassLoader().getResource(classLocation).toString().replace(classLocation, "../../").replace("file:", "");
+        String classLocation = GameControllerFullIntegrationTest.class.getCanonicalName().replace(".", "/") + ".class";
+        String projectBase = GameControllerFullIntegrationTest.class.getClassLoader().getResource(classLocation).toString().replace(classLocation, "../../").replace("file:", "");
 
-        // start proxy (in tomcat)
-        tomcat = new Tomcat();
-        tomcat.setBaseDir(new File(".").getCanonicalPath() + File.separatorChar + "tomcat");
+        server = new Server();
+        // add connectors
+        server.addConnector(createHTTPConnector(server, httpPort, httpsPort));
+        server.addConnector(createHTTPSConnector(projectBase, server, httpsPort));
+        WebAppContext root = new WebAppContext();
 
-        // add http port
-        tomcat.setPort(httpPort);
+        root.setWar(projectBase + "src/main/webapp");
+        root.setContextPath("/");
 
-        // add https port
-        Connector httpsConnector = new Connector();
-        httpsConnector.setPort(httpsPort);
-        httpsConnector.setSecure(true);
-        httpsConnector.setScheme("https");
-        httpsConnector.setAttribute("keystorePass", "changeit");
-        httpsConnector.setAttribute("keystoreFile", projectBase + "../keystore");
-        httpsConnector.setAttribute("clientAuth", "false");
-        httpsConnector.setAttribute("sslProtocol", "TLS");
-        httpsConnector.setAttribute("SSLEnabled", true);
-        Service service = tomcat.getService();
-        service.addConnector(httpsConnector);
-
-        // add servlet
-        Context ctx = tomcat.addContext("/", new File(".").getAbsolutePath());
-        ContextConfig contextConfig = new ContextConfig();
-        ctx.addLifecycleListener(contextConfig);
-        contextConfig.setDefaultWebXml(projectBase + "src/main/webapp/WEB-INF/web.xml");
-
-        // control logging level
-        java.util.logging.Logger.getLogger("").setLevel(Level.FINER);
-
-        // start server
-        tomcat.start();
+        server.setHandler(root);
+        server.start();
 
         // load key store for certificates
         trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -97,10 +75,40 @@ public class GameControllerFullIntegrationTest {
         numberOfGames = 4;
     }
 
+    private static ServerConnector createHTTPConnector(Server server, Integer port, Integer securePort) {
+        // HTTP Configuration
+        HttpConfiguration http_config = new HttpConfiguration();
+        if (securePort != null) {
+            http_config.setSecurePort(securePort);
+        }
+
+        // HTTP connector
+        ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
+        http.setPort(port);
+        return http;
+    }
+
+    private static ServerConnector createHTTPSConnector(String projectBase, Server server, Integer securePort) throws GeneralSecurityException, IOException {
+        // HTTPS Configuration
+        HttpConfiguration https_config = new HttpConfiguration();
+        https_config.setSecurePort(securePort);
+        https_config.addCustomizer(new SecureRequestCustomizer());
+
+        SslContextFactory sslContextFactory = new SslContextFactory(true);
+        sslContextFactory.setKeyStorePath(projectBase + "../keystore");
+        sslContextFactory.setKeyStorePassword("changeit");
+        sslContextFactory.setProtocol("TLS");
+
+        // HTTPS connector
+        ServerConnector https = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https_config));
+        https.setPort(securePort);
+        return https;
+    }
+
     @AfterClass
-    public static void shutdownFixture() throws LifecycleException, InterruptedException {
+    public static void shutdownFixture() throws Exception {
         // stop server
-        tomcat.stop();
+        server.stop();
     }
 
     protected void registerUser(String email, String password) throws Exception {
@@ -111,7 +119,8 @@ public class GameControllerFullIntegrationTest {
                 new BasicNameValuePair("nickname", "some_nickname"),
                 new BasicNameValuePair("password", password)
         )));
-        httpClient.execute(register);
+        HttpResponse httpResponse = httpClient.execute(register);
+        System.out.println("httpResponse = " + httpResponse);
     }
 
     protected CloseableHttpClient createApacheClient() throws Exception {

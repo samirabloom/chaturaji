@@ -7,12 +7,9 @@ import ac.ic.chaturaji.web.PortFactory;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.Service;
-import org.apache.catalina.connector.Connector;
-import org.apache.catalina.startup.ContextConfig;
-import org.apache.catalina.startup.Tomcat;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,8 +17,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.util.logging.Level;
 
 import static org.junit.Assert.*;
 
@@ -30,10 +27,10 @@ import static org.junit.Assert.*;
  */
 public class ChatuServiceTest {
 
-    private static Tomcat tomcat;
-    private static KeyStore trustStore;
-    private static int httpPort;
-    private static int httpsPort;
+    protected static Server server;
+    protected static KeyStore trustStore;
+    protected static int httpPort;
+    protected static int httpsPort;
     private static String serverHost = "127.0.0.1";
 
     @BeforeClass
@@ -47,37 +44,17 @@ public class ChatuServiceTest {
         String classLocation = ChatuServiceTest.class.getCanonicalName().replace(".", "/") + ".class";
         String projectBase = ChatuServiceTest.class.getClassLoader().getResource(classLocation).toString().replace(classLocation, "../../").replace("file:", "");
 
-        // start proxy (in tomcat)
-        tomcat = new Tomcat();
-        tomcat.setBaseDir(new File(".").getCanonicalPath() + File.separatorChar + "tomcat");
+        server = new Server();
+        // add connectors
+        server.addConnector(createHTTPConnector(server, httpPort, httpsPort));
+        server.addConnector(createHTTPSConnector(projectBase, server, httpsPort));
+        WebAppContext root = new WebAppContext();
 
-        // add http port
-        tomcat.setPort(httpPort);
+        root.setWar(projectBase + "../chaturaji-web-services/src/main/webapp");
+        root.setContextPath("/");
 
-        // add https port
-        Connector httpsConnector = new Connector();
-        httpsConnector.setPort(httpsPort);
-        httpsConnector.setSecure(true);
-        httpsConnector.setScheme("https");
-        httpsConnector.setAttribute("keystorePass", "changeit");
-        httpsConnector.setAttribute("keystoreFile", projectBase + "../keystore");
-        httpsConnector.setAttribute("clientAuth", "false");
-        httpsConnector.setAttribute("sslProtocol", "TLS");
-        httpsConnector.setAttribute("SSLEnabled", true);
-        Service service = tomcat.getService();
-        service.addConnector(httpsConnector);
-
-        // add servlet
-        Context ctx = tomcat.addContext("/", new File(".").getAbsolutePath());
-        ContextConfig contextConfig = new ContextConfig();
-        ctx.addLifecycleListener(contextConfig);
-        contextConfig.setDefaultWebXml(projectBase + "../chaturaji-web-services/src/main/webapp/WEB-INF/web.xml");
-
-        // control logging level
-        java.util.logging.Logger.getLogger("").setLevel(Level.FINER);
-
-        // start server
-        tomcat.start();
+        server.setHandler(root);
+        server.start();
 
         // load key store for certificates
         trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -86,10 +63,40 @@ public class ChatuServiceTest {
         }
     }
 
+    private static ServerConnector createHTTPConnector(Server server, Integer port, Integer securePort) {
+        // HTTP Configuration
+        HttpConfiguration http_config = new HttpConfiguration();
+        if (securePort != null) {
+            http_config.setSecurePort(securePort);
+        }
+
+        // HTTP connector
+        ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
+        http.setPort(port);
+        return http;
+    }
+
+    private static ServerConnector createHTTPSConnector(String projectBase, Server server, Integer securePort) throws GeneralSecurityException, IOException {
+        // HTTPS Configuration
+        HttpConfiguration https_config = new HttpConfiguration();
+        https_config.setSecurePort(securePort);
+        https_config.addCustomizer(new SecureRequestCustomizer());
+
+        SslContextFactory sslContextFactory = new SslContextFactory(true);
+        sslContextFactory.setKeyStorePath(projectBase + "../keystore");
+        sslContextFactory.setKeyStorePassword("changeit");
+        sslContextFactory.setProtocol("TLS");
+
+        // HTTPS connector
+        ServerConnector https = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https_config));
+        https.setPort(securePort);
+        return https;
+    }
+
     @AfterClass
-    public static void shutdownFixture() throws LifecycleException, InterruptedException {
+    public static void shutdownFixture() throws Exception {
         // stop server
-        tomcat.stop();
+        server.stop();
     }
 
     @Test
