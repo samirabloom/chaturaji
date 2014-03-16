@@ -4,8 +4,8 @@ package ac.ic.chaturaji.model;
  * @author samirarabbanian
  */
 public enum GameStatus {
-    GAME_STARTED,
+    NOT_STARTED,
+    IN_PLAY,
     GAME_OVER,
-    STALEMATE,
-    IN_PLAY
+    STALEMATE
 }

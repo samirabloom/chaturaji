@@ -5,14 +5,12 @@ import ac.ic.chaturaji.dao.GameDAO;
 import ac.ic.chaturaji.dao.MoveDAO;
 import ac.ic.chaturaji.dao.PlayerDAO;
 import ac.ic.chaturaji.model.*;
-import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import ac.ic.chaturaji.uuid.UUIDFactory;
 import ac.ic.chaturaji.web.websockets.NotifyPlayer;
 import ac.ic.chaturaji.web.websockets.ReplayGameMoveSender;
 import ac.ic.chaturaji.web.websockets.WebSocketServletContextListener;
 import ac.ic.chaturaji.websockets.ClientRegistrationListener;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInMemoryGames;
 
@@ -101,7 +96,12 @@ public class GameController {
     public ResponseEntity joinGame(@RequestParam("gameId") String gameId) throws IOException {
         Game game = getInMemoryGames(servletContext).get(gameId);
         if (game == null) {
-            return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
+            game = gameDAO.get(gameId);
+            if (game == null) {
+                return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
+            } else {
+                getInMemoryGames(servletContext).put(gameId, game);
+            }
         }
         if (game.getPlayers().size() >= 4) {
             return new ResponseEntity<>("Game already has four players", HttpStatus.BAD_REQUEST);
@@ -130,7 +130,11 @@ public class GameController {
     @ResponseBody
     @RequestMapping(value = "/submitMove", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> submitMove(@RequestBody Move move) {
-        ai.submitMove(getInMemoryGames(servletContext).get(move.getGameId()), move);
+        Result result = ai.submitMove(getInMemoryGames(servletContext).get(move.getGameId()), move);
+        for(Player player : result.getGame().getPlayers()) {
+            playerDAO.save(result.getGame().getId(), player);
+        }
+        moveDAO.save(result.getGame().getId(), result.getMove());
         return new ResponseEntity<>("", HttpStatus.ACCEPTED);
     }
 

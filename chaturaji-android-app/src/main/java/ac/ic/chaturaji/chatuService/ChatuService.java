@@ -268,7 +268,9 @@ public class ChatuService {
             localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
 
             HttpPost submitMove = new HttpPost(url);
-            StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(uuidFactory.generateUUID(), player.getGameId(), player.getColour(), source, destination)));
+            Move move = new Move(uuidFactory.generateUUID(), player.getGameId(), player.getColour(), source, destination);
+            System.out.println("move = " + move);
+            StringEntity entity = new StringEntity(objectMapper.writeValueAsString(move));
             entity.setContentType("application/json;charset=UTF-8");
             submitMove.setEntity(entity);
             HttpResponse submitMoveResponse = httpClient.execute(submitMove, localContext);

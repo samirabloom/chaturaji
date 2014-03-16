@@ -21,8 +21,8 @@ public class MoveDAO {
     @Resource
     private DataSource dataSource;
 
-    public void saveMove(Move move, String gameId) {
-        String sql = "INSERT INTO MOVE(MOVE_ID,GAME_ID,COLOUR,SOURCE,DESTINATION) VALUES (?,?,?,?,?)";
+    public void save(String gameId, Move move) {
+        String sql = "INSERT INTO MOVE(MOVE_ID, GAME_ID, COLOUR, SOURCE, DESTINATION) VALUES (?,?,?,?,?)";
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
 
@@ -39,26 +39,6 @@ public class MoveDAO {
             throw new RuntimeException(e);
         }
     }
-
-    // TODO Remove this method as there is no need for this functionality
-    /*public Move get(Game game, int move_no) {
-        String sql = "SELECT * FROM MOVE WHERE GAME_ID=?";
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql);
-
-            ps.setString(1, game.getId());
-            ResultSet result = ps.executeQuery();
-            Move move = null;
-            result.next();
-            move = new Move();
-            move.setColour(Colour.values()[move_no % 4 - 1]);
-            move.setSource(result.getInt("SOURCE"));
-            move.setDestination(result.getInt("DESTINATION"));
-            return move;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
 
     public ArrayList<Move> getAll(String gameId) {
         String sql = "SELECT * FROM MOVE WHERE GAME_ID=?";

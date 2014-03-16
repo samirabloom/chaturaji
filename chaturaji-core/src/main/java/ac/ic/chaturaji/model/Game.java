@@ -20,6 +20,7 @@ public class Game extends EqualsHashCodeToString {
     private LocalDateTime createdDate;
     private List<Player> players = new ArrayList<>();
     private Colour currentPlayer = Colour.YELLOW;
+    private GameStatus gameStatus = GameStatus.NOT_STARTED;
     /* JsonIgnore the following fields to prevent them from being sent down to the client,
     this is important otherwise the performance will be ridiculously slow and unresponsive */
     @JsonIgnore
@@ -103,6 +104,14 @@ public class Game extends EqualsHashCodeToString {
 
     public void setCurrentPlayer(Colour currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     public int getStalemateCount() {

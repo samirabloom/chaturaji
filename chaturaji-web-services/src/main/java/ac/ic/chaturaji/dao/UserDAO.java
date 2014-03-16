@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
 
 /**
  * @author samirarabbanian
@@ -101,21 +100,40 @@ public class UserDAO {
     }
 
     public void save(User user) {
-        String sql = "INSERT INTO USER (USER_ID,EMAIL,NICKNAME,PASSWORD) VALUES (?,?,?,?)";
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        if (get(user.getId()) == null) {
+            String sql = "INSERT INTO USER (USER_ID, EMAIL, NICKNAME, PASSWORD) VALUES (?,?,?,?)";
+            try (Connection connection = dataSource.getConnection()) {
+                PreparedStatement ps = connection.prepareStatement(sql);
 
-            ps.setString(1, user.getId());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getNickname());
-            ps.setString(4, user.getPassword());
+                ps.setString(1, user.getId());
+                ps.setString(2, user.getEmail());
+                ps.setString(3, user.getNickname());
+                ps.setString(4, user.getPassword());
 
-            if (ps.executeUpdate() != 1) {
-                throw new RuntimeException();
+                if (ps.executeUpdate() != 1) {
+                    throw new RuntimeException();
+                }
+                ps.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } else {
+            String sql = "UPDATE USER SET EMAIL=?, NICKNAME=?, PASSWORD=? WHERE USER_ID=?";
+            try (Connection connection = dataSource.getConnection()) {
+                PreparedStatement ps = connection.prepareStatement(sql);
+
+                ps.setString(1, user.getEmail());
+                ps.setString(2, user.getNickname());
+                ps.setString(3, user.getPassword());
+                ps.setString(4, user.getId());
+
+                if (ps.executeUpdate() != 1) {
+                    throw new RuntimeException();
+                }
+                ps.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }

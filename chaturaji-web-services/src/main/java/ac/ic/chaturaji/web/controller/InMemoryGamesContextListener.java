@@ -15,7 +15,7 @@ public class InMemoryGamesContextListener implements ServletContextListener {
 
     public static final String IN_MEMORY_GAMES_ATTRIBUTE_NAME = "IN_MEMORY_GAMES_ATTRIBUTE_NAME";
 
-    public static Map<String, Game> getInMemoryGames(ServletContext servletContext) {
+    public synchronized static Map<String, Game> getInMemoryGames(ServletContext servletContext) {
         if (servletContext.getAttribute(IN_MEMORY_GAMES_ATTRIBUTE_NAME) == null) {
             servletContext.setAttribute(IN_MEMORY_GAMES_ATTRIBUTE_NAME, new ConcurrentHashMap<String, Game>());
         }

@@ -5,7 +5,6 @@ package ac.ic.chaturaji.model;
  */
 public class Result extends EqualsHashCodeToString {
 
-    private GameStatus gameStatus;
     private ResultType type;
 
     private Game game;
@@ -16,17 +15,17 @@ public class Result extends EqualsHashCodeToString {
     }
 
     public Result(GameStatus gameStatus, Game game, Move move) {
-        this.gameStatus = gameStatus;
+        game.setGameStatus(gameStatus);
         this.game = game;
         this.move = move;
     }
 
     public GameStatus getGameStatus() {
-        return gameStatus;
+        return game.getGameStatus();
     }
 
     public void setGameStatus(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
+        game.setGameStatus(gameStatus);
     }
 
     public ResultType getType() {

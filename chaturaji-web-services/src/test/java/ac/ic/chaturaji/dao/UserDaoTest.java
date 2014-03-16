@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,9 +22,8 @@ public class UserDaoTest {
     @Resource
     private UserDAO userDAO;
     @Resource
-    private UUIDFactory uuidFactory;
-    @Resource
     private PasswordEncoder passwordEncoder;
+    private UUIDFactory uuidFactory = new UUIDFactory();
 
     @Test
     public void shouldSaveAndGetUser() {
@@ -39,6 +37,7 @@ public class UserDaoTest {
         // then
         assertEquals(user, userDAO.get(userId));
     }
+
     @Test
     public void shouldSaveAndGetUserByEmail() {
         // given
@@ -51,6 +50,7 @@ public class UserDaoTest {
         // then
         assertEquals(user, userDAO.findByEmail("user_three@email.com"));
     }
+
     @Test
     public void shouldSaveAndGetUserByNickname() {
         // given

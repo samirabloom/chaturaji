@@ -1,8 +1,7 @@
 package ac.ic.chaturaji.dao;
 
 import ac.ic.chaturaji.config.RootConfiguration;
-import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.*;
 import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +32,7 @@ public class GameDaoTest {
     public void shouldSaveAndGetGame() {
         // given
         String gameId = uuidFactory.generateUUID();
-        Game game = new Game(gameId, new Player());
+        Game game = new Game(gameId, new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "as@df.com", "qazqaz", "user_one"), Colour.YELLOW, PlayerType.HUMAN));
 
         // when
         gameDAO.save(game);
