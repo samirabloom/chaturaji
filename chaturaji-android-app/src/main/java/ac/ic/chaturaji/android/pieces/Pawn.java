@@ -28,18 +28,18 @@ public class Pawn extends Pieces {
                     valid_moves[column - 1][row + 1] = true;
         }
 
-        if((Board[column][row].colour == 2) && (column <= 6))
+        if((Board[column][row].colour == 2) && (column >= 1))
         {
-            if(Board[column + 1][row] == null)
-                valid_moves[column + 1][row] = true;
+            if(Board[column - 1][row] == null)
+                valid_moves[column - 1][row] = true;
 
             if(row <= 6)
-                if(Board[column + 1][row + 1] != null && this.colour != Board[column + 1][row + 1].colour)
-                    valid_moves[column + 1][row + 1] = true;
+                if(Board[column - 1][row + 1] != null && this.colour != Board[column - 1][row + 1].colour)
+                    valid_moves[column - 1][row + 1] = true;
 
             if(row >= 1)
-                if(Board[column + 1][row - 1] != null && this.colour != Board[column + 1][row - 1].colour)
-                    valid_moves[column + 1][row - 1] = true;
+                if(Board[column - 1][row - 1] != null && this.colour != Board[column - 1][row - 1].colour)
+                    valid_moves[column - 1][row - 1] = true;
         }
 
         if((Board[column][row].colour == 3) && (row >= 1))
@@ -56,18 +56,18 @@ public class Pawn extends Pieces {
                     valid_moves[column - 1][row - 1] = true;
         }
 
-        if((Board[column][row].colour == 4) && (column >= 1))
+        if((Board[column][row].colour == 4) && (column <= 6))
         {
-            if(Board[column - 1][row] == null)
-                valid_moves[column - 1][row] = true;
+            if(Board[column + 1][row] == null)
+                valid_moves[column + 1][row] = true;
 
             if(row <= 6)
-                if(Board[column - 1][row + 1] != null && this.colour != Board[column - 1][row + 1].colour)
-                    valid_moves[column - 1][row + 1] = true;
+                if(Board[column + 1][row + 1] != null && this.colour != Board[column + 1][row + 1].colour)
+                    valid_moves[column + 1][row + 1] = true;
 
             if(row >= 1)
-                if(Board[column - 1][row - 1] != null && this.colour != Board[column - 1][row - 1].colour)
-                    valid_moves[column - 1][row - 1] = true;
+                if(Board[column + 1][row - 1] != null && this.colour != Board[column + 1][row - 1].colour)
+                    valid_moves[column + 1][row - 1] = true;
         }
 
         return valid_moves;

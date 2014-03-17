@@ -141,37 +141,36 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void setPieces() {
 
-        for(int i = 0; i <= 3; i++)
-            Board[i][1] = new Pawn(1, (i + 2));
-
         for(int i = 4; i <= 7; i++)
-            Board[1][i] = new Pawn(2, (9 - i));
-
+            Board[i][1] = new Pawn(1, (9 - i));
         for(int i = 4; i <= 7; i++)
-            Board[i][6] = new Pawn(3, (9 - i));
+            Board[6][i] = new Pawn(2, (9 - i));
 
         for(int i = 0; i <= 3; i++)
-            Board[6][i] = new Pawn(4, (i + 2));
+            Board[i][6] = new Pawn(3, (i + 2));
 
-        Board[0][0] = new Boat(1);
-        Board[0][7] = new Boat(2);
-        Board[7][7] = new Boat(3);
-        Board[7][0] = new Boat(4);
+        for(int i = 0; i <= 3; i++)
+            Board[1][i] = new Pawn(4, (i + 2));
 
-        Board[1][0] = new Knight(1);
-        Board[0][6] = new Knight(2);
-        Board[6][7] = new Knight(3);
-        Board[7][1] = new Knight(4);
+        Board[7][0] = new Boat(1);
+        Board[7][7] = new Boat(2);
+        Board[0][7] = new Boat(3);
+        Board[0][0] = new Boat(4);
 
-        Board[2][0] = new Elephant(1);
-        Board[0][5] = new Elephant(2);
-        Board[5][7] = new Elephant(3);
-        Board[7][2] = new Elephant(4);
+        Board[6][0] = new Knight(1);
+        Board[7][6] = new Knight(2);
+        Board[1][7] = new Knight(3);
+        Board[0][1] = new Knight(4);
 
-        Board[3][0] = new King(1);
-        Board[0][4] = new King(2);
-        Board[4][7] = new King(3);
-        Board[7][3] = new King(4);
+        Board[5][0] = new Elephant(1);
+        Board[7][5] = new Elephant(2);
+        Board[2][7] = new Elephant(3);
+        Board[0][2] = new Elephant(4);
+
+        Board[4][0] = new King(1);
+        Board[7][4] = new King(2);
+        Board[3][7] = new King(3);
+        Board[0][3] = new King(4);
     }
 
     public void setBoard() {
