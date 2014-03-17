@@ -28,11 +28,13 @@ public class UserTest {
         user.setEmail("some email");
         user.setNickname("some nickname");
         user.setPassword("some password");
+        user.setOneTimeToken("some one time token");
 
         // then
         assertEquals("some id", user.getId());
         assertEquals("some email", user.getEmail());
         assertEquals("some nickname", user.getNickname());
         assertEquals("some password", user.getPassword());
+        assertEquals("some one time token", user.getOneTimeToken());
     }
 }

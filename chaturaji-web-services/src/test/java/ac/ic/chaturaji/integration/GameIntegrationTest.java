@@ -44,10 +44,10 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
         // --- login ---
 
         // given
-        registerUser("user_two@example.com", "password_two");
+        registerUser("user_two@example.com", "qazQAZ123");
 
         // when
-        HttpPost login = new HttpPost("https://user_two%40example.com:password_two@127.0.0.1:" + httpsPort + "/login");
+        HttpPost login = new HttpPost("https://user_two%40example.com:qazQAZ123@127.0.0.1:" + httpsPort + "/login");
         HttpResponse loginResponse = httpClient.execute(login);
 
         // then
@@ -77,10 +77,10 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
         // --- login ---
 
         // given
-        registerUser("user_two@example.com", "password_two");
+        registerUser("user_two@example.com", "qazQAZ123");
 
         // when
-        HttpPost login = new HttpPost("https://user_two%40example.com:password_two@127.0.0.1:" + httpsPort + "/login");
+        HttpPost login = new HttpPost("https://user_two%40example.com:qazQAZ123@127.0.0.1:" + httpsPort + "/login");
         HttpResponse loginResponse = httpClient.execute(login);
 
         // then
@@ -117,10 +117,10 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
         // --- login another user ---
 
         // given
-        registerUser("user_three@example.com", "password_three");
+        registerUser("user_three@example.com", "qazQAZ123");
 
         // when
-        login = new HttpPost("https://user_three%40example.com:password_three@127.0.0.1:" + httpsPort + "/login");
+        login = new HttpPost("https://user_three%40example.com:qazQAZ123@127.0.0.1:" + httpsPort + "/login");
         loginResponse = httpClient.execute(login);
 
         // then

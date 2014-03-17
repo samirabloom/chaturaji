@@ -106,7 +106,7 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.createAccount("test@test.com", "testpass", "testman");
+        String state = chatuService.createAccount("test@test.com", "testpass123", "testman");
 
         // if state is successful then it was a 201
         assertEquals("Success", state);
@@ -122,7 +122,7 @@ public class ChatuServiceTest {
 
         long startTime = System.currentTimeMillis();
 
-        String state = chatuService.createAccount("test@test.com", "testpass", "testman");
+        String state = chatuService.createAccount("test_speed@test.com", "testpass123", "testman");
 
         long elapsedTime = System.currentTimeMillis() - startTime;
 
@@ -133,7 +133,7 @@ public class ChatuServiceTest {
 
         startTime = System.currentTimeMillis();
 
-        state = chatuService.login("test@test.com", "testpass");
+        state = chatuService.login("test_speed@test.com", "testpass123");
 
         elapsedTime = System.currentTimeMillis() - startTime;
 
@@ -164,20 +164,17 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.createAccount("NotAProperEmail", "testpass", "testman");
-
         // Should return Error if a proper email is not entered
-        assertEquals("Error", state);
-
-        state = chatuService.createAccount("test@test.com", "pas", "testman");
+        assertEquals("Error", chatuService.createAccount("NotAProperEmail", "testpass123", "testman"));
 
         // Should return Error if too small a password is entered
-        assertEquals("Error", state);
+        assertEquals("Error", chatuService.createAccount("test_not_registered@test.com", "pas", "testman"));
 
-        state = chatuService.createAccount("test@test.com", "pas8ht4343to3ijto5453t43tiorjgoirhgohergouehgojngoh54ogni45ohrtoigerogneroigheuirbgeroingeurohgoerngiuergergjieprng43ohgp3gji03igpiong", "testman");
+        // Should succeed
+        assertEquals("Success", chatuService.createAccount("test_not_registered@test.com", "testpass123", "testman"));
 
-        // Should return Error if too large a password is entered
-        assertEquals("Error", state);
+        // Should return Error if too small a password is entered
+        assertEquals("Error", chatuService.createAccount("test_not_registered@test.com", "testpass123", "testman"));
     }
 
 
@@ -201,7 +198,7 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.createAccount("wrongpassword@test.com", "password", "testman");
+        String state = chatuService.createAccount("wrongpassword@test.com", "password123", "testman");
 
         // if state is successful then it was a 201
         assertEquals("Success", state);
@@ -218,7 +215,12 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.login("test@test.com", "testpass");
+        String state = chatuService.createAccount("test_login@test.com", "testpass123", "testman");
+
+        // if state is successful then it was a 201
+        assertEquals("Success", state);
+
+        state = chatuService.login("test_login@test.com", "testpass123");
 
         // this is the test account that was previously registered, therefore should be able to log in
         assertEquals("Success", state);
@@ -262,12 +264,12 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.createAccount("test@test.com", "testpass", "testman");
+        String state = chatuService.createAccount("test_clear@test.com", "testpass123", "testman");
 
         // if state is successful then it was a 201
         assertEquals("Success", state);
 
-        state = chatuService.login("test@test.com", "testpass");
+        state = chatuService.login("test_clear@test.com", "testpass123");
 
         assertEquals("Success", state);
 
@@ -286,12 +288,12 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.createAccount("test@test.com", "testpass", "testman");
+        String state = chatuService.createAccount("test_create_game@test.com", "testpass123", "testman");
 
         // if state is successful then it was a 201
         assertEquals("Success", state);
 
-        state = chatuService.login("test@test.com", "testpass");
+        state = chatuService.login("test_create_game@test.com", "testpass123");
 
         assertEquals("Success", state);
 
@@ -308,12 +310,12 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.createAccount("test@test.com", "testpass", "testman");
+        String state = chatuService.createAccount("test_too_many_ais@test.com", "testpass123", "testman");
 
         // if state is successful then it was a 201
         assertEquals("Success", state);
 
-        state = chatuService.login("test@test.com", "testpass");
+        state = chatuService.login("test_too_many_ais@test.com", "testpass123");
 
         assertEquals("Success", state);
 
@@ -330,9 +332,9 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        chatuService.createAccount("join_test@test.com", "testpass", "testman");
+        chatuService.createAccount("test_join_game@test.com", "testpass123", "testman");
 
-        String state = chatuService.login("join_test@test.com", "testpass");
+        String state = chatuService.login("test_join_game@test.com", "testpass123");
 
         assertEquals("Success", state);
 
@@ -342,11 +344,11 @@ public class ChatuServiceTest {
 
         chatuService.clearCookieCred();
 
-        state = chatuService.createAccount("test2@test.com", "testpass", "testman2");
+        state = chatuService.createAccount("test2@test.com", "testpass123", "testman2");
 
         assertEquals("Success", state);
 
-        state = chatuService.login("test2@test.com", "testpass");
+        state = chatuService.login("test2@test.com", "testpass123");
 
         assertEquals("Success", state);
 
@@ -429,9 +431,9 @@ public class ChatuServiceTest {
 
         chatuService.clearCookieCred();
 
-        String state = chatuService.createAccount("test2@test.com", "testpass", "testman2");
+        chatuService.createAccount("test_full_game@test.com", "testpass123", "testman2");
 
-        state = chatuService.login("test2@test.com", "testpass");
+        String state = chatuService.login("test_full_game@test.com", "testpass123");
 
         assertEquals("Success", state);
 
@@ -486,7 +488,9 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String state = chatuService.login("test@test.com", "testpass");
+        chatuService.createAccount("test_invalid_game_id@test.com", "testpass123", "testman2");
+
+        String state = chatuService.login("test_invalid_game_id@test.com", "testpass123");
 
         assertEquals("Success", state);
 
@@ -532,11 +536,11 @@ public class ChatuServiceTest {
         chatuService.setServerHost(serverHost);
         chatuService.setServerPort(httpsPort);
 
-        String email = "unqi@test.com";
+        String email = "test_join_own_game@test.com";
 
-        chatuService.createAccount(email, "testpass", "testman2");
+        chatuService.createAccount(email, "testpass123", "testman2");
 
-        String state = chatuService.login(email, "testpass");
+        String state = chatuService.login(email, "testpass123");
 
         assertEquals("Success", state);
 

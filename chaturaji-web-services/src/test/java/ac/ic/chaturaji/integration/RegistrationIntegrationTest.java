@@ -25,7 +25,7 @@ public class RegistrationIntegrationTest extends GameControllerFullIntegrationTe
         // --- does not login ---
 
         // when
-        HttpPost login = new HttpPost("https://some_user%40example.com:some_password@127.0.0.1:" + httpsPort + "/login");
+        HttpPost login = new HttpPost("https://some_user%40example.com:qazQAZ123@127.0.0.1:" + httpsPort + "/login");
         HttpResponse loginResponse = httpClient.execute(login);
 
         // then
@@ -37,7 +37,7 @@ public class RegistrationIntegrationTest extends GameControllerFullIntegrationTe
         HttpPost register = new HttpPost("https://127.0.0.1:" + httpsPort + "/register");
         register.setEntity(new UrlEncodedFormEntity(Arrays.asList(
                 new BasicNameValuePair("email", "some_user@example.com"),
-                new BasicNameValuePair("password", "some_password"),
+                new BasicNameValuePair("password", "qazQAZ123"),
                 new BasicNameValuePair("nickname", "my_nickname")
         )));
         HttpResponse createGameResponse = httpClient.execute(register);
@@ -51,8 +51,9 @@ public class RegistrationIntegrationTest extends GameControllerFullIntegrationTe
         httpClient = createApacheClient();
 
         // when
-        login = new HttpPost("https://some_user%40example.com:some_password@127.0.0.1:" + httpsPort + "/login");
+        login = new HttpPost("https://some_user%40example.com:qazQAZ123@127.0.0.1:" + httpsPort + "/login");
         loginResponse = httpClient.execute(login);
+        System.out.println("loginResponse = " + loginResponse);
 
         // then
         assertEquals(HttpStatus.ACCEPTED.value(), loginResponse.getStatusLine().getStatusCode());

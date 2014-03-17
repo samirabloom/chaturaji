@@ -1,4 +1,4 @@
-package ac.ic.chaturaji.config;
+package ac.ic.chaturaji.security;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/games").permitAll()
+                .antMatchers("/register", "/games", "/sendUpdatePasswordEmail", "/updatePassword", "/message").permitAll()
                 .antMatchers("/login", "/createGame", "/joinGame", "/submitMove").authenticated()
                 .antMatchers("/**").denyAll();
     }

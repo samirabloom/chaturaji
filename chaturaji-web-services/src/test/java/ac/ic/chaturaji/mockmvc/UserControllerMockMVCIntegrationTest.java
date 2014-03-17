@@ -68,7 +68,7 @@ public class UserControllerMockMVCIntegrationTest {
                 post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("email", "user_one@email.com")
-                        .param("password", "some_password")
+                        .param("password", "qazQAZ123")
                         .param("nickname", "user")
         )
                 // then
@@ -86,14 +86,14 @@ public class UserControllerMockMVCIntegrationTest {
                 post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("email", "user_one#email.com")
-                        .param("password", "some_password")
+                        .param("password", "qazQAZ123")
                         .param("nickname", "user")
         )
                 // then
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertEquals("email - not a well-formed email address", result.getResponse().getContentAsString());
+        assertEquals("email - Please provide a valid email", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class UserControllerMockMVCIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertEquals("password - size must be between 6 and 50", result.getResponse().getContentAsString());
+        assertEquals("password - Please provide a password of 8 or more characters with at least 1 digit and 1 letter", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -120,14 +120,14 @@ public class UserControllerMockMVCIntegrationTest {
                 post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("email", "user_one@email.com")
-                        .param("password", "some_password")
+                        .param("password", "qazQAZ123")
                         .param("nickname", " ")
         )
                 // then
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertEquals("nickname - size must be between 3 and 50", result.getResponse().getContentAsString());
+        assertEquals("nickname - Please provide a name between 3 and 50 characters", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -144,8 +144,8 @@ public class UserControllerMockMVCIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertTrue(result.getResponse().getContentAsString().contains("password - size must be between 6 and 50"));
-        assertTrue(result.getResponse().getContentAsString().contains("nickname - size must be between 3 and 50"));
+        assertTrue(result.getResponse().getContentAsString().contains("password - Please provide a password of 8 or more characters with at least 1 digit and 1 letter"));
+        assertTrue(result.getResponse().getContentAsString().contains("nickname - Please provide a name between 3 and 50 characters"));
     }
 
     @Configuration

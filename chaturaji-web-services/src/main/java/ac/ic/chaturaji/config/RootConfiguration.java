@@ -1,24 +1,30 @@
 package ac.ic.chaturaji.config;
 
+import ac.ic.chaturaji.security.SecurityConfig;
 import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.annotation.Resource;
+import java.util.Properties;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author samirarabbanian
  */
 @Configuration
-@PropertySource({"classpath:database-mysql.properties"})
+@PropertySource({"classpath:database-mysql.properties", "classpath:email.properties"})
 @Import(SecurityConfig.class)
-@ComponentScan(basePackages = {"ac.ic.chaturaji.dao", "ac.ic.chaturaji.ai"})
+@ComponentScan(basePackages = {"ac.ic.chaturaji.dao", "ac.ic.chaturaji.ai", "ac.ic.chaturaji.email"})
 public class RootConfiguration {
 
     @Resource
@@ -60,5 +66,31 @@ public class RootConfiguration {
         // create scheme
         JdbcTestUtils.executeSqlScript(new JdbcTemplate(basicDataSource), new ClassPathResource("/sql/create_scheme.sql"), false);
         return basicDataSource;
+    }
+
+    @Bean
+    public MailSender mailSender() {
+        return new JavaMailSenderImpl() {{
+            setHost(environment.getProperty("email.host"));
+            setPort(environment.getProperty("email.port", Integer.class));
+            setProtocol(environment.getProperty("email.protocol"));
+            setUsername(environment.getProperty("email.username"));
+            setPassword(environment.getProperty("email.password"));
+            setJavaMailProperties(new Properties() {{ // https://javamail.java.net/nonav/docs/api/com/sun/mail/smtp/package-summary.html
+                setProperty("mail.smtp.auth", "true");
+                setProperty("mail.smtp.starttls.enable", environment.getProperty("email.starttls"));
+                setProperty("mail.smtp.quitwait", "false");
+            }});
+        }};
+    }
+
+    @Bean
+    public ThreadPoolTaskExecutor taskExecutor() {
+        return new ThreadPoolTaskExecutor() {{
+            setCorePoolSize(5);
+            setMaxPoolSize(10);
+            setQueueCapacity(50);
+            setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        }};
     }
 }

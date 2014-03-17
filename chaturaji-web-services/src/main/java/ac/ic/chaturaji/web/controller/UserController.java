@@ -1,6 +1,7 @@
 package ac.ic.chaturaji.web.controller;
 
 import ac.ic.chaturaji.dao.UserDAO;
+import ac.ic.chaturaji.email.EmailService;
 import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.uuid.UUIDFactory;
 import org.slf4j.Logger;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author samirarabbanian
@@ -33,10 +34,15 @@ public class UserController {
     private UUIDFactory uuidFactory;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private EmailService emailService;
 
     @ResponseBody
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> register(@Valid User user, BindingResult bindingResult) throws IOException {
+    public ResponseEntity<String> register(@Valid User user, BindingResult bindingResult, HttpServletRequest request) throws IOException {
+        if(userDAO.findByEmail(user.getEmail()) != null) {
+            return new ResponseEntity<>("A user already exists with that email address", HttpStatus.BAD_REQUEST);
+        }
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -57,6 +63,7 @@ public class UserController {
             logger.warn("Exception while saving user", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        emailService.sendRegistrationMessage(user, request);
         return new ResponseEntity<>("", HttpStatus.CREATED);
     }
 
