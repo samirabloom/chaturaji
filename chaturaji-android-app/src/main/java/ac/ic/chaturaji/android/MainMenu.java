@@ -60,15 +60,27 @@ public class MainMenu extends Activity {
         @Override
         public void onClick(View theView) {
 
-            Intent getSingleGame = new Intent(MainMenu.this, ChooseColour.class);
+            Intent getSingleGame = new Intent(MainMenu.this, GameActivity.class);
             PostGame postgame = new PostGame();
-            startActivity(getSingleGame);
 
             try {
 
                 postgame.execute("3");
-                String state = postgame.get();
+                String[] state = postgame.get();
                 System.out.println(state);
+
+                String colour = "in_game_yellow";
+
+                if(state[1].equals("BLUE"))
+                    colour = "in_game_blue";
+
+                else if(state[1].equals("RED"))
+                    colour = "in_game_red";
+
+                else if(state[1].equals("GREEN"))
+                    colour = "in_game_green";
+
+                getSingleGame.putExtra("colour", colour);
 
                 if(state.equals("Error")){
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
@@ -129,15 +141,15 @@ public class MainMenu extends Activity {
 
 
 
-    private class PostGame extends AsyncTask<String, Void, String> {
+    private class PostGame extends AsyncTask<String, Void, String[]> {
 
         @Override
-        protected String doInBackground(String... AIs) {
+        protected String[] doInBackground(String... AIs) {
             ChatuService chatuService = ChatuService.getInstance();
 
             chatuService.setEmailPassword(email, password);
 
-            String state = chatuService.createGame(AIs[0]);
+            String[] state = chatuService.createGame(AIs[0]);
 
             System.out.println(state);
 

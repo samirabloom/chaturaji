@@ -48,7 +48,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
 
     public void testTClickSinglePlayer(){
 
-        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(ChooseColour.class.getName(), null, false);
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(GameActivity.class.getName(), null, false);
 
         MainMenu myActivity = getActivity();
 
@@ -62,7 +62,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
             }
         });
 
-        ChooseColour nextActivity = (ChooseColour) getInstrumentation().waitForMonitor(activityMonitor);
+        GameActivity nextActivity = (GameActivity) getInstrumentation().waitForMonitor(activityMonitor);
 
         assertNotNull(nextActivity);
         nextActivity.finish();

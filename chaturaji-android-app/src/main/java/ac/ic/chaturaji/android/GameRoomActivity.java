@@ -55,13 +55,27 @@ public class GameRoomActivity extends Activity {
 
                 JoinGame joinGame = new JoinGame();
 
-                Intent gotoGame = new Intent(GameRoomActivity.this, ChooseColour.class);
+                Intent gotoGame = new Intent(GameRoomActivity.this, GameActivity.class);
+
 
                 try {
 
                     joinGame.execute(gameId);
                     String[] state = joinGame.get();
                     System.out.println(state);
+
+                    String colour = "in_game_yellow";
+
+                    if(state[2].equals("BLUE"))
+                        colour = "in_game_blue";
+
+                    else if(state[2].equals("RED"))
+                        colour = "in_game_red";
+
+                    else if(state[2].equals("GREEN"))
+                        colour = "in_game_green";
+
+                    gotoGame.putExtra("colour", colour);
 
                     if(state[1].equals("Error")){
                         Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();

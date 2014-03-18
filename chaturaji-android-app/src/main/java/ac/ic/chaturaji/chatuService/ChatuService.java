@@ -159,10 +159,16 @@ public class ChatuService {
         return games;
     }
 
-    public String createGame(String AIOpps) {
+    public String[] createGame(String AIOpps) {
 
-        if (Integer.parseInt(AIOpps) > 3 || Integer.parseInt(AIOpps) < 0)
-            return "Invalid AI count";
+        String[] reply = {"Error", " "};
+
+        if (Integer.parseInt(AIOpps) > 3 || Integer.parseInt(AIOpps) < 0){
+
+            reply[0] = "Invalid AI count";
+            return reply;
+
+        }
 
         setupClient();
 
@@ -185,22 +191,26 @@ public class ChatuService {
             System.out.println(response.getStatusLine().getStatusCode());
 
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
-                return "Error";
+
+                return reply;
             }
 
             player = objectMapper.readValue(EntityUtils.toString(response.getEntity()), Player.class);
 
+            reply[1] = player.getColour().toString();
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error";
+            return reply;
         }
 
-        return "Success";
+        reply[0] = "Success";
+        return reply;
     }
 
     public String[] joinGame(String gameId) {
 
-        String[] reply = {"Good", "Success"};
+        String[] reply = {"Good", "Success", "Colour"};
         setupClient();
 
         String url = "https://" + serverHost + ":" + serverPort + "/joinGame";
@@ -240,6 +250,8 @@ public class ChatuService {
             }
 
             player = objectMapper.readValue(EntityUtils.toString(response.getEntity()), Player.class);
+
+            reply[2] = player.getColour().toString();
 
         } catch (Exception e) {
 

@@ -149,7 +149,7 @@ public class ChatuServiceTest {
 
         startTime = System.currentTimeMillis();
 
-        state = chatuService.createGame("0");
+        String[] state2 = chatuService.createGame("0");
 
         elapsedTime = System.currentTimeMillis() - startTime;
 
@@ -275,10 +275,10 @@ public class ChatuServiceTest {
 
         chatuService.clearCookieCred();
 
-        state = chatuService.createGame("2");
+        String[] state2 = chatuService.createGame("2");
 
         // we cleared the cookie and creds on the client, so should not be able to log in now
-        assertEquals("Error", state);
+        assertEquals("Error", state2[0]);
     }
 
     @Test
@@ -297,10 +297,10 @@ public class ChatuServiceTest {
 
         assertEquals("Success", state);
 
-        state = chatuService.createGame("2");
+        String[] state2 = chatuService.createGame("2");
 
         // we cleared the cookie and creds on the client, so should not be able to log in now
-        assertEquals("Success", state);
+        assertEquals("Success", state2[0]);
     }
 
     @Test
@@ -319,10 +319,10 @@ public class ChatuServiceTest {
 
         assertEquals("Success", state);
 
-        state = chatuService.createGame("5");
+        String[] state2 = chatuService.createGame("5");
 
         // should not allow more than 3 AIs
-        assertEquals("Invalid AI count", state);
+        assertEquals("Invalid AI count", state2[0]);
     }
 
     @Test
@@ -338,7 +338,7 @@ public class ChatuServiceTest {
 
         assertEquals("Success", state);
 
-        state = chatuService.createGame("0");
+        String[] state2 = chatuService.createGame("0");
 
         assertEquals("Success", state);
 
@@ -544,7 +544,7 @@ public class ChatuServiceTest {
 
         assertEquals("Success", state);
 
-        state = chatuService.createGame("0");
+        String[] state2 = chatuService.createGame("0");
 
         assertEquals("Success", state);
 
