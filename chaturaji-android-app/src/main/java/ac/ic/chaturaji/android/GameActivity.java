@@ -310,7 +310,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         move_list.setText(movelist);
 
         TextView show_turn = (TextView) findViewById(R.id.turn);
-        int turn = (move_count % 4) + 1;
+        int turn = ((move_count + 3) % 4) + 1;
         String colour;
 
         if(turn == 1)
@@ -418,7 +418,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public boolean selectPiece(int column, int row) {
 
-        int turn = (move_count % 4) + 1;
+        int turn = ((move_count + 3) % 4) + 1;
         return ((Board[column][row] != null) && (Board[column][row].colour == turn));
     }
 
@@ -437,7 +437,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public boolean checkValidMoves() {
 
-        int turn = (move_count % 4) + 1;
+        int turn = ((move_count + 3) % 4) + 1;
         boolean[][] check_moves;
 
         for(int i = 0; i < 8; i++)
