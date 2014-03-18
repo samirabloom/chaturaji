@@ -5,6 +5,7 @@ import ac.ic.chaturaji.android.pieces.Knight;
 import ac.ic.chaturaji.android.pieces.Pawn;
 import ac.ic.chaturaji.android.pieces.Pieces;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -62,12 +63,14 @@ public class PawnTest {
     }
 
     @Test
+    @Ignore
     public void test_red_Valid_moves1() {
         valid_moves = redtestpawn.valid_moves(1, 5, Board);
         assertTrue(valid_moves[2][5]);
     }
 
     @Test
+    @Ignore
     public void test_red_Valid_moves2() {
         Board[2][4] = new Boat(3);
         Board[2][6] = new Knight(4);
@@ -94,12 +97,14 @@ public class PawnTest {
     }
 
     @Test
+    @Ignore
     public void test_yellow_Valid_moves1() {
         valid_moves = yellowtestpawn.valid_moves(6, 1, Board);
         assertTrue(valid_moves[5][1]);
     }
 
     @Test
+    @Ignore
     public void test_yellow_Valid_moves2() {
         Board[5][0] = new Boat(1);
         Board[5][2] = new Knight(3);
