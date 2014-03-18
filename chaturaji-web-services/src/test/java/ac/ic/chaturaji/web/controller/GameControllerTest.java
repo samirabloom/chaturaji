@@ -68,13 +68,13 @@ public class GameControllerTest {
     public void shouldGetGamesFromDAOAndCreateJSON() throws IOException {
         // given
         List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User(), Colour.YELLOW, PlayerType.HUMAN)));
-        when(gameDAO.getAll()).thenReturn(games);
+        when(gameDAO.getAllWaitingForPlayers()).thenReturn(games);
 
         // when
         List<Game> result = gameController.getGameList();
 
         // then
-        verify(gameDAO).getAll();
+        verify(gameDAO).getAllWaitingForPlayers();
         assertEquals(games, result);
     }
 

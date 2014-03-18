@@ -61,11 +61,10 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
                 new BasicNameValuePair("numberOfAIPlayers", "3")
         )));
         HttpResponse createGameResponse = httpClient.execute(createGame);
-        numberOfGames++;
 
         // then
         assertEquals(HttpStatus.CREATED.value(), createGameResponse.getStatusLine().getStatusCode());
-        assertEquals(games.length + 1, numberOfGames());
+        assertEquals(games.length, numberOfGames());
     }
 
 
@@ -134,6 +133,7 @@ public class GameIntegrationTest extends GameControllerFullIntegrationTest {
                 new BasicNameValuePair("gameId", player.getGameId())
         )));
         HttpResponse joinGameResponse = httpClient.execute(joinGame);
+        numberOfGames--;
 
         // then
         assertEquals(HttpStatus.CREATED.value(), joinGameResponse.getStatusLine().getStatusCode());

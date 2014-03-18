@@ -96,7 +96,7 @@ public class GameControllerMockMVCIntegrationTest {
                 uuidFactory.generateUUID(),
                 uuidFactory.generateUUID()
         };
-        when(gameDAO.getAll()).thenReturn(Arrays.asList(
+        when(gameDAO.getAllWaitingForPlayers()).thenReturn(Arrays.asList(
                 new Game("1", new Player(gameIds[0], new User(), Colour.YELLOW, PlayerType.HUMAN)),
                 new Game("2", new Player(gameIds[1], new User(), Colour.YELLOW, PlayerType.HUMAN)),
                 new Game("3", new Player(gameIds[2], new User(), Colour.YELLOW, PlayerType.HUMAN)),

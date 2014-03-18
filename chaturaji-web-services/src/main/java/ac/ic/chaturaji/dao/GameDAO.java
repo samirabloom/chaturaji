@@ -48,8 +48,11 @@ public class GameDAO {
         }
     }
 
-    public Collection<Game> getAll() {
-        String sql = "SELECT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS FROM GAME";
+    public Collection<Game> getAllWaitingForPlayers() {
+        String sql = "SELECT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS " +
+                "FROM GAME NATURAL JOIN PLAYER " +
+                "WHERE GAME_STATUS = 0 AND CREATED_DATE >= \'" + new LocalDateTime().minusDays(3).toString("yyyy-MM-dd HH:mm:ss") + "\' " +
+                "GROUP BY GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS, CREATED_DATE HAVING count(PLAYER_ID) < 4";
         List<Game> games = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -62,6 +65,8 @@ public class GameDAO {
         }
         return games;
     }
+
+    // SELECT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS FROM GAME NATURAL JOIN PLAYER WHERE GAME_STATUS = 0 AND CREATED_DATE >= '2014-03-19' GROUP BY GAME_ID HAVING count(PLAYER_ID) < 4;
 
     public Game get(String id) {
         String sql = "SELECT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS FROM GAME WHERE GAME_ID=?";

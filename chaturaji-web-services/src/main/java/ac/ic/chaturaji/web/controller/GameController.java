@@ -54,7 +54,7 @@ public class GameController {
     public List<Game> getGameList() throws IOException {
         User currentUser = springSecurityUserContext.getCurrentUser();
         List<Game> notYourGames = new ArrayList<>();
-        for (Game game : gameDAO.getAll()) {
+        for (Game game : gameDAO.getAllWaitingForPlayers()) {
             if (!alreadyJoinedGame(game, currentUser)) {
                 notYourGames.add(game);
             }

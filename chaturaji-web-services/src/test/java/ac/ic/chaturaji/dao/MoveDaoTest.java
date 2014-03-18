@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = RootConfiguration.class, initializers = HSQLApplicationContextInitializer.class)
-public class MoveDaoTest {
+public class MoveDAOTest {
 
     @Resource
     private GameDAO gameDAO;

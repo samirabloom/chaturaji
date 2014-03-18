@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = RootConfiguration.class, initializers = HSQLApplicationContextInitializer.class)
-public class PlayerDaoTest {
+public class PlayerDAOTest {
 
     @Resource
     PasswordEncoder passwordEncoder;
