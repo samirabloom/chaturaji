@@ -24,6 +24,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     private final android.widget.ImageView[][] BoardImage = new android.widget.ImageView[8][8];
     private Pieces[][] Board = new Pieces[8][8];
+    private int player_colour;
     private int selected_column = -1; // -1 if nothing selected
     private int selected_row = -1; // -1 if nothing selected
     private boolean[][] valid_moves = new boolean[8][8];
@@ -51,6 +52,16 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         chatuService.setupSocketClient(GameActivity.this);
 
         String colour = getIntent().getStringExtra("colour");
+
+        if(colour.equals("in_game_yellow"))
+            player_colour = 4;
+        else if(colour.equals("in_game_blue"))
+            player_colour = 1;
+        else if(colour.equals("in_game_red"))
+            player_colour = 2;
+        else if(colour.equals("in_game_green"))
+            player_colour = 3;
+
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
         setContentView(identifier);
 
@@ -244,38 +255,41 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
                     public void onClick(View v) {
 
-                        if(selected_column == column && selected_row == row)
-                            clearSelections();
-                        else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
+                        if((((move_count + 3) % 4) + 1) == player_colour)
                         {
-                            String state = "Error";
-                            SubmitMove submit_move = new SubmitMove();
-
-                            while(state.equals("Error"))
+                            if(selected_column == column && selected_row == row)
+                                clearSelections();
+                            else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
                             {
-                                submit_move.execute(convertMove(selected_column, selected_row), convertMove(column, row));
-                                try {
-                                    state = submit_move.get();
+                                String state = "Error";
+                                SubmitMove submit_move = new SubmitMove();
 
-                                    if(state.equals("Error"))
-                                        Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
+                                while(state.equals("Error"))
+                                {
+                                    submit_move.execute(convertMove(selected_column, selected_row), convertMove(column, row));
+                                    try {
+                                        state = submit_move.get();
+
+                                        if(state.equals("Error"))
+                                            Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
+                                    }
+                                    catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                                catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+
+                            }
+                            else if ((!moved) && selectPiece(column, row))
+                            {
+                                clearSelections();
+                                BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
+                                selected_column = column;
+                                selected_row = row;
+                                showValidMoves(column, row);
                             }
 
+                            moved = false;
                         }
-                        else if ((!moved) && selectPiece(column, row))
-                        {
-                            clearSelections();
-                            BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
-                            selected_column = column;
-                            selected_row = row;
-                            showValidMoves(column, row);
-                        }
-
-                        moved = false;
                     }
                 });
             }
