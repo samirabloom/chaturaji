@@ -1140,7 +1140,7 @@
                     android:textColor="@color/white"
                     android:layout_weight="1"
                     android:id="@+id/blue_score"
-                    android:textSize="14sp"
+                    android:textSize="20sp"
                     android:gravity="center_vertical"
                     android:drawableStart="@drawable/blueking"/>
 
@@ -1149,7 +1149,7 @@
                     android:textColor="@color/white"
                     android:layout_weight="1"
                     android:id="@+id/red_score"
-                    android:textSize="14sp"
+                    android:textSize="20sp"
                     android:gravity="center_vertical"
                     android:drawableStart="@drawable/redking"/>
 
@@ -1158,7 +1158,7 @@
                     android:textColor="@color/white"
                     android:layout_weight="1"
                     android:id="@+id/green_score"
-                    android:textSize="14sp"
+                    android:textSize="20sp"
                     android:gravity="center_vertical"
                     android:drawableStart="@drawable/greenking"/>
 
@@ -1167,7 +1167,7 @@
                     android:textColor="@color/white"
                     android:id="@+id/yellow_score"
                     android:layout_weight="1"
-                    android:textSize="14sp"
+                    android:textSize="20sp"
                     android:gravity="center_vertical"
                     android:drawableStart="@drawable/yellowking"/>
 
@@ -1184,7 +1184,7 @@
                               android:layout_weight="5"
                               android:gravity="center"
                               android:text="@string/movelist"
-                              android:textSize="22sp"/>
+                              android:textSize="30sp"/>
 
                     <TextView android:layout_width="match_parent"
                               android:layout_height="match_parent"
@@ -1202,7 +1202,7 @@
                   android:layout_weight="4"
                   android:gravity="center"
                   android:textColor="@color/white"
-                  android:textSize="22sp"
+                  android:textSize="30sp"
                   android:scrollbars = "vertical"
                   android:id="@+id/turn"/>
 

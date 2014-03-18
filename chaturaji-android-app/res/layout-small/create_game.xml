@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/main_colour">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Create New Game"
+            android:id="@+id/textView"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Number of AIs:"
+            android:id="@+id/textView2"/>
+
+    <RadioGroup
+            android:id="@+id/radioAI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp">
+
+        <RadioButton
+                android:id="@+id/radioAI0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="0"
+                android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radioAI1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="1" />
+
+        <RadioButton
+                android:id="@+id/radioAI2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="2" />
+
+        <RadioButton
+                android:id="@+id/radioAI3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="3" />
+
+
+    </RadioGroup>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Game"
+            style="@style/btnStyleArsenic"
+            android:layout_gravity="center"
+            android:id="@+id/start_game_button"/>
+
+</LinearLayout>
