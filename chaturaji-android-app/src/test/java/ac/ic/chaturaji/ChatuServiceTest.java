@@ -340,7 +340,7 @@ public class ChatuServiceTest {
 
         String[] state2 = chatuService.createGame("0");
 
-        assertEquals("Success", state);
+        assertEquals("Success", state2[0]);
 
         chatuService.clearCookieCred();
 
@@ -546,7 +546,7 @@ public class ChatuServiceTest {
 
         String[] state2 = chatuService.createGame("0");
 
-        assertEquals("Success", state);
+        assertEquals("Success", state2[0]);
 
         state = chatuService.getGames();
 
