@@ -324,22 +324,46 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         move_list.setText(movelist);
 
         TextView show_turn = (TextView) findViewById(R.id.turn);
-        int turn = ((move_count + 3) % 4) + 1;
-        String colour;
+        int gameover = checkEndGame();
 
-        if(turn == 1)
-            colour = "Blue";
-        else if(turn == 2)
-            colour = "Red";
-        else if(turn == 3)
-            colour = "Green";
-        else if(turn == 4)
-            colour = "Yellow";
+        if(gameover != 0)
+        {
+            String colour;
+
+            if(gameover == 1)
+                colour = "Blue";
+            else if(gameover == 2)
+                colour = "Red";
+            else if(gameover == 3)
+                colour = "Green";
+            else if(gameover == 4)
+                colour = "Yellow";
+            else
+                colour = "";
+
+            String winner = colour + " wins!";
+            show_turn.setText(winner);
+        }
         else
-            colour = "";
+        {
+            int turn = ((move_count + 3) % 4) + 1;
+            String colour;
 
-        String turn_string = "It is " + colour + "'s turn to move";
-        show_turn.setText(turn_string);
+            if(turn == 1)
+                colour = "Blue";
+            else if(turn == 2)
+                colour = "Red";
+            else if(turn == 3)
+                colour = "Green";
+            else if(turn == 4)
+                colour = "Yellow";
+            else
+                colour = "";
+
+
+            String turn_string = "It is " + colour + "'s turn to move";
+            show_turn.setText(turn_string);
+        }
     }
 
     public void adjustScoreboard(int source_column, int source_row, int destination_column, int destination_row) {
@@ -466,6 +490,35 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                 }
 
         return false;
+    }
+
+    public int checkEndGame() {
+
+        int colour = 0;
+
+        for(int i = 0; i < 8; i++)
+        {
+            if(colour != 0)
+                break;
+
+            for(int j = 0; j < 8; j++)
+                if(Board[i][j] != null)
+                {
+                   colour = Board[i][j].colour;
+                   break;
+                }
+        }
+
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                if((Board[i][j] != null) && (Board[i][j].colour != colour))
+                    return 0;
+            }
+        }
+
+        return colour;
     }
 
     public void showValidMoves(int column, int row) {
