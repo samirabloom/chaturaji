@@ -33,7 +33,7 @@ public class AITest{
         game = ai.createGame(game);
         long[] trueBoards;
 
-        assertEquals(Colour.YELLOW, game.getCurrentPlayer());
+        assertEquals(Colour.YELLOW, game.getCurrentPlayerColour());
         System.out.println("startGameTest: succeeded");
     }
 
@@ -51,7 +51,7 @@ public class AITest{
 
         move.setSource(0);
         move.setDestination(18);
-        move.setColour(game.getCurrentPlayer());
+        move.setColour(game.getCurrentPlayerColour());
 
         assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
         System.out.println("submitMoveHumanTest: succeeded");
@@ -70,7 +70,7 @@ public class AITest{
 
         move.setSource(0);
         move.setDestination(18);
-        move.setColour(game.getCurrentPlayer());
+        move.setColour(game.getCurrentPlayerColour());
 
         assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
         System.out.println("submitMoveAITest: succeeded");
@@ -91,7 +91,7 @@ public class AITest{
         }
 
         while (!move_complete) {
-        move.setColour(game.getCurrentPlayer());
+        move.setColour(game.getCurrentPlayerColour());
         result = ai.submitMove(game, move);
         if (result.getGameStatus() == GameStatus.GAME_OVER || result.getGameStatus() == GameStatus.STALEMATE)
             move_complete = true;
@@ -117,7 +117,7 @@ public class AITest{
             int source = moves[0];
             int dest = moves[1];
 
-            move.setColour(game.getCurrentPlayer());
+            move.setColour(game.getCurrentPlayerColour());
             move.setSource(source);
             move.setDestination(dest);
 
@@ -198,7 +198,7 @@ public class AITest{
                 source = BoatTest[i + (k * 4)][0];
                 dest = BoatTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 
@@ -208,7 +208,7 @@ public class AITest{
                 source = KnightTest[i + (k * 4)][0];
                 dest = KnightTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 
@@ -218,7 +218,7 @@ public class AITest{
                 source = ElephantTest[i + (k * 4)][0];
                 dest = ElephantTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 
@@ -228,7 +228,7 @@ public class AITest{
                 source = KingTest[i + (k * 4)][0];
                 dest = KingTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 
@@ -241,7 +241,7 @@ public class AITest{
                 source = BoatTest[i + (k * 4)][0];
                 dest = BoatTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 
@@ -257,7 +257,7 @@ public class AITest{
                 source = KnightTest[i + (k * 4)][0];
                 dest = KnightTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 
@@ -273,7 +273,7 @@ public class AITest{
                 source = ElephantTest[i + (k * 4)][0];
                 dest = ElephantTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 
@@ -289,7 +289,7 @@ public class AITest{
                 source = KingTest[i + (k * 4)][0];
                 dest = KingTest[i + (k * 4)][1];
 
-                move.setColour(game.getCurrentPlayer());
+                move.setColour(game.getCurrentPlayerColour());
                 move.setSource(source);
                 move.setDestination(dest);
 

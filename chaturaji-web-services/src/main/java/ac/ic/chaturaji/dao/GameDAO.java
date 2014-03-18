@@ -89,7 +89,7 @@ public class GameDAO {
         Game game = new Game();
         game.setId(result.getString("GAME_ID"));
         game.setCreatedDate(new LocalDateTime(result.getTimestamp("CREATED_DATE").getTime()));
-        game.setCurrentPlayer(Colour.values()[result.getInt("CURRENT_PLAYER")]);
+        game.setCurrentPlayerColour(Colour.values()[result.getInt("CURRENT_PLAYER")]);
         game.setGameStatus(GameStatus.values()[result.getInt("GAME_STATUS")]);
         game.setPlayers(playerDAO.getAll(game.getId()));
         game.setMoves(moveDAO.getAll(game.getId()));
@@ -103,7 +103,7 @@ public class GameDAO {
 
             ps.setString(1, game.getId());
             ps.setDate(2, new java.sql.Date(game.getCreatedDate().toDate().getTime()));
-            ps.setInt(3, game.getCurrentPlayer().ordinal());
+            ps.setInt(3, game.getCurrentPlayerColour().ordinal());
             ps.setInt(4, game.getGameStatus().ordinal());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException();

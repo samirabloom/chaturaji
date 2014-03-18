@@ -19,7 +19,7 @@ public class Game extends EqualsHashCodeToString {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdDate;
     private List<Player> players = new ArrayList<>();
-    private Colour currentPlayer = Colour.YELLOW;
+    private Colour currentPlayerColour = Colour.YELLOW;
     private GameStatus gameStatus = GameStatus.NOT_STARTED;
     /* JsonIgnore the following fields to prevent them from being sent down to the client,
     this is important otherwise the performance will be ridiculously slow and unresponsive */
@@ -98,12 +98,23 @@ public class Game extends EqualsHashCodeToString {
         this.bitboards = bitboards;
     }
 
-    public Colour getCurrentPlayer() {
-        return currentPlayer;
+    public Colour getCurrentPlayerColour() {
+        return currentPlayerColour;
     }
 
-    public void setCurrentPlayer(Colour currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    public void setCurrentPlayerColour(Colour currentPlayer) {
+        this.currentPlayerColour = currentPlayer;
+    }
+
+    @JsonIgnore
+    public Colour getNextPlayerColour() {
+        Colour[] colours = Colour.values();
+        return colours[(currentPlayerColour.ordinal() + 1) % colours.length];
+    }
+
+    @JsonIgnore
+    public Player getNextPlayer() {
+        return players.get(getNextPlayerColour().ordinal());
     }
 
     public GameStatus getGameStatus() {

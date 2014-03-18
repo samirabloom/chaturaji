@@ -28,9 +28,7 @@ public class AI {
     public Result submitMove(Game game, Move move) {
         Result result = null;
 
-        int colour = game.getCurrentPlayer().ordinal();
-        int source = move.getSource();
-        int dest = move.getDestination();
+        int colour = game.getCurrentPlayerColour().ordinal();
 
         Player player = game.getPlayer(colour);
         Move_AI theMove;
@@ -44,7 +42,7 @@ public class AI {
             case HUMAN: {
                 humanPlayer = new PlayerHuman(colour, player.getPoints(), player.getKingsCaptured());
 
-                theMove = humanPlayer.GetMove(board, source, dest);
+                theMove = humanPlayer.GetMove(board, move.getSource(), move.getDestination());
 
                 if (theMove == null) {
                     result = new Result(GameStatus.IN_PLAY, game, move);
@@ -58,7 +56,7 @@ public class AI {
 
                 game.setBitboards(board.GetBitBoards());
                 game.getPlayer(colour).setPoints(humanPlayer.GetPoints());
-                game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
+                game.setCurrentPlayerColour(Colour.values()[board.GetCurrentPlayer()]);
 
                 if (board.isGameOver() == 0 || game.getStalemateCount() == 10)
                     result = new Result(GameStatus.GAME_OVER, game, move);
@@ -101,7 +99,7 @@ public class AI {
                     //Move ResultMove = new Move();
                     move.setSource(theMove.getSource());
                     move.setDestination(theMove.getDest());
-                    move.setColour(game.getCurrentPlayer());
+                    move.setColour(game.getCurrentPlayerColour());
                 } else {
                     // If the AI returns a null move, it is because the current player cannot make one - either because the player's
                     // pieces are blocked or because they have been eliminated. If so, move on to the next player.
@@ -110,7 +108,7 @@ public class AI {
                 //Game ResultGame = new Game();
 
                 game.getPlayer(colour).setPoints(playerAI.GetPoints());
-                game.setCurrentPlayer(Colour.values()[board.GetCurrentPlayer()]);
+                game.setCurrentPlayerColour(Colour.values()[board.GetCurrentPlayer()]);
                 game.setBitboards(board.GetBitBoards());
 
                 if (board.isGameOver() <= 1)

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInMemoryGames;
 
@@ -33,6 +35,7 @@ import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInM
  */
 @Controller
 public class GameController {
+    public static final int AI_PLAYER_DELAY = 500;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private GameDAO gameDAO;
@@ -48,6 +51,8 @@ public class GameController {
     private SpringSecurityUserContext springSecurityUserContext;
     @Resource
     private ServletContext servletContext;
+    @Resource
+    private ThreadPoolTaskExecutor taskExecutor;
 
     @ResponseBody
     @RequestMapping(value = "/games", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
@@ -129,13 +134,32 @@ public class GameController {
     // Note: request must have a Content-Type: application/json; charset=UTF-8
     @ResponseBody
     @RequestMapping(value = "/submitMove", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> submitMove(@RequestBody Move move) {
-        Result result = ai.submitMove(getInMemoryGames(servletContext).get(move.getGameId()), move);
-        for(Player player : result.getGame().getPlayers()) {
-            playerDAO.save(result.getGame().getId(), player);
+    public ResponseEntity<String> submitMove(@RequestBody final Move move) {
+        final Game game = getInMemoryGames(servletContext).get(move.getGameId());
+        if (game != null) {
+            Result result = ai.submitMove(game, move);
+            for (Player player : result.getGame().getPlayers()) {
+                playerDAO.save(result.getGame().getId(), player);
+            }
+            moveDAO.save(result.getGame().getId(), result.getMove());
+            // now schedule AI move if next player is AI
+            if (game.getNextPlayer().getType() == PlayerType.AI) {
+                taskExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(AI_PLAYER_DELAY);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        submitMove(new Move(uuidFactory.generateUUID(), move.getGameId(), game.getNextPlayerColour(), -1, -1));
+                    }
+                });
+            }
+            return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("No game found with gameId: " + move.getGameId(), HttpStatus.BAD_REQUEST);
         }
-        moveDAO.save(result.getGame().getId(), result.getMove());
-        return new ResponseEntity<>("", HttpStatus.ACCEPTED);
     }
 
 

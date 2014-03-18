@@ -6,7 +6,10 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author samirarabbanian
@@ -36,7 +39,7 @@ public class GameTest {
         game.setId("some id");
         game.setBitboards(bitboards);
         game.setCreatedDate(createdDate);
-        game.setCurrentPlayer(Colour.BLUE);
+        game.setCurrentPlayerColour(Colour.BLUE);
         game.setMoves(moves);
         game.setPlayers(Arrays.asList(playerOne, playerTwo, playerThree));
 
@@ -44,7 +47,7 @@ public class GameTest {
         assertEquals("some id", game.getId());
         assertEquals(bitboards, game.getBitboards());
         assertEquals(createdDate, game.getCreatedDate());
-        assertEquals(Colour.BLUE, game.getCurrentPlayer());
+        assertEquals(Colour.BLUE, game.getCurrentPlayerColour());
         assertEquals(moves, game.getMoves());
         assertEquals(Arrays.asList(playerOne, playerTwo, playerThree), game.getPlayers());
         assertEquals(playerOne, game.getPlayer(0));
@@ -80,5 +83,51 @@ public class GameTest {
 
         // then
         game.addPlayer(new Player()); // illegal
+    }
+
+    @Test
+    public void shouldDetermineNextPlayer() {
+        // given
+        Game game = new Game("game id", new Player("player one", new User(), Colour.YELLOW, PlayerType.HUMAN));
+        game.addPlayer(new Player("player two", new User(), Colour.BLUE, PlayerType.HUMAN));
+        game.addPlayer(new Player("player three", new User(), Colour.RED, PlayerType.HUMAN));
+        game.addPlayer(new Player("player four", new User(), Colour.GREEN, PlayerType.HUMAN));
+
+        // then
+        assertThat(game.getCurrentPlayerColour(), is(Colour.YELLOW));
+        assertThat(game.getNextPlayerColour(), is(Colour.BLUE));
+        assertThat(game.getNextPlayer(), is(game.getPlayer(1)));
+
+        // when
+        game.setCurrentPlayerColour(Colour.BLUE);
+
+        // then
+        assertThat(game.getCurrentPlayerColour(), is(Colour.BLUE));
+        assertThat(game.getNextPlayerColour(), is(Colour.RED));
+        assertThat(game.getNextPlayer(), is(game.getPlayer(2)));
+
+        // when
+        game.setCurrentPlayerColour(Colour.RED);
+
+        // then
+        assertThat(game.getCurrentPlayerColour(), is(Colour.RED));
+        assertThat(game.getNextPlayerColour(), is(Colour.GREEN));
+        assertThat(game.getNextPlayer(), is(game.getPlayer(3)));
+
+        // when
+        game.setCurrentPlayerColour(Colour.GREEN);
+
+        // then
+        assertThat(game.getCurrentPlayerColour(), is(Colour.GREEN));
+        assertThat(game.getNextPlayerColour(), is(Colour.YELLOW));
+        assertThat(game.getNextPlayer(), is(game.getPlayer(0)));
+
+        // when
+        game.setCurrentPlayerColour(Colour.YELLOW);
+
+        // then
+        assertThat(game.getCurrentPlayerColour(), is(Colour.YELLOW));
+        assertThat(game.getNextPlayerColour(), is(Colour.BLUE));
+        assertThat(game.getNextPlayer(), is(game.getPlayer(1)));
     }
 }

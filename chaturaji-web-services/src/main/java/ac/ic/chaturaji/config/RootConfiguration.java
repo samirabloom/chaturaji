@@ -87,8 +87,8 @@ public class RootConfiguration {
     @Bean
     public ThreadPoolTaskExecutor taskExecutor() {
         return new ThreadPoolTaskExecutor() {{
-            setCorePoolSize(5);
-            setMaxPoolSize(10);
+            setCorePoolSize(15);
+            setMaxPoolSize(25);
             setQueueCapacity(50);
             setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         }};
