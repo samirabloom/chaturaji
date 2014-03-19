@@ -377,6 +377,36 @@ public class ChatuService {
         }
     }
 
+    public String updatePassword(String emailString) {
+
+        setupClient();
+
+        String url = "https://" + serverHost + ":" + serverPort + "/sendUpdatePasswordEmail";
+
+        try {
+
+            HttpPost httpPost = new HttpPost(url);
+
+            httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(
+                    new BasicNameValuePair("email", emailString)
+            )));
+
+            HttpResponse response = httpClient.execute(httpPost);
+
+            System.out.println(response.getStatusLine().getStatusCode());
+
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_ACCEPTED) {
+                return "Success";
+            } else {
+                return EntityUtils.toString(response.getEntity());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
     public void setEmailPassword(String email, String password) {
 
         this.email = email;

@@ -107,6 +107,11 @@ public class Game extends EqualsHashCodeToString {
     }
 
     @JsonIgnore
+    public boolean currentPlayerHasNoPieces() {
+        return players.get(currentPlayerColour.ordinal()).isNoMorePieces();
+    }
+
+    @JsonIgnore
     public PlayerType getCurrentPlayerType() {
         return players.get(currentPlayerColour.ordinal()).getType();
     }

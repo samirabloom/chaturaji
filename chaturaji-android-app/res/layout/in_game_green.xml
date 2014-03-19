@@ -1124,14 +1124,14 @@
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="match_parent"
-                          android:layout_weight="1.9"
+                          android:layout_weight="1.95"
                           android:background="@color/main_colour"
                           android:orientation="vertical"/>
 
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="match_parent"
-                          android:layout_weight="1.2"
+                          android:layout_weight="1.1"
                           android:gravity="center_vertical"
                           android:orientation="vertical">
 
@@ -1142,7 +1142,7 @@
                           android:id="@+id/blue_score"
                           android:textSize="14sp"
                           android:gravity="center_vertical"
-                          android:drawableStart="@drawable/blueking"/>
+                          android:drawableStart="@drawable/blueking" android:layout_marginRight="@dimen/right_padding"/>
 
                 <TextView android:layout_width="match_parent"
                           android:layout_height="match_parent"
@@ -1151,7 +1151,7 @@
                           android:id="@+id/red_score"
                           android:textSize="14sp"
                           android:gravity="center_vertical"
-                          android:drawableStart="@drawable/redking"/>
+                          android:drawableStart="@drawable/redking" android:layout_marginRight="@dimen/right_padding"/>
 
                 <TextView android:layout_width="match_parent"
                           android:layout_height="match_parent"
@@ -1160,7 +1160,7 @@
                           android:id="@+id/green_score"
                           android:textSize="14sp"
                           android:gravity="center_vertical"
-                          android:drawableStart="@drawable/greenking"/>
+                          android:drawableStart="@drawable/greenking" android:layout_marginRight="@dimen/right_padding"/>
 
                 <TextView android:layout_width="match_parent"
                           android:layout_height="match_parent"
@@ -1169,7 +1169,7 @@
                           android:layout_weight="1"
                           android:textSize="14sp"
                           android:gravity="center_vertical"
-                          android:drawableStart="@drawable/yellowking"/>
+                          android:drawableStart="@drawable/yellowking" android:layout_marginRight="@dimen/right_padding"/>
 
             </LinearLayout>
 

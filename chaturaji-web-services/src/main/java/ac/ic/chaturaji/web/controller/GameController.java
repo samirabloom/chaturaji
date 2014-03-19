@@ -154,6 +154,10 @@ public class GameController {
                     }
                     moveDAO.save(result.getGame().getId(), result.getMove());
                     gameDAO.save(game);
+                    // allow for a human player to have no pieces left
+                    while (game.currentPlayerHasNoPieces()) {
+                        game.setCurrentPlayerColour(game.getNextPlayerColour());
+                    }
                     // now schedule AI move if next player is AI
                     if (game.getCurrentPlayerType() == PlayerType.AI) {
                         taskExecutor.execute(new Runnable() {

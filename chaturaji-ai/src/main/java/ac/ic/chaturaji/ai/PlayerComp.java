@@ -1,11 +1,13 @@
 package ac.ic.chaturaji.ai;
 
+import java.util.Set;
+
 public class PlayerComp extends Player_AI {
 
     int colour;
     MoveGenerator_AI ValidMoves;
 
-    PlayerComp (int col, int points, int[] kingsCaptured){
+    PlayerComp (int col, int points, Set<Integer> kingsCaptured){
         super(points, kingsCaptured);
         this.type = GameConstants.HUMAN;
         colour = col;
@@ -28,8 +30,9 @@ public class PlayerComp extends Player_AI {
         }
 
         // Set the points if a capture occurred.
-        if (move != null)
+        if (move != null) {
             setPoints(theBoard, move);
+        }
 
         //Return the move
         return move;

@@ -84,8 +84,8 @@
         <Button
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password"
-                android:id="@+id/forgot_button"
+                android:text="@string/update_password"
+                android:id="@+id/update_button"
                 style="@style/btnStyleArsenic"/>
 
     </LinearLayout>

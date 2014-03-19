@@ -5,7 +5,8 @@ import ac.ic.chaturaji.email.EmailService;
 import ac.ic.chaturaji.model.User;
 import ac.ic.chaturaji.security.SpringSecurityUserContext;
 import ac.ic.chaturaji.uuid.UUIDFactory;
-import org.springframework.core.env.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 @Controller
 public class UpdatePasswordController {
 
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final Pattern PASSWORD_MATCHER = Pattern.compile(User.PASSWORD_PATTERN);
     @Resource
     private UserDAO userDAO;
@@ -45,13 +47,18 @@ public class UpdatePasswordController {
 
     @RequestMapping(value = "/sendUpdatePasswordEmail", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/json; charset=UTF-8")
     public ResponseEntity sendUpdatePasswordEmail(String email, HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {
-        User user = userDAO.findByEmail(email);
-        if (user != null) {
-            user.setOneTimeToken(uuidService.generateUUID());
-            userDAO.save(user);
-            emailService.sendUpdatePasswordMessage(user, request);
+        try {
+            User user = userDAO.findByEmail(email);
+            if (user != null) {
+                user.setOneTimeToken(uuidService.generateUUID());
+                userDAO.save(user);
+                emailService.sendUpdatePasswordMessage(user, request);
+            }
+            logger.info("An email has been sent to " + email + " with a link to create your password and login");
+            return new ResponseEntity<>("An email has been sent to " + email + " with a link to create your password and login", HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("An email has been sent to " + email + " with a link to create your password and login", HttpStatus.ACCEPTED);
     }
 
     private boolean hasInvalidToken(User user, String oneTimeToken, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
@@ -94,6 +101,7 @@ public class UpdatePasswordController {
                 errors.add("The second password field does not match the first password field");
             }
             uiModel.addAttribute("validationErrors", errors);
+            logger.info("Validation error while trying to update password for " + email + "\n" + errors);
             return "updatePassword";
         }
         user.setPassword(passwordEncoder.encode(password));
@@ -102,6 +110,7 @@ public class UpdatePasswordController {
 
         redirectAttributes.addFlashAttribute("message", "Your password has been updated");
         redirectAttributes.addFlashAttribute("title", "Password Updated");
+        logger.info("Password updated for " + email);
         return "redirect:/message";
     }
 }

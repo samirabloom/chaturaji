@@ -1,18 +1,20 @@
 package ac.ic.chaturaji.ai;
 
+import java.util.Set;
+
 abstract public class Player_AI {
     // Data Members
     int colour;
     int points;
     int type;
-    int[] KingsCaptured;
+    Set<Integer> kingsCaptured;
 
     /*---- Methods ------*/
 
     // Constructor
-    public Player_AI(int Points, int[] kings) {
-        points = Points;
-        KingsCaptured = kings;
+    public Player_AI(int points, Set<Integer> kingsCaptured) {
+        this.points = points;
+        this.kingsCaptured = kingsCaptured;
     }
 
     // Accessors:
@@ -71,12 +73,7 @@ abstract public class Player_AI {
     public abstract int GetPlayerType();
 
     protected boolean checkKingsCaptured(int kingColour) {
-        KingsCaptured[kingColour] = 1;
-        int totalKingsCaptured = 0;
-        for (int i = 0; i < 4; i++)
-            totalKingsCaptured++;
-        if (totalKingsCaptured == 3)
-            return true;
-        return false;
+        kingsCaptured.add(kingColour);
+        return kingsCaptured.size() == 3;
     }
 }

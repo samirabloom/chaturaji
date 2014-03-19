@@ -2,6 +2,9 @@ package ac.ic.chaturaji.model;
 
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -31,7 +34,11 @@ public class PlayerTest {
         player.setType(PlayerType.HUMAN);
         player.setColour(Colour.RED);
         player.setPoints(10);
-        int[] kingsCaptured = {1, 2, 3};
+        Set<Integer> kingsCaptured = new HashSet<Integer>() {{
+            add(1);
+            add(2);
+            add(3);
+        }};
         player.setKingsCaptured(kingsCaptured);
         player.setUser(user);
 

@@ -333,10 +333,9 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
             else
                 colour = "";
 
-            if(gameover == 5)
+            if (gameover == 5)
                 show_turn.setText("It is a draw!");
-            else
-            {
+            else {
                 String winner = colour + " wins!";
                 show_turn.setText(winner);
             }
@@ -424,21 +423,24 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                 boattriumph = true;
             }
 
-        if (Board[source_column][source_row].colour == 1)
-            blue_score = blue_score + score;
-        else if (Board[source_column][source_row].colour == 2)
-            red_score = red_score + score;
-        else if (Board[source_column][source_row].colour == 3)
-            green_score = green_score + score;
-        else if (Board[source_column][source_row].colour == 4)
-            yellow_score = yellow_score + score;
+        if (Board[source_column][source_row] != null) {
+            if (Board[source_column][source_row].colour == 1) {
+                blue_score = blue_score + score;
+            } else if (Board[source_column][source_row].colour == 2) {
+                red_score = red_score + score;
+            } else if (Board[source_column][source_row].colour == 3) {
+                green_score = green_score + score;
+            } else if (Board[source_column][source_row].colour == 4) {
+                yellow_score = yellow_score + score;
+            }
+        }
 
         if (!boattriumph && Board[destination_column][destination_row] == null)
-            movelist = movelist + (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + "\n";
+            movelist = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + "\n" + movelist;
         else if (boattriumph)
-            movelist = movelist + (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " Boat Triumph!\n";
+            movelist = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " Boat Triumph!\n" + movelist;
         else if (Board[destination_column][destination_row] != null)
-            movelist = movelist + (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " taking " + taken_colour + "'s " + taken_type + "\n";
+            movelist = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " taking " + taken_colour + "'s " + taken_type + "\n" + movelist;
     }
 
     public boolean selectPiece(int column, int row) {
@@ -501,40 +503,34 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         int final_score = 0;
 
-        if(blue_score >= final_score)
+        if (blue_score >= final_score)
             final_score = blue_score;
 
-        if(red_score >= final_score)
+        if (red_score >= final_score)
             final_score = red_score;
 
-        if(green_score >= final_score)
+        if (green_score >= final_score)
             final_score = green_score;
 
-        if(yellow_score >= final_score)
+        if (yellow_score >= final_score)
             final_score = yellow_score;
 
-        if(final_score == blue_score)
-        {
-            if(blue_score == red_score || blue_score == green_score || blue_score == yellow_score)
+        if (final_score == blue_score) {
+            if (blue_score == red_score || blue_score == green_score || blue_score == yellow_score)
                 colour = 5;
             else
                 colour = 1;
-        }
-        else if(final_score == red_score)
-        {
-            if(red_score == green_score || red_score == yellow_score)
+        } else if (final_score == red_score) {
+            if (red_score == green_score || red_score == yellow_score)
                 colour = 5;
             else
                 colour = 2;
-        }
-        else if(final_score == green_score)
-        {
-            if(green_score == yellow_score)
+        } else if (final_score == green_score) {
+            if (green_score == yellow_score)
                 colour = 5;
             else
                 colour = 3;
-        }
-        else if(final_score == yellow_score)
+        } else if (final_score == yellow_score)
             colour = 4;
 
         return colour;
@@ -683,6 +679,14 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         updateGameThread();
 
+        switch (result.getGameStatus()) {
+            case STALEMATE:
+                movelist = "-- STALEMATE --\n" + movelist;
+                break;
+            case GAME_OVER:
+                movelist = "-- GAME OVER --\n" + movelist;
+                break;
+        }
     }
 
     // this makes sure the server callback updates happen on the main UI thread
@@ -699,8 +703,9 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
                             pawnPromotion();
 
-                            while (!checkValidMoves())
+                            while (!checkValidMoves()) {
                                 move_count++;
+                            }
 
                             setScoreboard();
                             clearSelections();

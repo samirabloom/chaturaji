@@ -151,8 +151,9 @@ public class MoveGenerator_AI {
         }
     */
     // Computes the possible moves for the given player:
-    public void ComputeMoves(Board_AI board) {
+    public ArrayList<Move_AI> ComputeMoves(Board_AI board) {
         GenerateMoves(board, Moves, board.GetCurrentPlayer());
+        return Moves;
     }
 
     public void GenerateMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
@@ -355,7 +356,6 @@ public class MoveGenerator_AI {
         int square;
         Move_AI newMove;
         int destination;
-        int opp_colour;
 
         if (pawnBoard == 0)
             return;

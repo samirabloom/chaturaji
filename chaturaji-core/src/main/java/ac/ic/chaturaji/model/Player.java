@@ -1,5 +1,9 @@
 package ac.ic.chaturaji.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author samirarabbanian
  */
@@ -10,7 +14,8 @@ public class Player extends EqualsHashCodeToString {
     private Colour colour;
     private User user;
     private int points;
-    private int[] kingsCaptured;
+    private Set<Integer> kingsCaptured = new HashSet<>();
+    private boolean noMorePieces;
 
     // Dummy constructor needed to map JSON string back to Java object
     public Player() {
@@ -71,11 +76,19 @@ public class Player extends EqualsHashCodeToString {
         this.points = points;
     }
 
-    public int[] getKingsCaptured() {
+    public Set<Integer> getKingsCaptured() {
         return kingsCaptured;
     }
 
-    public void setKingsCaptured(int[] kingsCaptured) {
+    public void setKingsCaptured(Set<Integer> kingsCaptured) {
         this.kingsCaptured = kingsCaptured;
+    }
+
+    public boolean isNoMorePieces() {
+        return noMorePieces;
+    }
+
+    public void setNoMoves(boolean noMorePieces) {
+        this.noMorePieces = noMorePieces;
     }
 }

@@ -17,6 +17,14 @@
             line-height: 1.125em;
         }
 
+        .header {
+            font-weight: bold;
+            font-size: 2em;
+            padding-top: 2.5%;
+            padding-left: 2.5%;
+            padding-bottom: 10px;
+        }
+
         .page_message {
             padding-bottom: 25px;
         }

@@ -78,6 +78,8 @@ public class AI {
                 if (result.getGameStatus() != GameStatus.GAME_OVER)
                     if (game.getStalemateCount() >= 10)
                         result.setGameStatus(GameStatus.STALEMATE);
+
+                player.setNoMoves(humanPlayer.getMoves(board).isEmpty());
             }
             break;
 

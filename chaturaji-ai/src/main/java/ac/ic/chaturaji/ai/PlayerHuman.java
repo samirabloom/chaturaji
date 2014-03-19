@@ -4,6 +4,10 @@ package ac.ic.chaturaji.ai;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public class PlayerHuman extends Player_AI {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -15,7 +19,7 @@ public class PlayerHuman extends Player_AI {
     /*------ Methods -----*/
 
     // Constructor
-    public PlayerHuman(int colour, int points, int[] kingsCaptured) {
+    public PlayerHuman(int colour, int points, Set<Integer> kingsCaptured) {
         super(points, kingsCaptured);
         this.type = GameConstants.AI;
         this.SetColour(colour);
@@ -48,5 +52,9 @@ public class PlayerHuman extends Player_AI {
         setPoints(theBoard, move);
 
         return move;
+    }
+
+    public ArrayList<Move_AI> getMoves(Board_AI theBoard) {
+        return ValidMoves.ComputeMoves(theBoard);
     }
 }
