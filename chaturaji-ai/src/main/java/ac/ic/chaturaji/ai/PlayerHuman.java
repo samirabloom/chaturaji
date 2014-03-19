@@ -15,19 +15,21 @@ public class PlayerHuman extends Player_AI {
     /*------ Methods -----*/
 
     // Constructor
-    public PlayerHuman(int colour, int points, int[] kingsCaptured ){
+    public PlayerHuman(int colour, int points, int[] kingsCaptured) {
         super(points, kingsCaptured);
         this.type = GameConstants.AI;
         this.SetColour(colour);
         ValidMoves = new MoveGenerator_AI();
     }
 
-    public int GetPlayerType(){ return GameConstants.HUMAN; }
+    public int GetPlayerType() {
+        return GameConstants.HUMAN;
+    }
 
     // Functions
 
     // Ask for move from the human player:
-    public Move_AI GetMove(Board_AI theBoard, int source, int dest){
+    public Move_AI GetMove(Board_AI theBoard, int source, int dest) {
         Move_AI move;
         // Generate all the possible moves for the player.
         ValidMoves.ComputeMoves(theBoard);
@@ -43,7 +45,9 @@ public class PlayerHuman extends Player_AI {
 
         logger.info("The Moves chosen:");
 
-        move.Print();
+        if (move != null) {
+            move.Print();
+        }
 
         setPoints(theBoard, move);
 
