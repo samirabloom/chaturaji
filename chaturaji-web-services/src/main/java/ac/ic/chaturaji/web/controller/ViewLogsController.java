@@ -29,7 +29,7 @@ public class ViewLogsController {
             lines.addFirst(rawLine);
         }
 
-        if (numberOfLines == 0) {
+        if (numberOfLines == null) {
             numberOfLines = 200;
         }
         for (int i = 0; i < numberOfLines; i++) {
