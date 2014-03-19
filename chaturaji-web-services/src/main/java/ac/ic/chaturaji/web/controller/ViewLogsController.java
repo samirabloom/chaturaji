@@ -22,7 +22,7 @@ public class ViewLogsController {
     public String messagePage(@RequestParam(value = "lines", required = false) Integer numberOfLines) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("/var/log/chaturaji/server.log"));
         String rawLine;
-        StringBuilder stringBuilder = new StringBuilder("<html><head></head><body>");
+        StringBuilder stringBuilder = new StringBuilder("<html><head><style>p {margin: 0; border: 0; color: #000; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 0.85em; line-height: 1.125em;}</style></head><body>");
 
         LinkedList<String> lines = new LinkedList<>();
         while ((rawLine = reader.readLine()) != null) {

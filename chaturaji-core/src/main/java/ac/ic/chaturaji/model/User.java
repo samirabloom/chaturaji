@@ -36,6 +36,10 @@ public class User extends EqualsHashCodeToString {
         this.nickname = nickname;
     }
 
+    protected String[] fieldsExcludedFromEqualsAndHashCode() {
+        return new String[]{"password"};
+    }
+
     public String getId() {
         return id;
     }

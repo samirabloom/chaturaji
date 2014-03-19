@@ -34,8 +34,6 @@ public class PlayerHuman extends Player_AI {
         // Generate all the possible moves for the player.
         ValidMoves.ComputeMoves(theBoard);
 
-        logger.info("The Moves available to the current player are:");
-
         ValidMoves.Print();
 
         // Since the source/ destination square validation is done on the client side, we know that
@@ -43,10 +41,8 @@ public class PlayerHuman extends Player_AI {
         // the specified source to the specified destination (there can be only one!).
         move = ValidMoves.FindMove(source, dest);
 
-        logger.info("The Moves chosen:");
-
         if (move != null) {
-            move.Print();
+            logger.info("The move chosen is: " + move.Print());
         }
 
         setPoints(theBoard, move);

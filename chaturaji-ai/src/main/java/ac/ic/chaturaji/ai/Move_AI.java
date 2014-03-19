@@ -1,13 +1,7 @@
 
 package ac.ic.chaturaji.ai;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.lang.System;
-
-public class Move_AI
-{
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+public class Move_AI {
 
     //------ Data Members ------//
 
@@ -24,7 +18,8 @@ public class Move_AI
     //------ Methods ------//
 
     // Constructor:
-    public Move_AI() { }
+    public Move_AI() {
+    }
 
     public Move_AI(int MovPiece, int SrcSqr, int DestSqr) {
         Piece = MovPiece;
@@ -33,32 +28,58 @@ public class Move_AI
     }
 
     // Accessors:
-    public int getDest() {return Dest;}
-    public int getSource() {return Source;}
-    public int getPiece() {return Piece;}
-    public int getCaptured() {return CapturedPiece;}
-    public int getType() {return Type;}
-    public int getPromoType() {return PromotionType;}
-    public boolean getTriumph() {return BoatTriumph;}
+    public int getDest() {
+        return Dest;
+    }
+
+    public int getSource() {
+        return Source;
+    }
+
+    public int getPiece() {
+        return Piece;
+    }
+
+    public int getCaptured() {
+        return CapturedPiece;
+    }
+
+    public int getType() {
+        return Type;
+    }
+
+    public int getPromoType() {
+        return PromotionType;
+    }
+
+    public boolean getTriumph() {
+        return BoatTriumph;
+    }
 
     public void SetDest(int newDest) {
         Dest = newDest;
     }
+
     public void SetSource(int newSrc) {
         Source = newSrc;
     }
+
     public void SetPiece(int newPc) {
         Piece = newPc;
     }
+
     public void SetCaptured(int newCap) {
         CapturedPiece = newCap;
     }
+
     public void SetType(int moveType) {
         Type = moveType;
     }
+
     public void SetPromotion(int promoType) {
         PromotionType = promoType;
     }
+
     public void SetBoatTriumph(boolean isTrue) {
         BoatTriumph = isTrue;
     }
@@ -84,29 +105,25 @@ public class Move_AI
         return true;
     }
 
-    public void Print()
-    {
+    public String Print() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("Move: ");
 
-        if (Type != GameConstants.RESIGN)
-        {
+        if (Type != GameConstants.RESIGN) {
             stringBuilder.append(GameConstants.PieceStrings[Piece]);
             stringBuilder.append(" [ ");
             stringBuilder.append(Source);
             stringBuilder.append(", ");
             stringBuilder.append(Dest);
             stringBuilder.append(" ] TYPE: ");
-            stringBuilder.append(Type).append("\n");
-            stringBuilder.append(" Captured Piece: ");
-            stringBuilder.append(CapturedPiece).append("\n");
-        }
-        else
-        {
-            stringBuilder.append("RESIGNATION!\n");
+            stringBuilder.append(Type);
+            stringBuilder.append(" Captured Pieces: ");
+            stringBuilder.append((CapturedPiece == -1 ? "0" : "" + CapturedPiece));
+        } else {
+            stringBuilder.append("RESIGNATION!");
         }
 
-        logger.info(stringBuilder.toString());
+        return stringBuilder.toString();
     }
 }

@@ -6,7 +6,6 @@
     <appender name="FILE_LOGGER" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="File" value="/var/log/chaturaji/server.log"/>
         <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
-        <param name="threshold" value="TRACE"/>
         <layout class="org.apache.log4j.EnhancedPatternLayout">
             <param name="ConversionPattern" value="%d{ISO8601}{UTC} %-5p [rid=%X{requestId}] [%c{1}] %t %m%n"/>
         </layout>
@@ -19,18 +18,13 @@
         </layout>
     </appender>
 
-    <logger name="org">
-        <level value="TRACE"/>
-        <appender-ref ref="FILE_LOGGER"/>
-    </logger>
-
-    <logger name="com">
+    <logger name="ac.ic.chaturaji">
         <level value="TRACE"/>
         <appender-ref ref="FILE_LOGGER"/>
     </logger>
 
     <root>
-        <level value="TRACE"/>
+        <level value="WARN"/>
         <appender-ref ref="FILE_LOGGER"/>
     </root>
 

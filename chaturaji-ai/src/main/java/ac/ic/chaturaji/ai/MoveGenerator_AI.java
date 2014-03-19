@@ -1,13 +1,18 @@
 package ac.ic.chaturaji.ai;
 //import Project.Chaturaji.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 // MoveGenerator_AI contains methods used to generate all possible moves given a
 // certain board position. It is implemented by the 'Movelist' class.
 
-public class MoveGenerator_AI
-{
+public class MoveGenerator_AI {
+
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
     /*------ Data Members ------*/
 
     ArrayList<Move_AI> Moves;
@@ -33,7 +38,7 @@ public class MoveGenerator_AI
     // Functions:
     public boolean IsMove(Move_AI move) {
 
-        for (Move_AI listMove: Moves)
+        for (Move_AI listMove : Moves)
             if (move.IsEqual(listMove))
                 return true;
 
@@ -42,9 +47,8 @@ public class MoveGenerator_AI
     }
 
     // Returns a valid move from the list
-    public Move_AI FindMove(int source, int destination)
-    {
-        for (Move_AI listMove: Moves) {
+    public Move_AI FindMove(int source, int destination) {
+        for (Move_AI listMove : Moves) {
             if (listMove.getSource() == source && listMove.getDest() == destination)
                 return listMove;
         }
@@ -52,100 +56,100 @@ public class MoveGenerator_AI
         return null;
     }
 
-    public void Print()
-    {
-        for(Move_AI listMove: Moves)
-        {
-            listMove.Print();
+    public void Print() {
+        StringBuilder stringBuilder = new StringBuilder("The Moves available to the current player are: \n");
+        for (Move_AI listMove : Moves) {
+            stringBuilder.append(listMove.Print()).append("\n");
         }
+        logger.info(stringBuilder.toString());
     }
 
-/*
-    public Board_AI[] Search_ply1(Board_AI board){
+    /*
+        public Board_AI[] Search_ply1(Board_AI board){
 
-        ComputeMoves(board, Moves, false);
-        Board_AI[] boards = new Board_AI[Moves.size()];
-        for(int i = 0; i < Moves.size(); i++){
-            boards[i] = board.clone();
-            boards[i].ApplyMove(Moves.get(i));
-        }
-        return boards;
-    }
-
-    public int Search_ply2(Board_AI board, Board_AI[] boards){
-
-        int CurrentPlayer = board.GetCurrentPlayer();
-        int n = 0;
-        int[] descendents = new int[boards.length];
-        int sumOfDescendents = 0;
-        for(int i = 0; i < boards.length; i++){
-            ComputeMoves(boards[i], Moves_2ply,true);
-            descendents[i] = Moves_2ply.size()-sumOfDescendents;
-            sumOfDescendents += descendents[i];
+            ComputeMoves(board, Moves, false);
+            Board_AI[] boards = new Board_AI[Moves.size()];
+            for(int i = 0; i < Moves.size(); i++){
+                boards[i] = board.clone();
+                boards[i].ApplyMove(Moves.get(i));
+            }
+            return boards;
         }
 
-        Board_AI[] boards_ply2 = new Board_AI[Moves_2ply.size()];
-        sumOfDescendents = 0;
-        int[] MoveValue = new int[Moves_2ply.size()];
-        for(int i = 0; i < Moves_2ply.size(); i++){
-            if(i == sumOfDescendents + descendents[n]){
-                sumOfDescendents+=descendents[n];
+        public int Search_ply2(Board_AI board, Board_AI[] boards){
+
+            int CurrentPlayer = board.GetCurrentPlayer();
+            int n = 0;
+            int[] descendents = new int[boards.length];
+            int sumOfDescendents = 0;
+            for(int i = 0; i < boards.length; i++){
+                ComputeMoves(boards[i], Moves_2ply,true);
+                descendents[i] = Moves_2ply.size()-sumOfDescendents;
+                sumOfDescendents += descendents[i];
+            }
+
+            Board_AI[] boards_ply2 = new Board_AI[Moves_2ply.size()];
+            sumOfDescendents = 0;
+            int[] MoveValue = new int[Moves_2ply.size()];
+            for(int i = 0; i < Moves_2ply.size(); i++){
+                if(i == sumOfDescendents + descendents[n]){
+                    sumOfDescendents+=descendents[n];
+                    n++;
+                }
+                boards_ply2[i] = boards[n].clone();
+                boards_ply2[i].ApplyMove(Moves_2ply.get(i));
+                MoveValue[i] = EvalMove(boards_ply2[i], board);
+            }
+            int maxEval = MoveValue[0];
+            int maxIndex = 0;
+            for(int i = 1; i < boards_ply2.length; i++){
+                if(MoveValue[i] > maxEval){
+                    maxEval = MoveValue[i];
+                    maxIndex = i;
+                }
+            }
+            n = 0;
+            maxIndex = maxIndex - descendents[n]+1;
+            while( maxIndex > 0){
                 n++;
+                maxIndex = maxIndex - descendents[n];
             }
-            boards_ply2[i] = boards[n].clone();
-            boards_ply2[i].ApplyMove(Moves_2ply.get(i));
-            MoveValue[i] = EvalMove(boards_ply2[i], board);
+            return n;
         }
-        int maxEval = MoveValue[0];
-        int maxIndex = 0;
-        for(int i = 1; i < boards_ply2.length; i++){
-            if(MoveValue[i] > maxEval){
-                maxEval = MoveValue[i];
-                maxIndex = i;
+
+        protected int EvalMove( Board_AI board, Board_AI originalBoard){
+            int CurrentPlayer = board.GetCurrentPlayer();
+            int[] MaterialValueBefore = originalBoard.GetMaterialValue();
+            int[] MaterialValueAfter = board.GetMaterialValue();
+
+            int CurrentPlayerValueBefore = 0;
+            int CurrentPlayerValueAfter = 0;
+
+            for(int i = 0; i < 4; i++){
+                if( i == CurrentPlayer ){
+                    CurrentPlayerValueBefore += MaterialValueBefore[i];
+                    CurrentPlayerValueAfter += MaterialValueAfter[i];
+                }
+                else{
+                    CurrentPlayerValueBefore -= MaterialValueBefore[i];
+                    CurrentPlayerValueAfter -= MaterialValueAfter[i];
+                }
             }
+            return CurrentPlayerValueAfter-CurrentPlayerValueBefore;
         }
-        n = 0;
-        maxIndex = maxIndex - descendents[n]+1;
-        while( maxIndex > 0){
-            n++;
-            maxIndex = maxIndex - descendents[n];
+
+        public Move_AI Search(Board_AI board){
+
+            int CurrentPlayer = board.GetCurrentPlayer();
+
+            Board_AI[] boards = Search_ply1(board);
+            Board_AI[] boards_ply2 ;
+            int moveIndex = Search_ply2(board, boards);
+
+            return Moves.get(moveIndex);
+
         }
-        return n;
-    }
-
-    protected int EvalMove( Board_AI board, Board_AI originalBoard){
-        int CurrentPlayer = board.GetCurrentPlayer();
-        int[] MaterialValueBefore = originalBoard.GetMaterialValue();
-        int[] MaterialValueAfter = board.GetMaterialValue();
-
-        int CurrentPlayerValueBefore = 0;
-        int CurrentPlayerValueAfter = 0;
-
-        for(int i = 0; i < 4; i++){
-            if( i == CurrentPlayer ){
-                CurrentPlayerValueBefore += MaterialValueBefore[i];
-                CurrentPlayerValueAfter += MaterialValueAfter[i];
-            }
-            else{
-                CurrentPlayerValueBefore -= MaterialValueBefore[i];
-                CurrentPlayerValueAfter -= MaterialValueAfter[i];
-            }
-        }
-        return CurrentPlayerValueAfter-CurrentPlayerValueBefore;
-    }
-
-    public Move_AI Search(Board_AI board){
-
-        int CurrentPlayer = board.GetCurrentPlayer();
-
-        Board_AI[] boards = Search_ply1(board);
-        Board_AI[] boards_ply2 ;
-        int moveIndex = Search_ply2(board, boards);
-
-        return Moves.get(moveIndex);
-
-    }
-*/
+    */
     // Computes the possible moves for the given player:
     public void ComputeMoves(Board_AI board) {
         GenerateMoves(board, Moves, board.GetCurrentPlayer());
@@ -196,8 +200,7 @@ public class MoveGenerator_AI
     }
 
     // Calculate the King's moves.
-    private void GetKingMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour)
-    {
+    private void GetKingMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
         long kingBoard = board.GetBitBoard(GameConstants.KING + colour);
         int kSquare;
         Move_AI newMove;
@@ -231,8 +234,7 @@ public class MoveGenerator_AI
 
 
     // Same as function above, but calculating the Boat moves.
-    private void GetBoatMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour)
-    {
+    private void GetBoatMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
         long boatBoard = board.GetBitBoard(GameConstants.BOAT + colour);
         int bSquare;
         Move_AI newMove;
@@ -258,8 +260,7 @@ public class MoveGenerator_AI
         }
     }
 
-    private void CheckBoatTriumph(Board_AI board, Move_AI newMove, int colour, int source, int destination)
-    {
+    private void CheckBoatTriumph(Board_AI board, Move_AI newMove, int colour, int source, int destination) {
         // Use this to check whether the boats are in the 2x2 formation:
         long formationCheck = 771;
         long allBoats = 0;
@@ -274,7 +275,7 @@ public class MoveGenerator_AI
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
                 // Check that we have an exact match:
-                if ((formationCheck | allBoats) == (formationCheck & allBoats))  {
+                if ((formationCheck | allBoats) == (formationCheck & allBoats)) {
                     newMove.SetBoatTriumph(true);
                     return;
                 }
@@ -285,8 +286,7 @@ public class MoveGenerator_AI
     }
 
     // Calculate the Knight moves - same process as above.
-    private void GetKnightMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour)
-    {
+    private void GetKnightMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
         long knightBoard = board.GetBitBoard(GameConstants.KNIGHT + colour);
         int kSquare;
         Move_AI newMove;
@@ -312,8 +312,7 @@ public class MoveGenerator_AI
     }
 
 
-    private void GetElephantMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour)
-    {
+    private void GetElephantMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
         long elephantBoard = board.GetBitBoard(GameConstants.ELEPHANT + colour);
 
         int eSquare;
@@ -323,7 +322,7 @@ public class MoveGenerator_AI
         if (elephantBoard == 0)
             return;
 
-        for (eSquare =0; eSquare <= 63; eSquare++)
+        for (eSquare = 0; eSquare <= 63; eSquare++)
             if ((GameConstants.SquareBits[eSquare] & elephantBoard) != 0)
                 break;
 
@@ -351,8 +350,7 @@ public class MoveGenerator_AI
             }
     }
 
-    private void GetPawnMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour)
-    {
+    private void GetPawnMoves(Board_AI board, ArrayList<Move_AI> Moves, int colour) {
         long pawnBoard = board.GetBitBoard(GameConstants.PAWN + colour);
         int square;
         Move_AI newMove;
@@ -371,11 +369,19 @@ public class MoveGenerator_AI
             // Find a pawn belonging to the current player's colour:
             if ((pawnBoard & GameConstants.SquareBits[square]) != 0) {
                 // First test basic forward moves.
-                switch(colour) {
-                    case 0: destination = square + 1; break;
-                    case 1: destination = square + 8; break;
-                    case 2: destination = square - 1; break;
-                    default: destination = square - 8; break;
+                switch (colour) {
+                    case 0:
+                        destination = square + 1;
+                        break;
+                    case 1:
+                        destination = square + 8;
+                        break;
+                    case 2:
+                        destination = square - 1;
+                        break;
+                    default:
+                        destination = square - 8;
+                        break;
                 }
 
                 if ((allPieces & GameConstants.SquareBits[destination]) == 0) {
@@ -401,95 +407,86 @@ public class MoveGenerator_AI
                         if (square < 8) {
                             destination = square + 9;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else if (square >= 56) {
+                        } else if (square >= 56) {
                             destination = square - 7;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else {
+                        } else {
                             destination = square + 9;
                             SetCapture(board, Moves, colour, square, destination);
                             destination = square - 7;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    } break;
+                    }
+                    break;
                     case 2: {
                         if (square < 8) {
                             destination = square + 7;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else if (square >= 56) {
+                        } else if (square >= 56) {
                             destination = square - 9;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else {
+                        } else {
                             destination = square + 7;
                             SetCapture(board, Moves, colour, square, destination);
                             destination = square - 9;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    } break;
+                    }
+                    break;
                     case 1: {
                         if ((square % 8) == 0) {
                             destination = square + 9;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else if ((square % 8) == 7) {
+                        } else if ((square % 8) == 7) {
                             destination = square + 7;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else {
+                        } else {
                             destination = square + 9;
                             SetCapture(board, Moves, colour, square, destination);
                             destination = square + 7;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    } break;
+                    }
+                    break;
                     case 3: {
                         if ((square % 8) == 0) {
                             destination = square - 7;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else if ((square % 8) == 7) {
+                        } else if ((square % 8) == 7) {
                             destination = square - 9;
                             SetCapture(board, Moves, colour, square, destination);
-                        }
-                        else {
+                        } else {
                             destination = square - 7;
                             SetCapture(board, Moves, colour, square, destination);
                             destination = square - 9;
                             SetCapture(board, Moves, colour, square, destination);
                         }
-                    } break;
+                    }
+                    break;
                 }
             }
         }
     }
 
-    private void SetPromo(Board_AI board, ArrayList<Move_AI> Moves, Move_AI newMove, int square)
-    {
+    private void SetPromo(Board_AI board, ArrayList<Move_AI> Moves, Move_AI newMove, int square) {
         if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.KNIGHT_PAWNS)) != 0) {
             newMove.SetPromotion(GameConstants.KNIGHT);
-        }
-        else if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.BOAT_PAWNS)) != 0) {
+        } else if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.BOAT_PAWNS)) != 0) {
             newMove.SetPromotion(GameConstants.BOAT);
-        }
-        else if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.ELEPHANT_PAWNS)) != 0) {
+        } else if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.ELEPHANT_PAWNS)) != 0) {
             newMove.SetPromotion(GameConstants.ELEPHANT);
-        }
-        else {
+        } else {
             newMove.SetPromotion(GameConstants.KING);
         }
     }
 
-    private void SetCapture(Board_AI board, ArrayList<Move_AI> Moves, int colour, int source, int destination)
-    {
+    private void SetCapture(Board_AI board, ArrayList<Move_AI> Moves, int colour, int source, int destination) {
         Move_AI newMove;
         int opp_colour;
 
         for (int i = 1; i < 4; i++) {
             if ((board.GetBitBoard(GameConstants.ALL_PIECES + ((colour + i) % 4)) &
-                    GameConstants.SquareBits[destination]) != 0 ) {
+                    GameConstants.SquareBits[destination]) != 0) {
 
                 newMove = new Move_AI(GameConstants.PAWN + colour, source, destination);
                 newMove.SetType(GameConstants.CAPTURE);
