@@ -8,7 +8,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 /**
- * Created by Haider on 10/03/14.
+ * @author Haider
  */
 public class SettingsActivityTest extends ActivityInstrumentationTestCase2<SettingsActivity> {
 

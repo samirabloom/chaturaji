@@ -165,16 +165,16 @@ public class ChatuServiceTest {
         chatuService.setServerPort(httpsPort);
 
         // Should return Error if a proper email is not entered
-        assertEquals("Error", chatuService.createAccount("NotAProperEmail", "testpass123", "testman"));
+        assertEquals("email - Please provide a valid email", chatuService.createAccount("NotAProperEmail", "testpass123", "testman"));
 
         // Should return Error if too small a password is entered
-        assertEquals("Error", chatuService.createAccount("test_not_registered@test.com", "pas", "testman"));
+        assertEquals("password - Please provide a password of 8 or more characters with at least 1 digit and 1 letter", chatuService.createAccount("test_not_registered@test.com", "pas", "testman"));
 
         // Should succeed
         assertEquals("Success", chatuService.createAccount("test_not_registered@test.com", "testpass123", "testman"));
 
         // Should return Error if too small a password is entered
-        assertEquals("Error", chatuService.createAccount("test_not_registered@test.com", "testpass123", "testman"));
+        assertEquals("A user already exists with that email address", chatuService.createAccount("test_not_registered@test.com", "testpass123", "testman"));
     }
 
 
@@ -188,7 +188,7 @@ public class ChatuServiceTest {
         String state = chatuService.login("randomguy@gmail.com", "randomness");
 
         // this guy does not exist on the database, therefore should return an Invalid when trying to log in
-        assertEquals("Invalid", state);
+        assertEquals("There was a problem logging in. Have you entered the correct details?", state);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class ChatuServiceTest {
 
         state = chatuService.login("wrongpassword@test.com", "pasword");
 
-        assertEquals("Invalid", state);
+        assertEquals("There was a problem logging in. Have you entered the correct details?", state);
     }
 
     @Test

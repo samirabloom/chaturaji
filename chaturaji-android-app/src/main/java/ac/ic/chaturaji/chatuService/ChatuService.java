@@ -1,8 +1,8 @@
 package ac.ic.chaturaji.chatuService;
 
-import ac.ic.chaturaji.model.Colour;
 import ac.ic.chaturaji.model.Move;
 import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.Result;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import ac.ic.chaturaji.uuid.UUIDFactory;
 import ac.ic.chaturaji.websockets.GameMoveListener;
@@ -53,7 +53,7 @@ public class ChatuService {
     private static ChatuService instance;
     private final ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
     private final UUIDFactory uuidFactory = new UUIDFactory();
-    private String serverHost = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com";
+    private String serverHost = "192.168.1.110";
     private int serverPort = 8443;
     private DefaultHttpClient httpClient;
     private String email = "";
@@ -113,23 +113,20 @@ public class ChatuService {
         }
     }
 
-    public void setupSocketClient(Activity activity) {
-
+    public void setupSocketClient(final Activity activity) {
         try {
-
             WebSocketsClient webSocketsClient = new WebSocketsClient(serverHost);
-
-            GameMoveListener gameMoveListener = new ClientGameMoveListener(activity);
-
-            webSocketsClient.registerGameMoveListener(gameMoveListener, player.getId());
-
+            webSocketsClient.registerGameMoveListener(new GameMoveListener() {
+                @Override
+                public void onMoveCompleted(Result result) {
+                    System.out.println("Got the move: ");
+                    System.out.println(result.getMove());
+                    ((OnMoveCompleteListener) activity).updateGame(result);
+                }
+            }, player.getId());
         } catch (Exception e) {
-
-            System.out.println("Device not compatible");
+            e.printStackTrace();
         }
-
-        System.out.println(player.getId());
-
     }
 
 
@@ -140,7 +137,6 @@ public class ChatuService {
         String games = "Error";
         String url = "https://" + serverHost + ":" + serverPort + "/games";
 
-
         try {
 
             HttpGet request = new HttpGet(url);
@@ -150,11 +146,8 @@ public class ChatuService {
             System.out.println(games);
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
-
 
         return games;
     }
@@ -163,7 +156,7 @@ public class ChatuService {
 
         String[] reply = {"Error", " "};
 
-        if (Integer.parseInt(AIOpps) > 3 || Integer.parseInt(AIOpps) < 0){
+        if (Integer.parseInt(AIOpps) > 3 || Integer.parseInt(AIOpps) < 0) {
 
             reply[0] = "Invalid AI count";
             return reply;
@@ -233,17 +226,14 @@ public class ChatuService {
 
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST) {
 
-                HttpEntity entity = response.getEntity();
-                String responseBody = EntityUtils.toString(entity);
-
-                reply[0] = responseBody;
+                reply[0] = EntityUtils.toString(response.getEntity());
                 reply[1] = "Bad request";
 
                 return reply;
 
             } else if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
 
-                reply[0] = "Not 201 or 400";
+                reply[0] = EntityUtils.toString(response.getEntity());
                 reply[1] = "Error";
 
                 return reply;
@@ -257,7 +247,7 @@ public class ChatuService {
 
             e.printStackTrace();
 
-            reply[0] = "Catch Exception";
+            reply[0] = e.getMessage();
             reply[1] = "Error";
 
             return reply;
@@ -289,18 +279,16 @@ public class ChatuService {
 
             System.out.println(submitMoveResponse.getStatusLine().getStatusCode());
 
-            if (submitMoveResponse.getStatusLine().getStatusCode() != HttpStatus.SC_ACCEPTED) {
-                return "Error";
+            if (submitMoveResponse.getStatusLine().getStatusCode() == HttpStatus.SC_ACCEPTED) {
+                return "Success";
+            } else {
+                return EntityUtils.toString(submitMoveResponse.getEntity());
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
             return "Error";
-
         }
-
-        return "Success";
     }
 
     public String createAccount(String email, String password, String nickname) {
@@ -323,17 +311,16 @@ public class ChatuService {
 
             System.out.println(response.getStatusLine().getStatusCode());
 
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
-                return "Error";
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
+                return "Success";
+            } else {
+                return EntityUtils.toString(response.getEntity());
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
             return "Error";
-
         }
-        return "Success";
     }
 
     public String login(String emailString, String password) {
@@ -378,19 +365,16 @@ public class ChatuService {
 
             System.out.println(response.getStatusLine().getStatusCode());
 
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_ACCEPTED) {
-                return "Invalid";
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_ACCEPTED) {
+                return "Success";
+            } else {
+                return "There was a problem logging in. Have you entered the correct details?";
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
             return "Error";
-
         }
-
-
-        return "Success";
     }
 
     public void setEmailPassword(String email, String password) {
@@ -411,12 +395,6 @@ public class ChatuService {
 
         credsProviderLocal = null;
         cookieStoreLocal = null;
-
-    }
-
-    public Colour getPlayerColour() {
-
-        return player.getColour();
 
     }
 

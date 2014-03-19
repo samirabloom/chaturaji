@@ -1,9 +1,14 @@
 
 package ac.ic.chaturaji.ai;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.System;
 
 public class Move_AI
 {
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
     //------ Data Members ------//
 
     // Set default to negative sentinel values.
@@ -81,23 +86,27 @@ public class Move_AI
 
     public void Print()
     {
-        System.out.print( "Move: " );
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("Move: ");
 
         if (Type != GameConstants.RESIGN)
         {
-            System.out.print(GameConstants.PieceStrings[Piece]);
-            System.out.print(" [ ");
-            System.out.print(Source);
-            System.out.print(", ");
-            System.out.print(Dest);
-            System.out.print(" ] TYPE: ");
-            System.out.println(Type);
-            System.out.print(" Captured Piece: ");
-            System.out.println(CapturedPiece);
+            stringBuilder.append(GameConstants.PieceStrings[Piece]);
+            stringBuilder.append(" [ ");
+            stringBuilder.append(Source);
+            stringBuilder.append(", ");
+            stringBuilder.append(Dest);
+            stringBuilder.append(" ] TYPE: ");
+            stringBuilder.append(Type).append("\n");
+            stringBuilder.append(" Captured Piece: ");
+            stringBuilder.append(CapturedPiece).append("\n");
         }
         else
         {
-            System.out.println("RESIGNATION!");
+            stringBuilder.append("RESIGNATION!\n");
         }
+
+        logger.info(stringBuilder.toString());
     }
 }

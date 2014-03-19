@@ -4,7 +4,7 @@ import ac.ic.chaturaji.ai.GameConstants;
 import static java.lang.Math.pow;
 
 /**
- * Created by dg3213 on 07/03/14.
+ * @author dg3213
  */
 public class TestCases {
 

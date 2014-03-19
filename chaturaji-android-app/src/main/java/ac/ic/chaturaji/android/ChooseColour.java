@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 /**
- * Created by ks513 on 26/02/14.
+ * @author ks513
  */
 public class ChooseColour extends Activity {
 

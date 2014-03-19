@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 
 /**
- * Created by dg3213 on 04/03/14.
+ * @author dg3213
  */
 public class AITest{
     private AI ai;

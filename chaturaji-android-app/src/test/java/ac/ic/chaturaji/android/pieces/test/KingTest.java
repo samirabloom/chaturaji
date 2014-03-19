@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by Kadir on March 9.
+ * @author Kadir
  */
 public class KingTest {
 

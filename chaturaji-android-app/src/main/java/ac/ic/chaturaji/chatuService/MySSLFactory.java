@@ -13,7 +13,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
- * Created by Haider on 25/02/14.
+ * @author Haider
  */
 
 // Used to run application on a test server that does not have an SSL cert
@@ -38,7 +38,7 @@ public class MySSLFactory extends SSLSocketFactory {
             }
         };
 
-        sslContext.init(null, new TrustManager[] { tm }, null);
+        sslContext.init(null, new TrustManager[]{tm}, null);
     }
 
 

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 
 /**
- * Created by dg3213 on 04/03/14.
+ * @author dg3213
  */
 public class MaxN {
     MoveGenerator_AI validMoves;

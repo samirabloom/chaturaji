@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Created by Haider on 10/03/14.
+ * @author Haider
  */
 public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActivity> {
 

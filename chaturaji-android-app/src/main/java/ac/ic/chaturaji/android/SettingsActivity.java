@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 
 /**
- * Created by Haider on 18/02/14.
+ * @author Haider
  */
 public class SettingsActivity extends Activity {
 
@@ -30,7 +30,7 @@ public class SettingsActivity extends Activity {
 
         soundcbx = (CheckBox) findViewById(R.id.soundbox);
 
-        if(soundOn)
+        if (soundOn)
             soundcbx.setChecked(true);
         else
             soundcbx.setChecked(false);
@@ -39,21 +39,19 @@ public class SettingsActivity extends Activity {
 
     }
 
-    private View.OnClickListener soundSettings = new View.OnClickListener(){
+    private View.OnClickListener soundSettings = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
 
-            if(((CheckBox)theView).isChecked()){
+            if (((CheckBox) theView).isChecked()) {
 
                 SharedPreferences settings = getSharedPreferences("main", 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("sound", true);
                 editor.commit();
 
-            }
-
-            else {
+            } else {
 
                 SharedPreferences settings = getSharedPreferences("main", 0);
                 SharedPreferences.Editor editor = settings.edit();

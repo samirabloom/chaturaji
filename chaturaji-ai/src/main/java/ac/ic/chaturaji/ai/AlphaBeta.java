@@ -4,7 +4,7 @@ import java.lang.Math.*;
 
 
 /**
- * Created by dg3213 on 04/03/14.
+ * @author dg3213
  */
 public class AlphaBeta {
     MoveGenerator_AI validMoves;

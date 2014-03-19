@@ -1,7 +1,12 @@
 package ac.ic.chaturaji.ai;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PlayerHuman extends Player_AI {
+
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /*------ Data Members -----*/
 
@@ -27,18 +32,18 @@ public class PlayerHuman extends Player_AI {
         // Generate all the possible moves for the player.
         ValidMoves.ComputeMoves(theBoard);
 
-        //System.out.println("The Moves available to the current player are:");
+        logger.info("The Moves available to the current player are:");
 
-        //ValidMoves.Print();
+        ValidMoves.Print();
 
         // Since the source/ destination square validation is done on the client side, we know that
         // it is a valid move that has been entered. Thus return the the move in the move list that goes from
         // the specified source to the specified destination (there can be only one!).
         move = ValidMoves.FindMove(source, dest);
 
-        //System.out.println("The Moves chosen:");
+        logger.info("The Moves chosen:");
 
-        //move.Print();
+        move.Print();
 
         setPoints(theBoard, move);
 

@@ -41,6 +41,7 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> register(@Valid User user, BindingResult bindingResult, HttpServletRequest request) throws IOException {
         if(userDAO.findByEmail(user.getEmail()) != null) {
+            logger.warn("A user already exists with " + user.getEmail() + " email address");
             return new ResponseEntity<>("A user already exists with that email address", HttpStatus.BAD_REQUEST);
         }
         if (bindingResult.hasErrors()) {
@@ -55,6 +56,7 @@ public class UserController {
                     errorMessage.append("\n");
                 }
             }
+            logger.warn("Error " + errorMessage.toString() + " while registering user " + user);
             return new ResponseEntity<>(errorMessage.toString(), HttpStatus.BAD_REQUEST);
         }
         try {

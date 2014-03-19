@@ -142,7 +142,7 @@ public class WebSocketIntegrationTest extends GameControllerFullIntegrationTest 
 
         // when
         HttpPost submitMove = new HttpPost("https://127.0.0.1:" + httpsPort + "/submitMove");
-        StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(uuidFactory.generateUUID(), player.getGameId(), Colour.YELLOW, 0, 1)));
+        StringEntity entity = new StringEntity(objectMapper.writeValueAsString(new Move(uuidFactory.generateUUID(), player.getGameId(), Colour.YELLOW, 24, 32)));
         entity.setContentType("application/json;charset=UTF-8");
         submitMove.setEntity(entity);
         HttpResponse submitMoveResponse = httpClient.execute(submitMove);

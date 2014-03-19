@@ -107,14 +107,14 @@ public class Game extends EqualsHashCodeToString {
     }
 
     @JsonIgnore
-    public Colour getNextPlayerColour() {
-        Colour[] colours = Colour.values();
-        return colours[(currentPlayerColour.ordinal() + 1) % colours.length];
+    public PlayerType getCurrentPlayerType() {
+        return players.get(currentPlayerColour.ordinal()).getType();
     }
 
     @JsonIgnore
-    public Player getNextPlayer() {
-        return players.get(getNextPlayerColour().ordinal());
+    public Colour getNextPlayerColour() {
+        Colour[] colours = Colour.values();
+        return colours[(currentPlayerColour.ordinal() + 1) % colours.length];
     }
 
     public GameStatus getGameStatus() {

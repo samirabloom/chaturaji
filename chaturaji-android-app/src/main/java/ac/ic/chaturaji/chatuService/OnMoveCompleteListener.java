@@ -3,7 +3,7 @@ package ac.ic.chaturaji.chatuService;
 import ac.ic.chaturaji.model.Result;
 
 /**
- * Created by Haider on 13/03/14.
+ * @author Haider
  */
 public interface OnMoveCompleteListener {
 

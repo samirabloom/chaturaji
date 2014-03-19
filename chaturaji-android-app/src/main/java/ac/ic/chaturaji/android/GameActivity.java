@@ -9,14 +9,13 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.view.*;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.Serializable;
 
 /* Following code done by Kadir Sekha */
 
@@ -45,22 +44,27 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ChatuService chatuService = ChatuService.getInstance();
         chatuService.setupSocketClient(GameActivity.this);
 
         String colour = getIntent().getStringExtra("colour");
 
-        if(colour.equals("in_game_yellow"))
-            player_colour = 4;
-        else if(colour.equals("in_game_blue"))
-            player_colour = 1;
-        else if(colour.equals("in_game_red"))
-            player_colour = 2;
-        else if(colour.equals("in_game_green"))
-            player_colour = 3;
+        switch (colour) {
+            case "in_game_yellow":
+                player_colour = 4;
+                break;
+            case "in_game_blue":
+                player_colour = 1;
+                break;
+            case "in_game_red":
+                player_colour = 2;
+                break;
+            case "in_game_green":
+                player_colour = 3;
+                break;
+        }
 
         int identifier = getResources().getIdentifier(colour, "layout", GameActivity.this.getPackageName());
         setContentView(identifier);
@@ -132,8 +136,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         playGame();
         setScoreboard();
 
-        if((selected_column != -1) && (selected_row != -1) && (!moved))
-        {
+        if ((selected_column != -1) && (selected_row != -1) && (!moved)) {
             selectPiece(selected_column, selected_row);
             BoardImage[selected_column][selected_row].setBackgroundColor(getResources().getColor(R.color.light_blue));
             showValidMoves(selected_column, selected_row);
@@ -152,16 +155,18 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void setPieces() {
 
-        for(int i = 4; i <= 7; i++)
+        for (int i = 4; i <= 7; i++) {
             Board[i][1] = new Pawn(1, (9 - i));
-        for(int i = 4; i <= 7; i++)
+        }
+        for (int i = 4; i <= 7; i++) {
             Board[6][i] = new Pawn(2, (9 - i));
-
-        for(int i = 0; i <= 3; i++)
+        }
+        for (int i = 0; i <= 3; i++) {
             Board[i][6] = new Pawn(3, (i + 2));
-
-        for(int i = 0; i <= 3; i++)
+        }
+        for (int i = 0; i <= 3; i++) {
             Board[1][i] = new Pawn(4, (i + 2));
+        }
 
         Board[7][0] = new Boat(1);
         Board[7][7] = new Boat(2);
@@ -186,11 +191,10 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void setBoard() {
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
-                char column_letter = (char)('A' + i);
-                char row_number = (char)('1' + j);
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++) {
+                char column_letter = (char) ('A' + i);
+                char row_number = (char) ('1' + j);
                 String square = "" + column_letter + row_number;
                 int identifier = getResources().getIdentifier(square, "id", GameActivity.this.getPackageName());
                 BoardImage[i][j] = (android.widget.ImageView) findViewById(identifier);
@@ -199,34 +203,32 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void drawPieces() {
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
-                if(Board[i][j] != null)
-                {
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++) {
+                if (Board[i][j] != null) {
                     String colour;
-                    if(Board[i][j].colour == 1)
+                    if (Board[i][j].colour == 1)
                         colour = "blue";
-                    else if(Board[i][j].colour == 2)
+                    else if (Board[i][j].colour == 2)
                         colour = "red";
-                    else if(Board[i][j].colour == 3)
+                    else if (Board[i][j].colour == 3)
                         colour = "green";
-                    else if(Board[i][j].colour == 4)
+                    else if (Board[i][j].colour == 4)
                         colour = "yellow";
                     else
                         colour = "";
 
                     String piece_type;
 
-                    if(Board[i][j] instanceof Pawn)
+                    if (Board[i][j] instanceof Pawn)
                         piece_type = "pawn";
-                    else if(Board[i][j] instanceof Boat)
+                    else if (Board[i][j] instanceof Boat)
                         piece_type = "boat";
-                    else if(Board[i][j] instanceof Knight)
+                    else if (Board[i][j] instanceof Knight)
                         piece_type = "knight";
-                    else if(Board[i][j] instanceof Elephant)
+                    else if (Board[i][j] instanceof Elephant)
                         piece_type = "elephant";
-                    else if(Board[i][j] instanceof King)
+                    else if (Board[i][j] instanceof King)
                         piece_type = "king";
                     else
                         piece_type = "";
@@ -234,8 +236,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                     String piece = colour + piece_type;
                     int identifier = getResources().getIdentifier(piece, "drawable", GameActivity.this.getPackageName());
                     BoardImage[i][j].setImageResource(identifier);
-                }
-                else
+                } else
                     BoardImage[i][j].setImageResource(0);
             }
     }
@@ -245,42 +246,34 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         int i;
         int j;
 
-        for(i = 0; i < 8; i++)
-        {
+        for (i = 0; i < 8; i++) {
             final int column = i;
-            for(j = 0; j < 8; j++)
-            {
+            for (j = 0; j < 8; j++) {
                 final int row = j;
                 BoardImage[column][row].setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
 
-                        if((((move_count + 3) % 4) + 1) == player_colour)
-                        {
-                            if(selected_column == column && selected_row == row)
+                        if ((((move_count + 3) % 4) + 1) == player_colour) {
+                            if (selected_column == column && selected_row == row) {
                                 clearSelections();
-                            else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row])
-                            {
-                                String state = "Error";
-                                SubmitMove submit_move = new SubmitMove();
-
-                                while(state.equals("Error"))
-                                {
-                                    submit_move.execute(convertMove(selected_column, selected_row), convertMove(column, row));
-                                    try {
-                                        state = submit_move.get();
-
-                                        if(state.equals("Error"))
+                            } else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row]) {
+                                try {
+                                    String state = new SubmitMove().execute(convertMove(selected_column, selected_row), convertMove(column, row)).get();
+                                    switch (state) {
+                                        case "Error":
                                             Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
+                                            break;
+                                        case "Success":
+                                            break;
+                                        default:
+                                            Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
+                                            break;
                                     }
-                                    catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-
-                            }
-                            else if ((!moved) && selectPiece(column, row))
-                            {
+                            } else if ((!moved) && selectPiece(column, row)) {
                                 clearSelections();
                                 BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
                                 selected_column = column;
@@ -326,36 +319,33 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         TextView show_turn = (TextView) findViewById(R.id.turn);
         int gameover = checkEndGame();
 
-        if(gameover != 0)
-        {
+        if (gameover != 0) {
             String colour;
 
-            if(gameover == 1)
+            if (gameover == 1)
                 colour = "Blue";
-            else if(gameover == 2)
+            else if (gameover == 2)
                 colour = "Red";
-            else if(gameover == 3)
+            else if (gameover == 3)
                 colour = "Green";
-            else if(gameover == 4)
+            else if (gameover == 4)
                 colour = "Yellow";
             else
                 colour = "";
 
             String winner = colour + " wins!";
             show_turn.setText(winner);
-        }
-        else
-        {
+        } else {
             int turn = ((move_count + 3) % 4) + 1;
             String colour;
 
-            if(turn == 1)
+            if (turn == 1)
                 colour = "Blue";
-            else if(turn == 2)
+            else if (turn == 2)
                 colour = "Red";
-            else if(turn == 3)
+            else if (turn == 3)
                 colour = "Green";
-            else if(turn == 4)
+            else if (turn == 4)
                 colour = "Yellow";
             else
                 colour = "";
@@ -373,85 +363,76 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         String taken_type = "";
         String taken_colour = "";
 
-        if(Board[destination_column][destination_row] != null)
-        {
-            if(Board[destination_column][destination_row] instanceof Pawn)
-            {
+        if (Board[destination_column][destination_row] != null) {
+            if (Board[destination_column][destination_row] instanceof Pawn) {
                 score = 1;
                 taken_type = "Pawn";
-            }
-            else if(Board[destination_column][destination_row] instanceof Boat)
-            {
+            } else if (Board[destination_column][destination_row] instanceof Boat) {
                 score = 2;
                 taken_type = "Boat";
-            }
-            else if(Board[destination_column][destination_row] instanceof Knight)
-            {
+            } else if (Board[destination_column][destination_row] instanceof Knight) {
                 score = 3;
                 taken_type = "Knight";
-            }
-            else if(Board[destination_column][destination_row] instanceof Elephant)
-            {
+            } else if (Board[destination_column][destination_row] instanceof Elephant) {
                 score = 4;
                 taken_type = "Elephant";
-            }
-            else if(Board[destination_column][destination_row] instanceof King)
-            {
+            } else if (Board[destination_column][destination_row] instanceof King) {
                 score = 5;
                 taken_type = "King";
-                if(Board[destination_column][destination_row].colour == 1)
+                if (Board[destination_column][destination_row].colour == 1) {
                     blue_king_captured_by = Board[source_column][source_row].colour;
-                else if(Board[destination_column][destination_row].colour == 2)
+                } else if (Board[destination_column][destination_row].colour == 2) {
                     red_king_captured_by = Board[source_column][source_row].colour;
-                else if(Board[destination_column][destination_row].colour == 3)
+                } else if (Board[destination_column][destination_row].colour == 3) {
                     green_king_captured_by = Board[source_column][source_row].colour;
-                else if(Board[destination_column][destination_row].colour == 4)
+                } else if (Board[destination_column][destination_row].colour == 4) {
                     yellow_king_captured_by = Board[source_column][source_row].colour;
+                }
 
-                if(blue_king_captured_by == 0 && red_king_captured_by == 1 && green_king_captured_by == 1 && yellow_king_captured_by == 1)
+                if (blue_king_captured_by == 0 && red_king_captured_by == 1 && green_king_captured_by == 1 && yellow_king_captured_by == 1) {
                     score = score + 54;
-                else if(blue_king_captured_by == 2 && red_king_captured_by == 0 &&green_king_captured_by == 2 && yellow_king_captured_by == 2)
+                } else if (blue_king_captured_by == 2 && red_king_captured_by == 0 && green_king_captured_by == 2 && yellow_king_captured_by == 2) {
                     score = score + 54;
-                else if(blue_king_captured_by == 3 && red_king_captured_by == 3 && green_king_captured_by == 0 &&yellow_king_captured_by == 3)
+                } else if (blue_king_captured_by == 3 && red_king_captured_by == 3 && green_king_captured_by == 0 && yellow_king_captured_by == 3) {
                     score = score + 54;
-                else if(blue_king_captured_by == 4 && red_king_captured_by == 4 && green_king_captured_by == 4 && yellow_king_captured_by == 0)
+                } else if (blue_king_captured_by == 4 && red_king_captured_by == 4 && green_king_captured_by == 4 && yellow_king_captured_by == 0) {
                     score = score + 54;
+                }
             }
 
-            if(Board[destination_column][destination_row].colour == 1)
+            if (Board[destination_column][destination_row].colour == 1)
                 taken_colour = "Blue";
-            else if(Board[destination_column][destination_row].colour == 2)
+            else if (Board[destination_column][destination_row].colour == 2)
                 taken_colour = "Red";
-            else if(Board[destination_column][destination_row].colour == 3)
+            else if (Board[destination_column][destination_row].colour == 3)
                 taken_colour = "Green";
-            else if(Board[destination_column][destination_row].colour == 4)
+            else if (Board[destination_column][destination_row].colour == 4)
                 taken_colour = "Yellow";
             else
                 taken_colour = "";
         }
 
-        if(Board[source_column][source_row] instanceof Boat)
-            if(boatTriumph(destination_column, destination_row))
-            {
+        if (Board[source_column][source_row] instanceof Boat)
+            if (boatTriumph(destination_column, destination_row)) {
                 score = score + 6;
                 boattriumph = true;
             }
 
-        if(Board[source_column][source_row].colour == 1)
+        if (Board[source_column][source_row].colour == 1)
             blue_score = blue_score + score;
-        else if(Board[source_column][source_row].colour == 2)
+        else if (Board[source_column][source_row].colour == 2)
             red_score = red_score + score;
-        else if(Board[source_column][source_row].colour == 3)
+        else if (Board[source_column][source_row].colour == 3)
             green_score = green_score + score;
-        else if(Board[source_column][source_row].colour == 4)
+        else if (Board[source_column][source_row].colour == 4)
             yellow_score = yellow_score + score;
 
-        if(!boattriumph && Board[destination_column][destination_row] == null)
-            movelist = movelist + (move_count + 1) + ". " + (char)(source_column + 65) + (source_row + 1) + " to " + (char)(destination_column + 65) + (destination_row + 1) + "\n";
-        else if(boattriumph)
-            movelist = movelist + (move_count + 1) + ". " + (char)(source_column + 65) + (source_row + 1) + " to " + (char)(destination_column + 65) + (destination_row + 1) + " Boat Triumph!\n";
-        else if(Board[destination_column][destination_row] != null)
-            movelist = movelist + (move_count + 1) + ". " + (char)(source_column + 65) + (source_row + 1) + " to " + (char)(destination_column + 65) + (destination_row + 1) + " taking " + taken_colour + "'s " + taken_type + "\n";
+        if (!boattriumph && Board[destination_column][destination_row] == null)
+            movelist = movelist + (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + "\n";
+        else if (boattriumph)
+            movelist = movelist + (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " Boat Triumph!\n";
+        else if (Board[destination_column][destination_row] != null)
+            movelist = movelist + (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " taking " + taken_colour + "'s " + taken_type + "\n";
     }
 
     public boolean selectPiece(int column, int row) {
@@ -462,9 +443,8 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void clearSelections() {
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++) {
                 BoardImage[i][j].setBackgroundColor(getResources().getColor(R.color.transparent));
                 valid_moves[i][j] = false;
             }
@@ -478,14 +458,13 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         int turn = ((move_count + 3) % 4) + 1;
         boolean[][] check_moves;
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                if(Board[i][j] != null && Board[i][j].colour == turn)
-                {
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (Board[i][j] != null && Board[i][j].colour == turn) {
                     check_moves = Board[i][j].valid_moves(i, j, Board);
-                    for(int x = 0; x < 8; x++)
-                        for(int y = 0; y < 8; y++)
-                            if(check_moves[x][y])
+                    for (int x = 0; x < 8; x++)
+                        for (int y = 0; y < 8; y++)
+                            if (check_moves[x][y])
                                 return true;
                 }
 
@@ -496,24 +475,20 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         int colour = 0;
 
-        for(int i = 0; i < 8; i++)
-        {
-            if(colour != 0)
+        for (int i = 0; i < 8; i++) {
+            if (colour != 0)
                 break;
 
-            for(int j = 0; j < 8; j++)
-                if(Board[i][j] != null)
-                {
-                   colour = Board[i][j].colour;
-                   break;
+            for (int j = 0; j < 8; j++)
+                if (Board[i][j] != null) {
+                    colour = Board[i][j].colour;
+                    break;
                 }
         }
 
-        for(int i = 0; i < 8; i++)
-        {
-            for(int j = 0; j < 8; j++)
-            {
-                if((Board[i][j] != null) && (Board[i][j].colour != colour))
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if ((Board[i][j] != null) && (Board[i][j].colour != colour))
                     return 0;
             }
         }
@@ -525,9 +500,9 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         valid_moves = Board[column][row].valid_moves(column, row, Board);
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                if(valid_moves[i][j])
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (valid_moves[i][j])
                     BoardImage[i][j].setBackgroundColor(getResources().getColor(R.color.light_blue));
 
     }
@@ -542,41 +517,37 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public boolean checkPromotion(int column, int row, int piece_type, int colour) {
 
-        if(colour == 1 && row != 7)
+        if (colour == 1 && row != 7)
             return false;
-        else if(colour == 2 && column != 7)
+        else if (colour == 2 && column != 7)
             return false;
-        else if(colour == 3 && row != 0)
+        else if (colour == 3 && row != 0)
             return false;
-        else if(colour == 4 && column != 0)
+        else if (colour == 4 && column != 0)
             return false;
 
-        if(piece_type == 2)
-            for(int i = 0; i < 8; i++)
-                for(int j = 0; j < 8; j++)
-                {
-                    if((Board[i][j] instanceof Boat) && (Board[i][j].colour == colour))
+        if (piece_type == 2)
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++) {
+                    if ((Board[i][j] instanceof Boat) && (Board[i][j].colour == colour))
                         return false;
                 }
-        else if(piece_type == 3)
-            for(int i = 0; i < 8; i++)
-                for(int j = 0; j < 8; j++)
-                {
-                    if((Board[i][j] instanceof Knight) && (Board[i][j].colour == colour))
+        else if (piece_type == 3)
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++) {
+                    if ((Board[i][j] instanceof Knight) && (Board[i][j].colour == colour))
                         return false;
                 }
-        else if(piece_type == 4)
-            for(int i = 0; i < 8; i++)
-                for(int j = 0; j < 8; j++)
-                {
-                    if((Board[i][j] instanceof Elephant) && (Board[i][j].colour == colour))
+        else if (piece_type == 4)
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++) {
+                    if ((Board[i][j] instanceof Elephant) && (Board[i][j].colour == colour))
                         return false;
                 }
-        else if(piece_type == 5)
-            for(int i = 0; i < 8; i++)
-                for(int j = 0; j < 8; j++)
-                {
-                    if((Board[i][j] instanceof King) && (Board[i][j].colour == colour))
+        else if (piece_type == 5)
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++) {
+                    if ((Board[i][j] instanceof King) && (Board[i][j].colour == colour))
                         return false;
                 }
 
@@ -585,30 +556,26 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void pawnPromotion() {
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                if(i == 0 || j == 0 || i == 7 || j == 7)
-                {
-                    if(Board[i][j] instanceof Pawn)
-                    {
-                        if(checkPromotion(i, j, Board[i][j].promotion, Board[i][j].colour))
-                        {
-                            if(Board[i][j].promotion == 2)
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (i == 0 || j == 0 || i == 7 || j == 7) {
+                    if (Board[i][j] instanceof Pawn) {
+                        if (checkPromotion(i, j, Board[i][j].promotion, Board[i][j].colour)) {
+                            if (Board[i][j].promotion == 2)
                                 Board[i][j] = new Boat(Board[i][j].colour);
-                            else if(Board[i][j].promotion == 3)
+                            else if (Board[i][j].promotion == 3)
                                 Board[i][j] = new Knight(Board[i][j].colour);
-                            else if(Board[i][j].promotion == 4)
+                            else if (Board[i][j].promotion == 4)
                                 Board[i][j] = new Elephant(Board[i][j].colour);
-                            else if(Board[i][j].promotion == 5)
-                            {
+                            else if (Board[i][j].promotion == 5) {
                                 Board[i][j] = new King(Board[i][j].colour);
-                                if(Board[i][j].colour == 1)
+                                if (Board[i][j].colour == 1)
                                     blue_king_captured_by = 0;
-                                else if(Board[i][j].colour == 2)
+                                else if (Board[i][j].colour == 2)
                                     red_king_captured_by = 0;
-                                else if(Board[i][j].colour == 3)
+                                else if (Board[i][j].colour == 3)
                                     green_king_captured_by = 0;
-                                else if(Board[i][j].colour == 4)
+                                else if (Board[i][j].colour == 4)
                                     yellow_king_captured_by = 0;
                             }
                         }
@@ -618,32 +585,22 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public boolean boatTriumph(int column, int row) {
 
-        if(column <= 6 && row <= 6 && Board[column + 1][row] instanceof Boat && Board[column + 1][row + 1] instanceof Boat && Board[column][row + 1] instanceof Boat)
-        {
+        if (column <= 6 && row <= 6 && Board[column + 1][row] instanceof Boat && Board[column + 1][row + 1] instanceof Boat && Board[column][row + 1] instanceof Boat) {
             Board[column + 1][row] = null;
             Board[column + 1][row + 1] = null;
             Board[column][row + 1] = null;
             return true;
-        }
-
-        else if(column <= 6 && row >= 1 && Board[column + 1][row] instanceof Boat && Board[column + 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
-        {
+        } else if (column <= 6 && row >= 1 && Board[column + 1][row] instanceof Boat && Board[column + 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat) {
             Board[column + 1][row] = null;
             Board[column + 1][row - 1] = null;
             Board[column][row - 1] = null;
             return true;
-        }
-
-        else if(column >= 1 && row <= 6 && Board[column][row + 1] instanceof Boat && Board[column - 1][row] instanceof Boat && Board[column - 1][row + 1] instanceof Boat)
-        {
+        } else if (column >= 1 && row <= 6 && Board[column][row + 1] instanceof Boat && Board[column - 1][row] instanceof Boat && Board[column - 1][row + 1] instanceof Boat) {
             Board[column][row + 1] = null;
             Board[column - 1][row] = null;
             Board[column - 1][row + 1] = null;
             return true;
-        }
-
-        else if(column >= 1 && row >= 1 && Board[column - 1][row] instanceof Boat && Board[column - 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat)
-        {
+        } else if (column >= 1 && row >= 1 && Board[column - 1][row] instanceof Boat && Board[column - 1][row - 1] instanceof Boat && Board[column][row - 1] instanceof Boat) {
             Board[column - 1][row] = null;
             Board[column - 1][row - 1] = null;
             Board[column][row - 1] = null;
@@ -655,20 +612,20 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public int convertMove(int column, int row) {
 
-        return ((7 - row)*8 + column);
+        return ((7 - row) * 8 + column);
     }
 
     public int getColumn(int move) {
-        return (move%8);
+        return (move % 8);
     }
 
     public int getRow(int move) {
-        return (7 - (move/8));
+        return (7 - (move / 8));
     }
 
     // This method gets called by the server every time a new move is made, including your current player's move
 
-    public void updateGame(Result result){
+    public void updateGame(Result result) {
 
         int colSrc = getColumn(result.getMove().getSource());
         int rowSrc = getRow(result.getMove().getSource());
@@ -690,48 +647,36 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         new Thread() {
             public void run() {
-                    try {
-                        runOnUiThread(new Runnable() {
+                try {
+                    runOnUiThread(new Runnable() {
 
-                            @Override
-                            public void run() {
+                        @Override
+                        public void run() {
 
-                                pawnPromotion();
+                            pawnPromotion();
 
-                                while(!checkValidMoves())
-                                    move_count++;
+                            while (!checkValidMoves())
+                                move_count++;
 
-                                setScoreboard();
-                                clearSelections();
-                                drawPieces();
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                            setScoreboard();
+                            clearSelections();
+                            drawPieces();
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
     }
 
     // This is for making a submit move request to the server, you just need to pass in the source and destination of the move
 
-    private class SubmitMove extends AsyncTask<Integer, Void, String> {
-
-        @Override
-        protected String doInBackground(Integer... info) {
-            ChatuService chatuService = ChatuService.getInstance();
-
-            String state = chatuService.submitMove(info[0], info[1]);
-
-            return state;
-        }
-    }
-
-    /* Get functions for testing */
-
     public ImageView[][] getBoardImage() {
         return BoardImage;
     }
+
+    /* Get functions for testing */
 
     public Pieces[][] getBoard() {
         return Board;
@@ -791,5 +736,13 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public String getMovelist() {
         return movelist;
+    }
+
+    private class SubmitMove extends AsyncTask<Integer, Void, String> {
+
+        @Override
+        protected String doInBackground(Integer... info) {
+            return ChatuService.getInstance().submitMove(info[0], info[1]);
+        }
     }
 }

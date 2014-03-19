@@ -1,6 +1,7 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +12,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import ac.ic.chaturaji.model.Game;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -23,12 +23,19 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Created by Haider on 12/02/14.
+ * @author Haider
  */
-
-
 public class GameRoomActivity extends Activity {
 
+    public View.OnClickListener createGameButtonListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View theView) {
+
+            Intent createGame = new Intent(GameRoomActivity.this, CreateGameActivity.class);
+            startActivity(createGame);
+        }
+    };
     ListView gameRooms;
     Game[] gamesList;
     Button create_game_button;
@@ -53,46 +60,42 @@ public class GameRoomActivity extends Activity {
 
                 String gameId = view.getTag().toString();
 
-                JoinGame joinGame = new JoinGame();
-
                 Intent gotoGame = new Intent(GameRoomActivity.this, GameActivity.class);
-
 
                 try {
 
-                    joinGame.execute(gameId);
-                    String[] state = joinGame.get();
-                    System.out.println(state);
+                    String[] state = new JoinGame().execute(gameId).get();
+                    System.out.println(Arrays.asList(state));
 
                     String colour = "in_game_yellow";
 
-                    if(state[2].equals("BLUE"))
-                        colour = "in_game_blue";
-
-                    else if(state[2].equals("RED"))
-                        colour = "in_game_red";
-
-                    else if(state[2].equals("GREEN"))
-                        colour = "in_game_green";
+                    switch (state[2]) {
+                        case "BLUE":
+                            colour = "in_game_blue";
+                            break;
+                        case "RED":
+                            colour = "in_game_red";
+                            break;
+                        case "GREEN":
+                            colour = "in_game_green";
+                            break;
+                    }
 
                     gotoGame.putExtra("colour", colour);
 
-                    if(state[1].equals("Error")){
-                        Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                    switch (state[1]) {
+                        case "Error":
+                            Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server.. " + state[0], Toast.LENGTH_LONG).show();
+                            break;
+                        case "Success":
+                            startActivity(gotoGame);
+                            break;
+                        case "Bad request":
+                            Toast.makeText(getApplicationContext(), state[0], Toast.LENGTH_LONG).show();
+                            break;
                     }
 
-                    else if(state[1].equals("Success")){
-                        startActivity(gotoGame);
-                    }
-
-                    else if(state[1].equals("Bad request")) {
-
-                        Toast.makeText(getApplicationContext(), state[0], Toast.LENGTH_LONG).show();
-
-                    }
-
-                }
-                catch(Exception e){
+                } catch (Exception e) {
 
                     e.printStackTrace();
                 }
@@ -100,12 +103,16 @@ public class GameRoomActivity extends Activity {
             }
         });
 
-
-        GetGames getgames = new GetGames();
-        getgames.execute();
+        new GetGames().execute();
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
     private class GetGames extends AsyncTask<Void, Void, String> {
 
@@ -124,37 +131,25 @@ public class GameRoomActivity extends Activity {
         protected void onPostExecute(String test) {
 
             try {
-
                 gamesList = new ObjectMapperFactory().createObjectMapper().readValue(test, Game[].class);
                 System.out.println(test);
-                System.out.println(gamesList.toString());
-            }
-
-            catch (JsonGenerationException e) {
-                Log.d("JsonGenerationException ",  e.toString());
+                System.out.println(Arrays.asList(gamesList));
+            } catch (JsonGenerationException e) {
+                Log.d("JsonGenerationException ", e.toString());
                 e.printStackTrace();
-
-            }
-
-            catch (JsonMappingException e) {
+            } catch (JsonMappingException e) {
                 Log.d("JsonMappingException", e.toString());
                 e.printStackTrace();
-
-            }
-
-            catch (IOException e) {
+            } catch (IOException e) {
                 Log.d("IOException", e.toString());
                 e.printStackTrace();
-
             }
 
-            if(gameRooms != null && gamesList != null){
+            if (gameRooms != null && gamesList != null) {
 
                 gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
 
-            }
-
-            else
+            } else
 
                 Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
 
@@ -162,33 +157,12 @@ public class GameRoomActivity extends Activity {
 
     }
 
-    public View.OnClickListener createGameButtonListener = new View.OnClickListener(){
-
-        @Override
-        public void onClick(View theView) {
-
-            Intent createGame = new Intent(GameRoomActivity.this, CreateGameActivity.class);
-            startActivity(createGame);
-        }
-    };
-
     private class JoinGame extends AsyncTask<String, Void, String[]> {
 
         @Override
         protected String[] doInBackground(String... info) {
-            ChatuService chatuService = ChatuService.getInstance();
-
-            String[] state = chatuService.joinGame(info[0]);
-
-            return state;
+            return ChatuService.getInstance().joinGame(info[0]);
         }
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 }

@@ -35,7 +35,7 @@ import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInM
  */
 @Controller
 public class GameController {
-    public static final int AI_PLAYER_DELAY = 500;
+    public static final int AI_PLAYER_DELAY = 1500;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private GameDAO gameDAO;
@@ -70,6 +70,7 @@ public class GameController {
     @ResponseBody
     @RequestMapping(value = "/createGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public ResponseEntity createGame(@RequestParam("numberOfAIPlayers") int numberOfAIPlayers) throws IOException {
+        logger.info("User " + springSecurityUserContext.getCurrentUser() + " creating game with " + numberOfAIPlayers + " number of AI players");
         if (numberOfAIPlayers < 0 || numberOfAIPlayers > 3) {
             return new ResponseEntity<>("Invalid numberOfAIPlayers: " + numberOfAIPlayers + " is not between 0 and 3 inclusive", HttpStatus.BAD_REQUEST);
         }
@@ -99,20 +100,24 @@ public class GameController {
     @ResponseBody
     @RequestMapping(value = "/joinGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public ResponseEntity joinGame(@RequestParam("gameId") String gameId) throws IOException {
+        logger.info("User " + springSecurityUserContext.getCurrentUser() + " is joining game " + gameId);
         Game game = getInMemoryGames(servletContext).get(gameId);
         if (game == null) {
             game = gameDAO.get(gameId);
             if (game == null) {
+                logger.info("No game found with gameId: " + gameId);
                 return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
             } else {
                 getInMemoryGames(servletContext).put(gameId, game);
             }
         }
         if (game.getPlayers().size() >= 4) {
+            logger.info("Game already has four players");
             return new ResponseEntity<>("Game already has four players", HttpStatus.BAD_REQUEST);
         }
         User currentUser = springSecurityUserContext.getCurrentUser();
         if (alreadyJoinedGame(game, currentUser)) {
+            logger.info("You have already joined this game");
             return new ResponseEntity<>("You have already joined this game", HttpStatus.BAD_REQUEST);
         }
 
@@ -135,30 +140,42 @@ public class GameController {
     @ResponseBody
     @RequestMapping(value = "/submitMove", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> submitMove(@RequestBody final Move move) {
-        final Game game = getInMemoryGames(servletContext).get(move.getGameId());
-        if (game != null) {
-            Result result = ai.submitMove(game, move);
-            for (Player player : result.getGame().getPlayers()) {
-                playerDAO.save(result.getGame().getId(), player);
-            }
-            moveDAO.save(result.getGame().getId(), result.getMove());
-            // now schedule AI move if next player is AI
-            if (game.getNextPlayer().getType() == PlayerType.AI) {
-                taskExecutor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(AI_PLAYER_DELAY);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        submitMove(new Move(uuidFactory.generateUUID(), move.getGameId(), game.getNextPlayerColour(), -1, -1));
+        try {
+            logger.info("User " + springSecurityUserContext.getCurrentUser() + " is submitting move " + move);
+            final Game game = getInMemoryGames(servletContext).get(move.getGameId());
+            if (game != null) {
+                Result result = ai.submitMove(game, move);
+                if (result.getType() == ResultType.NOT_VALID) {
+                    logger.info("Move " + move + " is not valid");
+                    return new ResponseEntity<>("That move is not valid", HttpStatus.BAD_REQUEST);
+                } else {
+                    for (Player player : result.getGame().getPlayers()) {
+                        playerDAO.save(result.getGame().getId(), player);
                     }
-                });
+                    moveDAO.save(result.getGame().getId(), result.getMove());
+                    gameDAO.save(game);
+                    // now schedule AI move if next player is AI
+                    if (game.getCurrentPlayerType() == PlayerType.AI) {
+                        taskExecutor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    TimeUnit.MILLISECONDS.sleep(AI_PLAYER_DELAY);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                submitMove(new Move(uuidFactory.generateUUID(), move.getGameId(), game.getCurrentPlayerColour(), -1, -1));
+                            }
+                        });
+                    }
+                    return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+                }
+            } else {
+                return new ResponseEntity<>("No game found with gameId: " + move.getGameId(), HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>("", HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>("No game found with gameId: " + move.getGameId(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            logger.warn("Exception while submitting move", e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -166,13 +183,16 @@ public class GameController {
     @ResponseBody
     @RequestMapping(value = "/replayGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public ResponseEntity replayGame(@RequestParam("gameId") String gameId) throws IOException {
+        logger.info("User " + springSecurityUserContext.getCurrentUser() + " is replaying game " + gameId);
         Game game = getInMemoryGames(servletContext).get(gameId);
         if (game == null) {
+            logger.info("No game found with gameId: " + gameId);
             return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
         }
         // find player
         Player player = findPlayer(game, springSecurityUserContext.getCurrentUser());
         if (player == null) {
+            logger.info("You can only replay games for which you were a player");
             return new ResponseEntity<>("You can only replay games for which you were a player", HttpStatus.BAD_REQUEST);
         }
 

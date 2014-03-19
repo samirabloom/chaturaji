@@ -13,14 +13,16 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 public class MainMenu extends Activity {
 
     /**
      * Called when the activity is first created.
      *
      * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
+     * previously being shut down then this Bundle contains the data it most
+     * recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
      */
 
     Button single_player_button;
@@ -55,48 +57,43 @@ public class MainMenu extends Activity {
         logout_button.setOnClickListener(logoutButttonListener);
     }
 
-    private View.OnClickListener singleButtonListener = new View.OnClickListener(){
+    private View.OnClickListener singleButtonListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
 
             Intent getSingleGame = new Intent(MainMenu.this, GameActivity.class);
-            PostGame postgame = new PostGame();
 
             try {
 
-                postgame.execute("3");
-                String[] state = postgame.get();
-                System.out.println(state);
+                String[] state = new PostGame().execute("3").get();
+                System.out.println(Arrays.asList(state));
 
                 String colour = "in_game_yellow";
 
-                if(state[1].equals("BLUE"))
-                    colour = "in_game_blue";
-
-                else if(state[1].equals("RED"))
-                    colour = "in_game_red";
-
-                else if(state[1].equals("GREEN"))
-                    colour = "in_game_green";
+                switch (state[1]) {
+                    case "BLUE":
+                        colour = "in_game_blue";
+                        break;
+                    case "RED":
+                        colour = "in_game_red";
+                        break;
+                    case "GREEN":
+                        colour = "in_game_green";
+                        break;
+                }
 
                 getSingleGame.putExtra("colour", colour);
 
-                if(state.equals("Error")){
+                if (Arrays.asList(state).contains("Error")) {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
-                }
-
-                else if(state.equals("Invalid")){
+                } else if (Arrays.asList(state).contains("Invalid")) {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem logging in.", Toast.LENGTH_LONG).show();
-                }
-
-                else{
-
+                } else {
                     startActivity(getSingleGame);
                 }
 
-            }
-            catch(Exception e){
+            } catch (Exception e) {
 
                 e.printStackTrace();
             }
@@ -104,7 +101,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    private View.OnClickListener multiButttonListener = new View.OnClickListener(){
+    private View.OnClickListener multiButttonListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -114,7 +111,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    private View.OnClickListener settingsButttonListener = new View.OnClickListener(){
+    private View.OnClickListener settingsButttonListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -124,7 +121,7 @@ public class MainMenu extends Activity {
         }
     };
 
-    private View.OnClickListener logoutButttonListener = new View.OnClickListener(){
+    private View.OnClickListener logoutButttonListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -140,7 +137,6 @@ public class MainMenu extends Activity {
     };
 
 
-
     private class PostGame extends AsyncTask<String, Void, String[]> {
 
         @Override
@@ -151,13 +147,12 @@ public class MainMenu extends Activity {
 
             String[] state = chatuService.createGame(AIs[0]);
 
-            System.out.println(state);
+            System.out.println(Arrays.asList(state));
 
             return state;
         }
 
     }
-
 
 
     @Override

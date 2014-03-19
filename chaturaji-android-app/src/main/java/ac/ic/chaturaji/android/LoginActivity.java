@@ -2,53 +2,39 @@ package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.view.View.OnClickListener;
-import android.view.View;
-import android.content.Intent;
 import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by Haider on 12/02/14.
+ * @author Haider
  */
 public class LoginActivity extends Activity {
 
+    public OnClickListener signupButtonListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View theView) {
+            Intent getSignup = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(getSignup);
+        }
+    };
     Button login_button;
     Button signup_button;
     EditText email_edittext;
     EditText password_edittext;
-
-    String email ="";
-    String password ="";
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.activity_main);
-
-        login_button = (Button) findViewById(R.id.login_button);
-        signup_button = (Button) findViewById(R.id.signup_button);
-        email_edittext = (EditText) findViewById(R.id.email_login);
-        password_edittext = (EditText) findViewById(R.id.password_login);
-
-        login_button.setOnClickListener(loginButtonListener);
-        signup_button.setOnClickListener(signupButtonListener);
-
-
-    }
-
-    public OnClickListener loginButtonListener = new OnClickListener(){
+    String email = "";
+    String password = "";
+    public OnClickListener loginButtonListener = new OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -66,56 +52,45 @@ public class LoginActivity extends Activity {
             editor.commit();
 
             Intent getMainMenu = new Intent(LoginActivity.this, MainMenu.class);
-            PostGame postgame = new PostGame();
 
             try {
 
-                postgame.execute("");
-                String state = postgame.get();
+                String state = new Login().execute("").get();
                 System.out.println(state);
 
-                if(state.equals("Error")){
-                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                switch (state) {
+                    case "Success":
+                        startActivity(getMainMenu);
+                        break;
+                    case "Error":
+                        Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
+                        break;
                 }
 
-                else if(state.equals("Invalid")){
-                    Toast.makeText(getApplicationContext(), "There was a problem logging in. Have you entered the correct details?", Toast.LENGTH_LONG).show();
-                }
-
-                else{
-
-                    startActivity(getMainMenu);
-                }
-
-            }
-            catch(Exception e){
+            } catch (Exception e) {
 
                 e.printStackTrace();
             }
         }
     };
 
-    public OnClickListener signupButtonListener = new OnClickListener(){
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_main);
 
-        @Override
-        public void onClick(View theView) {
+        login_button = (Button) findViewById(R.id.login_button);
+        signup_button = (Button) findViewById(R.id.signup_button);
+        email_edittext = (EditText) findViewById(R.id.email_login);
+        password_edittext = (EditText) findViewById(R.id.password_login);
 
-            Intent getSignup = new Intent(LoginActivity.this, SignUpActivity.class);
-            startActivity(getSignup);
-        }
-    };
-
-    private class PostGame extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... info) {
-            ChatuService chatuService = ChatuService.getInstance();
-
-            String state = chatuService.login(email, password);
-
-            return state;
-        }
-
+        login_button.setOnClickListener(loginButtonListener);
+        signup_button.setOnClickListener(signupButtonListener);
     }
 
     @Override
@@ -123,5 +98,14 @@ public class LoginActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    private class Login extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... info) {
+            return ChatuService.getInstance().login(email, password);
+        }
+
     }
 }

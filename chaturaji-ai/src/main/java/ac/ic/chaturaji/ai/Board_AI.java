@@ -8,10 +8,15 @@ package ac.ic.chaturaji.ai;
 // promote to a higher value piece given that their corresponding piece has been taken.
 // The final four are used to keep track of which pawns are potential boats/elephants/kings/knights upon promotion.
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.System;
 
 
 public class Board_AI implements Cloneable{
+
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /*------ Data Members ------*/
 
@@ -266,7 +271,7 @@ public class Board_AI implements Cloneable{
                     RemovePiece(boat_square, GameConstants.BOAT + ((CurrentPlayer + i) % 4));
                 }
                 else
-                    System.out.println("ERROR CALCULATING BOAT TRIUMPH");
+                    logger.error("ERROR CALCULATING BOAT TRIUMPH");
             }
         }
 
@@ -357,10 +362,11 @@ public class Board_AI implements Cloneable{
 
     public boolean Print()
     {
+        StringBuilder stringBuilder = new StringBuilder();
         for( int line = 0; line < 8; line++ )
         {
-            System.out.println( "  -----------------------------------------" );
-            System.out.println( "  |    |    |    |    |    |    |    |    |" );
+            stringBuilder.append( "  -----------------------------------------" );
+            stringBuilder.append( "  |    |    |    |    |    |    |    |    |" );
             System.out.print((8 - line) + " ");
             for( int col = 0; col < 8; col++ )
             {
@@ -374,11 +380,13 @@ public class Board_AI implements Cloneable{
                 // Show the piece
                 System.out.print( "| " + GameConstants.PieceStrings[ piece ] + " " );
             }
-            System.out.println( "|" );
-            System.out.println( "  |    |    |    |    |    |    |    |    |" );
+            stringBuilder.append( "|" );
+            stringBuilder.append( "  |    |    |    |    |    |    |    |    |" );
         }
-        System.out.println( "  -----------------------------------------" );
-        System.out.println( "    A    B    C    D    E    F    G    H   " );
+        stringBuilder.append( "  -----------------------------------------" );
+        stringBuilder.append( "    A    B    C    D    E    F    G    H   " );
+
+        logger.info(stringBuilder.toString());
 
         return true;
     }

@@ -14,10 +14,8 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by Haider on 12/02/14.
+ * @author Haider
  */
-
-
 public class GameRoomAdapter extends BaseAdapter {
 
     Context context;

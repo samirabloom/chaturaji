@@ -97,26 +97,50 @@ public class GameDAO {
     }
 
     public void save(Game game) {
-        String sql = "INSERT INTO GAME(GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS) VALUES (?, ?, ?, ?)";
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        if (get(game.getId()) == null) {
+            String sql = "INSERT INTO GAME(GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS) VALUES (?, ?, ?, ?)";
+            try (Connection connection = dataSource.getConnection()) {
+                PreparedStatement ps = connection.prepareStatement(sql);
 
-            ps.setString(1, game.getId());
-            ps.setDate(2, new java.sql.Date(game.getCreatedDate().toDate().getTime()));
-            ps.setInt(3, game.getCurrentPlayerColour().ordinal());
-            ps.setInt(4, game.getGameStatus().ordinal());
-            if (ps.executeUpdate() != 1) {
-                throw new RuntimeException();
+                ps.setString(1, game.getId());
+                ps.setDate(2, new java.sql.Date(game.getCreatedDate().toDate().getTime()));
+                ps.setInt(3, game.getCurrentPlayerColour().ordinal());
+                ps.setInt(4, game.getGameStatus().ordinal());
+                if (ps.executeUpdate() != 1) {
+                    throw new RuntimeException();
+                }
+                for (Player player : game.getPlayers()) {
+                    playerDAO.save(game.getId(), player);
+                }
+                for (Move move : game.getMoves()) {
+                    moveDAO.save(game.getId(), move);
+                }
+                ps.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            for (Player player : game.getPlayers()) {
-                playerDAO.save(game.getId(), player);
+        } else {
+            String sql = "UPDATE GAME SET CREATED_DATE=?, CURRENT_PLAYER=?, GAME_STATUS=? WHERE GAME_ID=?";
+            try (Connection connection = dataSource.getConnection()) {
+                PreparedStatement ps = connection.prepareStatement(sql);
+
+                ps.setDate(1, new java.sql.Date(game.getCreatedDate().toDate().getTime()));
+                ps.setInt(2, game.getCurrentPlayerColour().ordinal());
+                ps.setInt(3, game.getGameStatus().ordinal());
+                ps.setString(4, game.getId());
+                if (ps.executeUpdate() != 1) {
+                    throw new RuntimeException();
+                }
+                for (Player player : game.getPlayers()) {
+                    playerDAO.save(game.getId(), player);
+                }
+                for (Move move : game.getMoves()) {
+                    moveDAO.save(game.getId(), move);
+                }
+                ps.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            for (Move move : game.getMoves()) {
-                moveDAO.save(game.getId(), move);
-            }
-            ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

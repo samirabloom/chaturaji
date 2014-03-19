@@ -3,6 +3,7 @@ package ac.ic.chaturaji.web.websockets;
 import ac.ic.chaturaji.ai.MoveListener;
 import ac.ic.chaturaji.model.GameStatus;
 import ac.ic.chaturaji.model.Result;
+import ac.ic.chaturaji.model.ResultType;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
@@ -28,20 +29,22 @@ public class NotifyPlayer implements MoveListener {
 
     @Override
     public void pieceMoved(Result result) {
-        try {
-            String jsonResult = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result);
-            logger.debug("Sending result [" + jsonResult + "] to player [ID_" + playerId + "]");
-            Channel channel = clients.get("ID_" + playerId);
-            if (channel != null) {
-                channel.writeAndFlush(new TextWebSocketFrame(jsonResult));
-            } else {
-                logger.warn("No channel found for player [ID_" + playerId + "] therefore result [" + result + "] not being sent to that player");
+        if (result.getType() != ResultType.NOT_VALID) {
+            try {
+                String jsonResult = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result);
+                logger.debug("Sending result [" + jsonResult + "] to player [ID_" + playerId + "]");
+                Channel channel = clients.get("ID_" + playerId);
+                if (channel != null) {
+                    channel.writeAndFlush(new TextWebSocketFrame(jsonResult));
+                } else {
+                    logger.warn("No channel found for player [ID_" + playerId + "] therefore result [" + result + "] not being sent to that player");
+                }
+                if (result.getGameStatus() == GameStatus.GAME_OVER) {
+                    clients.remove("ID_" + playerId);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            if (result.getGameStatus() == GameStatus.GAME_OVER) {
-                clients.remove("ID_" + playerId);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }

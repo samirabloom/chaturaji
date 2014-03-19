@@ -89,45 +89,45 @@ public class GameTest {
     public void shouldDetermineNextPlayer() {
         // given
         Game game = new Game("game id", new Player("player one", new User(), Colour.YELLOW, PlayerType.HUMAN));
-        game.addPlayer(new Player("player two", new User(), Colour.BLUE, PlayerType.HUMAN));
+        game.addPlayer(new Player("player two", new User(), Colour.BLUE, PlayerType.AI));
         game.addPlayer(new Player("player three", new User(), Colour.RED, PlayerType.HUMAN));
-        game.addPlayer(new Player("player four", new User(), Colour.GREEN, PlayerType.HUMAN));
+        game.addPlayer(new Player("player four", new User(), Colour.GREEN, PlayerType.AI));
 
         // then
         assertThat(game.getCurrentPlayerColour(), is(Colour.YELLOW));
+        assertThat(game.getCurrentPlayerType(), is(PlayerType.HUMAN));
         assertThat(game.getNextPlayerColour(), is(Colour.BLUE));
-        assertThat(game.getNextPlayer(), is(game.getPlayer(1)));
 
         // when
         game.setCurrentPlayerColour(Colour.BLUE);
 
         // then
         assertThat(game.getCurrentPlayerColour(), is(Colour.BLUE));
+        assertThat(game.getCurrentPlayerType(), is(PlayerType.AI));
         assertThat(game.getNextPlayerColour(), is(Colour.RED));
-        assertThat(game.getNextPlayer(), is(game.getPlayer(2)));
 
         // when
         game.setCurrentPlayerColour(Colour.RED);
 
         // then
         assertThat(game.getCurrentPlayerColour(), is(Colour.RED));
+        assertThat(game.getCurrentPlayerType(), is(PlayerType.HUMAN));
         assertThat(game.getNextPlayerColour(), is(Colour.GREEN));
-        assertThat(game.getNextPlayer(), is(game.getPlayer(3)));
 
         // when
         game.setCurrentPlayerColour(Colour.GREEN);
 
         // then
         assertThat(game.getCurrentPlayerColour(), is(Colour.GREEN));
+        assertThat(game.getCurrentPlayerType(), is(PlayerType.AI));
         assertThat(game.getNextPlayerColour(), is(Colour.YELLOW));
-        assertThat(game.getNextPlayer(), is(game.getPlayer(0)));
 
         // when
         game.setCurrentPlayerColour(Colour.YELLOW);
 
         // then
         assertThat(game.getCurrentPlayerColour(), is(Colour.YELLOW));
+        assertThat(game.getCurrentPlayerType(), is(PlayerType.HUMAN));
         assertThat(game.getNextPlayerColour(), is(Colour.BLUE));
-        assertThat(game.getNextPlayer(), is(game.getPlayer(1)));
     }
 }

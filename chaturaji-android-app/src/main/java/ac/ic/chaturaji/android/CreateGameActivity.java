@@ -15,7 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 /**
- * Created by Haider on 18/02/14.
+ * @author Haider
  */
 public class CreateGameActivity extends Activity {
 
@@ -54,7 +54,7 @@ public class CreateGameActivity extends Activity {
 
     }
 
-    public View.OnClickListener startButtonListener = new View.OnClickListener(){
+    public View.OnClickListener startButtonListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -71,34 +71,32 @@ public class CreateGameActivity extends Activity {
 
                 String colour = "in_game_yellow";
 
-                if(state[1].equals("BLUE"))
+                if (state[1].equals("BLUE"))
                     colour = "in_game_blue";
 
-                else if(state[1].equals("RED"))
+                else if (state[1].equals("RED"))
                     colour = "in_game_red";
 
-                else if(state[1].equals("GREEN"))
+                else if (state[1].equals("GREEN"))
                     colour = "in_game_green";
 
                 startGame.putExtra("colour", colour);
 
-                if(state.equals("Error")){
+                if (state.equals("Error")) {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
 
                     startActivity(startGame);
                 }
 
-            }
-            catch(Exception e){
+            } catch (Exception e) {
 
                 e.printStackTrace();
             }
         }
     };
 
-    public View.OnClickListener radioAI0Listener = new View.OnClickListener(){
+    public View.OnClickListener radioAI0Listener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -107,7 +105,7 @@ public class CreateGameActivity extends Activity {
         }
     };
 
-    public View.OnClickListener radioAI1Listener = new View.OnClickListener(){
+    public View.OnClickListener radioAI1Listener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -116,7 +114,7 @@ public class CreateGameActivity extends Activity {
         }
     };
 
-    public View.OnClickListener radioAI2Listener = new View.OnClickListener(){
+    public View.OnClickListener radioAI2Listener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -125,7 +123,7 @@ public class CreateGameActivity extends Activity {
         }
     };
 
-    public View.OnClickListener radioAI3Listener = new View.OnClickListener(){
+    public View.OnClickListener radioAI3Listener = new View.OnClickListener() {
 
         @Override
         public void onClick(View theView) {
@@ -138,9 +136,7 @@ public class CreateGameActivity extends Activity {
 
         @Override
         protected String[] doInBackground(String... AIs) {
-            ChatuService chatuService = ChatuService.getInstance();
-            String[] state = chatuService.createGame(AIs[0]);
-            return state;
+            return ChatuService.getInstance().createGame(AIs[0]);
         }
 
     }
