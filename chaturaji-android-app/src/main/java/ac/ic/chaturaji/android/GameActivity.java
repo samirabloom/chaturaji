@@ -333,8 +333,14 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
             else
                 colour = "";
 
-            String winner = colour + " wins!";
-            show_turn.setText(winner);
+            if(gameover == 5)
+                show_turn.setText("It is a draw!");
+            else
+            {
+                String winner = colour + " wins!";
+                show_turn.setText(winner);
+            }
+
         } else {
             int turn = ((move_count + 3) % 4) + 1;
             String colour;
@@ -493,6 +499,44 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
             }
         }
 
+        int final_score = 0;
+
+        if(blue_score >= final_score)
+            final_score = blue_score;
+
+        if(red_score >= final_score)
+            final_score = red_score;
+
+        if(green_score >= final_score)
+            final_score = green_score;
+
+        if(yellow_score >= final_score)
+            final_score = yellow_score;
+
+        if(final_score == blue_score)
+        {
+            if(blue_score == red_score || blue_score == green_score || blue_score == yellow_score)
+                colour = 5;
+            else
+                colour = 1;
+        }
+        else if(final_score == red_score)
+        {
+            if(red_score == green_score || red_score == yellow_score)
+                colour = 5;
+            else
+                colour = 2;
+        }
+        else if(final_score == green_score)
+        {
+            if(green_score == yellow_score)
+                colour = 5;
+            else
+                colour = 3;
+        }
+        else if(final_score == yellow_score)
+            colour = 4;
+
         return colour;
     }
 
@@ -612,7 +656,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public int convertMove(int column, int row) {
 
-        return ((7 - row) * 8 + column);
+        return (column + (row * 8));
     }
 
     public int getColumn(int move) {
@@ -620,7 +664,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     }
 
     public int getRow(int move) {
-        return (7 - (move / 8));
+        return (move / 8);
     }
 
     // This method gets called by the server every time a new move is made, including your current player's move
