@@ -1,6 +1,8 @@
 package ac.ic.chaturaji.ai;
 
 import ac.ic.chaturaji.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -11,7 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class AI {
-    Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
 
     public Game createGame(Game game) {
 
@@ -79,7 +82,11 @@ public class AI {
                     if (game.getStalemateCount() >= 10)
                         result.setGameStatus(GameStatus.STALEMATE);
 
-                player.setNoMoves(humanPlayer.getMoves(board).isEmpty());
+                boolean canMovePiece = humanPlayer.getMoves(board).isEmpty();
+                if (canMovePiece) {
+                    logger.info("Updating player " + player + " to indicate no available moves");
+                }
+                player.setCanMovePiece(canMovePiece);
             }
             break;
 
