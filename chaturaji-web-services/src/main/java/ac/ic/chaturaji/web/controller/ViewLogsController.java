@@ -19,7 +19,7 @@ public class ViewLogsController {
 
     @ResponseBody
     @RequestMapping(value = "/log", method = RequestMethod.GET)
-    public String messagePage(@RequestParam(value = "lines", required = false) int numberOfLines) throws IOException {
+    public String messagePage(@RequestParam(value = "lines", required = false) Integer numberOfLines) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("/var/log/chaturaji/server.log"));
         String rawLine;
         StringBuilder stringBuilder = new StringBuilder("<html><head></head><body>");
