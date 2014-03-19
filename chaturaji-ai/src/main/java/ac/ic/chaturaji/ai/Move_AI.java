@@ -116,10 +116,16 @@ public class Move_AI {
             stringBuilder.append(Source);
             stringBuilder.append(", ");
             stringBuilder.append(Dest);
-            stringBuilder.append(" ] TYPE: ");
+            stringBuilder.append(" ] Type: ");
             stringBuilder.append(Type);
-            stringBuilder.append(" Captured Pieces: ");
-            stringBuilder.append((CapturedPiece == -1 ? "0" : "" + CapturedPiece));
+            switch (CapturedPiece) {
+                case -1:
+                case GameConstants.EMPTY_SQUARE:
+                    break;
+                default:
+                    stringBuilder.append(" Captured Piece: ").append(CapturedPiece);
+                    break;
+            }
         } else {
             stringBuilder.append("RESIGNATION!");
         }

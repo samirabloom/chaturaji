@@ -21,11 +21,11 @@ public class PlayerComp extends Player_AI {
         MaxN maxn = new MaxN();
         AlphaBeta alphabeta  = new AlphaBeta();
 
-        searchType = 0;
-        if (searchType == 0)
-            move = alphabeta.Search(theBoard, theBoard.GetCurrentPlayer(), 7);
-        else
-            move = maxn.Search(theBoard, theBoard.GetCurrentPlayer(), 7);
+        if (searchType == 0) {
+            move = alphabeta.Search(theBoard, theBoard.GetCurrentPlayer(), 5);
+        } else {
+            move = maxn.Search(theBoard, theBoard.GetCurrentPlayer(), 5);
+        }
 
         // Set the points if a capture occurred.
         if (move != null)

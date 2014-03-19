@@ -35,7 +35,7 @@ import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInM
  */
 @Controller
 public class GameController {
-    public static final int AI_PLAYER_DELAY = 1500;
+    public static final int AI_PLAYER_DELAY = 500;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private GameDAO gameDAO;
