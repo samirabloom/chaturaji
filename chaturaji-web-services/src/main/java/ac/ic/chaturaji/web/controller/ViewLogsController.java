@@ -32,7 +32,7 @@ public class ViewLogsController {
         if (numberOfLines == null) {
             numberOfLines = 200;
         }
-        for (int i = 0; i < numberOfLines; i++) {
+        for (int i = 0; i < numberOfLines && i < lines.size(); i++) {
             String line = lines.get(i);
             stringBuilder.append("<p>");
             stringBuilder.append(line);
