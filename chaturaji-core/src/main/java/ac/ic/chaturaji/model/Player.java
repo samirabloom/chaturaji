@@ -14,7 +14,7 @@ public class Player extends EqualsHashCodeToString {
     private User user;
     private int points;
     private Set<Integer> kingsCaptured = new HashSet<>();
-    private boolean canMovePiece;
+    private boolean canNotMoveAnyPiece;
 
     // Dummy constructor needed to map JSON string back to Java object
     public Player() {
@@ -83,11 +83,11 @@ public class Player extends EqualsHashCodeToString {
         this.kingsCaptured = kingsCaptured;
     }
 
-    public boolean isCanMovePiece() {
-        return canMovePiece;
+    public boolean isCanNotMoveAnyPiece() {
+        return canNotMoveAnyPiece;
     }
 
-    public void setCanMovePiece(boolean canMovePiece) {
-        this.canMovePiece = canMovePiece;
+    public void setCanNotMoveAnyPiece(boolean canNotMoveAnyPiece) {
+        this.canNotMoveAnyPiece = canNotMoveAnyPiece;
     }
 }

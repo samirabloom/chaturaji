@@ -86,7 +86,7 @@ public class AI {
                 if (canMovePiece) {
                     logger.info("Updating player " + player + " to indicate no available moves");
                 }
-                player.setCanMovePiece(canMovePiece);
+                player.setCanNotMoveAnyPiece(canMovePiece);
             }
             break;
 
