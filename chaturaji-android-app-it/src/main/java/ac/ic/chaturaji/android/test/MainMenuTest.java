@@ -46,7 +46,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
         assertTrue(logout_button != null);
     }
 
-    public void testTClickSinglePlayer(){
+   /* public void testTClickSinglePlayer(){
 
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(GameActivity.class.getName(), null, false);
 
@@ -67,7 +67,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
         assertNotNull(nextActivity);
         nextActivity.finish();
 
-    }
+    } */
 
     public void testTClickMultiPlayer(){
 

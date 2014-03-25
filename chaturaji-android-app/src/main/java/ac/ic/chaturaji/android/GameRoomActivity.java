@@ -4,6 +4,7 @@ import ac.ic.chaturaji.chatuService.ChatuService;
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,10 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -39,6 +37,7 @@ public class GameRoomActivity extends Activity {
     ListView gameRooms;
     Game[] gamesList;
     Button create_game_button;
+    Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,60 +49,61 @@ public class GameRoomActivity extends Activity {
 
         setContentView(R.layout.game_rooms);
 
+        context = getApplicationContext();
+
         create_game_button = (Button) findViewById(R.id.create_game_button);
         create_game_button.setOnClickListener(createGameButtonListener);
 
         gameRooms = (ListView) findViewById(R.id.game_rooms_list);
-        gameRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                String gameId = view.getTag().toString();
-
-                Intent gotoGame = new Intent(GameRoomActivity.this, GameActivity.class);
-
-                try {
-
-                    String[] state = new JoinGame().execute(gameId).get();
-                    System.out.println(Arrays.asList(state));
-
-                    String colour = "in_game_yellow";
-
-                    switch (state[2]) {
-                        case "BLUE":
-                            colour = "in_game_blue";
-                            break;
-                        case "RED":
-                            colour = "in_game_red";
-                            break;
-                        case "GREEN":
-                            colour = "in_game_green";
-                            break;
-                    }
-
-                    gotoGame.putExtra("colour", colour);
-
-                    switch (state[1]) {
-                        case "Error":
-                            Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server.. " + state[0], Toast.LENGTH_LONG).show();
-                            break;
-                        case "Success":
-                            startActivity(gotoGame);
-                            break;
-                        case "Bad request":
-                            Toast.makeText(getApplicationContext(), state[0], Toast.LENGTH_LONG).show();
-                            break;
-                    }
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-
-            }
-        });
 
         new GetGames().execute();
+
+    }
+
+    public void joinGameClickListener(View v){
+
+        String gameId = v.getTag().toString();
+
+        Intent gotoGame = new Intent(GameRoomActivity.this, GameActivity.class);
+
+        try {
+
+            String[] state = new JoinGame().execute(gameId).get();
+            System.out.println(Arrays.asList(state));
+
+            String colour = "in_game_yellow";
+
+            switch (state[2]) {
+                case "BLUE":
+                    colour = "in_game_blue";
+                    break;
+                case "RED":
+                    colour = "in_game_red";
+                    break;
+                case "GREEN":
+                    colour = "in_game_green";
+                    break;
+            }
+
+            gotoGame.putExtra("colour", colour);
+
+            switch (state[1]) {
+                case "Error":
+                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server.. " + state[0], Toast.LENGTH_LONG).show();
+                    break;
+                case "Success":
+                    startActivity(gotoGame);
+                    break;
+                case "Bad request":
+                    Toast.makeText(getApplicationContext(), state[0], Toast.LENGTH_LONG).show();
+                    break;
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
 
     }
 

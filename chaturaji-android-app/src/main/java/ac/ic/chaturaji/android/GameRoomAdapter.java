@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,6 +67,8 @@ public class GameRoomAdapter extends BaseAdapter {
         TextView ais_text = (TextView) row.findViewById(R.id.game_ais);
         TextView human_text = (TextView) row.findViewById(R.id.game_humans);
         ImageView icon = (ImageView) row.findViewById(R.id.gameImage);
+        Button joinButton = (Button) row.findViewById(R.id.join_button);
+        joinButton.setTag(current.getId());
 
         switch (humans) {
             case 2:

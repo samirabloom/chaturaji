@@ -79,8 +79,6 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
 
     public void testPreconditions() {
 
-        assertTrue(localListView.getOnItemClickListener() != null);
-
         //assertTrue(localAdapter != null);
 
         //assertTrue(localAdapter.getCount() > 0);
