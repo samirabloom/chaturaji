@@ -1,14 +1,16 @@
 package ac.ic.chaturaji.ai;
 
+import java.util.Random;
+
 public class GameConstants {
 
     /*------ BOARD CONSTANTS ------*/
 
     // Allows quick referral to pieces when constructing bit boards.
-    public static int YELLOW = 0;
-    public static int BLUE = 1;
-    public static int RED = 2;
-    public static int GREEN = 3;
+    public static final int YELLOW = 0;
+    public static final int BLUE = 1;
+    public static final int RED = 2;
+    public static final int GREEN = 3;
 
     public static final int PAWN = 0;
     public static final int KNIGHT = 4;
@@ -64,14 +66,11 @@ public class GameConstants {
     public static final int ALL_BITBOARDS = 32;
 
     //Material value of each piece
-    public static final int PAWN_VALUE = 50;
-    public static final int KNIGHT_VALUE = 100;
-    public static final int BOAT_VALUE = 150;
-    public static final int ELEPHANT_VALUE = 200;
-    public static final int KING_VALUE = 300;
-
-
-
+    public static final int PAWN_VALUE = 100;
+    public static final int KNIGHT_VALUE = 500;
+    public static final int BOAT_VALUE = 300;
+    public static final int ELEPHANT_VALUE = 800;
+    public static final int KING_VALUE = 1300;
 
     // An array of bitfields, each of which contains the single bit associated
     // with a square in a bitboard
@@ -92,6 +91,76 @@ public class GameConstants {
     // Used for printing:
     public static String PieceStrings[];
     public static final String PlayerStrings[] = { "Yellow", "Blue", "Red", "Green"};
+
+
+    /*------ EVALUATION FUNCTION CONSTANTS ------*/
+
+    public static int YellowPawnTable[] = {
+        0,   0, 10, 15, 15, 20, 50,  70,
+        0,   0, 10, 15, 15, 20, 50,  70,
+        0, -20, 15, 20, 20, 25, 50,  70,
+        0, -20, 15, 25, 25, 25, 50,  70,
+        0,   0,  0, 25, 25,  0, 30,  70,
+        0,   0,  0,  0,  0,  0, 30,  70,
+        0,   0,  0,  0,  0,  0, 30,  70,
+        0,   0,  0,  0,  0,  0, 30,  70
+    };
+
+    public static int BluePawnTable[] = {
+        0,   0,  0,  0,   0,   0,  0,  0,
+        0,   0,  0,  0, -20, -20,  0,  0,
+        0,   0,  0,  0,  15,  15, 10, 10,
+        0,   0,  0, 25,  25,  20, 15, 15,
+        0,   0,  0, 25,  25,  20, 15, 15,
+        0,   0,  0,  0,  25,  20, 20, 20,
+       30,  30, 30, 30,  50,  50, 50, 50,
+       70,  70, 70, 70,  70,  70, 70, 70
+    };
+
+    public static int RedPawnTable[] = {
+       70,  30,  0,  0,  0,  0,   0,  0,
+       70,  30,  0,  0,  0,  0,   0,  0,
+       70,  30,  0,  0,  0,  0,   0,  0,
+       70,  30,  0, 25, 25,  0,   0,  0,
+       70,  50, 25, 25, 25, 15, -20,  0,
+       70,  50, 25, 20, 20, 15, -20,  0,
+       70,  50, 20, 15, 15, 10,   0,  0,
+       70,  50, 20, 15, 15, 10,   0,  0
+    };
+
+    public static int GreenPawnTable[] = {
+       70,  70,  70,  70, 70, 70, 70, 70,
+       50,  50,  50,  50, 30, 30, 30, 30,
+       20,  20,  20,  25,  0,  0,  0,  0,
+       15,  15,  25,  25, 25,  0,  0,  0,
+       15,  15,  20,  25, 25,  0,  0,  0,
+       10,  10,  15,  15,  0,  0,  0,  0,
+        0,   0, -20, -20,  0,  0,  0,  0,
+        0,   0,   0,   0,  0,  0,  0,  0
+    };
+
+    public static int KnightTable[] = {
+        -50,-40,-30,-30,-30,-30,-40,-50,
+        -40,-20,  0,  0,  0,  0,-20,-40,
+        -30,  0, 10, 15, 15, 10,  0,-30,
+        -30,  5, 15, 20, 20, 15,  5,-30,
+        -30,  0, 15, 20, 20, 15,  0,-30,
+        -30,  5, 10, 15, 15, 10,  5,-30,
+        -40,-20,  0,  5,  5,  0,-20,-40,
+        -50,-40,-20,-30,-30,-20,-40,-50,
+    };
+
+    public static int BoatTable[] = {
+        -20,-10,-10,-10,-10,-10,-10,-20,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -10,  0,  5, 10, 10,  5,  0,-10,
+        -10,  5,  5, 10, 10,  5,  5,-10,
+        -10,  0, 10, 10, 10, 10,  0,-10,
+        -10, 10, 10, 10, 10, 10, 10,-10,
+        -10,  5,  0,  0,  0,  0,  5,-10,
+        -20,-10,-40,-10,-10,-40,-10,-20,
+    };
+
 
 
     /*------ MEMBER INITIALISATION ------*/
