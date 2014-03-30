@@ -2,13 +2,10 @@ package ac.ic.chaturaji.ai;
 
 import java.util.ArrayList;
 
-/**
- * Created by Homogoblin on 27/03/2014.
- */
-
 public class Evaluation {
     Board_AI board;
     int currentPlayer;
+    ArrayList<Move_AI> validMoves;
 
 
     int PawnVal = 6;
@@ -19,16 +16,18 @@ public class Evaluation {
 
     public Evaluation() {}
 
-    public int EvaluateScore(int maximisingPlayer, Board_AI theBoard) {
+    public int EvaluateScore(int player, Board_AI theBoard, ArrayList<Move_AI> possMoves) {
         int score = 0;
 
         board = theBoard;
-        currentPlayer = maximisingPlayer;
-
-        score += board.GetMaterialValue(maximisingPlayer);
+        currentPlayer = player;
+        validMoves = possMoves;
+        
+        score += board.GetMaterialValue(player);
         score += EvaluatePositions();
-        score += EvaluatePawns();
-        score += EvaluateDefense();
+        //score += EvaluatePawns();
+        score += EvaluateDefense(currentPlayer);
+        score += EvaluateOffense(currentPlayer);
 
         return score;
     }
@@ -75,7 +74,7 @@ public class Evaluation {
                             score -= 20;
 
                         // Encourage developing pawns that are almost towards the end of the board.
-                        if (((i % 8) == 6 || (i % 8) == 7) && (isDefended(i) > isAttacked(i)))
+                        if (((i % 8) == 6 || (i % 8) == 7) && (isDefended(i, currentPlayer) > isAttacked(i, currentPlayer)))
                             score += 100;
                     } break;
                     case GameConstants.BLUE: {
@@ -84,7 +83,7 @@ public class Evaluation {
                         if (DoubledPawn(i, GameConstants.BLUE))
                             score -= 20;
 
-                        if (i >= 48 && (isDefended(i) > isAttacked(i)))
+                        if (i >= 48 && (isDefended(i, currentPlayer) > isAttacked(i, currentPlayer)))
                             score += 100;
                     } break;
                     case GameConstants.RED: {
@@ -93,7 +92,7 @@ public class Evaluation {
                         if (DoubledPawn(i, GameConstants.RED))
                             score -= 20;
 
-                        if (((i % 8) == 0 || (i % 8) == 1) && (isDefended(i) > isAttacked(i)))
+                        if (((i % 8) == 0 || (i % 8) == 1) && (isDefended(i, currentPlayer) > isAttacked(i, currentPlayer)))
                             score += 100;
                     } break;
                     case GameConstants.GREEN: {
@@ -102,7 +101,7 @@ public class Evaluation {
                         if (DoubledPawn(i, GameConstants.BLUE))
                             score -= 20;
 
-                        if (i <= 15 && (isDefended(i) > isAttacked(i)))
+                        if (i <= 15 && (isDefended(i, currentPlayer) > isAttacked(i, currentPlayer)))
                             score += 100;
                     } break;
 
@@ -131,66 +130,104 @@ public class Evaluation {
     return false;
     }
 
-    private int EvaluateDefense() {
+    private int EvaluateDefense(int colour) {
         // Wish to make sure that the pieces are backed up:
         int score = 0;
 
-        score += CheckPieceDefense(GameConstants.KING);
-        score += CheckPieceDefense(GameConstants.BOAT);
-        score += CheckPieceDefense(GameConstants.KNIGHT);
-        score += CheckPieceDefense(GameConstants.ELEPHANT);
+        score += CheckPieceDefense(GameConstants.KING, colour);
+        score += CheckPieceDefense(GameConstants.BOAT, colour);
+        score += CheckPieceDefense(GameConstants.KNIGHT, colour);
+        score += CheckPieceDefense(GameConstants.ELEPHANT, colour);
 
         return score;
     }
+    
+    private int EvaluateOffense(int colour) {
+        int score = 0;
+        int count = 0;
+        
+        for (Move_AI listMove: validMoves)
+            if (listMove.getType() == GameConstants.CAPTURE) {
+                int destination =  listMove.getDest();
+                int piece = listMove.getCaptured();
 
-    private int CheckPieceDefense(int piece) {
+                // Promote positions with lots of capture potential, count the number of captures and add them at the end.
+                count++;
+
+                int defendingPieces = isAttacked(destination, colour);
+                int currentColourAttacking = isDefended(destination, colour);
+
+                // Check if the destination is covered by other players, if not then the piece is hanging & free to take
+                // without consequence.
+                if(defendingPieces == 0) {
+                    switch (piece) {
+                        case GameConstants.PAWN: score += GameConstants.PAWN_VALUE; break;
+                        case GameConstants.BOAT: score += GameConstants.BOAT_VALUE; break;
+                        case GameConstants.KNIGHT: score += GameConstants.KNIGHT_VALUE; break;
+                        case GameConstants.ELEPHANT: score += GameConstants.ELEPHANT_VALUE; break;
+                        case GameConstants.KING: score += GameConstants.KING_VALUE; break;
+                    }
+                }
+                // Otherwise promote ganging up on a certain piece:
+                else if (currentColourAttacking > defendingPieces) {
+                    score += (currentColourAttacking - defendingPieces) * 5;
+                }
+            }
+
+        return score + (count * 2);
+    }
+
+    
+    private int CheckPieceDefense(int piece, int colour) {
         // Check to see if the given piece is being attacked. Return penalties if so.
         int position;
         int score = 0;
 
-        if (board.GetBitBoard(piece + currentPlayer) == 0)
+        if (board.GetBitBoard(piece + colour) == 0)
             return 0;
 
         for (position = 0; position < 64; position++) {
-            if ((GameConstants.SquareBits[position] & board.GetBitBoard(piece + currentPlayer)) != 0)
+            if ((GameConstants.SquareBits[position] & board.GetBitBoard(piece + colour)) != 0)
                 break;
         }
 
-        int defense = isDefended(position);
-        int attacked = isAttacked(position);
+        int defense = isDefended(position, colour);
+        int attacked = isAttacked(position, colour);
 
         score += (defense - attacked);
         // Check if the piece is being overwhelmed, penalise heavily if so:
         if (defense < attacked) {
-            score -= (attacked - defense) * 10;
+            score -= (attacked - defense) * 5;
         }
 
         return score;
     }
 
-    private int isDefended(int position) {
+    // Check whether a certain colour's position is defended by its own pieces:
+    private int isDefended(int position, int colour) {
         int count = 0;
 
-        if (CheckCover(position, GameConstants.KNIGHT, currentPlayer))
+        if (CheckCover(position, GameConstants.KNIGHT, colour))
             count += KnightVal;
-        if (CheckCover(position, GameConstants.KING, currentPlayer))
+        if (CheckCover(position, GameConstants.KING, colour))
             count += KingVal;
-        if (CheckCover(position, GameConstants.BOAT, currentPlayer))
+        if (CheckCover(position, GameConstants.BOAT, colour))
             count += BoatVal;
-        if (CheckCover(position, GameConstants.ELEPHANT, currentPlayer))
+        if (CheckCover(position, GameConstants.ELEPHANT, colour))
             count += ElephantVal;
 
-        count += PawnVal * PawnCover(position, currentPlayer);
+        count += PawnVal * PawnCover(position, colour);
 
         return count;
     }
 
-    private int isAttacked(int position) {
+    // Check whether a certain colour's position is being attacked by other player's pieces:
+    private int isAttacked(int position, int colour) {
         int count = 0;
         int enemy;
 
         for (int i = 1; i < 4; i++) {
-            enemy = (currentPlayer + i) % 4;
+            enemy = (colour + i) % 4;
 
             if (CheckCover(position, GameConstants.KNIGHT, enemy))
                 count += KnightVal;
@@ -206,6 +243,7 @@ public class Evaluation {
         return count;
     }
 
+    // Check if a given square is within the attacking/ defending range of a given piece:
     private boolean CheckCover(int position, int piece, int colour) {
         if (board.GetBitBoard(piece + colour) == 0)
             return false;

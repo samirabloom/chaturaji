@@ -82,6 +82,10 @@ public class GameConstants {
     public static final int CAPTURE = 1;
     public static final int RESIGN = 2;
 
+    public static final int EXACT_VALUE = 0;
+    public static final int UPPER_BOUND = 1;
+    public static final int LOWER_BOUND = 2;
+
     /*------ PLAYER CONSTANTS ------*/
 
     public static final int HUMAN = 0;
@@ -92,12 +96,19 @@ public class GameConstants {
     public static String PieceStrings[];
     public static final String PlayerStrings[] = { "Yellow", "Blue", "Red", "Green"};
 
+    public static long ZobristHash[][];
+    public static long ZobristLock[][];
+
+    public static final long YellowMove;
+    public static final long BlueMove;
+    public static final long RedMove;
+    public static final long GreenMove;
 
     /*------ EVALUATION FUNCTION CONSTANTS ------*/
 
     public static int YellowPawnTable[] = {
-        0,   0, 10, 15, 15, 20, 50,  70,
-        0,   0, 10, 15, 15, 20, 50,  70,
+        0,   0, 0, 15, 15, 20, 50,  70,
+        0,   0, 0, 15, 15, 20, 50,  70,
         0, -20, 15, 20, 20, 25, 50,  70,
         0, -20, 15, 25, 25, 25, 50,  70,
         0,   0,  0, 25, 25,  0, 30,  70,
@@ -109,7 +120,7 @@ public class GameConstants {
     public static int BluePawnTable[] = {
         0,   0,  0,  0,   0,   0,  0,  0,
         0,   0,  0,  0, -20, -20,  0,  0,
-        0,   0,  0,  0,  15,  15, 10, 10,
+        0,   0,  0,  0,  15,  15,  0,  0,
         0,   0,  0, 25,  25,  20, 15, 15,
         0,   0,  0, 25,  25,  20, 15, 15,
         0,   0,  0,  0,  25,  20, 20, 20,
@@ -124,8 +135,8 @@ public class GameConstants {
        70,  30,  0, 25, 25,  0,   0,  0,
        70,  50, 25, 25, 25, 15, -20,  0,
        70,  50, 25, 20, 20, 15, -20,  0,
-       70,  50, 20, 15, 15, 10,   0,  0,
-       70,  50, 20, 15, 15, 10,   0,  0
+       70,  50, 20, 15, 15,  0,   0,  0,
+       70,  50, 20, 15, 15,  0,   0,  0
     };
 
     public static int GreenPawnTable[] = {
@@ -134,7 +145,7 @@ public class GameConstants {
        20,  20,  20,  25,  0,  0,  0,  0,
        15,  15,  25,  25, 25,  0,  0,  0,
        15,  15,  20,  25, 25,  0,  0,  0,
-       10,  10,  15,  15,  0,  0,  0,  0,
+        0,   0,  15,  15,  0,  0,  0,  0,
         0,   0, -20, -20,  0,  0,  0,  0,
         0,   0,   0,   0,  0,  0,  0,  0
     };
@@ -162,7 +173,6 @@ public class GameConstants {
     };
 
 
-
     /*------ MEMBER INITIALISATION ------*/
     // static member initialization
     static
@@ -174,30 +184,47 @@ public class GameConstants {
             SquareBits[ i ] = ( 1L << i );
         }
 
+        Random rnd = new Random();
+        ZobristHash = new long[GameConstants.ALL_PIECES][64];
+        ZobristLock = new long[GameConstants.ALL_PIECES][64];
+
+        YellowMove = rnd.nextLong();
+        BlueMove = rnd.nextLong();
+        RedMove = rnd.nextLong();
+        GreenMove = rnd.nextLong();
+
+        for (int player = 0; player < 4; player++) {
+            for (int piece = 0; piece < GameConstants.ALL_PIECES; piece++)
+                for (int square = 0; square < 64; square++) {
+                    ZobristHash[piece][square] = rnd.nextLong();
+                    ZobristLock[piece][square] = rnd.nextLong();
+                }
+        }
+
         // Tokens representing the various concepts in the game, for printing
         // and file i/o purposes.
         // PieceStrings contains an extra string representing empty squares.
         PieceStrings = new String[ ALL_PIECES + 1 ];
         PieceStrings[ YELLOW_PAWN ] = "YP";
-        PieceStrings[ YELLOW_ELEPHANT ] = "YR";
+        PieceStrings[ YELLOW_ELEPHANT ] = "YE";
         PieceStrings[ YELLOW_KNIGHT ] = "YN";
         PieceStrings[ YELLOW_BOAT ] = "YB";
         PieceStrings[ YELLOW_KING ] = "YK";
 
         PieceStrings[ BLUE_PAWN ] = "BP";
-        PieceStrings[ BLUE_ELEPHANT ] = "BR";
+        PieceStrings[ BLUE_ELEPHANT ] = "BE";
         PieceStrings[ BLUE_KNIGHT ] = "BN";
         PieceStrings[ BLUE_BOAT ] = "BB";
         PieceStrings[ BLUE_KING ] = "BK";
 
         PieceStrings[ RED_PAWN ] = "RP";
-        PieceStrings[ RED_ELEPHANT ] = "RR";
+        PieceStrings[ RED_ELEPHANT ] = "RE";
         PieceStrings[ RED_KNIGHT ] = "RN";
         PieceStrings[ RED_BOAT ] = "RB";
         PieceStrings[ RED_KING ] = "RK";
 
         PieceStrings[ GREEN_PAWN ] = "GP";
-        PieceStrings[ GREEN_ELEPHANT ] = "GR";
+        PieceStrings[ GREEN_ELEPHANT ] = "GE";
         PieceStrings[ GREEN_KNIGHT ] = "GN";
         PieceStrings[ GREEN_BOAT ] = "GB";
         PieceStrings[ GREEN_KING ] = "GK";

@@ -75,7 +75,7 @@ public class AITest{
         assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
         System.out.println("submitMoveAITest: succeeded");
     }
-
+    /*
     @Test
     public void gameTest() {
         Game game = new Game();
@@ -98,7 +98,7 @@ public class AITest{
         }
         System.out.println("gameTest: succeeded");
     }
-
+    */
     @Test
     public void boatTriumphTest() {
         int[][] boatTriumph = TestCases.BoatTriumphGame;

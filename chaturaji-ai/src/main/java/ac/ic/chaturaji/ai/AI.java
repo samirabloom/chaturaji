@@ -20,7 +20,7 @@ public class AI {
 
         //Create a new board and set up the bitboards within the Game class:
         Board_AI board = new Board_AI();
-        //board.Print();
+        board.Print();
 
         game.setBitboards(board.GetBitBoards());
 
@@ -101,8 +101,8 @@ public class AI {
 
                 if (theMove != null) {
                     board.ApplyMove(theMove);
-                    //board.Print();
-                    //theMove.Print();
+                    board.Print();
+                    System.out.println(theMove.Print());
 
                     //Create Move and Game to return in a result object
                     //Move ResultMove = new Move();

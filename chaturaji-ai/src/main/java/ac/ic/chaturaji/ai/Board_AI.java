@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.System;
+import java.util.Random;
 
 
 public class Board_AI implements Cloneable{
@@ -177,6 +178,27 @@ public class Board_AI implements Cloneable{
                 MaterialValue[i]+=GameConstants.KING_VALUE;
         }
 
+    }
+
+    public long ZobristKey() {
+        long zobristKey = 0;
+
+        for( int piece = 0; piece < GameConstants.ALL_PIECES; piece++ )
+        {
+            long currentBoard = BitBoards[piece];
+            for(int square = 0; square < 64; square++ )
+            {
+                if ((currentBoard & GameConstants.SquareBits[square]) != 0 )
+                    zobristKey ^= GameConstants.ZobristHash[piece][square];
+            }
+        }
+        switch(CurrentPlayer) {
+            case GameConstants.YELLOW: zobristKey ^= GameConstants.YellowMove; break;
+            case GameConstants.BLUE: zobristKey ^= GameConstants.BlueMove; break;
+            case GameConstants.RED: zobristKey ^= GameConstants.RedMove; break;
+            case GameConstants.GREEN: zobristKey ^= GameConstants.GreenMove; break;
+        }
+        return zobristKey;
     }
 
     public int isGameOver() {
@@ -363,11 +385,14 @@ public class Board_AI implements Cloneable{
     public boolean Print()
     {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\n");
         for( int line = 0; line < 8; line++ )
         {
             stringBuilder.append( "  -----------------------------------------" );
+            stringBuilder.append("\n");
             stringBuilder.append( "  |    |    |    |    |    |    |    |    |" );
-            System.out.print((8 - line) + " ");
+            stringBuilder.append("\n");
+            stringBuilder.append((8 - line) + " ");
             for( int col = 0; col < 8; col++ )
             {
                 long bits = GameConstants.SquareBits[ line * 8 + col ];
@@ -378,13 +403,17 @@ public class Board_AI implements Cloneable{
                     piece++;
 
                 // Show the piece
-                System.out.print( "| " + GameConstants.PieceStrings[ piece ] + " " );
+                stringBuilder.append("| " + GameConstants.PieceStrings[piece] + " ");
             }
             stringBuilder.append( "|" );
+            stringBuilder.append("\n");
             stringBuilder.append( "  |    |    |    |    |    |    |    |    |" );
+            stringBuilder.append("\n");
         }
         stringBuilder.append( "  -----------------------------------------" );
+        stringBuilder.append("\n");
         stringBuilder.append( "    A    B    C    D    E    F    G    H   " );
+        stringBuilder.append("\n");
 
         logger.info(stringBuilder.toString());
 

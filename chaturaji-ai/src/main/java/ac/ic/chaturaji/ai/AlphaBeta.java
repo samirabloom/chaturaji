@@ -7,10 +7,21 @@ import java.lang.Math.*;
  * @author dg3213
  */
 public class AlphaBeta {
+    int MINVAL = -1000000;
+    int MAXVAL = 1000000;
+
     MoveGenerator_AI validMoves;
+    Evaluation evalFunction;
+    TranspositionTable TransTable;
+    int GameTimer;
+    int NodesSearched;
 
     public AlphaBeta() {
         validMoves = new MoveGenerator_AI();
+        evalFunction = new Evaluation();
+        TransTable = new TranspositionTable();
+        GameTimer = 0;
+        NodesSearched = 0;
     }
 
     // Search to find the best move for the given colour to the given depth:
@@ -20,32 +31,69 @@ public class AlphaBeta {
         // First generate the moves for the current player.
         validMoves.GenerateMoves(board, possMoves, colour);
 
-        double alpha = -1000000;
-        double beta = 1000000;
-
-        double record = -1000000;
+        double alpha = MINVAL;
+        double beta = MAXVAL;
+        double record = MINVAL;
+        double score;
 
         Move_AI bestMove = null;
 
+        // Use the GameTimer to determine how far through the game we are. This allows us to put a time stamp
+        // on the entries within the transposition table.
+        GameTimer++;
         for (Move_AI listMove: possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
+
             // Maximise the corresponding value returned
-            double value = alphaBeta(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, colour);
-            if (value > record) {
-                record = value;
+            score = alphaBeta(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, colour);
+            alpha = Math.max(alpha, score);
+
+            if (score > record) {
+                record = score;
                 bestMove = listMove;
+                bestMove.SetScore(score);
             }
         }
         return bestMove;
     }
 
-    double alphaBeta(Board_AI board, int depth, double alpha, double beta ,int colour, int maximisingPlayer) {
+    public double alphaBeta(Board_AI board, int depth, double alpha, double beta ,int colour, int maximisingPlayer) {
+
+        Move_AI testMove = new Move_AI();
+        NodesSearched++;
+
+        // Check if there is anything suitable within the transposition table first
+        if (TransTable.FindBoard(board, testMove) && testMove.getDepth() >= depth) {
+            // We have found a move for the current board position. Must now check whether it is relevant
+            // (i.e. if it has been resolved to a greater depth than we are currently at and what sort of bound
+            // has been placed on its evaluation. Note that we can only use certain bounds depending on whether we are
+            // maximising or minimising).
+
+            //System.out.println("Transposition found!");
+
+            int evalType = testMove.getEvaluationType();
+            double evaluation = testMove.getScore();
+
+            if (evalType == GameConstants.EXACT_VALUE) {
+                return evaluation;
+            }
+
+            if (evalType == GameConstants.UPPER_BOUND){
+                if (evaluation <= alpha) {
+                    return alpha;
+                }
+            }
+            else if (evalType == GameConstants.LOWER_BOUND) {
+                if (evaluation >= beta) {
+                    return beta;
+                }
+            }
+        }
 
         if (depth == 0 || board.isGameOver() == 0)
-            return Evaluate(board.GetMaterialValue(), maximisingPlayer);
+            return Evaluate(maximisingPlayer, board);
 
-        double value;
         ArrayList<Move_AI> possMoves = new ArrayList<>();
         validMoves.GenerateMoves(board, possMoves, colour);
 
@@ -59,16 +107,28 @@ public class AlphaBeta {
         for (Move_AI listMove: possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
-            value = alphaBeta(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
+            double score = alphaBeta(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
+
             if (colour == maximisingPlayer) {
-                alpha = Math.max(alpha, value);
-                if (beta <= alpha)
-                    break;
+                alpha = Math.max(alpha, score);
+                if (beta <= score) {
+                    TransTable.SaveBoard(board, beta, GameConstants.LOWER_BOUND, depth, GameTimer);
+                    return beta;
+                }
+                // Otherwise we have a score between alpha and beta - save this as en exact value.
+                if (score > alpha) {
+                    TransTable.SaveBoard(board, score, GameConstants.EXACT_VALUE, depth, GameTimer);
+                }
             }
             else {
-                beta = Math.min(beta, value);
-                if (beta <= alpha)
-                    break;
+                beta = Math.min(beta, score);
+                if (score <= alpha) {
+                    TransTable.SaveBoard(board, alpha, GameConstants.UPPER_BOUND, depth, GameTimer);
+                    return alpha;
+                }
+                if (score < beta) {
+                    TransTable.SaveBoard(board, score, GameConstants.EXACT_VALUE, depth, GameTimer);
+                }
             }
         }
         if (colour == maximisingPlayer)
@@ -77,13 +137,23 @@ public class AlphaBeta {
             return beta;
     }
 
-    private double Evaluate(int[] MaterialVal, int maximisingColour) {
+    private double Evaluate(int maximisingColour, Board_AI board) {
         double totalOtherScore = 0;
+        ArrayList<Move_AI> possMoves = new ArrayList<>();
 
         for (int i = 1; i < 4; i++) {
-            totalOtherScore += MaterialVal[(maximisingColour + i) % 4];
+            totalOtherScore += board.GetMaterialValue((maximisingColour + i) % 4);
         }
 
-        return MaterialVal[maximisingColour] - (totalOtherScore);
+        return board.GetMaterialValue(maximisingColour) - (totalOtherScore);
+
+        /*
+        for (int i = 1; i < 4; i++) {
+            validMoves.GenerateMoves(board, possMoves, (maximisingColour + i) % 4);
+            totalOtherScore += evalFunction.EvaluateScore((maximisingColour + i) % 4, board, possMoves);
+        }
+        validMoves.GenerateMoves(board, possMoves, maximisingColour);
+        return evalFunction.EvaluateScore(maximisingColour, board, possMoves) - (totalOtherScore);
+        */
     }
 }

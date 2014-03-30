@@ -14,6 +14,9 @@ public class Move_AI {
     private int PromotionType = -1;
     private boolean BoatTriumph = false;
 
+    private int EvaluationType;
+    private double Score;
+    private int Depth;
 
     //------ Methods ------//
 
@@ -29,7 +32,7 @@ public class Move_AI {
 
     // Accessors:
     public int getDest() {
-        return Dest;
+      return Dest;
     }
 
     public int getSource() {
@@ -55,6 +58,12 @@ public class Move_AI {
     public boolean getTriumph() {
         return BoatTriumph;
     }
+
+    public int getEvaluationType() {return EvaluationType;}
+
+    public double getScore() {return Score;}
+
+    public int getDepth() {return Depth;}
 
     public void SetDest(int newDest) {
         Dest = newDest;
@@ -82,6 +91,18 @@ public class Move_AI {
 
     public void SetBoatTriumph(boolean isTrue) {
         BoatTriumph = isTrue;
+    }
+
+    public void SetEvalType(int flag) {
+        EvaluationType = flag;
+    }
+
+    public void SetScore(double evaluation) {
+        Score = evaluation;
+    }
+
+    public void SetDepth(int depth) {
+        Depth = depth;
     }
 
     // Functions:
