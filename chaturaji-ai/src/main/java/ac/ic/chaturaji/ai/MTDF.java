@@ -13,7 +13,7 @@ public class MTDF extends AlphaBeta {
     }
 
     public Move_AI Search(Board_AI board) {
-        Move_AI bestMove;
+        Move_AI bestMove = null;
         int iterateDepth = 1;
         double firstGuess = 0;
 
@@ -81,8 +81,16 @@ public class MTDF extends AlphaBeta {
                 record = score;
                 bestMove = listMove;
                 bestMove.SetScore(score);
+
+                if (record >= beta) {
+                    TransTable.SaveBoard(board, record, GameConstants.LOWER_BOUND, depth, GameTimer);
+                    return bestMove;
+                }
+                if (record > alpha) {
+                TransTable.SaveBoard(board, record, GameConstants.EXACT_VALUE, depth, GameTimer);
                 }
             }
+        }
         return bestMove;
     }
 }

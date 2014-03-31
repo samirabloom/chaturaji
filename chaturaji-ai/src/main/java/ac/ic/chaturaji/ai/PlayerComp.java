@@ -25,7 +25,9 @@ public class PlayerComp extends Player_AI {
         MaxN maxn = new MaxN();
         AlphaBeta alphabeta  = new AlphaBeta();
         MTDF mtdf = new MTDF();
+        //NegaMax negaMax = new NegaMax();
 
+        //move = negaMax.Search(board, board.GetCurrentPlayer(), 8);
         //move = mtdf.Search(board);
         move = alphabeta.Search(board, board.GetCurrentPlayer(), 7);
 

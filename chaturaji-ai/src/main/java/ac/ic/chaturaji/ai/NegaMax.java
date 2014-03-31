@@ -1,12 +1,12 @@
 package ac.ic.chaturaji.ai;
+
 import java.util.ArrayList;
-import java.lang.Math.*;
-
-
+/*
 /**
- * @author dg3213
+ * Created by dg3213 on 31/03/14.
  */
-public class AlphaBeta {
+/*
+public class NegaMax {
     int MINVAL = -1000000;
     int MAXVAL = 1000000;
 
@@ -16,7 +16,7 @@ public class AlphaBeta {
     int GameTimer;
     int NodesSearched;
 
-    public AlphaBeta() {
+    public NegaMax() {
         validMoves = new MoveGenerator_AI();
         evalFunction = new Evaluation();
         TransTable = new TranspositionTable();
@@ -48,32 +48,28 @@ public class AlphaBeta {
                 Board_AI newBoard = board.clone();
                 newBoard.ApplyMove(listMove);
 
-                // Maximise the corresponding value returned
-                score = alphaBeta(newBoard, iteration - 1, alpha, beta, (colour + 1) % 4, colour);
-
-                // If score is outside the given window then we must call the next alphaBeta with the
-                // original values. Otherwise we may close the window for added efficiency:
-                if(score <= alpha || score >= beta) {
-                    alpha = MINVAL;
-                    beta = MAXVAL;
-                }
-                else {
-                    alpha = score - 10;
-                    beta = score + 10;
-                }
+                score = -negaMax(newBoard, iteration - 1, -beta, -alpha, (colour + 1) % 4, colour);
+                alpha = Math.max(record, alpha);
 
                 if (score > record) {
                     record = score;
                     bestMove = listMove;
                     bestMove.SetScore(score);
                 }
+                if (record >= beta)
+                    break;
             }
         }
+        if(record <= alpha)
+            TransTable.SaveBoard(board, record, GameConstants.LOWER_BOUND, depth, GameTimer);
+        else if(record >= beta)
+            TransTable.SaveBoard(board, record, GameConstants.UPPER_BOUND, depth, GameTimer);
+        else
+            TransTable.SaveBoard(board, record, GameConstants.UPPER_BOUND, depth, GameTimer);
         return bestMove;
     }
 
-    public double alphaBeta(Board_AI board, int depth, double alpha, double beta ,int colour, int maximisingPlayer) {
-
+    private double negaMax(Board_AI board, int depth, double alpha, double beta, int colour, int maximisingPlayer) {
         Move_AI testMove = new Move_AI();
         NodesSearched++;
         double score;
@@ -121,7 +117,7 @@ public class AlphaBeta {
             return score;
         }
 
-
+        double record = MINVAL;
         ArrayList<Move_AI> possMoves = new ArrayList<>();
         validMoves.GenerateMoves(board, possMoves, colour);
 
@@ -129,51 +125,30 @@ public class AlphaBeta {
             // The current player may have lost all its pieces or none of its pieces may move (i.e. pawns blocked).
             // In this case, the player can be ignored, and will return whatever board is optimal for the next
             // depth.
-            return alphaBeta(board, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
+            return negaMax(board, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
         }
 
         for (Move_AI listMove: possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
-            score = alphaBeta(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
+            if (colour != maximisingPlayer)
+                score = negaMax(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
+            else
+                score = -negaMax(newBoard, depth - 1, -beta, -alpha, (colour + 1) % 4, maximisingPlayer);
 
-            if (colour == maximisingPlayer) {
-                alpha = Math.max(alpha, score);
-                if (beta <= score) {
-                    TransTable.SaveBoard(board, beta, GameConstants.LOWER_BOUND, depth, GameTimer);
-                    return beta;
-                }
-                // Otherwise we have a score between alpha and beta - save this as en exact value.
-                if (score > alpha) {
-                    TransTable.SaveBoard(board, score, GameConstants.EXACT_VALUE, depth, GameTimer);
-                }
-            }
-            else {
-                beta = Math.min(beta, score);
-                if (score <= alpha) {
-                    TransTable.SaveBoard(board, alpha, GameConstants.UPPER_BOUND, depth, GameTimer);
-                    return alpha;
-                }
-                if (score < beta) {
-                    TransTable.SaveBoard(board, score, GameConstants.EXACT_VALUE, depth, GameTimer);
-                }
-            }
+            record = Math.max(score, record);
+            alpha = Math.max(record, alpha);
+
+            if(record >= beta)
+                break;
         }
-        if (colour == maximisingPlayer)
-            return alpha;
-        else
-            return beta;
-    }
-
-    // Very basic material evaluation
-    private double Evaluate(int maximisingColour, Board_AI board) {
-
-        double totalOtherScore = 0;
-
-        for (int i = 1; i < 4; i++) {
-            totalOtherScore += board.GetMaterialValue((maximisingColour + i) % 4);
-        }
-
-        return board.GetMaterialValue(maximisingColour) - (totalOtherScore);
+        if(record <= alpha) // a lowerbound value
+            TransTable.SaveBoard(board, record, GameConstants.LOWER_BOUND, depth, GameTimer);
+        else if(record >= beta) // an upperbound value
+            TransTable.SaveBoard(board, record, GameConstants.UPPER_BOUND, depth, GameTimer);
+        else // a true minimax value
+            TransTable.SaveBoard(board, record, GameConstants.UPPER_BOUND, depth, GameTimer);
+        return record;
     }
 }
+*/
