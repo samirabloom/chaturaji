@@ -150,7 +150,7 @@ public class GameConstants {
          0,   0,   0,   0,   0,  0,  0,  0
     };
 
-    public static int KnightTable[] = {
+    public static double KnightTable[] = {
         -50,-40,-30,-30,-30,-30,-40,-50,
         -40,-20,  0,  0,  0,  0,-20,-40,
         -30,  0, 10, 15, 15, 10,  0,-30,
@@ -161,7 +161,7 @@ public class GameConstants {
         -50,-40,-20,-30,-30,-20,-40,-50,
     };
 
-    public static int BoatTable[] = {
+    public static double BoatTable[] = {
         -20,-10,-10,-10,-10,-10,-10,-20,
         -10,  0,  0,  0,  0,  0,  0,-10,
         -10,  0,  5, 10, 10,  5,  0,-10,

@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by dg3213 on 28/03/14.
  */
 public class MTDF extends AlphaBeta {
-    private static final int MaxSearchSize = 200000;
+    private static final int MaxSearchSize = 100000;
 
     public MTDF() {
         super();
@@ -14,20 +14,20 @@ public class MTDF extends AlphaBeta {
 
     public Move_AI Search(Board_AI board) {
         Move_AI bestMove = null;
-        int iterateDepth = 1;
+        int iterateDepth;
         double firstGuess = 0;
 
         GameTimer++;
-        while(true) {
-            iterateDepth++;
-
+        for (iterateDepth = 2; iterateDepth <= 15; iterateDepth++) {
             bestMove = MTD_f(board, firstGuess, iterateDepth);
-            firstGuess = bestMove.getScore();
 
-            if (iterateDepth >= 15 || (NodesSearched > MaxSearchSize))
+            if (bestMove != null)
+                firstGuess = bestMove.getScore();
+
+            if (NodesSearched > MaxSearchSize) {
                 break;
+            }
         }
-
         return bestMove;
     }
 
@@ -48,7 +48,8 @@ public class MTDF extends AlphaBeta {
                 beta = estimate;
 
             bestMove = AlphaBetaWithMemory(board, depth, beta - 1, beta, maximisingPlayer, maximisingPlayer);
-            estimate = bestMove.getScore();
+            if (bestMove != null)
+                estimate = bestMove.getScore();
 
             if (estimate < beta)
                 upperBound = estimate;
@@ -66,14 +67,12 @@ public class MTDF extends AlphaBeta {
         double record = MINVAL;
         double score;
 
-        // First generate the moves for the current player.
         validMoves.GenerateMoves(board, possMoves, colour);
 
         for (Move_AI listMove: possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
 
-            // Maximise the corresponding value returned
             score = alphaBeta(newBoard, depth - 1, alpha, beta, (maximisingPlayer + 1) % 4, maximisingPlayer);
             alpha = Math.max(alpha, score);
 

@@ -164,16 +164,4 @@ public class AlphaBeta {
         else
             return beta;
     }
-
-    // Very basic material evaluation
-    private double Evaluate(int maximisingColour, Board_AI board) {
-
-        double totalOtherScore = 0;
-
-        for (int i = 1; i < 4; i++) {
-            totalOtherScore += board.GetMaterialValue((maximisingColour + i) % 4);
-        }
-
-        return board.GetMaterialValue(maximisingColour) - (totalOtherScore);
-    }
 }
