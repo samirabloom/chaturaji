@@ -1,7 +1,9 @@
 package ac.ic.chaturaji.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -30,10 +32,12 @@ public class SettingsActivity extends Activity {
 
         soundcbx = (CheckBox) findViewById(R.id.soundbox);
 
-        if (soundOn)
+        if (soundOn){
             soundcbx.setChecked(true);
-        else
+        }
+        else{
             soundcbx.setChecked(false);
+        }
 
         soundcbx.setOnClickListener(soundSettings);
 
@@ -51,12 +55,20 @@ public class SettingsActivity extends Activity {
                 editor.putBoolean("sound", true);
                 editor.commit();
 
+                AudioManager aMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                int amStreamMusicMaxVol = aMan.getStreamMaxVolume(aMan.STREAM_MUSIC);
+                aMan.setStreamVolume(aMan.STREAM_MUSIC, amStreamMusicMaxVol, 9);
+
             } else {
 
                 SharedPreferences settings = getSharedPreferences("main", 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("sound", false);
                 editor.commit();
+
+                AudioManager aMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                int amStreamMusicMaxVol = aMan.getStreamMaxVolume(aMan.STREAM_MUSIC);
+                aMan.setStreamVolume(aMan.STREAM_MUSIC, amStreamMusicMaxVol, 0);
 
             }
         }

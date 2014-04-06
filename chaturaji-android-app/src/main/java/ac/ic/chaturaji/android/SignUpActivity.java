@@ -49,6 +49,7 @@ public class SignUpActivity extends Activity {
 
                 switch (state) {
                     case "Success":
+                        createAccountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(createAccountIntent);
                         break;
                     case "Error":

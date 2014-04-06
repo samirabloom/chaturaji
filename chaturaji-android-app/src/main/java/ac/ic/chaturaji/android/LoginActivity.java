@@ -2,8 +2,10 @@ package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChatuService;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,6 +27,12 @@ public class LoginActivity extends Activity {
 
         @Override
         public void onClick(View theView) {
+
+            SharedPreferences settings = getSharedPreferences("main", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("sound", false);
+            editor.commit();
+
             Intent getSignup = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(getSignup);
         }
@@ -43,7 +51,7 @@ public class LoginActivity extends Activity {
 
             SharedPreferences settings = getSharedPreferences("main", 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("sound", true);
+            editor.putBoolean("sound", false);
 
             email = email_edittext.getText().toString();
             password = password_edittext.getText().toString();
@@ -62,6 +70,7 @@ public class LoginActivity extends Activity {
 
                 switch (state) {
                     case "Success":
+                        getMainMenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(getMainMenu);
                         break;
                     case "Error":
@@ -86,7 +95,7 @@ public class LoginActivity extends Activity {
 
             SharedPreferences settings = getSharedPreferences("main", 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("sound", true);
+            editor.putBoolean("sound", false);
 
             email = email_edittext.getText().toString();
 
@@ -129,6 +138,10 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
+        AudioManager aMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        int amStreamMusicMaxVol = aMan.getStreamMaxVolume(aMan.STREAM_MUSIC);
+        aMan.setStreamVolume(aMan.STREAM_MUSIC, amStreamMusicMaxVol, 0);
 
         login_button = (Button) findViewById(R.id.login_button);
         signup_button = (Button) findViewById(R.id.signup_button);
