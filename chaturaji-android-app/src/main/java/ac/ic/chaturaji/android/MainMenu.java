@@ -134,6 +134,7 @@ public class MainMenu extends Activity {
         public void onClick(View theView) {
 
             Intent logOut = new Intent(MainMenu.this, LoginActivity.class);
+            logOut.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             ChatuService chatuService = ChatuService.getInstance();
 

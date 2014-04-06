@@ -100,6 +100,7 @@ public class GameRoomActivity extends Activity {
                 case "401":
                     Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
                     Intent logOut = new Intent(GameRoomActivity.this, LoginActivity.class);
+                    logOut.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     ChatuService chatuService = ChatuService.getInstance();
                     chatuService.logout();
                     chatuService.clearCookieCred();
