@@ -183,6 +183,12 @@ public class ChatuService {
 
             System.out.println(response.getStatusLine().getStatusCode());
 
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+
+                reply[0] = "401";
+                return reply;
+            }
+
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
 
                 return reply;
@@ -223,6 +229,11 @@ public class ChatuService {
 
             System.out.println(response.getStatusLine().getStatusCode());
 
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+
+                reply[0] = "401";
+                return reply;
+            }
 
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST) {
 
@@ -370,6 +381,36 @@ public class ChatuService {
             } else {
                 return "There was a problem logging in. Have you entered the correct details?";
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    public String logout() {
+
+        setupClient();
+
+        String url = "https://" + serverHost + ":" + serverPort + "/logout";
+
+        System.out.println(url);
+
+        try {
+
+            HttpContext localContext = new BasicHttpContext();
+
+            localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
+            localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
+
+            HttpPost httpPost = new HttpPost(url);
+
+            HttpResponse response = httpClient.execute(httpPost, localContext);
+
+            System.out.println(response.getStatusLine().getStatusCode());
+
+            return "Success";
+
 
         } catch (Exception e) {
             e.printStackTrace();

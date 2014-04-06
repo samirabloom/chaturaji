@@ -89,7 +89,14 @@ public class MainMenu extends Activity {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
                 } else if (Arrays.asList(state).contains("Invalid")) {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem logging in.", Toast.LENGTH_LONG).show();
-                } else {
+                } else if (Arrays.asList(state).contains("401")) {
+                    Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
+                    Intent logOut = new Intent(MainMenu.this, LoginActivity.class);
+                    ChatuService chatuService = ChatuService.getInstance();
+                    chatuService.logout();
+                    chatuService.clearCookieCred();
+                    startActivity(logOut);
+                }else {
                     startActivity(getSingleGame);
                 }
 
@@ -130,6 +137,7 @@ public class MainMenu extends Activity {
 
             ChatuService chatuService = ChatuService.getInstance();
 
+            chatuService.logout();
             chatuService.clearCookieCred();
 
             startActivity(logOut);

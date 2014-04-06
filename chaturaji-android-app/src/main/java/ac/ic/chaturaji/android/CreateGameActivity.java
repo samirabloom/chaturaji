@@ -82,9 +82,16 @@ public class CreateGameActivity extends Activity {
 
                 startGame.putExtra("colour", colour);
 
-                if (state.equals("Error")) {
+                if (state[0].equals("Error")) {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
-                } else {
+                } else if (state[0].equals("401")) {
+                    Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
+                    Intent logOut = new Intent(CreateGameActivity.this, LoginActivity.class);
+                    ChatuService chatuService = ChatuService.getInstance();
+                    chatuService.logout();
+                    chatuService.clearCookieCred();
+                    startActivity(logOut);
+                }else {
 
                     startActivity(startGame);
                 }

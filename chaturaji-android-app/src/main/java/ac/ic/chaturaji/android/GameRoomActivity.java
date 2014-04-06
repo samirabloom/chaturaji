@@ -97,6 +97,14 @@ public class GameRoomActivity extends Activity {
                 case "Bad request":
                     Toast.makeText(getApplicationContext(), state[0], Toast.LENGTH_LONG).show();
                     break;
+                case "401":
+                    Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
+                    Intent logOut = new Intent(GameRoomActivity.this, LoginActivity.class);
+                    ChatuService chatuService = ChatuService.getInstance();
+                    chatuService.logout();
+                    chatuService.clearCookieCred();
+                    startActivity(logOut);
+                    break;
             }
 
         } catch (Exception e) {
