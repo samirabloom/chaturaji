@@ -384,6 +384,9 @@ public class MoveGenerator_AI {
                         break;
                 }
 
+                if (destination < 0 || destination >= 64)
+                    continue;
+
                 if ((allPieces & GameConstants.SquareBits[destination]) == 0) {
 
                     if ((GameConstants.SquareBits[destination] & board.GetBitBoard(GameConstants.YELLOW_END_SQUARES + colour)) == 0) {

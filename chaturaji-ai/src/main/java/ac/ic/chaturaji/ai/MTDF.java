@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by dg3213 on 28/03/14.
  */
 public class MTDF extends AlphaBeta {
-    private static final int MaxSearchSize = 100000;
+    private static final int MaxSearchSize = 250000;
 
     public MTDF() {
         super();

@@ -15,13 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AI {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
+    private int playerToMove;
 
     public Game createGame(Game game) {
 
         //Create a new board and set up the bitboards within the Game class:
         Board_AI board = new Board_AI();
         board.Print();
-
+        playerToMove = 0;
         game.setBitboards(board.GetBitBoards());
 
         return game;
@@ -93,11 +94,9 @@ public class AI {
             case AI: {
                 playerAI = new PlayerComp(colour, player.getPoints(), player.getKingsCaptured());
 
-                Random randomGenerator = new Random();
-                int random = randomGenerator.nextInt();
-
                 // If it's the AI's turn just generate a move:
-                theMove = playerAI.GetMove(board, (random % 2));
+                theMove = playerAI.GetMove(board, (playerToMove % 2));
+                playerToMove++;
 
                 if (theMove != null) {
                     board.ApplyMove(theMove);
