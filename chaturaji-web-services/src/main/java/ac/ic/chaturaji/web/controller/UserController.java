@@ -40,7 +40,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> register(@Valid User user, BindingResult bindingResult, HttpServletRequest request) throws IOException {
-        if(userDAO.findByEmail(user.getEmail()) != null) {
+        if (userDAO.findByEmail(user.getEmail()) != null) {
             logger.warn("A user already exists with " + user.getEmail() + " email address");
             return new ResponseEntity<>("A user already exists with that email address", HttpStatus.BAD_REQUEST);
         }

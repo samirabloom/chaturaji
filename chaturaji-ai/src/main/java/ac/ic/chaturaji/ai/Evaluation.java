@@ -2,6 +2,9 @@ package ac.ic.chaturaji.ai;
 
 import java.util.ArrayList;
 
+/**
+ * @author dg3213
+ */
 public class Evaluation {
     MoveGenerator_AI moveGenerator;
 
@@ -36,11 +39,11 @@ public class Evaluation {
         int boatScore = 0;
         int pawnScore = 0;
 
-        int kingCount[] = {0,0,0,0};
-        int elephantCount[] = {0,0,0,0};
-        int knightCount[] = {0,0,0,0};
-        int boatCount[] = {0,0,0,0};
-        int pawnCount[] = {0,0,0,0};
+        int kingCount[] = {0, 0, 0, 0};
+        int elephantCount[] = {0, 0, 0, 0};
+        int knightCount[] = {0, 0, 0, 0};
+        int boatCount[] = {0, 0, 0, 0};
+        int pawnCount[] = {0, 0, 0, 0};
 
         for (int colour = 0; colour < 4; colour++) {
             if (board.GetBitBoard(GameConstants.KING + colour) != 0)
@@ -51,7 +54,7 @@ public class Evaluation {
                 knightCount[colour]++;
             if (board.GetBitBoard(GameConstants.BOAT + colour) != 0)
                 boatCount[colour]++;
-            
+
             if (board.GetBitBoard(GameConstants.PAWN + colour) == 0)
                 continue;
             for (int i = 0; i < 64; i++) {
@@ -88,25 +91,29 @@ public class Evaluation {
                         // Doubled pawns are useless
                         if (DoubledPawn(i, GameConstants.YELLOW, board))
                             score--;
-                    } break;
+                    }
+                    break;
                     case GameConstants.BLUE: {
                         score += GameConstants.BluePawnTable[i] / 10;
 
                         if (DoubledPawn(i, GameConstants.BLUE, board))
                             score--;
-                    } break;
+                    }
+                    break;
                     case GameConstants.RED: {
                         score += GameConstants.RedPawnTable[i] / 10;
 
                         if (DoubledPawn(i, GameConstants.RED, board))
                             score--;
-                    } break;
+                    }
+                    break;
                     case GameConstants.GREEN: {
                         score += GameConstants.GreenPawnTable[i] / 10;
 
                         if (DoubledPawn(i, GameConstants.BLUE, board))
                             score--;
-                    } break;
+                    }
+                    break;
                 }
             }
         return score;
@@ -116,17 +123,19 @@ public class Evaluation {
 
         switch (colour % 2) {
             case 0: {
-                if ((GameConstants.SquareBits[square - 1] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0)
+                if (square >= 1 && ((GameConstants.SquareBits[square - 1] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0))
                     return true;
-                if ((GameConstants.SquareBits[square + 1] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0)
+                if (square < GameConstants.ALL_SQUARES - 1 && ((GameConstants.SquareBits[square + 1] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0))
                     return true;
-            } break;
+            }
+            break;
             case 1: {
-                if ((GameConstants.SquareBits[square + 8] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0)
+                if (square < GameConstants.ALL_SQUARES - 8 && (GameConstants.SquareBits[square + 8] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0)
                     return true;
-                if ((GameConstants.SquareBits[square - 8] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0)
+                if (square >= 8 && ((GameConstants.SquareBits[square - 8] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0))
                     return true;
-            } break;
+            }
+            break;
         }
         return false;
     }
@@ -145,11 +154,11 @@ public class Evaluation {
                 break;
 
             if ((GameConstants.SquareBits[i] & board.GetBitBoard(GameConstants.KNIGHT + maximisingColour)) != 0) {
-                score += GameConstants.KnightTable[i]/100;
+                score += GameConstants.KnightTable[i] / 100;
                 count++;
             }
             if ((GameConstants.SquareBits[i] & board.GetBitBoard(GameConstants.BOAT + maximisingColour)) != 0) {
-                score += GameConstants.BoatTable[i]/100;
+                score += GameConstants.BoatTable[i] / 100;
                 count++;
             }
         }
@@ -158,18 +167,18 @@ public class Evaluation {
 
     private double EvaluateMobility(int maximisingColour, Board_AI board) {
         ArrayList<Move_AI> possMoves = new ArrayList<>();
-        
+
         int currentMobility;
         int otherMobility = 0;
 
         moveGenerator.GenerateMoves(board, possMoves, maximisingColour);
         currentMobility = possMoves.size();
-        
+
         for (int i = 1; i < 4; i++) {
             moveGenerator.GenerateMoves(board, possMoves, (maximisingColour + i) % 4);
             otherMobility += possMoves.size();
         }
-        
+
         return currentMobility - otherMobility;
     }
 
@@ -181,13 +190,13 @@ public class Evaluation {
             if ((board.GetBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[i]) != 0)
                 if (CheckCover(board, i, GameConstants.KING, colour))
                     score += KingVal;
-                if (CheckCover(board, i, GameConstants.KNIGHT, colour))
-                    score += KnightVal;
-                if (CheckCover(board, i, GameConstants.ELEPHANT, colour))
-                    score += ElephantVal;
-                if (CheckCover(board, i, GameConstants.BOAT, colour))
-                    score += BoatVal;
-                score += PawnVal * PawnCover(board, i, colour);
+            if (CheckCover(board, i, GameConstants.KNIGHT, colour))
+                score += KnightVal;
+            if (CheckCover(board, i, GameConstants.ELEPHANT, colour))
+                score += ElephantVal;
+            if (CheckCover(board, i, GameConstants.BOAT, colour))
+                score += BoatVal;
+            score += PawnVal * PawnCover(board, i, colour);
         }
         return (score / 10);
     }
@@ -240,7 +249,8 @@ public class Evaluation {
                                 if ((allPieces & GameConstants.SquareBits[destination]) != 0)
                                     break;
                             }
-                    } break;
+                    }
+                    break;
                 }
             }
         }
@@ -259,23 +269,27 @@ public class Evaluation {
                     case 0: {
                         if ((i + 9) == position || (i - 7) == position)
                             count++;
-                    } break;
+                    }
+                    break;
                     case 1: {
                         if ((i + 9) == position || (i + 7) == position)
                             count++;
-                    } break;
+                    }
+                    break;
                     case 2: {
                         if ((i - 9) == position || (i + 7) == position)
                             count++;
-                    } break;
+                    }
+                    break;
                     case 3: {
                         if ((i - 9) == position || (i - 7) == position)
                             count++;
-                    } break;
+                    }
+                    break;
                 }
             }
         }
-    return count;
+        return count;
     }
 }
 

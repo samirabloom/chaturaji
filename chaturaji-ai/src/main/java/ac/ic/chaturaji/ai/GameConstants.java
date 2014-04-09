@@ -2,6 +2,9 @@ package ac.ic.chaturaji.ai;
 
 import java.util.Random;
 
+/**
+ * @author dg3213
+ */
 public class GameConstants {
 
     /*------ BOARD CONSTANTS ------*/
@@ -94,7 +97,7 @@ public class GameConstants {
     /*------ OTHER CONSTANTS ------*/
     // Used for printing:
     public static String PieceStrings[];
-    public static final String PlayerStrings[] = { "Yellow", "Blue", "Red", "Green"};
+    public static final String PlayerStrings[] = {"Yellow", "Blue", "Red", "Green"};
 
     public static long ZobristHash[][];
     public static long ZobristLock[][];
@@ -107,81 +110,79 @@ public class GameConstants {
     /*------ EVALUATION FUNCTION CONSTANTS ------*/
 
     public static double YellowPawnTable[] = {
-        0,   0,   0, 1.5, 1.5,   2, 5,  7,
-        0,   0,   0, 1.5, 1.5,   2, 5,  7,
-        0,  -2, 1.5,   2,   2, 2.5, 5,  7,
-        0,  -2, 1.5, 2.5, 2.5, 2.5, 5,  7,
-        0,   0,   0, 2.5, 2.5,   2, 3,  7,
-        0,   0,   0,   0,   0,   0, 3,  7,
-        0,   0,   0,   0,   0,   0, 3,  7,
-        0,   0,   0,   0,   0,   0, 3,  7
+            0, 0, 0, 1.5, 1.5, 2, 5, 7,
+            0, 0, 0, 1.5, 1.5, 2, 5, 7,
+            0, -2, 1.5, 2, 2, 2.5, 5, 7,
+            0, -2, 1.5, 2.5, 2.5, 2.5, 5, 7,
+            0, 0, 0, 2.5, 2.5, 2, 3, 7,
+            0, 0, 0, 0, 0, 0, 3, 7,
+            0, 0, 0, 0, 0, 0, 3, 7,
+            0, 0, 0, 0, 0, 0, 3, 7
     };
 
     public static double BluePawnTable[] = {
-        0,   0,  0,   0,   0,   0,   0,   0,
-        0,   0,  0,   0,  -2,  -2,   0,   0,
-        0,   0,  0,   0, 1.5, 1.5,   0,   0,
-        0,   0,  0, 2.5, 2.5,   2, 1.5, 1.5,
-        0,   0,  0, 2.5, 2.5,   2, 1.5, 1.5,
-        0,   0,  0,   2, 2.5,   2,   2,   2,
-        3,   3,  3,   3,   5,   5,   5,   5,
-        7,   7,  7,   7,   7,   7,   7,   7
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, -2, -2, 0, 0,
+            0, 0, 0, 0, 1.5, 1.5, 0, 0,
+            0, 0, 0, 2.5, 2.5, 2, 1.5, 1.5,
+            0, 0, 0, 2.5, 2.5, 2, 1.5, 1.5,
+            0, 0, 0, 2, 2.5, 2, 2, 2,
+            3, 3, 3, 3, 5, 5, 5, 5,
+            7, 7, 7, 7, 7, 7, 7, 7
     };
 
     public static double RedPawnTable[] = {
-       7, 3,   0,   0,   0,   0,   0,  0,
-       7, 3,   0,   0,   0,   0,   0,  0,
-       7, 3,   0,   0,   0,   0,   0,  0,
-       7, 3,   2, 2.5, 2.5,   0,   0,  0,
-       7, 5, 2.5, 2.5, 2.5, 1.5,  -2,  0,
-       7, 5, 2.5,   2,   2, 1.5,  -2,  0,
-       7, 5,   2, 1.5, 1.5,   0,   0,  0,
-       7, 5,   2, 1.5, 1.5,   0,   0,  0
+            7, 3, 0, 0, 0, 0, 0, 0,
+            7, 3, 0, 0, 0, 0, 0, 0,
+            7, 3, 0, 0, 0, 0, 0, 0,
+            7, 3, 2, 2.5, 2.5, 0, 0, 0,
+            7, 5, 2.5, 2.5, 2.5, 1.5, -2, 0,
+            7, 5, 2.5, 2, 2, 1.5, -2, 0,
+            7, 5, 2, 1.5, 1.5, 0, 0, 0,
+            7, 5, 2, 1.5, 1.5, 0, 0, 0
     };
 
     public static double GreenPawnTable[] = {
-         7,   7,   7,   7,   7,  7,  7,  7,
-         5,   5,   5,   5,   3,  3,  3,  3,
-         2,   2,   2, 2.5,   2,  0,  0,  0,
-       1.5, 1.5, 2.5, 2.5, 2.5,  0,  0,  0,
-       1.5, 1.5,   2, 2.5, 2.5,  0,  0,  0,
-         0,   0, 1.5, 1.5,   0,  0,  0,  0,
-         0,   0,  -2,  -2,   0,  0,  0,  0,
-         0,   0,   0,   0,   0,  0,  0,  0
+            7, 7, 7, 7, 7, 7, 7, 7,
+            5, 5, 5, 5, 3, 3, 3, 3,
+            2, 2, 2, 2.5, 2, 0, 0, 0,
+            1.5, 1.5, 2.5, 2.5, 2.5, 0, 0, 0,
+            1.5, 1.5, 2, 2.5, 2.5, 0, 0, 0,
+            0, 0, 1.5, 1.5, 0, 0, 0, 0,
+            0, 0, -2, -2, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0
     };
 
     public static double KnightTable[] = {
-        -50,-40,-30,-30,-30,-30,-40,-50,
-        -40,-20,  0,  0,  0,  0,-20,-40,
-        -30,  0, 10, 15, 15, 10,  0,-30,
-        -30,  5, 15, 20, 20, 15,  5,-30,
-        -30,  0, 15, 20, 20, 15,  0,-30,
-        -30,  5, 10, 15, 15, 10,  5,-30,
-        -40,-20,  0,  5,  5,  0,-20,-40,
-        -50,-40,-20,-30,-30,-20,-40,-50,
+            -50, -40, -30, -30, -30, -30, -40, -50,
+            -40, -20, 0, 0, 0, 0, -20, -40,
+            -30, 0, 10, 15, 15, 10, 0, -30,
+            -30, 5, 15, 20, 20, 15, 5, -30,
+            -30, 0, 15, 20, 20, 15, 0, -30,
+            -30, 5, 10, 15, 15, 10, 5, -30,
+            -40, -20, 0, 5, 5, 0, -20, -40,
+            -50, -40, -20, -30, -30, -20, -40, -50,
     };
 
     public static double BoatTable[] = {
-        -20,-10,-10,-10,-10,-10,-10,-20,
-        -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,  0,  5, 10, 10,  5,  0,-10,
-        -10,  5,  5, 10, 10,  5,  5,-10,
-        -10,  0, 10, 10, 10, 10,  0,-10,
-        -10, 10, 10, 10, 10, 10, 10,-10,
-        -10,  5,  0,  0,  0,  0,  5,-10,
-        -20,-10,-40,-10,-10,-40,-10,-20,
+            -20, -10, -10, -10, -10, -10, -10, -20,
+            -10, 0, 0, 0, 0, 0, 0, -10,
+            -10, 0, 5, 10, 10, 5, 0, -10,
+            -10, 5, 5, 10, 10, 5, 5, -10,
+            -10, 0, 10, 10, 10, 10, 0, -10,
+            -10, 10, 10, 10, 10, 10, 10, -10,
+            -10, 5, 0, 0, 0, 0, 5, -10,
+            -20, -10, -40, -10, -10, -40, -10, -20,
     };
 
 
     /*------ MEMBER INITIALISATION ------*/
     // static member initialization
-    static
-    {
+    static {
         // Build the SquareBits constants
-        SquareBits = new long[ ALL_SQUARES ];
-        for( int i = 0; i < ALL_SQUARES; i++ )
-        {
-            SquareBits[ i ] = ( 1L << i );
+        SquareBits = new long[ALL_SQUARES];
+        for (int i = 0; i < ALL_SQUARES; i++) {
+            SquareBits[i] = (1L << i);
         }
 
         Random rnd = new Random();
@@ -204,31 +205,31 @@ public class GameConstants {
         // Tokens representing the various concepts in the game, for printing
         // and file i/o purposes.
         // PieceStrings contains an extra string representing empty squares.
-        PieceStrings = new String[ ALL_PIECES + 1 ];
-        PieceStrings[ YELLOW_PAWN ] = "YP";
-        PieceStrings[ YELLOW_ELEPHANT ] = "YE";
-        PieceStrings[ YELLOW_KNIGHT ] = "YN";
-        PieceStrings[ YELLOW_BOAT ] = "YB";
-        PieceStrings[ YELLOW_KING ] = "YK";
+        PieceStrings = new String[ALL_PIECES + 1];
+        PieceStrings[YELLOW_PAWN] = "YP";
+        PieceStrings[YELLOW_ELEPHANT] = "YE";
+        PieceStrings[YELLOW_KNIGHT] = "YN";
+        PieceStrings[YELLOW_BOAT] = "YB";
+        PieceStrings[YELLOW_KING] = "YK";
 
-        PieceStrings[ BLUE_PAWN ] = "BP";
-        PieceStrings[ BLUE_ELEPHANT ] = "BE";
-        PieceStrings[ BLUE_KNIGHT ] = "BN";
-        PieceStrings[ BLUE_BOAT ] = "BB";
-        PieceStrings[ BLUE_KING ] = "BK";
+        PieceStrings[BLUE_PAWN] = "BP";
+        PieceStrings[BLUE_ELEPHANT] = "BE";
+        PieceStrings[BLUE_KNIGHT] = "BN";
+        PieceStrings[BLUE_BOAT] = "BB";
+        PieceStrings[BLUE_KING] = "BK";
 
-        PieceStrings[ RED_PAWN ] = "RP";
-        PieceStrings[ RED_ELEPHANT ] = "RE";
-        PieceStrings[ RED_KNIGHT ] = "RN";
-        PieceStrings[ RED_BOAT ] = "RB";
-        PieceStrings[ RED_KING ] = "RK";
+        PieceStrings[RED_PAWN] = "RP";
+        PieceStrings[RED_ELEPHANT] = "RE";
+        PieceStrings[RED_KNIGHT] = "RN";
+        PieceStrings[RED_BOAT] = "RB";
+        PieceStrings[RED_KING] = "RK";
 
-        PieceStrings[ GREEN_PAWN ] = "GP";
-        PieceStrings[ GREEN_ELEPHANT ] = "GE";
-        PieceStrings[ GREEN_KNIGHT ] = "GN";
-        PieceStrings[ GREEN_BOAT ] = "GB";
-        PieceStrings[ GREEN_KING ] = "GK";
+        PieceStrings[GREEN_PAWN] = "GP";
+        PieceStrings[GREEN_ELEPHANT] = "GE";
+        PieceStrings[GREEN_KNIGHT] = "GN";
+        PieceStrings[GREEN_BOAT] = "GB";
+        PieceStrings[GREEN_KING] = "GK";
 
-        PieceStrings[ ALL_PIECES ] = "  ";
+        PieceStrings[ALL_PIECES] = "  ";
     }
 }

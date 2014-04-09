@@ -53,7 +53,7 @@ public class ChatuService {
     private static ChatuService instance;
     private final ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
     private final UUIDFactory uuidFactory = new UUIDFactory();
-    private String serverHost = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com";
+    private String serverHost = "192.168.1.100";
     private int serverPort = 8443;
     private DefaultHttpClient httpClient;
     private String email = "";

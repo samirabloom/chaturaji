@@ -3,26 +3,24 @@ package ac.ic.chaturaji.integration;
 import ac.ic.chaturaji.ai.AI;
 import ac.ic.chaturaji.ai.GameConstants;
 import ac.ic.chaturaji.model.*;
-
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.io.File;
+
+import static org.junit.Assert.*;
 
 /**
  * @author dg3213
  */
-public class AITest{
+public class AITest {
     private AI ai;
     private Game game;
-    private String filepath;
 
     @Before
     public void setup() {
         ai = new AI();
         game = new Game();
-        filepath = new File("").getAbsolutePath();
     }
 
     /*------ TESTS ------- */
@@ -56,6 +54,7 @@ public class AITest{
         assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
         System.out.println("submitMoveHumanTest: succeeded");
     }
+
     @Test
     public void submitMoveAITest() {
         Game game = new Game();
@@ -75,6 +74,7 @@ public class AITest{
         assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
         System.out.println("submitMoveAITest: succeeded");
     }
+
     /*
     @Test
     public void gameTest() {
@@ -113,7 +113,7 @@ public class AITest{
             game.addPlayer(player);
         }
 
-        for (int[] moves: boatTriumph) {
+        for (int[] moves : boatTriumph) {
             int source = moves[0];
             int dest = moves[1];
 
@@ -136,7 +136,7 @@ public class AITest{
         Game game = new Game();
         game = ai.createGame(game);
 
-        long[] PawnBoards = new long [32];
+        long[] PawnBoards = new long[32];
 
         for (int i = 0; i < 4; i++) {
             Player player = new Player();
@@ -161,7 +161,7 @@ public class AITest{
         Game game = new Game();
         game = ai.createGame(game);
 
-        long[] PawnBoards = new long [32];
+        long[] PawnBoards = new long[32];
 
         for (int i = 0; i < 4; i++) {
             Player player = new Player();

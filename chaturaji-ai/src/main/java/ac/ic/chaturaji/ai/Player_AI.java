@@ -2,8 +2,13 @@ package ac.ic.chaturaji.ai;
 
 import java.util.Set;
 
+/**
+ * @author dg3213
+ */
 abstract public class Player_AI {
+
     // Data Members
+
     int colour;
     int points;
     int type;
@@ -12,21 +17,14 @@ abstract public class Player_AI {
     /*---- Methods ------*/
 
     // Constructor
+
     public Player_AI(int points, Set<Integer> kingsCaptured) {
         this.points = points;
         this.kingsCaptured = kingsCaptured;
     }
 
-    // Accessors:
-    int GetColour() {
-        return colour;
-    }
+    // Accessors
 
-    int GetType() {
-        return type;
-    }
-
-    // Functions:
     void SetColour(int col) {
         colour = col;
     }
@@ -34,6 +32,8 @@ abstract public class Player_AI {
     int GetPoints() {
         return points;
     }
+
+    // Functions
 
     protected void setPoints(Board_AI theBoard, Move_AI theMove) {
         if (theMove != null) {
@@ -65,12 +65,6 @@ abstract public class Player_AI {
             }
         }
     }
-
-    // Functions
-
-    //public abstract Move_AI GetMove(Board_AI theBoard, int source, int dest);
-
-    public abstract int GetPlayerType();
 
     protected boolean checkKingsCaptured(int kingColour) {
         kingsCaptured.add(kingColour);

@@ -13,7 +13,9 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -60,7 +62,7 @@ public class GameRoomActivity extends Activity {
 
     }
 
-    public void joinGameClickListener(View v){
+    public void joinGameClickListener(View v) {
 
         String gameId = v.getTag().toString();
 

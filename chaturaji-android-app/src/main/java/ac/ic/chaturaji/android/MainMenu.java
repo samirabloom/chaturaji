@@ -96,7 +96,7 @@ public class MainMenu extends Activity {
                     chatuService.logout();
                     chatuService.clearCookieCred();
                     startActivity(logOut);
-                }else {
+                } else {
                     startActivity(getSingleGame);
                 }
 

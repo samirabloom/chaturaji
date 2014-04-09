@@ -1,7 +1,6 @@
 package ac.ic.chaturaji.integration;
 
 import ac.ic.chaturaji.ai.GameConstants;
-import static java.lang.Math.pow;
 
 /**
  * @author dg3213
@@ -30,12 +29,11 @@ public class TestCases {
     static {
 
         Squares = new long[64];
-        for(int i = 0; i < 64; i++)
-        {
-            Squares[i] = ( 1L << i );
+        for (int i = 0; i < 64; i++) {
+            Squares[i] = (1L << i);
         }
 
-        BoatTriumphGame = new int[][] {{0,18},{7,21},{63,45},{56,42},{18,36},{21,35},{45,27},{42,28}};
+        BoatTriumphGame = new int[][]{{0, 18}, {7, 21}, {63, 45}, {56, 42}, {18, 36}, {21, 35}, {45, 27}, {42, 28}};
 
         JustYellows = new long[32];
         JustBlues = new long[32];
@@ -49,18 +47,18 @@ public class TestCases {
         EmptyBoards();
         SinglePieceBoards();
 
-        BoatPromo = new int[][] {{1,2},{15,23},{62,61},{48,40},{2,3},{23,31},{61,60},
-                {40,32},{3,4},{31,39},{60,59},{32,24},{4,5},{39,47},{59,58},{24,16},
-                {5,6},{47,55},{58,57},{16,8},{6,7},{55,63},{57,56},{8,0}};
+        BoatPromo = new int[][]{{1, 2}, {15, 23}, {62, 61}, {48, 40}, {2, 3}, {23, 31}, {61, 60},
+                {40, 32}, {3, 4}, {31, 39}, {60, 59}, {32, 24}, {4, 5}, {39, 47}, {59, 58}, {24, 16},
+                {5, 6}, {47, 55}, {58, 57}, {16, 8}, {6, 7}, {55, 63}, {57, 56}, {8, 0}};
 
-        KnightPromo = new int[][] {{9,10},{14,22},{54,53},{49,41},{10,11},{22,30},{53,52},{41,33},{11,12},{30,38},{52,51},
-                {33,25},{12,13},{38,46},{51,50},{25,17},{13,14},{46,54},{50,49},{17,9},{14,15},{54,62},{49,48},{9,1}};
+        KnightPromo = new int[][]{{9, 10}, {14, 22}, {54, 53}, {49, 41}, {10, 11}, {22, 30}, {53, 52}, {41, 33}, {11, 12}, {30, 38}, {52, 51},
+                {33, 25}, {12, 13}, {38, 46}, {51, 50}, {25, 17}, {13, 14}, {46, 54}, {50, 49}, {17, 9}, {14, 15}, {54, 62}, {49, 48}, {9, 1}};
 
-        ElephantPromo = new int[][] {{17,18},{13,21},{46,45},{50,42},{18,19},{21,29},{45,44},{42,34},{19,20},{29,37},
-                {44,43},{34,26},{20,21},{37,45},{43,42},{26,18},{21,22},{45,53},{42,41},{18,10},{22,23},{53,61},{41,40},{10,2}};
+        ElephantPromo = new int[][]{{17, 18}, {13, 21}, {46, 45}, {50, 42}, {18, 19}, {21, 29}, {45, 44}, {42, 34}, {19, 20}, {29, 37},
+                {44, 43}, {34, 26}, {20, 21}, {37, 45}, {43, 42}, {26, 18}, {21, 22}, {45, 53}, {42, 41}, {18, 10}, {22, 23}, {53, 61}, {41, 40}, {10, 2}};
 
-        KingPromo = new int[][] {{25,26},{12,20},{38,37},{51,43},{26,27},{20,28},{37,36},{43,35},{27,28},{28,36},{36,35},
-                {35,27},{28,29},{36,44},{35,34},{27,19},{29,30},{44,52},{34,33},{19,11},{30,31},{52,60},{33,32},{11,3}};
+        KingPromo = new int[][]{{25, 26}, {12, 20}, {38, 37}, {51, 43}, {26, 27}, {20, 28}, {37, 36}, {43, 35}, {27, 28}, {28, 36}, {36, 35},
+                {35, 27}, {28, 29}, {36, 44}, {35, 34}, {27, 19}, {29, 30}, {44, 52}, {34, 33}, {19, 11}, {30, 31}, {52, 60}, {33, 32}, {11, 3}};
     }
 
     private static void setYellows() {
@@ -84,7 +82,7 @@ public class TestCases {
         JustYellows[GameConstants.YELLOW_KING] = Squares[24];
 
         JustYellows[GameConstants.ALL_YELLOW_PIECES] = (JustYellows[GameConstants.YELLOW_PAWN] | JustYellows[GameConstants.YELLOW_BOAT]
-                    | JustYellows[GameConstants.YELLOW_KNIGHT] | JustYellows[GameConstants.YELLOW_ELEPHANT] | JustYellows[GameConstants.YELLOW_KING]);
+                | JustYellows[GameConstants.YELLOW_KNIGHT] | JustYellows[GameConstants.YELLOW_ELEPHANT] | JustYellows[GameConstants.YELLOW_KING]);
 
     }
 
@@ -170,10 +168,8 @@ public class TestCases {
         setReds();
     }
 
-    private static void EmptyBoards()
-    {
-        for(int i = 0; i < 32; i++)
-        {
+    private static void EmptyBoards() {
+        for (int i = 0; i < 32; i++) {
             JustYellows[i] = 0;
             JustBlues[i] = 0;
             JustReds[i] = 0;

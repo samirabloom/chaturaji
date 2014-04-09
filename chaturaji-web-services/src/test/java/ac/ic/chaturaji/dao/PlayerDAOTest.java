@@ -60,8 +60,7 @@ public class PlayerDAOTest {
     @Test
     public void shouldUpdatePlayers() {
         //given
-        Game game = new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "as@df.com", "qazqaz", "user_two"), Colour.YELLOW, PlayerType.HUMAN))
-        ;
+        Game game = new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "as@df.com", "qazqaz", "user_two"), Colour.YELLOW, PlayerType.HUMAN));
         gameDAO.save(game);
         User user = new User(uuidFactory.generateUUID(), "user_update@email.com", passwordEncoder.encode("password_update"), "my_nickname");
         userDAO.save(user);

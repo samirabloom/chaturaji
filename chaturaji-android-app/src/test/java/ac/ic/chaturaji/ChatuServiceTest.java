@@ -278,7 +278,7 @@ public class ChatuServiceTest {
         String[] state2 = chatuService.createGame("2");
 
         // we cleared the cookie and creds on the client, so should not be able to log in now
-        assertEquals("Error", state2[0]);
+        assertEquals("401", state2[0]);
     }
 
     @Test

@@ -35,7 +35,7 @@ import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInM
  */
 @Controller
 public class GameController {
-    public static final int AI_PLAYER_DELAY = 500;
+    public static final int AI_PLAYER_DELAY = 1000;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private GameDAO gameDAO;
@@ -159,7 +159,7 @@ public class GameController {
                         game.setCurrentPlayerColour(game.getNextPlayerColour());
                     }
                     // now schedule AI move if next player is AI
-                    if (game.getCurrentPlayerType() == PlayerType.AI) {
+                    if (game.getCurrentPlayerType() == PlayerType.AI && result.getGameStatus() != GameStatus.GAME_OVER) {
                         taskExecutor.execute(new Runnable() {
                             @Override
                             public void run() {

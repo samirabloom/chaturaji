@@ -1,6 +1,8 @@
-
 package ac.ic.chaturaji.ai;
 
+/**
+ * @author dg3213
+ */
 public class Move_AI {
 
     //------ Data Members ------//
@@ -20,7 +22,8 @@ public class Move_AI {
 
     //------ Methods ------//
 
-    // Constructor:
+    // Constructor
+
     public Move_AI() {
     }
 
@@ -30,9 +33,10 @@ public class Move_AI {
         Dest = DestSqr;
     }
 
-    // Accessors:
+    // Accessors
+
     public int getDest() {
-      return Dest;
+        return Dest;
     }
 
     public int getSource() {
@@ -59,22 +63,16 @@ public class Move_AI {
         return BoatTriumph;
     }
 
-    public int getEvaluationType() {return EvaluationType;}
-
-    public double getScore() {return Score;}
-
-    public int getDepth() {return Depth;}
-
-    public void SetDest(int newDest) {
-        Dest = newDest;
+    public int getEvaluationType() {
+        return EvaluationType;
     }
 
-    public void SetSource(int newSrc) {
-        Source = newSrc;
+    public double getScore() {
+        return Score;
     }
 
-    public void SetPiece(int newPc) {
-        Piece = newPc;
+    public int getDepth() {
+        return Depth;
     }
 
     public void SetCaptured(int newCap) {
@@ -105,7 +103,8 @@ public class Move_AI {
         Depth = depth;
     }
 
-    // Functions:
+    // Functions
+
     public boolean IsEqual(Move_AI another) {
         if (Piece != another.getPiece())
             return false;

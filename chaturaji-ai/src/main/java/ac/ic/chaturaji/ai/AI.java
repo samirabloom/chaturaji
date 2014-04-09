@@ -15,14 +15,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AI {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
-    private int playerToMove;
 
     public Game createGame(Game game) {
 
         //Create a new board and set up the bitboards within the Game class:
         Board_AI board = new Board_AI();
         board.Print();
-        playerToMove = 0;
         game.setBitboards(board.GetBitBoards());
 
         return game;
@@ -55,8 +53,8 @@ public class AI {
                 }
 
                 board.ApplyMove(theMove);
-                //board.Print();
-                //theMove.Print();
+                board.Print();
+                logger.info(theMove.Print());
 
                 game.setBitboards(board.GetBitBoards());
                 game.getPlayer(colour).setPoints(humanPlayer.GetPoints());
@@ -78,16 +76,10 @@ public class AI {
                     game.incrementStalemateCount();
                 }
 
-                // Finally we check if a stalemate has occured:
+                // Finally we check if a stalemate has occurred:
                 if (result.getGameStatus() != GameStatus.GAME_OVER)
                     if (game.getStalemateCount() >= 10)
                         result.setGameStatus(GameStatus.STALEMATE);
-
-                boolean canMovePiece = humanPlayer.getMoves(board).isEmpty();
-                if (canMovePiece) {
-                    logger.info("Updating player " + player + " to indicate no available moves");
-                }
-                player.setCanNotMoveAnyPiece(canMovePiece);
             }
             break;
 
@@ -95,13 +87,12 @@ public class AI {
                 playerAI = new PlayerComp(colour, player.getPoints(), player.getKingsCaptured());
 
                 // If it's the AI's turn just generate a move:
-                theMove = playerAI.GetMove(board, (playerToMove % 2));
-                playerToMove++;
+                theMove = playerAI.GetMove(board, new Random().nextInt() % 2);
 
                 if (theMove != null) {
                     board.ApplyMove(theMove);
                     board.Print();
-                    System.out.println(theMove.Print());
+                    logger.info(theMove.Print());
 
                     //Create Move and Game to return in a result object
                     //Move ResultMove = new Move();
@@ -113,7 +104,6 @@ public class AI {
                     // pieces are blocked or because they have been eliminated. If so, move on to the next player.
                     board.NextPlayer();
                 }
-                //Game ResultGame = new Game();
 
                 game.getPlayer(colour).setPoints(playerAI.GetPoints());
                 game.setCurrentPlayerColour(Colour.values()[board.GetCurrentPlayer()]);
@@ -145,6 +135,8 @@ public class AI {
             }
             break;
         }
+        setAllPlayersCanMoveAnyPieceStatus(game);
+
         // DO NOT COMMENT THIS OUT THIS IS THE WAY THE SERVER INTEGRATES TO AI
 
         synchronized (this) {
@@ -172,14 +164,25 @@ public class AI {
         return result;
     }
 
+    private void setAllPlayersCanMoveAnyPieceStatus(Game game) {
+        for (Colour colour : Colour.values()) {
+            Player player = game.getPlayer(colour.ordinal());
+            if (player.getType() == PlayerType.HUMAN) {
+                Board_AI board = new Board_AI(game.getBitboards(), colour.ordinal());
+                PlayerHuman humanPlayer = new PlayerHuman(colour.ordinal(), player.getPoints(), player.getKingsCaptured());
+                boolean canMovePiece = humanPlayer.getMoves(board).isEmpty();
+                if (canMovePiece) {
+                    logger.info("Updating player " + player + " to indicate no available moves");
+                }
+                player.setCanNotMoveAnyPiece(canMovePiece);
+            }
+        }
+    }
+
     public synchronized void registerListener(String gameId, MoveListener moveListener) {
         if (!moveListeners.containsKey(gameId)) {
             moveListeners.put(gameId, Collections.synchronizedList(new ArrayList<MoveListener>()));
         }
         moveListeners.get(gameId).add(moveListener);
-    }
-
-    public synchronized void unregisterListeners(String gameId) {
-        moveListeners.remove(gameId);
     }
 }

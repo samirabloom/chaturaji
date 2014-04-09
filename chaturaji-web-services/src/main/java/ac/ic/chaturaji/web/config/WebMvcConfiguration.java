@@ -1,12 +1,10 @@
 package ac.ic.chaturaji.web.config;
 
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.cache.WebappTemplateLoader;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +23,6 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @author samirarabbanian

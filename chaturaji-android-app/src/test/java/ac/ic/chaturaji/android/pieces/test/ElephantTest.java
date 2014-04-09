@@ -5,6 +5,7 @@ import ac.ic.chaturaji.android.pieces.Elephant;
 import ac.ic.chaturaji.android.pieces.Pieces;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**

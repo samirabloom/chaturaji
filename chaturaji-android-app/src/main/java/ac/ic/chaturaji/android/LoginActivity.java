@@ -139,7 +139,7 @@ public class LoginActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        AudioManager aMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        AudioManager aMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         int amStreamMusicMaxVol = aMan.getStreamMaxVolume(aMan.STREAM_MUSIC);
         aMan.setStreamVolume(aMan.STREAM_MUSIC, amStreamMusicMaxVol, 0);
 

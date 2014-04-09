@@ -4,19 +4,32 @@ package ac.ic.chaturaji.ai;
  * Created by dg3213 on 28/03/14.
  */
 
-class TableEntry
-{
+class TableEntry {
     private long zobristKey;
     private int depth;
     private int flag;
     private double eval;
     private int time;
 
-    public long getZobrist() {return zobristKey;}
-    public int getFlag() {return flag;}
-    public double getEval() {return eval;}
-    public int getTime() {return time;}
-    public int getDepth() {return depth;}
+    public long getZobrist() {
+        return zobristKey;
+    }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public double getEval() {
+        return eval;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
 
     public TableEntry() {
         this.flag = -1;
@@ -31,17 +44,15 @@ class TableEntry
     }
 }
 
-public class TranspositionTable
-{
+public class TranspositionTable {
     // Make sure hash table size is prime
     private static final int HASH_SIZE = 131303;
     private TableEntry TransTable[];
 
     // Construction
-    public TranspositionTable()
-    {
+    public TranspositionTable() {
         TransTable = new TableEntry[HASH_SIZE];
-        for (int i = 0; i < HASH_SIZE; i++ ) {
+        for (int i = 0; i < HASH_SIZE; i++) {
             TransTable[i] = new TableEntry();
         }
     }
@@ -49,15 +60,14 @@ public class TranspositionTable
     // Check to see if there is already a stored board position within the transposition table.
     // If so then we also have a best move for that position (either an upper bound/lower bound/exact value)
     // so copy the values in the table to the input parameter 'move'.
-    public boolean FindBoard(Board_AI board, Move_AI move )
-    {
+    public boolean FindBoard(Board_AI board, Move_AI move) {
         long zobristKey = board.ZobristKey();
         // Find the board's hash position in Table
-        int key = Math.abs((int)(zobristKey) % HASH_SIZE);
+        int key = Math.abs((int) (zobristKey) % HASH_SIZE);
         TableEntry entry = TransTable[key];
 
         // Check flag - empty entries are set to 1. If so then then there is not yet an entry corresponding to the board position.
-        if (entry.getFlag() == -1 )
+        if (entry.getFlag() == -1)
             return false;
 
         // Also make sure that the actual board zobrist keys match - not just the hash table entries!
@@ -72,10 +82,9 @@ public class TranspositionTable
     }
 
     // Save the board using Zobrist's key as identity.
-    public boolean SaveBoard(Board_AI board, double evaluation, int flag, int depth, int timeStamp)
-    {
+    public boolean SaveBoard(Board_AI board, double evaluation, int flag, int depth, int timeStamp) {
         long zobristKey = board.ZobristKey();
-        int key = Math.abs((int)(zobristKey) % HASH_SIZE );
+        int key = Math.abs((int) (zobristKey) % HASH_SIZE);
 
         // If there already exists a better move in the transposition table (i.e. of greater depth)
         // then don't erase it!

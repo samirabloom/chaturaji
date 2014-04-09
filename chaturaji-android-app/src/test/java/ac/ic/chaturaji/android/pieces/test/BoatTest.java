@@ -4,7 +4,9 @@ import ac.ic.chaturaji.android.pieces.Boat;
 import ac.ic.chaturaji.android.pieces.Pieces;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kadir

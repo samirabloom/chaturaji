@@ -92,7 +92,7 @@ public class CreateGameActivity extends Activity {
                     chatuService.logout();
                     chatuService.clearCookieCred();
                     startActivity(logOut);
-                }else {
+                } else {
 
                     startActivity(startGame);
                 }

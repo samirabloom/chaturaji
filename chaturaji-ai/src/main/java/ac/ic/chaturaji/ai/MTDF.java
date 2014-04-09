@@ -3,14 +3,10 @@ package ac.ic.chaturaji.ai;
 import java.util.ArrayList;
 
 /**
- * Created by dg3213 on 28/03/14.
+ * @author dg3213
  */
 public class MTDF extends AlphaBeta {
     private static final int MaxSearchSize = 250000;
-
-    public MTDF() {
-        super();
-    }
 
     public Move_AI Search(Board_AI board) {
         Move_AI bestMove = null;
@@ -69,7 +65,7 @@ public class MTDF extends AlphaBeta {
 
         validMoves.GenerateMoves(board, possMoves, colour);
 
-        for (Move_AI listMove: possMoves) {
+        for (Move_AI listMove : possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
 
@@ -86,7 +82,7 @@ public class MTDF extends AlphaBeta {
                     return bestMove;
                 }
                 if (record > alpha) {
-                TransTable.SaveBoard(board, record, GameConstants.EXACT_VALUE, depth, GameTimer);
+                    TransTable.SaveBoard(board, record, GameConstants.EXACT_VALUE, depth, GameTimer);
                 }
             }
         }

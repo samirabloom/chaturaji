@@ -32,10 +32,9 @@ public class SettingsActivity extends Activity {
 
         soundcbx = (CheckBox) findViewById(R.id.soundbox);
 
-        if (soundOn){
+        if (soundOn) {
             soundcbx.setChecked(true);
-        }
-        else{
+        } else {
             soundcbx.setChecked(false);
         }
 
@@ -55,7 +54,7 @@ public class SettingsActivity extends Activity {
                 editor.putBoolean("sound", true);
                 editor.commit();
 
-                AudioManager aMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                AudioManager aMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 int amStreamMusicMaxVol = aMan.getStreamMaxVolume(aMan.STREAM_MUSIC);
                 aMan.setStreamVolume(aMan.STREAM_MUSIC, amStreamMusicMaxVol, 9);
 
@@ -66,7 +65,7 @@ public class SettingsActivity extends Activity {
                 editor.putBoolean("sound", false);
                 editor.commit();
 
-                AudioManager aMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                AudioManager aMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 int amStreamMusicMaxVol = aMan.getStreamMaxVolume(aMan.STREAM_MUSIC);
                 aMan.setStreamVolume(aMan.STREAM_MUSIC, amStreamMusicMaxVol, 0);
 

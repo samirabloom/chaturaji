@@ -1,6 +1,6 @@
 package ac.ic.chaturaji.ai;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 
 /**
  * @author dg3213
@@ -23,7 +23,7 @@ public class MaxN {
         Move_AI bestMove = null;
         double[] returnEval = null;
 
-        for (Move_AI listMove: possMoves) {
+        for (Move_AI listMove : possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
             double[] value = MinimaxN(newBoard, depth - 1, (colour + 1) % 4);
@@ -31,8 +31,7 @@ public class MaxN {
                 bestVal = value[colour];
                 returnEval = value;
                 bestMove = listMove;
-            }
-            else if (value[colour] == bestVal) {
+            } else if (value[colour] == bestVal) {
                 if (sum(value) < sum(returnEval)) {
                     bestVal = value[colour];
                     returnEval = value;
@@ -61,15 +60,14 @@ public class MaxN {
         double bestVal = -1000000;
         double[] returnEval = null;
 
-        for (Move_AI listMove: possMoves) {
+        for (Move_AI listMove : possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
             double[] value = MinimaxN(newBoard, depth - 1, (colour + 1) % 4);
             if (value[colour] > bestVal) {
                 bestVal = value[colour];
                 returnEval = value;
-            }
-            else if (value[colour] == bestVal) {
+            } else if (value[colour] == bestVal) {
                 if (sum(value) < sum(returnEval)) {
                     bestVal = value[colour];
                     returnEval = value;
@@ -82,7 +80,7 @@ public class MaxN {
     private double sum(double[] array) {
         double total = 0;
 
-        for (double element: array) {
+        for (double element : array) {
             total += element;
         }
         return total;
@@ -91,9 +89,9 @@ public class MaxN {
     private double[] Evaluate(int[] MaterialVal) {
         double[] evaluated = new double[4];
 
-        for(int i = 0; i < 4; i++) {
-            double[] others = new double[] {(MaterialVal[(i + 1) % 4]), MaterialVal[(i + 2) % 4], MaterialVal[(i + 3) % 4]};
-            evaluated[i] = MaterialVal[i] - (1/3) * sum(others);
+        for (int i = 0; i < 4; i++) {
+            double[] others = new double[]{(MaterialVal[(i + 1) % 4]), MaterialVal[(i + 2) % 4], MaterialVal[(i + 3) % 4]};
+            evaluated[i] = MaterialVal[i] - (1 / 3) * sum(others);
         }
         return evaluated;
     }

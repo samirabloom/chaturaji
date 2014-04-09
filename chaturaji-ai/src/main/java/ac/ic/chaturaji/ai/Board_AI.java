@@ -1,21 +1,21 @@
 package ac.ic.chaturaji.ai;
-// Chaturaji.Board_AI: constructs all relevant bitboards and handles chaturaji board manipulation (i.e. adding and removing pieces).
-// The board is represented by a 64-bit string, the first bit denoting square a8, the second is a7 and so forth.
-// There are 32 bitboards in total. The first 20 are for each piece of each player; for example Green will have 5 bitboards,
-// one for each of its different pieces. The next 4 are used to denote the positions of ALL the individual players' pieces,
-// essentially just the 5 single bitboards concatenated into one.
-// The following 4 are the end squares opposite to each colour's starting position. These are the squares on which the pawns may
-// promote to a higher value piece given that their corresponding piece has been taken.
-// The final four are used to keep track of which pawns are potential boats/elephants/kings/knights upon promotion.
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.System;
-import java.util.Random;
-
-
-public class Board_AI implements Cloneable{
+/**
+ *  Chaturaji.Board_AI: constructs all relevant bitboards and handles chaturaji board manipulation (i.e. adding and removing pieces).
+ *  The board is represented by a 64-bit string, the first bit denoting square a8, the second is a7 and so forth.
+ *  There are 32 bitboards in total. The first 20 are for each piece of each player; for example Green will have 5 bitboards,
+ *  one for each of its different pieces. The next 4 are used to denote the positions of ALL the individual players' pieces,
+ *  essentially just the 5 single bitboards concatenated into one.
+ *  The following 4 are the end squares opposite to each colour's starting position. These are the squares on which the pawns may
+ *  promote to a higher value piece given that their corresponding piece has been taken.
+ *  The final four are used to keep track of which pawns are potential boats/elephants/kings/knights upon promotion.
+ *
+ * @author dg3213
+ */
+public class Board_AI implements Cloneable {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -33,8 +33,7 @@ public class Board_AI implements Cloneable{
 	/*------ Methods ------*/
 
     /* Constructor */
-    public Board_AI()
-    {
+    public Board_AI() {
         BitBoards = new long[GameConstants.ALL_BITBOARDS];
         MaterialValue = new int[4];
 
@@ -42,8 +41,7 @@ public class Board_AI implements Cloneable{
         EvalMaterial();
     }
 
-    public Board_AI clone(){
-
+    public Board_AI clone() {
         Board_AI cloned = new Board_AI();
         cloned.BitBoards = BitBoards.clone();
         cloned.MaterialValue = MaterialValue.clone();
@@ -53,14 +51,14 @@ public class Board_AI implements Cloneable{
 
     public Board_AI(long[] bit_boards, int colour) {
         BitBoards = bit_boards;
-        MaterialValue = new int [4];
+        MaterialValue = new int[4];
         EvalMaterial();
 
         CurrentPlayer = colour;
     }
 
     //Copy constructor
-    public Board_AI(Board_AI board){
+    public Board_AI(Board_AI board) {
         BitBoards = board.BitBoards;
         MaterialValue = board.MaterialValue;
         CurrentPlayer = board.CurrentPlayer;
@@ -68,16 +66,29 @@ public class Board_AI implements Cloneable{
 
     /* Accessors */
 
-    public int GetCurrentPlayer()  {return CurrentPlayer;}
-    public long GetBitBoard(int which_one) {return BitBoards[which_one];}
-    public long[] GetBitBoards() {return BitBoards;}
-    public int[] GetMaterialValue(){ return MaterialValue; }
-    public int GetMaterialValue(int colour) { return MaterialValue[colour]; }
+    public int GetCurrentPlayer() {
+        return CurrentPlayer;
+    }
+
+    public long GetBitBoard(int which_one) {
+        return BitBoards[which_one];
+    }
+
+    public long[] GetBitBoards() {
+        return BitBoards;
+    }
+
+    public int[] GetMaterialValue() {
+        return MaterialValue;
+    }
+
+    public int GetMaterialValue(int colour) {
+        return MaterialValue[colour];
+    }
     /* Functions */
 
     // Initialise the Board:
-    private void StartBoard()
-    {
+    private void StartBoard() {
         // Empty the board of anything that may be on it.
         EmptyBoard();
 
@@ -86,34 +97,32 @@ public class Board_AI implements Cloneable{
         AddPiece(16, GameConstants.YELLOW_ELEPHANT);
         AddPiece(24, GameConstants.YELLOW_KING);
 
-        AddPiece( 4, GameConstants.BLUE_KING );
-        AddPiece( 5, GameConstants.BLUE_ELEPHANT );
-        AddPiece( 6, GameConstants.BLUE_KNIGHT );
-        AddPiece( 7, GameConstants.BLUE_BOAT);
+        AddPiece(4, GameConstants.BLUE_KING);
+        AddPiece(5, GameConstants.BLUE_ELEPHANT);
+        AddPiece(6, GameConstants.BLUE_KNIGHT);
+        AddPiece(7, GameConstants.BLUE_BOAT);
 
         AddPiece(39, GameConstants.RED_KING);
         AddPiece(47, GameConstants.RED_ELEPHANT);
         AddPiece(55, GameConstants.RED_KNIGHT);
         AddPiece(63, GameConstants.RED_BOAT);
 
-        AddPiece( 56, GameConstants.GREEN_BOAT);
-        AddPiece( 57, GameConstants.GREEN_KNIGHT );
-        AddPiece( 58, GameConstants.GREEN_ELEPHANT );
-        AddPiece( 59, GameConstants.GREEN_KING);
+        AddPiece(56, GameConstants.GREEN_BOAT);
+        AddPiece(57, GameConstants.GREEN_KNIGHT);
+        AddPiece(58, GameConstants.GREEN_ELEPHANT);
+        AddPiece(59, GameConstants.GREEN_KING);
 
         for (int i = 1; i <= 25; i = i + 8) {
             AddPiece(i, GameConstants.YELLOW_PAWN);
         }
-        for( int i = 12; i <= 15; i++ )
-        {
+        for (int i = 12; i <= 15; i++) {
             AddPiece(i, GameConstants.BLUE_PAWN);
         }
         for (int i = 38; i <= 62; i = i + 8) {
             AddPiece(i, GameConstants.RED_PAWN);
         }
-        for( int i = 48; i <= 51; i++ )
-        {
-            AddPiece( i, GameConstants.GREEN_PAWN);
+        for (int i = 48; i <= 51; i++) {
+            AddPiece(i, GameConstants.GREEN_PAWN);
         }
 
         for (int i = 7; i <= 63; i = i + 8) {
@@ -147,35 +156,35 @@ public class Board_AI implements Cloneable{
 
     private void EvalMaterial() {
         MaterialValue = new int[4];
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             //Check for the pawns of that colour
-            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.KING_PAWNS]) != 0)
-                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.KING_PAWNS]) != 0)
+                MaterialValue[i] += GameConstants.PAWN_VALUE;
 
-            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0)
-                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0)
+                MaterialValue[i] += GameConstants.PAWN_VALUE;
 
-            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.BOAT_PAWNS]) != 0)
-                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.BOAT_PAWNS]) != 0)
+                MaterialValue[i] += GameConstants.PAWN_VALUE;
 
-            if((BitBoards[GameConstants.PAWN+i] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0)
-                MaterialValue[i]+=GameConstants.PAWN_VALUE;
+            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0)
+                MaterialValue[i] += GameConstants.PAWN_VALUE;
 
             //Check for the elephant
-            if((BitBoards[GameConstants.ELEPHANT+i]) != 0 )
-                MaterialValue[i]+=GameConstants.ELEPHANT_VALUE;
+            if ((BitBoards[GameConstants.ELEPHANT + i]) != 0)
+                MaterialValue[i] += GameConstants.ELEPHANT_VALUE;
 
             //Check for the boat
-            if((BitBoards[GameConstants.BOAT+i]) != 0 )
-                MaterialValue[i]+=GameConstants.BOAT_VALUE;
+            if ((BitBoards[GameConstants.BOAT + i]) != 0)
+                MaterialValue[i] += GameConstants.BOAT_VALUE;
 
             //Check for the knight
-            if((BitBoards[GameConstants.KNIGHT+i]) != 0 )
-                MaterialValue[i]+=GameConstants.KNIGHT_VALUE;
+            if ((BitBoards[GameConstants.KNIGHT + i]) != 0)
+                MaterialValue[i] += GameConstants.KNIGHT_VALUE;
 
             //Check for the king
-            if((BitBoards[GameConstants.KING+i]) != 0 )
-                MaterialValue[i]+=GameConstants.KING_VALUE;
+            if ((BitBoards[GameConstants.KING + i]) != 0)
+                MaterialValue[i] += GameConstants.KING_VALUE;
         }
 
     }
@@ -183,20 +192,26 @@ public class Board_AI implements Cloneable{
     public long ZobristKey() {
         long zobristKey = 0;
 
-        for( int piece = 0; piece < GameConstants.ALL_PIECES; piece++ )
-        {
+        for (int piece = 0; piece < GameConstants.ALL_PIECES; piece++) {
             long currentBoard = BitBoards[piece];
-            for(int square = 0; square < 64; square++ )
-            {
-                if ((currentBoard & GameConstants.SquareBits[square]) != 0 )
+            for (int square = 0; square < 64; square++) {
+                if ((currentBoard & GameConstants.SquareBits[square]) != 0)
                     zobristKey ^= GameConstants.ZobristHash[piece][square];
             }
         }
-        switch(CurrentPlayer) {
-            case GameConstants.YELLOW: zobristKey ^= GameConstants.YellowMove; break;
-            case GameConstants.BLUE: zobristKey ^= GameConstants.BlueMove; break;
-            case GameConstants.RED: zobristKey ^= GameConstants.RedMove; break;
-            case GameConstants.GREEN: zobristKey ^= GameConstants.GreenMove; break;
+        switch (CurrentPlayer) {
+            case GameConstants.YELLOW:
+                zobristKey ^= GameConstants.YellowMove;
+                break;
+            case GameConstants.BLUE:
+                zobristKey ^= GameConstants.BlueMove;
+                break;
+            case GameConstants.RED:
+                zobristKey ^= GameConstants.RedMove;
+                break;
+            case GameConstants.GREEN:
+                zobristKey ^= GameConstants.GreenMove;
+                break;
         }
         return zobristKey;
     }
@@ -204,7 +219,7 @@ public class Board_AI implements Cloneable{
     public int isGameOver() {
         int count = 0;
 
-        for (int i = 0; i < 4; i++ ) {
+        for (int i = 0; i < 4; i++) {
             if (BitBoards[GameConstants.KING + i] != 0) {
                 count++;
             }
@@ -213,28 +228,28 @@ public class Board_AI implements Cloneable{
     }
 
     // Look for the piece located on a specific square
-    public int FindPieceColour(int square, int Colour){
-        if ( ( BitBoards[ GameConstants.KING + Colour ] & GameConstants.SquareBits[ square ] ) != 0 )
+    public int FindPieceColour(int square, int Colour) {
+        if ((BitBoards[GameConstants.KING + Colour] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.KING + Colour;
-        if ( ( BitBoards[ GameConstants.ELEPHANT + Colour ] & GameConstants.SquareBits[ square ] ) != 0 )
+        if ((BitBoards[GameConstants.ELEPHANT + Colour] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.ELEPHANT + Colour;
-        if ( ( BitBoards[ GameConstants.KNIGHT  + Colour] & GameConstants.SquareBits[ square ] ) != 0 )
+        if ((BitBoards[GameConstants.KNIGHT + Colour] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.KNIGHT + Colour;
-        if ( ( BitBoards[ GameConstants.BOAT + Colour ] & GameConstants.SquareBits[ square ] ) != 0 )
+        if ((BitBoards[GameConstants.BOAT + Colour] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.BOAT + Colour;
-        if ( ( BitBoards[ GameConstants.PAWN + Colour ] & GameConstants.SquareBits[ square ] ) != 0 )
+        if ((BitBoards[GameConstants.PAWN + Colour] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.PAWN + Colour;
         return GameConstants.EMPTY_SQUARE;
     }
 
-    public int FindColourPieceInSquare(int square){
-        if( ( BitBoards[GameConstants.ALL_RED_PIECES] & GameConstants.SquareBits[square]) != 0)
+    public int FindColourPieceInSquare(int square) {
+        if ((BitBoards[GameConstants.ALL_RED_PIECES] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.RED;
-        if( ( BitBoards[GameConstants.ALL_BLUE_PIECES] & GameConstants.SquareBits[square])!= 0)
+        if ((BitBoards[GameConstants.ALL_BLUE_PIECES] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.BLUE;
-        if( ( BitBoards[GameConstants.ALL_GREEN_PIECES] & GameConstants.SquareBits[square])!= 0)
+        if ((BitBoards[GameConstants.ALL_GREEN_PIECES] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.GREEN;
-        if( ( BitBoards[GameConstants.ALL_YELLOW_PIECES] & GameConstants.SquareBits[square])!= 0)
+        if ((BitBoards[GameConstants.ALL_YELLOW_PIECES] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.YELLOW;
         return -1;
     }
@@ -244,8 +259,7 @@ public class Board_AI implements Cloneable{
     }
 
     // Apply the move given and update the bit boards.
-    public void ApplyMove( Move_AI theMove )
-    {
+    public void ApplyMove(Move_AI theMove) {
         // Check if the move is a promotion
         boolean isPromotion = (theMove.getPromoType() > 0);
 
@@ -255,25 +269,21 @@ public class Board_AI implements Cloneable{
         if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.KNIGHT_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.KNIGHT_PAWNS);
-        }
-        else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.BOAT_PAWNS]) != 0) {
+        } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.BOAT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.BOAT_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.BOAT_PAWNS);
-        }
-        else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0) {
+        } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.ELEPHANT_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.ELEPHANT_PAWNS);
-        }
-        else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KING_PAWNS]) != 0) {
+        } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KING_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.KING_PAWNS);
             AddPiece(theMove.getDest(), GameConstants.KING_PAWNS);
         }
 
-        switch(theMove.getType())
-        {
+        switch (theMove.getType()) {
             case GameConstants.NORMAL_MOVE:
-                RemovePiece( theMove.getSource(), theMove.getPiece() );
-                AddPiece( theMove.getDest(), theMove.getPiece() );
+                RemovePiece(theMove.getSource(), theMove.getPiece());
+                AddPiece(theMove.getDest(), theMove.getPiece());
                 break;
             case GameConstants.CAPTURE:
                 RemovePiece(theMove.getSource(), theMove.getPiece());
@@ -291,43 +301,41 @@ public class Board_AI implements Cloneable{
                 boat_square = FindBoatSquare((CurrentPlayer + i) % 4);
                 if (boat_square >= 0) {
                     RemovePiece(boat_square, GameConstants.BOAT + ((CurrentPlayer + i) % 4));
-                }
-                else
+                } else
                     logger.error("ERROR CALCULATING BOAT TRIUMPH");
             }
         }
 
         // Handle the pawn promotions
         if (isPromotion) {
-            int colour = ( theMove.getPiece() % 4);
-            switch(theMove.getPromoType())
-            {
+            int colour = (theMove.getPiece() % 4);
+            switch (theMove.getPromoType()) {
                 case GameConstants.KNIGHT:
                     if (BitBoards[GameConstants.KNIGHT + colour] == 0) {
-                        RemovePiece( theMove.getDest(), theMove.getPiece() );
-                        RemovePiece( theMove.getDest(), GameConstants.KNIGHT_PAWNS);
-                        AddPiece( theMove.getDest(), GameConstants.KNIGHT + colour );
+                        RemovePiece(theMove.getDest(), theMove.getPiece());
+                        RemovePiece(theMove.getDest(), GameConstants.KNIGHT_PAWNS);
+                        AddPiece(theMove.getDest(), GameConstants.KNIGHT + colour);
                     }
                     break;
                 case GameConstants.BOAT:
                     if (BitBoards[GameConstants.BOAT + colour] == 0) {
-                        RemovePiece( theMove.getDest(), theMove.getPiece() );
-                        RemovePiece( theMove.getDest(), GameConstants.BOAT_PAWNS);
-                        AddPiece( theMove.getDest(), GameConstants.BOAT + colour );
+                        RemovePiece(theMove.getDest(), theMove.getPiece());
+                        RemovePiece(theMove.getDest(), GameConstants.BOAT_PAWNS);
+                        AddPiece(theMove.getDest(), GameConstants.BOAT + colour);
                     }
                     break;
                 case GameConstants.ELEPHANT:
                     if (BitBoards[GameConstants.ELEPHANT + colour] == 0) {
-                        RemovePiece( theMove.getDest(), theMove.getPiece() );
-                        RemovePiece( theMove.getDest(), GameConstants.ELEPHANT_PAWNS);
-                        AddPiece( theMove.getDest(), GameConstants.ELEPHANT + colour );
+                        RemovePiece(theMove.getDest(), theMove.getPiece());
+                        RemovePiece(theMove.getDest(), GameConstants.ELEPHANT_PAWNS);
+                        AddPiece(theMove.getDest(), GameConstants.ELEPHANT + colour);
                     }
                     break;
                 case GameConstants.KING:
                     if (BitBoards[GameConstants.KING + colour] == 0) {
-                        RemovePiece( theMove.getDest(), theMove.getPiece() );
-                        RemovePiece( theMove.getDest(), GameConstants.KING_PAWNS);
-                        AddPiece( theMove.getDest(), GameConstants.KING + colour );
+                        RemovePiece(theMove.getDest(), theMove.getPiece());
+                        RemovePiece(theMove.getDest(), GameConstants.KING_PAWNS);
+                        AddPiece(theMove.getDest(), GameConstants.KING + colour);
                     }
                     break;
             }
@@ -341,10 +349,9 @@ public class Board_AI implements Cloneable{
     /*---- Helper functions ------*/
 
     // Add a piece (whichPiece) to the board at square (whichSquare).
-    private boolean AddPiece( int whichSquare, int whichPiece )
-    {
+    private boolean AddPiece(int whichSquare, int whichPiece) {
         // Add the piece to the corresponding bitboard
-        BitBoards[whichPiece] |= GameConstants.SquareBits[ whichSquare ];
+        BitBoards[whichPiece] |= GameConstants.SquareBits[whichSquare];
 
         // Now update the bitboard of all pieces of that particular colour.
         // Note that we check the value given is less than ALL_PIECES, this makes sure
@@ -353,71 +360,63 @@ public class Board_AI implements Cloneable{
         // and so should not be factored into the updating of a particular side.
 
         if (whichPiece < GameConstants.ALL_PIECES) {
-            BitBoards[ GameConstants.ALL_PIECES + ( whichPiece % 4 ) ] |= GameConstants.SquareBits[ whichSquare ];
+            BitBoards[GameConstants.ALL_PIECES + (whichPiece % 4)] |= GameConstants.SquareBits[whichSquare];
         }
 
         return true;
     }
 
     // Remove a piece from the board.
-    private boolean RemovePiece( int whichSquare, int whichPiece )
-    {
+    private boolean RemovePiece(int whichSquare, int whichPiece) {
         // Remove the piece from the corresponding bitboard.
-        BitBoards[ whichPiece ] ^= GameConstants.SquareBits[ whichSquare ];
+        BitBoards[whichPiece] ^= GameConstants.SquareBits[whichSquare];
 
         // Update the bitboard representing the player's colour.
         if (whichPiece < GameConstants.ALL_PIECES) {
-            BitBoards[GameConstants.ALL_PIECES + (whichPiece % 4) ] ^= GameConstants.SquareBits[ whichSquare ];
+            BitBoards[GameConstants.ALL_PIECES + (whichPiece % 4)] ^= GameConstants.SquareBits[whichSquare];
         }
 
         return true;
     }
 
     // Delete all pieces from the board
-    private void EmptyBoard()
-    {
-        for( int i = 0; i < GameConstants.ALL_BITBOARDS; i++ )
-        {
-            BitBoards[ i ] = 0;
+    private void EmptyBoard() {
+        for (int i = 0; i < GameConstants.ALL_BITBOARDS; i++) {
+            BitBoards[i] = 0;
         }
     }
 
-    public boolean Print()
-    {
+    public void Print() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n");
-        for( int line = 0; line < 8; line++ )
-        {
-            stringBuilder.append( "  -----------------------------------------" );
+        for (int line = 0; line < 8; line++) {
+            stringBuilder.append("  -----------------------------------------");
             stringBuilder.append("\n");
-            stringBuilder.append( "  |    |    |    |    |    |    |    |    |" );
+            stringBuilder.append("  |    |    |    |    |    |    |    |    |");
             stringBuilder.append("\n");
-            stringBuilder.append((8 - line) + " ");
-            for( int col = 0; col < 8; col++ )
-            {
-                long bits = GameConstants.SquareBits[ line * 8 + col ];
+            stringBuilder.append(8 - line).append(" ");
+            for (int col = 0; col < 8; col++) {
+                long bits = GameConstants.SquareBits[line * 8 + col];
 
                 // Scan the bitboards to find a piece, if any
                 int piece = 0;
-                while ( ( piece < GameConstants.ALL_PIECES ) && ( ( bits & BitBoards[ piece ] ) == 0 ) )
+                while ((piece < GameConstants.ALL_PIECES) && ((bits & BitBoards[piece]) == 0))
                     piece++;
 
                 // Show the piece
-                stringBuilder.append("| " + GameConstants.PieceStrings[piece] + " ");
+                stringBuilder.append("| ").append(GameConstants.PieceStrings[piece]).append(" ");
             }
-            stringBuilder.append( "|" );
+            stringBuilder.append("|");
             stringBuilder.append("\n");
-            stringBuilder.append( "  |    |    |    |    |    |    |    |    |" );
+            stringBuilder.append("  |    |    |    |    |    |    |    |    |");
             stringBuilder.append("\n");
         }
-        stringBuilder.append( "  -----------------------------------------" );
+        stringBuilder.append("  -----------------------------------------");
         stringBuilder.append("\n");
-        stringBuilder.append( "    A    B    C    D    E    F    G    H   " );
+        stringBuilder.append("    A    B    C    D    E    F    G    H   ");
         stringBuilder.append("\n");
 
         logger.info(stringBuilder.toString());
-
-        return true;
     }
 
     public int FindBoatSquare(int colour) {

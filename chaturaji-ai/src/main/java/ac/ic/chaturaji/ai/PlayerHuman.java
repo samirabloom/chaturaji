@@ -1,13 +1,14 @@
 package ac.ic.chaturaji.ai;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
+/**
+ * @author dg3213
+ */
 public class PlayerHuman extends Player_AI {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -19,15 +20,12 @@ public class PlayerHuman extends Player_AI {
     /*------ Methods -----*/
 
     // Constructor
+
     public PlayerHuman(int colour, int points, Set<Integer> kingsCaptured) {
         super(points, kingsCaptured);
         this.type = GameConstants.AI;
         this.SetColour(colour);
         ValidMoves = new MoveGenerator_AI();
-    }
-
-    public int GetPlayerType() {
-        return GameConstants.HUMAN;
     }
 
     // Functions

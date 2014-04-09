@@ -8,10 +8,12 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-
+/**
+ * @author dg3213
+ */
 public class MoveGenerator_AITest {
     MoveGenerator_AI validMoves;
     Board_AI theBoard;
@@ -42,6 +44,6 @@ public class MoveGenerator_AITest {
     public void testFindMove() {
         validMoves.ComputeMoves(theBoard);
 
-        assertNull(validMoves.FindMove(0,0));
+        assertNull(validMoves.FindMove(0, 0));
     }
 }

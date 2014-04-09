@@ -1,6 +1,6 @@
 package ac.ic.chaturaji.ai;
+
 import java.util.ArrayList;
-import java.lang.Math.*;
 
 
 /**
@@ -44,7 +44,7 @@ public class AlphaBeta {
 
         // Use the iterative deepening method combined with aspiration windows for better move ordering:
         for (int iteration = depth; iteration <= depth; iteration++) {
-            for (Move_AI listMove: possMoves) {
+            for (Move_AI listMove : possMoves) {
                 Board_AI newBoard = board.clone();
                 newBoard.ApplyMove(listMove);
 
@@ -53,11 +53,10 @@ public class AlphaBeta {
 
                 // If score is outside the given window then we must call the next alphaBeta with the
                 // original values. Otherwise we may close the window for added efficiency:
-                if(score <= alpha || score >= beta) {
+                if (score <= alpha || score >= beta) {
                     alpha = MINVAL;
                     beta = MAXVAL;
-                }
-                else {
+                } else {
                     alpha = score - 10;
                     beta = score + 10;
                 }
@@ -72,7 +71,7 @@ public class AlphaBeta {
         return bestMove;
     }
 
-    public double alphaBeta(Board_AI board, int depth, double alpha, double beta ,int colour, int maximisingPlayer) {
+    public double alphaBeta(Board_AI board, int depth, double alpha, double beta, int colour, int maximisingPlayer) {
 
         Move_AI testMove = new Move_AI();
         NodesSearched++;
@@ -94,12 +93,11 @@ public class AlphaBeta {
                 return evaluation;
             }
 
-            if (evalType == GameConstants.UPPER_BOUND){
+            if (evalType == GameConstants.UPPER_BOUND) {
                 if (evaluation <= alpha) {
                     return alpha;
                 }
-            }
-            else if (evalType == GameConstants.LOWER_BOUND) {
+            } else if (evalType == GameConstants.LOWER_BOUND) {
                 if (evaluation >= beta) {
                     return beta;
                 }
@@ -111,9 +109,9 @@ public class AlphaBeta {
 
             score = evalFunction.EvaluateScore(maximisingPlayer, board);
 
-            if(score <= alpha) // We have a lower bound
+            if (score <= alpha) // We have a lower bound
                 TransTable.SaveBoard(board, score, GameConstants.LOWER_BOUND, depth, GameTimer);
-            else if(score >= beta) // Upper bound
+            else if (score >= beta) // Upper bound
                 TransTable.SaveBoard(board, score, GameConstants.UPPER_BOUND, depth, GameTimer);
             else // An exact value: alpha < score < beta
                 TransTable.SaveBoard(board, score, GameConstants.EXACT_VALUE, depth, GameTimer);
@@ -132,7 +130,7 @@ public class AlphaBeta {
             return alphaBeta(board, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
         }
 
-        for (Move_AI listMove: possMoves) {
+        for (Move_AI listMove : possMoves) {
             Board_AI newBoard = board.clone();
             newBoard.ApplyMove(listMove);
             score = alphaBeta(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
@@ -147,8 +145,7 @@ public class AlphaBeta {
                 if (score > alpha) {
                     TransTable.SaveBoard(board, score, GameConstants.EXACT_VALUE, depth, GameTimer);
                 }
-            }
-            else {
+            } else {
                 beta = Math.min(beta, score);
                 if (score <= alpha) {
                     TransTable.SaveBoard(board, alpha, GameConstants.UPPER_BOUND, depth, GameTimer);

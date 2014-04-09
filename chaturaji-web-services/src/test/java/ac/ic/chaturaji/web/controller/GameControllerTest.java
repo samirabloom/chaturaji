@@ -23,9 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -51,7 +49,7 @@ public class GameControllerTest {
     private UUIDFactory uuidFactory;
     @InjectMocks
     private GameController gameController;
-    private HashMap<String,Game> games;
+    private HashMap<String, Game> games;
 
     @Before
     public void setupMocks() {

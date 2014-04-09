@@ -1,14 +1,16 @@
 package ac.ic.chaturaji.ai;
-//import Project.Chaturaji.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-// MoveGenerator_AI contains methods used to generate all possible moves given a
-// certain board position. It is implemented by the 'Movelist' class.
-
+/**
+ * MoveGenerator_AI contains methods used to generate all possible moves given a
+ * certain board position. It is implemented by the 'Movelist' class.
+ *
+ * @author dg3213
+ */
 public class MoveGenerator_AI {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -20,13 +22,15 @@ public class MoveGenerator_AI {
 
     /*------ Methods ------*/
 
-    // Constructor:
+    // Constructor
+
     public MoveGenerator_AI() {
         Moves = new ArrayList<Move_AI>();
         Moves_2ply = new ArrayList<Move_AI>();
     }
 
-    // Accessors:
+    // Accessors
+
     public ArrayList GetMoves() {
         return Moves;
     }

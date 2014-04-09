@@ -19,9 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;

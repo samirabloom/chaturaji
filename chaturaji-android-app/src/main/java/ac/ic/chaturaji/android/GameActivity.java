@@ -3,6 +3,7 @@ package ac.ic.chaturaji.android;
 import ac.ic.chaturaji.android.pieces.*;
 import ac.ic.chaturaji.chatuService.ChatuService;
 import ac.ic.chaturaji.chatuService.OnMoveCompleteListener;
+import ac.ic.chaturaji.model.GameStatus;
 import ac.ic.chaturaji.model.Result;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -677,21 +678,12 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         moved = true;
         move_count++;
 
-        updateGameThread();
-
-        switch (result.getGameStatus()) {
-            case STALEMATE:
-                movelist = "-- STALEMATE --\n" + movelist;
-                break;
-            case GAME_OVER:
-                movelist = "-- GAME OVER --\n" + movelist;
-                break;
-        }
+        updateGameThread(result.getGameStatus());
     }
 
     // this makes sure the server callback updates happen on the main UI thread
 
-    private void updateGameThread() {
+    private void updateGameThread(final GameStatus gameStatus) {
 
         new Thread() {
             public void run() {
@@ -710,6 +702,13 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                             setScoreboard();
                             clearSelections();
                             drawPieces();
+
+                            if (gameStatus == GameStatus.GAME_OVER) {
+                                movelist = "-- GAME OVER --\n" + movelist;
+                                Toast.makeText(getApplicationContext(), "-- GAME OVER --", Toast.LENGTH_LONG).show();
+                            }
+
+                            findViewById(R.id.board_layout).invalidate();
                         }
                     });
                 } catch (Exception e) {
