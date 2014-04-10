@@ -18,10 +18,12 @@ public class PlayerComp extends Player_AI {
         Move_AI move;
         MTDF mtdf = new MTDF();
 
-        if (searchType == 0)
-            move = mtdf.Search(board);
-        else
-            move = new AlphaBeta().Search(board, board.GetCurrentPlayer(), 3);
+//        if (searchType == 0)
+//            move = mtdf.Search(board);
+//        else
+//            move = new AlphaBeta().Search(board, board.GetCurrentPlayer(), 6);
+
+        move = mtdf.Search(board);
 
         // Set the points if a capture occurred.
         if (move != null) {
