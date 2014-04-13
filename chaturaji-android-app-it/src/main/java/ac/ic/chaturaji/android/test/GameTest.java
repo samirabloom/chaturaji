@@ -1,12 +1,9 @@
 package ac.ic.chaturaji.android.test;
 
 import ac.ic.chaturaji.android.GameActivity;
-import ac.ic.chaturaji.android.R;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.test.ActivityInstrumentationTestCase2;
 import ac.ic.chaturaji.android.pieces.*;
+import android.content.Intent;
+import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageView;
 
 public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
@@ -49,7 +46,7 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
         selected_row = game.getSelected_row();
         valid_moves = game.getValid_moves();
         moved = game.getMoved();
-        movelist = game.getMovelist();
+        movelist = game.getMoveList();
         blue_score = game.getBlue_score();
         red_score = game.getRed_score();
         green_score = game.getGreen_score();
@@ -63,9 +60,8 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
 
     public void testPreconditions() {
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++) {
                 assertTrue(BoardImage[i][j] != null);
                 assertFalse(valid_moves[i][j]);
             }
@@ -90,16 +86,16 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
         game.setPieces();
         Board = game.getBoard();
 
-        for(int i = 0; i <= 3; i++)
+        for (int i = 0; i <= 3; i++)
             assertTrue(Board[i][1] instanceof Pawn);
 
-        for(int i = 4; i <= 7; i++)
+        for (int i = 4; i <= 7; i++)
             assertTrue(Board[1][i] instanceof Pawn);
 
-        for(int i = 4; i <= 7; i++)
+        for (int i = 4; i <= 7; i++)
             assertTrue(Board[i][6] instanceof Pawn);
 
-        for(int i = 0; i <= 3; i++)
+        for (int i = 0; i <= 3; i++)
             assertTrue(Board[6][i] instanceof Pawn);
 
         assertTrue(Board[0][0] instanceof Boat);
@@ -127,8 +123,8 @@ public class GameTest extends ActivityInstrumentationTestCase2<GameActivity> {
         game.setBoard();
         BoardImage = game.getBoardImage();
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
                 assertTrue(BoardImage[i][j] instanceof ImageView);
     }
 

@@ -70,7 +70,7 @@ public class AIBoard implements Cloneable {
         return CurrentPlayer;
     }
 
-    public long GetBitBoard(int which_one) {
+    public long getBitBoard(int which_one) {
         return BitBoards[which_one];
     }
 
@@ -228,7 +228,7 @@ public class AIBoard implements Cloneable {
     }
 
     // Look for the piece located on a specific square
-    public int FindPieceColour(int square, int Colour) {
+    public int findPieceColour(int square, int Colour) {
         if ((BitBoards[GameConstants.KING + Colour] & GameConstants.SquareBits[square]) != 0)
             return GameConstants.KING + Colour;
         if ((BitBoards[GameConstants.ELEPHANT + Colour] & GameConstants.SquareBits[square]) != 0)
@@ -268,27 +268,27 @@ public class AIBoard implements Cloneable {
 
         if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.KNIGHT_PAWNS);
-            AddPiece(theMove.getDest(), GameConstants.KNIGHT_PAWNS);
+            AddPiece(theMove.getDestination(), GameConstants.KNIGHT_PAWNS);
         } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.BOAT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.BOAT_PAWNS);
-            AddPiece(theMove.getDest(), GameConstants.BOAT_PAWNS);
+            AddPiece(theMove.getDestination(), GameConstants.BOAT_PAWNS);
         } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.ELEPHANT_PAWNS);
-            AddPiece(theMove.getDest(), GameConstants.ELEPHANT_PAWNS);
+            AddPiece(theMove.getDestination(), GameConstants.ELEPHANT_PAWNS);
         } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KING_PAWNS]) != 0) {
             RemovePiece(theMove.getSource(), GameConstants.KING_PAWNS);
-            AddPiece(theMove.getDest(), GameConstants.KING_PAWNS);
+            AddPiece(theMove.getDestination(), GameConstants.KING_PAWNS);
         }
 
         switch (theMove.getType()) {
             case GameConstants.NORMAL_MOVE:
                 RemovePiece(theMove.getSource(), theMove.getPiece());
-                AddPiece(theMove.getDest(), theMove.getPiece());
+                AddPiece(theMove.getDestination(), theMove.getPiece());
                 break;
             case GameConstants.CAPTURE:
                 RemovePiece(theMove.getSource(), theMove.getPiece());
-                RemovePiece(theMove.getDest(), theMove.getCaptured());
-                AddPiece(theMove.getDest(), theMove.getPiece());
+                RemovePiece(theMove.getDestination(), theMove.getCaptured());
+                AddPiece(theMove.getDestination(), theMove.getPiece());
                 break;
             case GameConstants.RESIGN:
                 break;
@@ -312,30 +312,30 @@ public class AIBoard implements Cloneable {
             switch (theMove.getPromoType()) {
                 case GameConstants.KNIGHT:
                     if (BitBoards[GameConstants.KNIGHT + colour] == 0) {
-                        RemovePiece(theMove.getDest(), theMove.getPiece());
-                        RemovePiece(theMove.getDest(), GameConstants.KNIGHT_PAWNS);
-                        AddPiece(theMove.getDest(), GameConstants.KNIGHT + colour);
+                        RemovePiece(theMove.getDestination(), theMove.getPiece());
+                        RemovePiece(theMove.getDestination(), GameConstants.KNIGHT_PAWNS);
+                        AddPiece(theMove.getDestination(), GameConstants.KNIGHT + colour);
                     }
                     break;
                 case GameConstants.BOAT:
                     if (BitBoards[GameConstants.BOAT + colour] == 0) {
-                        RemovePiece(theMove.getDest(), theMove.getPiece());
-                        RemovePiece(theMove.getDest(), GameConstants.BOAT_PAWNS);
-                        AddPiece(theMove.getDest(), GameConstants.BOAT + colour);
+                        RemovePiece(theMove.getDestination(), theMove.getPiece());
+                        RemovePiece(theMove.getDestination(), GameConstants.BOAT_PAWNS);
+                        AddPiece(theMove.getDestination(), GameConstants.BOAT + colour);
                     }
                     break;
                 case GameConstants.ELEPHANT:
                     if (BitBoards[GameConstants.ELEPHANT + colour] == 0) {
-                        RemovePiece(theMove.getDest(), theMove.getPiece());
-                        RemovePiece(theMove.getDest(), GameConstants.ELEPHANT_PAWNS);
-                        AddPiece(theMove.getDest(), GameConstants.ELEPHANT + colour);
+                        RemovePiece(theMove.getDestination(), theMove.getPiece());
+                        RemovePiece(theMove.getDestination(), GameConstants.ELEPHANT_PAWNS);
+                        AddPiece(theMove.getDestination(), GameConstants.ELEPHANT + colour);
                     }
                     break;
                 case GameConstants.KING:
                     if (BitBoards[GameConstants.KING + colour] == 0) {
-                        RemovePiece(theMove.getDest(), theMove.getPiece());
-                        RemovePiece(theMove.getDest(), GameConstants.KING_PAWNS);
-                        AddPiece(theMove.getDest(), GameConstants.KING + colour);
+                        RemovePiece(theMove.getDestination(), theMove.getPiece());
+                        RemovePiece(theMove.getDestination(), GameConstants.KING_PAWNS);
+                        AddPiece(theMove.getDestination(), GameConstants.KING + colour);
                     }
                     break;
             }

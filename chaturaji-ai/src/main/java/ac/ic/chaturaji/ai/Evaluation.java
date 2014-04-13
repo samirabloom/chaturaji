@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author dg3213
  */
 public class Evaluation {
-    MoveGenerator_AI moveGenerator;
+    AIMoveGenerator moveGenerator;
 
     int PawnVal = 6;
     int BoatVal = 4;
@@ -15,7 +15,7 @@ public class Evaluation {
     int KingVal = 1;
 
     public Evaluation() {
-        moveGenerator = new MoveGenerator_AI();
+        moveGenerator = new AIMoveGenerator();
     }
 
     // Weigh up the different factors in the evaluation.
@@ -46,19 +46,19 @@ public class Evaluation {
         int pawnCount[] = {0, 0, 0, 0};
 
         for (int colour = 0; colour < 4; colour++) {
-            if (board.GetBitBoard(GameConstants.KING + colour) != 0)
+            if (board.getBitBoard(GameConstants.KING + colour) != 0)
                 kingCount[colour]++;
-            if (board.GetBitBoard(GameConstants.ELEPHANT + colour) != 0)
+            if (board.getBitBoard(GameConstants.ELEPHANT + colour) != 0)
                 elephantCount[colour]++;
-            if (board.GetBitBoard(GameConstants.KNIGHT + colour) != 0)
+            if (board.getBitBoard(GameConstants.KNIGHT + colour) != 0)
                 knightCount[colour]++;
-            if (board.GetBitBoard(GameConstants.BOAT + colour) != 0)
+            if (board.getBitBoard(GameConstants.BOAT + colour) != 0)
                 boatCount[colour]++;
 
-            if (board.GetBitBoard(GameConstants.PAWN + colour) == 0)
+            if (board.getBitBoard(GameConstants.PAWN + colour) == 0)
                 continue;
             for (int i = 0; i < 64; i++) {
-                if ((board.GetBitBoard(GameConstants.PAWN + colour) & GameConstants.SquareBits[i]) != 0)
+                if ((board.getBitBoard(GameConstants.PAWN + colour) & GameConstants.SquareBits[i]) != 0)
                     pawnCount[colour]++;
             }
         }
@@ -79,11 +79,11 @@ public class Evaluation {
     private double EvaluatePawns(int maximisingColour, AIBoard board) {
         int score = 0;
 
-        if (board.GetBitBoard(GameConstants.PAWN + maximisingColour) == 0)
+        if (board.getBitBoard(GameConstants.PAWN + maximisingColour) == 0)
             return score;
 
         for (int i = 0; i < 64; i++)
-            if ((GameConstants.SquareBits[i] & board.GetBitBoard(GameConstants.PAWN + maximisingColour)) != 0) {
+            if ((GameConstants.SquareBits[i] & board.getBitBoard(GameConstants.PAWN + maximisingColour)) != 0) {
                 switch (maximisingColour) {
                     case GameConstants.YELLOW: {
                         score += GameConstants.YellowPawnTable[i] / 10;
@@ -123,16 +123,16 @@ public class Evaluation {
 
         switch (colour % 2) {
             case 0: {
-                if (square >= 1 && ((GameConstants.SquareBits[square - 1] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0))
+                if (square >= 1 && ((GameConstants.SquareBits[square - 1] & board.getBitBoard(GameConstants.PAWN + colour)) != 0))
                     return true;
-                if (square < GameConstants.ALL_SQUARES - 1 && ((GameConstants.SquareBits[square + 1] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0))
+                if (square < GameConstants.ALL_SQUARES - 1 && ((GameConstants.SquareBits[square + 1] & board.getBitBoard(GameConstants.PAWN + colour)) != 0))
                     return true;
             }
             break;
             case 1: {
-                if (square < GameConstants.ALL_SQUARES - 8 && (GameConstants.SquareBits[square + 8] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0)
+                if (square < GameConstants.ALL_SQUARES - 8 && (GameConstants.SquareBits[square + 8] & board.getBitBoard(GameConstants.PAWN + colour)) != 0)
                     return true;
-                if (square >= 8 && ((GameConstants.SquareBits[square - 8] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0))
+                if (square >= 8 && ((GameConstants.SquareBits[square - 8] & board.getBitBoard(GameConstants.PAWN + colour)) != 0))
                     return true;
             }
             break;
@@ -144,20 +144,20 @@ public class Evaluation {
         int score = 0;
         int count = 0;
 
-        if (board.GetBitBoard(GameConstants.KNIGHT + maximisingColour) == 0)
+        if (board.getBitBoard(GameConstants.KNIGHT + maximisingColour) == 0)
             count++;
-        if (board.GetBitBoard(GameConstants.BOAT + maximisingColour) == 0)
+        if (board.getBitBoard(GameConstants.BOAT + maximisingColour) == 0)
             count++;
 
         for (int i = 0; i < 64; i++) {
             if (count >= 2)
                 break;
 
-            if ((GameConstants.SquareBits[i] & board.GetBitBoard(GameConstants.KNIGHT + maximisingColour)) != 0) {
+            if ((GameConstants.SquareBits[i] & board.getBitBoard(GameConstants.KNIGHT + maximisingColour)) != 0) {
                 score += GameConstants.KnightTable[i] / 100;
                 count++;
             }
-            if ((GameConstants.SquareBits[i] & board.GetBitBoard(GameConstants.BOAT + maximisingColour)) != 0) {
+            if ((GameConstants.SquareBits[i] & board.getBitBoard(GameConstants.BOAT + maximisingColour)) != 0) {
                 score += GameConstants.BoatTable[i] / 100;
                 count++;
             }
@@ -171,11 +171,11 @@ public class Evaluation {
         int currentMobility;
         int otherMobility = 0;
 
-        moveGenerator.GenerateMoves(board, possMoves, maximisingColour);
+        moveGenerator.generateMoves(board, possMoves, maximisingColour);
         currentMobility = possMoves.size();
 
         for (int i = 1; i < 4; i++) {
-            moveGenerator.GenerateMoves(board, possMoves, (maximisingColour + i) % 4);
+            moveGenerator.generateMoves(board, possMoves, (maximisingColour + i) % 4);
             otherMobility += possMoves.size();
         }
 
@@ -187,7 +187,7 @@ public class Evaluation {
         int score = 0;
 
         for (int i = 0; i < 64; i++) {
-            if ((board.GetBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[i]) != 0)
+            if ((board.getBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[i]) != 0)
                 if (CheckCover(board, i, GameConstants.KING, colour))
                     score += KingVal;
             if (CheckCover(board, i, GameConstants.KNIGHT, colour))
@@ -203,11 +203,11 @@ public class Evaluation {
 
     // Check if a given square is within the attacking/ defending range of a given colour's piece:
     private boolean CheckCover(AIBoard board, int position, int piece, int colour) {
-        if (board.GetBitBoard(piece + colour) == 0)
+        if (board.getBitBoard(piece + colour) == 0)
             return false;
 
         for (int i = 0; i < 64; i++) {
-            if ((GameConstants.SquareBits[i] & board.GetBitBoard(piece + colour)) != 0) {
+            if ((GameConstants.SquareBits[i] & board.getBitBoard(piece + colour)) != 0) {
 
                 switch (piece) {
                     case GameConstants.KNIGHT: {
@@ -235,7 +235,7 @@ public class Evaluation {
                         long allPieces = 0;
 
                         for (int col = 0; col < 4; col++) {
-                            allPieces |= board.GetBitBoard(GameConstants.ALL_PIECES + col);
+                            allPieces |= board.getBitBoard(GameConstants.ALL_PIECES + col);
                         }
 
                         for (int direction = 0; direction < PieceMoves.ElephantMoves[i].length; direction++)
@@ -258,13 +258,13 @@ public class Evaluation {
     }
 
     private int PawnCover(AIBoard board, int position, int colour) {
-        if (board.GetBitBoard(GameConstants.PAWN + colour) == 0)
+        if (board.getBitBoard(GameConstants.PAWN + colour) == 0)
             return 0;
 
         int count = 0;
 
         for (int i = 0; i < 64; i++) {
-            if ((GameConstants.SquareBits[i] & board.GetBitBoard(GameConstants.PAWN + colour)) != 0) {
+            if ((GameConstants.SquareBits[i] & board.getBitBoard(GameConstants.PAWN + colour)) != 0) {
                 switch (colour) {
                     case 0: {
                         if ((i + 9) == position || (i - 7) == position)

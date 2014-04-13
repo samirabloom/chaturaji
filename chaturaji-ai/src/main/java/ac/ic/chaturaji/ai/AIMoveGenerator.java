@@ -11,38 +11,38 @@ import java.util.ArrayList;
  *
  * @author dg3213
  */
-public class MoveGenerator_AI {
+public class AIMoveGenerator {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /*------ Data Members ------*/
 
-    ArrayList<AIMove> Moves;
-    ArrayList<AIMove> Moves_2ply;
+    ArrayList<AIMove> moves;
+    ArrayList<AIMove> moves_2ply;
 
     /*------ Methods ------*/
 
     // Constructor
 
-    public MoveGenerator_AI() {
-        Moves = new ArrayList<AIMove>();
-        Moves_2ply = new ArrayList<AIMove>();
+    public AIMoveGenerator() {
+        moves = new ArrayList<>();
+        moves_2ply = new ArrayList<>();
     }
 
     // Accessors
 
     public ArrayList GetMoves() {
-        return Moves;
+        return moves;
     }
 
     public int GetMoveSize() {
-        return Moves.size();
+        return moves.size();
     }
 
     // Functions:
     public boolean IsMove(AIMove move) {
 
-        for (AIMove listMove : Moves)
+        for (AIMove listMove : moves)
             if (move.IsEqual(listMove))
                 return true;
 
@@ -51,18 +51,18 @@ public class MoveGenerator_AI {
     }
 
     // Returns a valid move from the list
-    public AIMove FindMove(int source, int destination) {
-        for (AIMove listMove : Moves) {
-            if (listMove.getSource() == source && listMove.getDest() == destination)
+    public AIMove findMove(int source, int destination) {
+        for (AIMove listMove : moves) {
+            if (listMove.getSource() == source && listMove.getDestination() == destination)
                 return listMove;
         }
 
         return null;
     }
 
-    public void Print() {
-        StringBuilder stringBuilder = new StringBuilder("The Moves available to the current player are: \n");
-        for (AIMove listMove : Moves) {
+    public void print() {
+        StringBuilder stringBuilder = new StringBuilder("The moves available to the current player are: \n");
+        for (AIMove listMove : moves) {
             stringBuilder.append(listMove.Print()).append("\n");
         }
         logger.debug(stringBuilder.toString());
@@ -71,11 +71,11 @@ public class MoveGenerator_AI {
     /*
         public Board_AI[] Search_ply1(Board_AI board){
 
-            ComputeMoves(board, Moves, false);
-            Board_AI[] boards = new Board_AI[Moves.size()];
-            for(int i = 0; i < Moves.size(); i++){
+            ComputeMoves(board, moves, false);
+            Board_AI[] boards = new Board_AI[moves.size()];
+            for(int i = 0; i < moves.size(); i++){
                 boards[i] = board.clone();
-                boards[i].ApplyMove(Moves.get(i));
+                boards[i].ApplyMove(moves.get(i));
             }
             return boards;
         }
@@ -87,21 +87,21 @@ public class MoveGenerator_AI {
             int[] descendents = new int[boards.length];
             int sumOfDescendents = 0;
             for(int i = 0; i < boards.length; i++){
-                ComputeMoves(boards[i], Moves_2ply,true);
-                descendents[i] = Moves_2ply.size()-sumOfDescendents;
+                ComputeMoves(boards[i], moves_2ply,true);
+                descendents[i] = moves_2ply.size()-sumOfDescendents;
                 sumOfDescendents += descendents[i];
             }
 
-            Board_AI[] boards_ply2 = new Board_AI[Moves_2ply.size()];
+            Board_AI[] boards_ply2 = new Board_AI[moves_2ply.size()];
             sumOfDescendents = 0;
-            int[] MoveValue = new int[Moves_2ply.size()];
-            for(int i = 0; i < Moves_2ply.size(); i++){
+            int[] MoveValue = new int[moves_2ply.size()];
+            for(int i = 0; i < moves_2ply.size(); i++){
                 if(i == sumOfDescendents + descendents[n]){
                     sumOfDescendents+=descendents[n];
                     n++;
                 }
                 boards_ply2[i] = boards[n].clone();
-                boards_ply2[i].ApplyMove(Moves_2ply.get(i));
+                boards_ply2[i].ApplyMove(moves_2ply.get(i));
                 MoveValue[i] = EvalMove(boards_ply2[i], board);
             }
             int maxEval = MoveValue[0];
@@ -150,23 +150,22 @@ public class MoveGenerator_AI {
             Board_AI[] boards_ply2 ;
             int moveIndex = Search_ply2(board, boards);
 
-            return Moves.get(moveIndex);
+            return moves.get(moveIndex);
 
         }
     */
     // Computes the possible moves for the given player:
-    public ArrayList<AIMove> ComputeMoves(AIBoard board) {
-        GenerateMoves(board, Moves, board.getCurrentPlayer());
-        return Moves;
+    public ArrayList<AIMove> computeMoves(AIBoard board) {
+        generateMoves(board, moves, board.getCurrentPlayer());
+        return moves;
     }
 
-    public void GenerateMoves(AIBoard board, ArrayList<AIMove> Moves, int colour) {
-
-        GetKingMoves(board, Moves, colour);
-        GetElephantMoves(board, Moves, colour);
-        GetBoatMoves(board, Moves, colour);
-        GetKnightMoves(board, Moves, colour);
-        GetPawnMoves(board, Moves, colour);
+    public void generateMoves(AIBoard board, ArrayList<AIMove> moves, int colour) {
+        getKingMoves(board, moves, colour);
+        getElephantMoves(board, moves, colour);
+        getBoatMoves(board, moves, colour);
+        getKnightMoves(board, moves, colour);
+        getPawnMoves(board, moves, colour);
     }
 
 
@@ -184,29 +183,26 @@ public class MoveGenerator_AI {
     // Given a certain destination, figure out whether it is empty or occupied by a certain piece.
     // If occupied, return which colour's piece is located at the destination.
 
-    private void DetermineMove(AIBoard board, int colour, int dest, AIMove move) {
-
+    private void determineMove(AIBoard board, int colour, int dest, AIMove move) {
         for (int j = 1; j < 4; j++) {
-            if ((board.GetBitBoard(GameConstants.ALL_PIECES + ((colour + j) % 4)) & GameConstants.SquareBits[dest]) != 0)
-            // If true then then we have located an enemy piece
-            {
-                move.SetType(GameConstants.CAPTURE);
-                move.SetCaptured(board.FindPieceColour(dest, (colour + j) % 4));
+            if ((board.getBitBoard(GameConstants.ALL_PIECES + ((colour + j) % 4)) & GameConstants.SquareBits[dest]) != 0) {
+                // If true then then we have located an enemy piece
+                move.setType(GameConstants.CAPTURE);
+                move.setCaptured(board.findPieceColour(dest, (colour + j) % 4));
 
-                // Only one enemy piece may occupy the square, so return when the one found
-                // has been processed.
+                // only one enemy piece may occupy the square, so
+                // return when the one found has been processed.
                 return;
             }
-
         }
         // If no enemy piece is found then it must be an empty square:
-        move.SetType(GameConstants.NORMAL_MOVE);
-        move.SetCaptured(GameConstants.EMPTY_SQUARE);
+        move.setType(GameConstants.NORMAL_MOVE);
+        move.setCaptured(GameConstants.EMPTY_SQUARE);
     }
 
     // Calculate the King's moves.
-    private void GetKingMoves(AIBoard board, ArrayList<AIMove> Moves, int colour) {
-        long kingBoard = board.GetBitBoard(GameConstants.KING + colour);
+    private void getKingMoves(AIBoard board, ArrayList<AIMove> moves, int colour) {
+        long kingBoard = board.getBitBoard(GameConstants.KING + colour);
         int kSquare;
         AIMove newMove;
         int destination;
@@ -223,7 +219,7 @@ public class MoveGenerator_AI {
         for (int i = 0; i < PieceMoves.KingMoves[kSquare].length; i++) {
             destination = PieceMoves.KingMoves[kSquare][i];
 
-            if ((board.GetBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) == 0) {
+            if ((board.getBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) == 0) {
                 // We have an empty square or an enemy piece at our destination!
 
                 newMove = new AIMove(GameConstants.KING + colour, kSquare, destination);
@@ -231,16 +227,16 @@ public class MoveGenerator_AI {
                 // Find out what type of move it is (capture or ordinary) and add it
                 // onto the end of the moves list:
 
-                DetermineMove(board, colour, destination, newMove);
-                Moves.add(newMove);
+                determineMove(board, colour, destination, newMove);
+                moves.add(newMove);
             }
         }
     }
 
 
     // Same as function above, but calculating the Boat moves.
-    private void GetBoatMoves(AIBoard board, ArrayList<AIMove> Moves, int colour) {
-        long boatBoard = board.GetBitBoard(GameConstants.BOAT + colour);
+    private void getBoatMoves(AIBoard board, ArrayList<AIMove> moves, int colour) {
+        long boatBoard = board.getBitBoard(GameConstants.BOAT + colour);
         int bSquare;
         AIMove newMove;
         int destination;
@@ -255,12 +251,12 @@ public class MoveGenerator_AI {
         for (int i = 0; i < PieceMoves.BoatMoves[bSquare].length; i++) {
             destination = PieceMoves.BoatMoves[bSquare][i];
 
-            if ((board.GetBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) == 0) {
+            if ((board.getBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) == 0) {
 
                 newMove = new AIMove(GameConstants.BOAT + colour, bSquare, destination);
-                DetermineMove(board, colour, destination, newMove);
+                determineMove(board, colour, destination, newMove);
                 CheckBoatTriumph(board, newMove, colour, bSquare, destination);
-                Moves.add(newMove);
+                moves.add(newMove);
             }
         }
     }
@@ -272,7 +268,7 @@ public class MoveGenerator_AI {
 
         // Create a bit board representing all the boats currently in the game.
         for (int i = 1; i < 4; i++) {
-            allBoats |= board.GetBitBoard(GameConstants.BOAT + ((colour + i) % 4));
+            allBoats |= board.getBitBoard(GameConstants.BOAT + ((colour + i) % 4));
         }
         // Finally add the destination square:
         allBoats |= GameConstants.SquareBits[destination];
@@ -281,7 +277,7 @@ public class MoveGenerator_AI {
             for (int col = 0; col < 6; col++) {
                 // Check that we have an exact match:
                 if ((formationCheck | allBoats) == (formationCheck & allBoats)) {
-                    newMove.SetBoatTriumph(true);
+                    newMove.setBoatTriumph(true);
                     return;
                 }
                 formationCheck <<= 1;
@@ -291,8 +287,8 @@ public class MoveGenerator_AI {
     }
 
     // Calculate the Knight moves - same process as above.
-    private void GetKnightMoves(AIBoard board, ArrayList<AIMove> Moves, int colour) {
-        long knightBoard = board.GetBitBoard(GameConstants.KNIGHT + colour);
+    private void getKnightMoves(AIBoard board, ArrayList<AIMove> moves, int colour) {
+        long knightBoard = board.getBitBoard(GameConstants.KNIGHT + colour);
         int kSquare;
         AIMove newMove;
         int destination;
@@ -307,18 +303,18 @@ public class MoveGenerator_AI {
         for (int i = 0; i < PieceMoves.KnightMoves[kSquare].length; i++) {
             destination = PieceMoves.KnightMoves[kSquare][i];
 
-            if ((board.GetBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) == 0) {
+            if ((board.getBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) == 0) {
 
                 newMove = new AIMove(GameConstants.KNIGHT + colour, kSquare, destination);
-                DetermineMove(board, colour, destination, newMove);
-                Moves.add(newMove);
+                determineMove(board, colour, destination, newMove);
+                moves.add(newMove);
             }
         }
     }
 
 
-    private void GetElephantMoves(AIBoard board, ArrayList<AIMove> Moves, int colour) {
-        long elephantBoard = board.GetBitBoard(GameConstants.ELEPHANT + colour);
+    private void getElephantMoves(AIBoard board, ArrayList<AIMove> moves, int colour) {
+        long elephantBoard = board.getBitBoard(GameConstants.ELEPHANT + colour);
 
         int eSquare;
         AIMove newMove;
@@ -342,12 +338,12 @@ public class MoveGenerator_AI {
 
                 // Check if our destination is occupied by a friendly piece. If so, move on to
                 // the next set of moves.
-                if ((board.GetBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) != 0)
+                if ((board.getBitBoard(GameConstants.ALL_PIECES + colour) & GameConstants.SquareBits[destination]) != 0)
                     break;
 
                 newMove = new AIMove(GameConstants.ELEPHANT + colour, eSquare, destination);
-                DetermineMove(board, colour, destination, newMove);
-                Moves.add(newMove);
+                determineMove(board, colour, destination, newMove);
+                moves.add(newMove);
 
                 // Check if the move added was a capture - if so, we cannot continue along this line of attack!
                 if (newMove.getCaptured() != GameConstants.EMPTY_SQUARE)
@@ -355,8 +351,8 @@ public class MoveGenerator_AI {
             }
     }
 
-    private void GetPawnMoves(AIBoard board, ArrayList<AIMove> Moves, int colour) {
-        long pawnBoard = board.GetBitBoard(GameConstants.PAWN + colour);
+    private void getPawnMoves(AIBoard board, ArrayList<AIMove> Moves, int colour) {
+        long pawnBoard = board.getBitBoard(GameConstants.PAWN + colour);
         int square;
         AIMove newMove;
         int destination;
@@ -364,10 +360,10 @@ public class MoveGenerator_AI {
         if (pawnBoard == 0)
             return;
 
-        long allPieces = board.GetBitBoard(GameConstants.ALL_YELLOW_PIECES) |
-                board.GetBitBoard(GameConstants.ALL_BLUE_PIECES) |
-                board.GetBitBoard(GameConstants.ALL_RED_PIECES) |
-                board.GetBitBoard(GameConstants.ALL_GREEN_PIECES);
+        long allPieces = board.getBitBoard(GameConstants.ALL_YELLOW_PIECES) |
+                board.getBitBoard(GameConstants.ALL_BLUE_PIECES) |
+                board.getBitBoard(GameConstants.ALL_RED_PIECES) |
+                board.getBitBoard(GameConstants.ALL_GREEN_PIECES);
 
         for (square = 0; square <= 63; square++) {
             // Find a pawn belonging to the current player's colour:
@@ -393,18 +389,18 @@ public class MoveGenerator_AI {
 
                 if ((allPieces & GameConstants.SquareBits[destination]) == 0) {
 
-                    if ((GameConstants.SquareBits[destination] & board.GetBitBoard(GameConstants.YELLOW_END_SQUARES + colour)) == 0) {
+                    if ((GameConstants.SquareBits[destination] & board.getBitBoard(GameConstants.YELLOW_END_SQUARES + colour)) == 0) {
                         newMove = new AIMove(GameConstants.PAWN + colour, square, destination);
-                        newMove.SetType(GameConstants.NORMAL_MOVE);
-                        newMove.SetCaptured(GameConstants.EMPTY_SQUARE);
+                        newMove.setType(GameConstants.NORMAL_MOVE);
+                        newMove.setCaptured(GameConstants.EMPTY_SQUARE);
                         Moves.add(newMove);
                     }
                     // If the above if statement is true then we have a promotion.
                     else {
                         newMove = new AIMove(GameConstants.PAWN + colour, square, destination);
                         SetPromo(board, Moves, newMove, square);
-                        newMove.SetType(GameConstants.NORMAL_MOVE);
-                        newMove.SetCaptured(GameConstants.EMPTY_SQUARE);
+                        newMove.setType(GameConstants.NORMAL_MOVE);
+                        newMove.setCaptured(GameConstants.EMPTY_SQUARE);
                         Moves.add(newMove);
                     }
                 }
@@ -476,14 +472,14 @@ public class MoveGenerator_AI {
     }
 
     private void SetPromo(AIBoard board, ArrayList<AIMove> Moves, AIMove newMove, int square) {
-        if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.KNIGHT_PAWNS)) != 0) {
-            newMove.SetPromotion(GameConstants.KNIGHT);
-        } else if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.BOAT_PAWNS)) != 0) {
-            newMove.SetPromotion(GameConstants.BOAT);
-        } else if ((GameConstants.SquareBits[square] & board.GetBitBoard(GameConstants.ELEPHANT_PAWNS)) != 0) {
-            newMove.SetPromotion(GameConstants.ELEPHANT);
+        if ((GameConstants.SquareBits[square] & board.getBitBoard(GameConstants.KNIGHT_PAWNS)) != 0) {
+            newMove.setPromotion(GameConstants.KNIGHT);
+        } else if ((GameConstants.SquareBits[square] & board.getBitBoard(GameConstants.BOAT_PAWNS)) != 0) {
+            newMove.setPromotion(GameConstants.BOAT);
+        } else if ((GameConstants.SquareBits[square] & board.getBitBoard(GameConstants.ELEPHANT_PAWNS)) != 0) {
+            newMove.setPromotion(GameConstants.ELEPHANT);
         } else {
-            newMove.SetPromotion(GameConstants.KING);
+            newMove.setPromotion(GameConstants.KING);
         }
     }
 
@@ -492,17 +488,17 @@ public class MoveGenerator_AI {
         int opp_colour;
 
         for (int i = 1; i < 4; i++) {
-            if ((board.GetBitBoard(GameConstants.ALL_PIECES + ((colour + i) % 4)) &
+            if ((board.getBitBoard(GameConstants.ALL_PIECES + ((colour + i) % 4)) &
                     GameConstants.SquareBits[destination]) != 0) {
 
                 newMove = new AIMove(GameConstants.PAWN + colour, source, destination);
-                newMove.SetType(GameConstants.CAPTURE);
+                newMove.setType(GameConstants.CAPTURE);
                 opp_colour = (colour + i) % 4;
 
-                if ((GameConstants.SquareBits[destination] & board.GetBitBoard(GameConstants.YELLOW_END_SQUARES + colour)) != 0)
+                if ((GameConstants.SquareBits[destination] & board.getBitBoard(GameConstants.YELLOW_END_SQUARES + colour)) != 0)
                     SetPromo(board, Moves, newMove, source);
 
-                newMove.SetCaptured(board.FindPieceColour(destination, opp_colour));
+                newMove.setCaptured(board.findPieceColour(destination, opp_colour));
                 Moves.add(newMove);
                 return;
             }

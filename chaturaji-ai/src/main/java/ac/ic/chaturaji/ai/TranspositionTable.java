@@ -75,9 +75,9 @@ public class TranspositionTable {
             return false;
 
         // If we find a match then copy into the given move parameter
-        move.SetScore(entry.getEval());
-        move.SetEvalType(entry.getFlag());
-        move.SetDepth(entry.getDepth());
+        move.setScore(entry.getEval());
+        move.setEvalType(entry.getFlag());
+        move.setDepth(entry.getDepth());
         return true;
     }
 

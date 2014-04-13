@@ -63,7 +63,7 @@ public class MTDF extends AlphaBeta {
         double record = MINVAL;
         double score;
 
-        validMoves.GenerateMoves(board, possMoves, colour);
+        validMoves.generateMoves(board, possMoves, colour);
 
         for (AIMove listMove : possMoves) {
             AIBoard newBoard = board.clone();
@@ -75,7 +75,7 @@ public class MTDF extends AlphaBeta {
             if (score > record) {
                 record = score;
                 bestMove = listMove;
-                bestMove.SetScore(score);
+                bestMove.setScore(score);
 
                 if (record >= beta) {
                     TransTable.SaveBoard(board, record, GameConstants.LOWER_BOUND, depth, GameTimer);

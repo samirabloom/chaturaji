@@ -10,14 +10,14 @@ public class AlphaBeta {
     int MINVAL = -1000000;
     int MAXVAL = 1000000;
 
-    MoveGenerator_AI validMoves;
+    AIMoveGenerator validMoves;
     Evaluation evalFunction;
     TranspositionTable TransTable;
     int GameTimer;
     int NodesSearched;
 
     public AlphaBeta() {
-        validMoves = new MoveGenerator_AI();
+        validMoves = new AIMoveGenerator();
         evalFunction = new Evaluation();
         TransTable = new TranspositionTable();
         GameTimer = 0;
@@ -29,7 +29,7 @@ public class AlphaBeta {
         ArrayList<AIMove> possMoves = new ArrayList<>();
 
         // First generate the moves for the current player.
-        validMoves.GenerateMoves(board, possMoves, colour);
+        validMoves.generateMoves(board, possMoves, colour);
 
         double alpha = MINVAL;
         double beta = MAXVAL;
@@ -64,7 +64,7 @@ public class AlphaBeta {
                 if (score > record) {
                     record = score;
                     bestMove = listMove;
-                    bestMove.SetScore(score);
+                    bestMove.setScore(score);
                 }
             }
         }
@@ -119,7 +119,7 @@ public class AlphaBeta {
 
 
         ArrayList<AIMove> possMoves = new ArrayList<>();
-        validMoves.GenerateMoves(board, possMoves, colour);
+        validMoves.generateMoves(board, possMoves, colour);
 
         if (possMoves.size() == 0) {
             // The current player may have lost all its pieces or none of its pieces may move (i.e. pawns blocked).

@@ -6,10 +6,10 @@ import java.util.ArrayList;
  * @author dg3213
  */
 public class MaxN {
-    MoveGenerator_AI validMoves;
+    AIMoveGenerator validMoves;
 
     public MaxN() {
-        validMoves = new MoveGenerator_AI();
+        validMoves = new AIMoveGenerator();
     }
 
     // Search to find the best move for the given colour to the given depth:
@@ -17,7 +17,7 @@ public class MaxN {
         ArrayList<AIMove> possMoves = new ArrayList<>();
 
         // First generate the moves for the current player.
-        validMoves.GenerateMoves(board, possMoves, colour);
+        validMoves.generateMoves(board, possMoves, colour);
 
         double bestVal = -1000000;
         AIMove bestMove = null;
@@ -48,7 +48,7 @@ public class MaxN {
             return Evaluate(board.GetMaterialValue());
 
         ArrayList<AIMove> possMoves = new ArrayList<>();
-        validMoves.GenerateMoves(board, possMoves, colour);
+        validMoves.generateMoves(board, possMoves, colour);
 
         if (possMoves.size() == 0) {
             // The current player may have lost all its pieces or none of its pieces may move (i.e. pawns blocked).

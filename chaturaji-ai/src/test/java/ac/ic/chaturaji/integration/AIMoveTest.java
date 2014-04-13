@@ -9,18 +9,18 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author dg3213
  */
-public class _AIMoveTest {
+public class AIMoveTest {
 
     @Test
     public void MoveTest() {
         AIMove theMove = new AIMove();
 
-        theMove.SetCaptured(0);
-        theMove.SetType(0);
-        theMove.SetPromotion(0);
-        theMove.SetBoatTriumph(false);
+        theMove.setCaptured(0);
+        theMove.setType(0);
+        theMove.setPromotion(0);
+        theMove.setBoatTriumph(false);
 
-        assertEquals(-1, theMove.getDest());
+        assertEquals(-1, theMove.getDestination());
         assertEquals(-1, theMove.getPiece());
         assertEquals(-1, theMove.getSource());
         assertEquals(0, theMove.getCaptured());
@@ -34,15 +34,15 @@ public class _AIMoveTest {
         AIMove theMove = new AIMove();
         AIMove otherMove = new AIMove();
 
-        theMove.SetCaptured(0);
-        theMove.SetType(0);
-        theMove.SetPromotion(0);
-        theMove.SetBoatTriumph(false);
+        theMove.setCaptured(0);
+        theMove.setType(0);
+        theMove.setPromotion(0);
+        theMove.setBoatTriumph(false);
 
-        otherMove.SetCaptured(0);
-        otherMove.SetType(0);
-        otherMove.SetPromotion(0);
-        otherMove.SetBoatTriumph(true);
+        otherMove.setCaptured(0);
+        otherMove.setType(0);
+        otherMove.setPromotion(0);
+        otherMove.setBoatTriumph(true);
 
         assertFalse(theMove.IsEqual(otherMove));
     }

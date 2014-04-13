@@ -150,6 +150,7 @@ public class WebSocketIntegrationTest extends GameControllerFullIntegrationTest 
         // wait for web socket message to be received
         TimeUnit.SECONDS.sleep(3);
         for (int i = 0; i < mockGameMoveListeners.length; i++) {
+            System.out.println("i = " + i);
             GameMoveListener mockGameMoveListener = mockGameMoveListeners[i];
             verify(mockGameMoveListener).onMoveCompleted(any(Result.class));
         }

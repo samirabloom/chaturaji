@@ -8,17 +8,17 @@ public class AIMove {
     //------ Data Members ------//
 
     // Set default to negative sentinel values.
-    private int Piece = -1;
-    private int CapturedPiece = -1;
-    private int Source = -1;
-    private int Dest = -1;
-    private int Type = -1;
-    private int PromotionType = -1;
-    private boolean BoatTriumph = false;
+    private int piece = -1;
+    private int capturedPiece = -1;
+    private int source = -1;
+    private int destination = -1;
+    private int type = -1;
+    private int promotionType = -1;
+    private boolean boatTriumph = false;
 
-    private int EvaluationType;
-    private double Score;
-    private int Depth;
+    private int evaluationType;
+    private double score;
+    private int depth;
 
     //------ Methods ------//
 
@@ -28,97 +28,97 @@ public class AIMove {
     }
 
     public AIMove(int MovPiece, int SrcSqr, int DestSqr) {
-        Piece = MovPiece;
-        Source = SrcSqr;
-        Dest = DestSqr;
+        piece = MovPiece;
+        source = SrcSqr;
+        destination = DestSqr;
     }
 
     // Accessors
 
-    public int getDest() {
-        return Dest;
+    public int getDestination() {
+        return destination;
     }
 
     public int getSource() {
-        return Source;
+        return source;
     }
 
     public int getPiece() {
-        return Piece;
+        return piece;
     }
 
     public int getCaptured() {
-        return CapturedPiece;
+        return capturedPiece;
     }
 
     public int getType() {
-        return Type;
+        return type;
     }
 
     public int getPromoType() {
-        return PromotionType;
+        return promotionType;
     }
 
     public boolean getTriumph() {
-        return BoatTriumph;
+        return boatTriumph;
     }
 
     public int getEvaluationType() {
-        return EvaluationType;
+        return evaluationType;
     }
 
     public double getScore() {
-        return Score;
+        return score;
     }
 
     public int getDepth() {
-        return Depth;
+        return depth;
     }
 
-    public void SetCaptured(int newCap) {
-        CapturedPiece = newCap;
+    public void setCaptured(int newCap) {
+        capturedPiece = newCap;
     }
 
-    public void SetType(int moveType) {
-        Type = moveType;
+    public void setType(int moveType) {
+        type = moveType;
     }
 
-    public void SetPromotion(int promoType) {
-        PromotionType = promoType;
+    public void setPromotion(int promoType) {
+        promotionType = promoType;
     }
 
-    public void SetBoatTriumph(boolean isTrue) {
-        BoatTriumph = isTrue;
+    public void setBoatTriumph(boolean isTrue) {
+        boatTriumph = isTrue;
     }
 
-    public void SetEvalType(int flag) {
-        EvaluationType = flag;
+    public void setEvalType(int flag) {
+        evaluationType = flag;
     }
 
-    public void SetScore(double evaluation) {
-        Score = evaluation;
+    public void setScore(double evaluation) {
+        score = evaluation;
     }
 
-    public void SetDepth(int depth) {
-        Depth = depth;
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 
     // Functions
 
     public boolean IsEqual(AIMove another) {
-        if (Piece != another.getPiece())
+        if (piece != another.getPiece())
             return false;
-        if (CapturedPiece != another.getCaptured())
+        if (capturedPiece != another.getCaptured())
             return false;
-        if (Source != another.getSource())
+        if (source != another.getSource())
             return false;
-        if (Dest != another.getDest())
+        if (destination != another.getDestination())
             return false;
-        if (Type != another.getType())
+        if (type != another.getType())
             return false;
-        if (PromotionType != another.PromotionType)
+        if (promotionType != another.promotionType)
             return false;
-        if (BoatTriumph != another.BoatTriumph)
+        if (boatTriumph != another.boatTriumph)
             return false;
 
         // Otherwise all data entries match
@@ -130,20 +130,20 @@ public class AIMove {
 
         stringBuilder.append("Move: ");
 
-        if (Type != GameConstants.RESIGN) {
-            stringBuilder.append(GameConstants.PieceStrings[Piece]);
+        if (type != GameConstants.RESIGN) {
+            stringBuilder.append(GameConstants.PieceStrings[piece]);
             stringBuilder.append(" [ ");
-            stringBuilder.append(Source);
+            stringBuilder.append(source);
             stringBuilder.append(", ");
-            stringBuilder.append(Dest);
+            stringBuilder.append(destination);
             stringBuilder.append(" ] Type: ");
-            stringBuilder.append(Type);
-            switch (CapturedPiece) {
+            stringBuilder.append(type);
+            switch (capturedPiece) {
                 case -1:
                 case GameConstants.EMPTY_SQUARE:
                     break;
                 default:
-                    stringBuilder.append(" Captured Piece: ").append(CapturedPiece);
+                    stringBuilder.append(" Captured Piece: ").append(capturedPiece);
                     break;
             }
         } else {

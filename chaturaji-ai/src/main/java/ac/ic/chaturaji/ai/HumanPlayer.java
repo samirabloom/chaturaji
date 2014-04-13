@@ -15,7 +15,7 @@ public class HumanPlayer extends AIPlayer {
 
     /*------ Data Members -----*/
 
-    MoveGenerator_AI ValidMoves;
+    AIMoveGenerator validMoves;
 
     /*------ Methods -----*/
 
@@ -25,34 +25,33 @@ public class HumanPlayer extends AIPlayer {
         super(points, kingsCaptured);
         this.type = GameConstants.AI;
         this.SetColour(colour);
-        ValidMoves = new MoveGenerator_AI();
+        validMoves = new AIMoveGenerator();
     }
 
     // Functions
 
     // Ask for move from the human player:
-    public AIMove GetMove(AIBoard theBoard, int source, int dest) {
+    public AIMove getMove(AIBoard theBoard, int source, int dest) {
         AIMove move;
         // Generate all the possible moves for the player.
-        ValidMoves.ComputeMoves(theBoard);
+        validMoves.computeMoves(theBoard);
 
-        ValidMoves.Print();
+        validMoves.print();
 
         // Since the source/ destination square validation is done on the client side, we know that
         // it is a valid move that has been entered. Thus return the the move in the move list that goes from
         // the specified source to the specified destination (there can be only one!).
-        move = ValidMoves.FindMove(source, dest);
+        move = validMoves.findMove(source, dest);
 
         if (move != null) {
             logger.debug("The move chosen is: " + move.Print());
+            setPoints(theBoard, move);
         }
-
-        setPoints(theBoard, move);
 
         return move;
     }
 
     public ArrayList<AIMove> getMoves(AIBoard theBoard) {
-        return ValidMoves.ComputeMoves(theBoard);
+        return validMoves.computeMoves(theBoard);
     }
 }

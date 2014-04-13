@@ -51,8 +51,8 @@ abstract public class AIPlayer {
                     points += 4;
                     break;
                 case GameConstants.KING:
-                    int kingColour = theBoard.FindColourPieceInSquare(theMove.getDest());
-                    if (checkKingsCaptured(kingColour) && theBoard.GetBitBoard(GameConstants.KING + colour) != 0) {
+                    int kingColour = theBoard.FindColourPieceInSquare(theMove.getDestination());
+                    if (checkKingsCaptured(kingColour) && theBoard.getBitBoard(GameConstants.KING + colour) != 0) {
                         points += 54;
                     } else {
                         points += 5;

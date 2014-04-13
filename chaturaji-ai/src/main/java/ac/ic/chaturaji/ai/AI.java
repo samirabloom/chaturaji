@@ -43,7 +43,7 @@ public class AI {
                     case HUMAN: {
                         HumanPlayer humanPlayer = new HumanPlayer(colour, player.getPoints(), player.getKingsCaptured());
 
-                        aiMove = humanPlayer.GetMove(board, move.getSource(), move.getDestination());
+                        aiMove = humanPlayer.getMove(board, move.getSource(), move.getDestination());
                         aiPlayer = humanPlayer;
 
                         if (aiMove != null) {
@@ -68,7 +68,7 @@ public class AI {
                             logger.debug(aiMove.Print());
 
                             move.setSource(aiMove.getSource());
-                            move.setDestination(aiMove.getDest());
+                            move.setDestination(aiMove.getDestination());
                             move.setColour(game.getCurrentPlayerColour());
                         } else {
                             // No available move so, move on to the next player.
