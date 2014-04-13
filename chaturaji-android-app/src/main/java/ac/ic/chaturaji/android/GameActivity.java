@@ -1,9 +1,10 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.android.pieces.*;
-import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.chatuService.ChaturajiService;
 import ac.ic.chaturaji.chatuService.OnMoveCompleteListener;
 import ac.ic.chaturaji.model.GameStatus;
+import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.Result;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -18,10 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 /* Following code done by Kadir Sekha */
 
 public class GameActivity extends Activity implements OnMoveCompleteListener {
 
+    private static final String TAG = "GameActivity";
     private final android.widget.ImageView[][] BoardImage = new android.widget.ImageView[8][8];
     private Pieces[][] Board = new Pieces[8][8];
     private int player_colour;
@@ -40,6 +44,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     private int red_king_captured_by = 0;
     private int green_king_captured_by = 0;
     private int yellow_king_captured_by = 0;
+    private boolean gameInPlay = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +52,8 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        ChatuService chatuService = ChatuService.getInstance();
-        chatuService.setupSocketClient(GameActivity.this);
+        ChaturajiService chaturajiService = ChaturajiService.getInstance();
+        chaturajiService.setupSocketClient(GameActivity.this);
 
         String colour = getIntent().getStringExtra("colour");
 
@@ -255,34 +260,36 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
                     public void onClick(View v) {
 
-                        if ((((move_count + 3) % 4) + 1) == player_colour) {
-                            if (selected_column == column && selected_row == row) {
-                                clearSelections();
-                            } else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row]) {
-                                try {
-                                    String state = new SubmitMove().execute(convertMove(selected_column, selected_row), convertMove(column, row)).get();
-                                    switch (state) {
-                                        case "Error":
-                                            Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
-                                            break;
-                                        case "Success":
-                                            break;
-                                        default:
-                                            Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
-                                            break;
+                        if (gameInPlay) {
+                            if ((((move_count + 3) % 4) + 1) == player_colour) {
+                                if (selected_column == column && selected_row == row) {
+                                    clearSelections();
+                                } else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row]) {
+                                    try {
+                                        String state = new SubmitMove().execute(convertMove(selected_column, selected_row), convertMove(column, row)).get();
+                                        switch (state) {
+                                            case "Error":
+                                                Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
+                                                break;
+                                            case "Success":
+                                                break;
+                                            default:
+                                                Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
+                                                break;
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                } else if ((!moved) && selectPiece(column, row)) {
+                                    clearSelections();
+                                    BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
+                                    selected_column = column;
+                                    selected_row = row;
+                                    showValidMoves(column, row);
                                 }
-                            } else if ((!moved) && selectPiece(column, row)) {
-                                clearSelections();
-                                BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
-                                selected_column = column;
-                                selected_row = row;
-                                showValidMoves(column, row);
-                            }
 
-                            moved = false;
+                                moved = false;
+                            }
                         }
                     }
                 });
@@ -292,15 +299,11 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
     public void setScoreboard() {
 
-        System.out.println("Inside scoreboard");
-
         TextView blue_score_text = (TextView) findViewById(R.id.blue_score);
         TextView red_score_text = (TextView) findViewById(R.id.red_score);
         TextView green_score_text = (TextView) findViewById(R.id.green_score);
         TextView yellow_score_text = (TextView) findViewById(R.id.yellow_score);
         TextView move_list = (TextView) findViewById(R.id.movelist);
-
-        System.out.println(movelist);
 
         String blue = "Blue Score: " + blue_score;
         blue_score_text.setText(blue);
@@ -678,12 +681,33 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         moved = true;
         move_count++;
 
-        updateGameThread(result.getGameStatus());
+        String winnerMessage = "";
+        switch (result.getGameStatus()) {
+            case GAME_OVER:
+                List<Player> playersWithHighestScore = result.getGame().getPlayersWithHighestScore();
+                for (int i = 0; i < playersWithHighestScore.size(); i++) {
+                    winnerMessage += playersWithHighestScore.get(i).getColour().name();
+                    if (i < playersWithHighestScore.size() - 1) {
+                        winnerMessage += " and ";
+                    }
+                }
+                winnerMessage += " wins";
+                movelist = "-- GAME OVER --\n" + movelist;
+                movelist = winnerMessage + "\n" + movelist;
+                gameInPlay = false;
+                break;
+            case STALEMATE:
+                movelist = "-- STALEMATE --\n" + movelist;
+                gameInPlay = false;
+                break;
+        }
+
+        updateGameThread(result.getGameStatus(), winnerMessage);
     }
 
     // this makes sure the server callback updates happen on the main UI thread
 
-    private void updateGameThread(final GameStatus gameStatus) {
+    private void updateGameThread(final GameStatus gameStatus, final String winnersMessage) {
 
         new Thread() {
             public void run() {
@@ -703,9 +727,17 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                             clearSelections();
                             drawPieces();
 
-                            if (gameStatus == GameStatus.GAME_OVER) {
-                                movelist = "-- GAME OVER --\n" + movelist;
-                                Toast.makeText(getApplicationContext(), "-- GAME OVER --", Toast.LENGTH_LONG).show();
+                            switch (gameStatus) {
+                                case GAME_OVER: {
+                                    Toast.makeText(getApplicationContext(), "-- GAME OVER " + (winnersMessage.length() > 0 ? winnersMessage : "") + "--", Toast.LENGTH_LONG).show();
+                                    ((TextView) findViewById(R.id.turn)).setText(winnersMessage);
+                                    break;
+                                }
+                                case STALEMATE: {
+                                    Toast.makeText(getApplicationContext(), "-- STALEMATE --", Toast.LENGTH_LONG).show();
+                                    ((TextView) findViewById(R.id.turn)).setText("-- STALEMATE --");
+                                    break;
+                                }
                             }
 
                             findViewById(R.id.board_layout).invalidate();
@@ -790,7 +822,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         @Override
         protected String doInBackground(Integer... info) {
-            return ChatuService.getInstance().submitMove(info[0], info[1]);
+            return ChaturajiService.getInstance().submitMove(info[0], info[1]);
         }
     }
 }

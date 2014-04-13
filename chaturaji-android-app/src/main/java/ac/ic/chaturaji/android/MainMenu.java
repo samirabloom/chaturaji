@@ -1,11 +1,12 @@
 package ac.ic.chaturaji.android;
 
-import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.chatuService.ChaturajiService;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -17,14 +18,7 @@ import java.util.Arrays;
 
 public class MainMenu extends Activity {
 
-    /**
-     * Called when the activity is first created.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     * previously being shut down then this Bundle contains the data it most
-     * recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
-     */
-
+    private static final String TAG = "MainMenu";
     Button single_player_button;
     Button multi_player_button;
     Button settings_button;
@@ -66,8 +60,7 @@ public class MainMenu extends Activity {
 
             try {
 
-                String[] state = new PostGame().execute("3").get();
-                System.out.println(Arrays.asList(state));
+                String[] state = new CreateGame().execute("3").get();
 
                 String colour = "in_game_yellow";
 
@@ -92,9 +85,9 @@ public class MainMenu extends Activity {
                 } else if (Arrays.asList(state).contains("401")) {
                     Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
                     Intent logOut = new Intent(MainMenu.this, LoginActivity.class);
-                    ChatuService chatuService = ChatuService.getInstance();
-                    chatuService.logout();
-                    chatuService.clearCookieCred();
+                    ChaturajiService chaturajiService = ChaturajiService.getInstance();
+                    chaturajiService.logout();
+                    chaturajiService.clearCookieCred();
                     startActivity(logOut);
                 } else {
                     startActivity(getSingleGame);
@@ -136,27 +129,27 @@ public class MainMenu extends Activity {
             Intent logOut = new Intent(MainMenu.this, LoginActivity.class);
             logOut.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            ChatuService chatuService = ChatuService.getInstance();
+            ChaturajiService chaturajiService = ChaturajiService.getInstance();
 
-            chatuService.logout();
-            chatuService.clearCookieCred();
+            chaturajiService.logout();
+            chaturajiService.clearCookieCred();
 
             startActivity(logOut);
         }
     };
 
 
-    private class PostGame extends AsyncTask<String, Void, String[]> {
+    private class CreateGame extends AsyncTask<String, Void, String[]> {
 
         @Override
         protected String[] doInBackground(String... AIs) {
-            ChatuService chatuService = ChatuService.getInstance();
+            ChaturajiService chaturajiService = ChaturajiService.getInstance();
 
-            chatuService.setEmailPassword(email, password);
+            chaturajiService.setEmailPassword(email, password);
 
-            String[] state = chatuService.createGame(AIs[0]);
+            String[] state = chaturajiService.createGame(AIs[0]);
 
-            System.out.println(Arrays.asList(state));
+            Log.d(TAG, "CreateGame status " + Arrays.asList(state));
 
             return state;
         }

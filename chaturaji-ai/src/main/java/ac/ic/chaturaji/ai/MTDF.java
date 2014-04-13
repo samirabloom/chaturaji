@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class MTDF extends AlphaBeta {
     private static final int MaxSearchSize = 250000;
 
-    public Move_AI Search(Board_AI board) {
-        Move_AI bestMove = null;
+    public AIMove Search(AIBoard board) {
+        AIMove bestMove = null;
         int iterateDepth;
         double firstGuess = 0;
 
@@ -27,15 +27,15 @@ public class MTDF extends AlphaBeta {
         return bestMove;
     }
 
-    private Move_AI MTD_f(Board_AI board, double guess, int depth) {
+    private AIMove MTD_f(AIBoard board, double guess, int depth) {
 
         double beta;
         double estimate = guess;
         double upperBound = MAXVAL;
         double lowerBound = MINVAL;
 
-        int maximisingPlayer = board.GetCurrentPlayer();
-        Move_AI bestMove = null;
+        int maximisingPlayer = board.getCurrentPlayer();
+        AIMove bestMove;
 
         do {
             if (estimate == lowerBound)
@@ -57,16 +57,16 @@ public class MTDF extends AlphaBeta {
         return bestMove;
     }
 
-    private Move_AI AlphaBetaWithMemory(Board_AI board, int depth, double alpha, double beta, int colour, int maximisingPlayer) {
-        Move_AI bestMove = null;
-        ArrayList<Move_AI> possMoves = new ArrayList<>();
+    private AIMove AlphaBetaWithMemory(AIBoard board, int depth, double alpha, double beta, int colour, int maximisingPlayer) {
+        AIMove bestMove = null;
+        ArrayList<AIMove> possMoves = new ArrayList<>();
         double record = MINVAL;
         double score;
 
         validMoves.GenerateMoves(board, possMoves, colour);
 
-        for (Move_AI listMove : possMoves) {
-            Board_AI newBoard = board.clone();
+        for (AIMove listMove : possMoves) {
+            AIBoard newBoard = board.clone();
             newBoard.ApplyMove(listMove);
 
             score = alphaBeta(newBoard, depth - 1, alpha, beta, (maximisingPlayer + 1) % 4, maximisingPlayer);

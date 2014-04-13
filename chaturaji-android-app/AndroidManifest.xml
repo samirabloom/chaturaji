@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1"
           android:versionName="1.0-SNAPSHOT" package="ac.ic.chaturaji.android">
 
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="19"/>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <application android:allowBackup="true" android:debuggable="true" android:icon="@drawable/ic_launcher"
@@ -16,28 +16,28 @@
         </activity>
         <activity
                 android:name=".MainMenu"
-                android:label="Main Menu" >
+                android:label="Main Menu">
         </activity>
         <activity
                 android:name=".GameRoomActivity"
-                android:label="Game Rooms" >
+                android:label="Game Rooms">
         </activity>
         <activity
                 android:name=".SettingsActivity"
-                android:label="Game Settings" >
+                android:label="Game Settings">
         </activity>
         <activity
                 android:name=".CreateGameActivity"
-                android:label="Create New Game" >
+                android:label="Create New Game">
         </activity>
         <activity
                 android:name=".GameActivity"
                 android:configChanges="mcc|mnc|locale|touchscreen|navigation|screenLayout|fontScale|uiMode|smallestScreenSize|orientation|keyboard|keyboardHidden|screenSize"
-                android:label="In-Game" >
+                android:label="In-Game">
         </activity>
         <activity
                 android:name=".SignUpActivity"
-                android:label="Sign up" >
+                android:label="Sign up">
         </activity>
         <activity
                 android:name=".ChooseColour"

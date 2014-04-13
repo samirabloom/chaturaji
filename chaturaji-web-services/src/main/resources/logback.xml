@@ -25,7 +25,7 @@
         </filter>
     </appender>
 
-    <logger name="ac.ic.chaturaji" level="TRACE"/>
+    <logger name="ac.ic.chaturaji" level="INFO"/>
 
     <root level="WARN">
         <appender-ref ref="FILE"/>

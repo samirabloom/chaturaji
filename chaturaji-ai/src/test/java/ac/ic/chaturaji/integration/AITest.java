@@ -6,8 +6,6 @@ import ac.ic.chaturaji.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
 import static org.junit.Assert.*;
 
 /**
@@ -32,11 +30,10 @@ public class AITest {
         long[] trueBoards;
 
         assertEquals(Colour.YELLOW, game.getCurrentPlayerColour());
-        System.out.println("startGameTest: succeeded");
     }
 
     @Test
-    public void submitMoveHumanTest() {
+    public void submitMoveHumanTest() throws Exception {
         Game game = new Game();
         Move move = new Move();
         game = ai.createGame(game);
@@ -52,11 +49,10 @@ public class AITest {
         move.setColour(game.getCurrentPlayerColour());
 
         assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
-        System.out.println("submitMoveHumanTest: succeeded");
     }
 
     @Test
-    public void submitMoveAITest() {
+    public void submitMoveAITest() throws Exception {
         Game game = new Game();
         Move move = new Move();
         game = ai.createGame(game);
@@ -72,7 +68,6 @@ public class AITest {
         move.setColour(game.getCurrentPlayerColour());
 
         assertEquals(GameStatus.IN_PLAY, ai.submitMove(game, move).getGameStatus());
-        System.out.println("submitMoveAITest: succeeded");
     }
 
     /*
@@ -96,11 +91,10 @@ public class AITest {
         if (result.getGameStatus() == GameStatus.GAME_OVER || result.getGameStatus() == GameStatus.STALEMATE)
             move_complete = true;
         }
-        System.out.println("gameTest: succeeded");
     }
     */
     @Test
-    public void boatTriumphTest() {
+    public void boatTriumphTest() throws Exception {
         int[][] boatTriumph = TestCases.BoatTriumphGame;
         Game game = new Game();
         Move move = new Move();
@@ -128,11 +122,10 @@ public class AITest {
         assertFalse(result == null);
 
         assertEquals(ResultType.BOAT_TRIUMPH, result.getType());
-        System.out.println("boatTriumphTest: succeeded");
     }
 
     @Test
-    public void promotionTestYellowRed() {
+    public void promotionTestYellowRed() throws Exception {
         Game game = new Game();
         game = ai.createGame(game);
 
@@ -153,11 +146,10 @@ public class AITest {
 
         game.setBitboards(PawnBoards);
         checkPromo(game);
-        System.out.println("promotionTestYellowRed: succeeded");
     }
 
     @Test
-    public void promotionTestBlueGreen() {
+    public void promotionTestBlueGreen() throws Exception {
         Game game = new Game();
         game = ai.createGame(game);
 
@@ -178,10 +170,9 @@ public class AITest {
 
         game.setBitboards(PawnBoards);
         checkPromo(game);
-        System.out.println("promotionTestBlueGreen: succeeded");
     }
 
-    private void checkPromo(Game game) {
+    private void checkPromo(Game game) throws Exception {
 
         int source, dest;
 

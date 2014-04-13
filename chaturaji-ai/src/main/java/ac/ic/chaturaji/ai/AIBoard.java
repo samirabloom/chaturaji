@@ -4,18 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *  Chaturaji.Board_AI: constructs all relevant bitboards and handles chaturaji board manipulation (i.e. adding and removing pieces).
- *  The board is represented by a 64-bit string, the first bit denoting square a8, the second is a7 and so forth.
- *  There are 32 bitboards in total. The first 20 are for each piece of each player; for example Green will have 5 bitboards,
- *  one for each of its different pieces. The next 4 are used to denote the positions of ALL the individual players' pieces,
- *  essentially just the 5 single bitboards concatenated into one.
- *  The following 4 are the end squares opposite to each colour's starting position. These are the squares on which the pawns may
- *  promote to a higher value piece given that their corresponding piece has been taken.
- *  The final four are used to keep track of which pawns are potential boats/elephants/kings/knights upon promotion.
+ * Chaturaji.Board_AI: constructs all relevant bitboards and handles chaturaji board manipulation (i.e. adding and removing pieces).
+ * The board is represented by a 64-bit string, the first bit denoting square a8, the second is a7 and so forth.
+ * There are 32 bitboards in total. The first 20 are for each piece of each player; for example Green will have 5 bitboards,
+ * one for each of its different pieces. The next 4 are used to denote the positions of ALL the individual players' pieces,
+ * essentially just the 5 single bitboards concatenated into one.
+ * The following 4 are the end squares opposite to each colour's starting position. These are the squares on which the pawns may
+ * promote to a higher value piece given that their corresponding piece has been taken.
+ * The final four are used to keep track of which pawns are potential boats/elephants/kings/knights upon promotion.
  *
  * @author dg3213
  */
-public class Board_AI implements Cloneable {
+public class AIBoard implements Cloneable {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -33,7 +33,7 @@ public class Board_AI implements Cloneable {
 	/*------ Methods ------*/
 
     /* Constructor */
-    public Board_AI() {
+    public AIBoard() {
         BitBoards = new long[GameConstants.ALL_BITBOARDS];
         MaterialValue = new int[4];
 
@@ -41,15 +41,15 @@ public class Board_AI implements Cloneable {
         EvalMaterial();
     }
 
-    public Board_AI clone() {
-        Board_AI cloned = new Board_AI();
+    public AIBoard clone() {
+        AIBoard cloned = new AIBoard();
         cloned.BitBoards = BitBoards.clone();
         cloned.MaterialValue = MaterialValue.clone();
         cloned.CurrentPlayer = CurrentPlayer;
         return cloned;
     }
 
-    public Board_AI(long[] bit_boards, int colour) {
+    public AIBoard(long[] bit_boards, int colour) {
         BitBoards = bit_boards;
         MaterialValue = new int[4];
         EvalMaterial();
@@ -58,7 +58,7 @@ public class Board_AI implements Cloneable {
     }
 
     //Copy constructor
-    public Board_AI(Board_AI board) {
+    public AIBoard(AIBoard board) {
         BitBoards = board.BitBoards;
         MaterialValue = board.MaterialValue;
         CurrentPlayer = board.CurrentPlayer;
@@ -66,7 +66,7 @@ public class Board_AI implements Cloneable {
 
     /* Accessors */
 
-    public int GetCurrentPlayer() {
+    public int getCurrentPlayer() {
         return CurrentPlayer;
     }
 
@@ -259,7 +259,7 @@ public class Board_AI implements Cloneable {
     }
 
     // Apply the move given and update the bit boards.
-    public void ApplyMove(Move_AI theMove) {
+    public void ApplyMove(AIMove theMove) {
         // Check if the move is a promotion
         boolean isPromotion = (theMove.getPromoType() > 0);
 
@@ -416,7 +416,7 @@ public class Board_AI implements Cloneable {
         stringBuilder.append("    A    B    C    D    E    F    G    H   ");
         stringBuilder.append("\n");
 
-        logger.info(stringBuilder.toString());
+        logger.debug(stringBuilder.toString());
     }
 
     public int FindBoatSquare(int colour) {

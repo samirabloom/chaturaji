@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.joda.ser.LocalDateTimeSerializer;
 import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ public class Game extends EqualsHashCodeToString {
     private long[] bitboards;
     @JsonIgnore
     private int stalemateCount;
+    private Object playerWithHighestScore;
 
     // Dummy constructor needed to map JSON string back to Java object
     public Game() {
@@ -154,5 +156,23 @@ public class Game extends EqualsHashCodeToString {
             throw new RuntimeException("Game already has four players");
         }
         return this;
+    }
+
+    @JsonIgnore
+    public List<Player> getPlayersWithHighestScore() {
+        List<Player> playersWithHighestScore = new ArrayList<>();
+        List<Integer> scores = new ArrayList<>();
+        for (Player player : players) {
+            scores.add(player.getPoints());
+        }
+        Collections.sort(scores);
+        if (scores.size() > 3) {
+            for (Player player : players) {
+                if (scores.get(3).equals(player.getPoints())) {
+                    playersWithHighestScore.add(player);
+                }
+            }
+        }
+        return playersWithHighestScore;
     }
 }

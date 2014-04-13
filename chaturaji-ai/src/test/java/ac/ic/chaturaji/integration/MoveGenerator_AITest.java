@@ -1,8 +1,8 @@
 package ac.ic.chaturaji.integration;
 
-import ac.ic.chaturaji.ai.Board_AI;
+import ac.ic.chaturaji.ai.AIBoard;
+import ac.ic.chaturaji.ai.AIMove;
 import ac.ic.chaturaji.ai.MoveGenerator_AI;
-import ac.ic.chaturaji.ai.Move_AI;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,12 +16,12 @@ import static org.junit.Assert.assertNull;
  */
 public class MoveGenerator_AITest {
     MoveGenerator_AI validMoves;
-    Board_AI theBoard;
+    AIBoard theBoard;
 
     @Before
     public void setUp() {
         validMoves = new MoveGenerator_AI();
-        theBoard = new Board_AI();
+        theBoard = new AIBoard();
     }
 
     @Test
@@ -33,9 +33,9 @@ public class MoveGenerator_AITest {
 
     @Test
     public void testGenerateMoves() {
-        ArrayList<Move_AI> moveList = new ArrayList<>();
+        ArrayList<AIMove> moveList = new ArrayList<>();
 
-        validMoves.GenerateMoves(theBoard, moveList, theBoard.GetCurrentPlayer());
+        validMoves.GenerateMoves(theBoard, moveList, theBoard.getCurrentPlayer());
 
         assertEquals(9, moveList.size());
     }

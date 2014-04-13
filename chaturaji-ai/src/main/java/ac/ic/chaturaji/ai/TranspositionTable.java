@@ -60,7 +60,7 @@ public class TranspositionTable {
     // Check to see if there is already a stored board position within the transposition table.
     // If so then we also have a best move for that position (either an upper bound/lower bound/exact value)
     // so copy the values in the table to the input parameter 'move'.
-    public boolean FindBoard(Board_AI board, Move_AI move) {
+    public boolean FindBoard(AIBoard board, AIMove move) {
         long zobristKey = board.ZobristKey();
         // Find the board's hash position in Table
         int key = Math.abs((int) (zobristKey) % HASH_SIZE);
@@ -82,7 +82,7 @@ public class TranspositionTable {
     }
 
     // Save the board using Zobrist's key as identity.
-    public boolean SaveBoard(Board_AI board, double evaluation, int flag, int depth, int timeStamp) {
+    public boolean SaveBoard(AIBoard board, double evaluation, int flag, int depth, int timeStamp) {
         long zobristKey = board.ZobristKey();
         int key = Math.abs((int) (zobristKey) % HASH_SIZE);
 

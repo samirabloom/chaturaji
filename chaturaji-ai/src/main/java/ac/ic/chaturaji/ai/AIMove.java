@@ -3,7 +3,7 @@ package ac.ic.chaturaji.ai;
 /**
  * @author dg3213
  */
-public class Move_AI {
+public class AIMove {
 
     //------ Data Members ------//
 
@@ -24,10 +24,10 @@ public class Move_AI {
 
     // Constructor
 
-    public Move_AI() {
+    public AIMove() {
     }
 
-    public Move_AI(int MovPiece, int SrcSqr, int DestSqr) {
+    public AIMove(int MovPiece, int SrcSqr, int DestSqr) {
         Piece = MovPiece;
         Source = SrcSqr;
         Dest = DestSqr;
@@ -105,7 +105,7 @@ public class Move_AI {
 
     // Functions
 
-    public boolean IsEqual(Move_AI another) {
+    public boolean IsEqual(AIMove another) {
         if (Piece != another.getPiece())
             return false;
         if (CapturedPiece != another.getCaptured())

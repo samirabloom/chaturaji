@@ -1,19 +1,16 @@
 package ac.ic.chaturaji.android.test;
 
-import ac.ic.chaturaji.android.*;
+import ac.ic.chaturaji.android.CreateGameActivity;
+import ac.ic.chaturaji.android.GameRoomActivity;
+import ac.ic.chaturaji.android.GameRoomAdapter;
+import ac.ic.chaturaji.android.R;
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.app.Instrumentation;
-import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -38,53 +35,18 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
     @Override
     protected void setUp() throws Exception {
 
-        super.setUp();
-
         setActivityInitialTouchMode(false);
 
         mActivity = getActivity();
 
-        try {
-
         gamesList = new ObjectMapperFactory().createObjectMapper().readValue(mockGameList, Game[].class);
 
-        }
-
-        catch (JsonGenerationException e) {
-            Log.d("JsonGenerationException ", e.toString());
-            e.printStackTrace();
-
-        }
-
-        catch (JsonMappingException e) {
-            Log.d("JsonMappingException", e.toString());
-            e.printStackTrace();
-
-        }
-
-        catch (IOException e) {
-            Log.d("IOException", e.toString());
-            e.printStackTrace();
-
-        }
-
-        assertTrue(gamesList != null);
         localListView = (ListView) mActivity.findViewById(R.id.game_rooms_list);
 
         localAdapter = new GameRoomAdapter(mActivity, Arrays.asList(gamesList));
-
-        System.out.println(localAdapter.getCount());
-
     }
 
-    public void testPreconditions() {
-
-        //assertTrue(localAdapter != null);
-
-        //assertTrue(localAdapter.getCount() > 0);
-    }
-
-    public void testTCreateGame(){
+    public void testTCreateGame() {
 
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(CreateGameActivity.class.getName(), null, false);
 
@@ -95,7 +57,6 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
         myActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 createGame.performClick();
             }
         });

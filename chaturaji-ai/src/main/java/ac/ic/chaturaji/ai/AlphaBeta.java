@@ -25,8 +25,8 @@ public class AlphaBeta {
     }
 
     // Search to find the best move for the given colour to the given depth:
-    public Move_AI Search(Board_AI board, int colour, int depth) {
-        ArrayList<Move_AI> possMoves = new ArrayList<>();
+    public AIMove Search(AIBoard board, int colour, int depth) {
+        ArrayList<AIMove> possMoves = new ArrayList<>();
 
         // First generate the moves for the current player.
         validMoves.GenerateMoves(board, possMoves, colour);
@@ -36,7 +36,7 @@ public class AlphaBeta {
         double record = MINVAL;
         double score;
 
-        Move_AI bestMove = null;
+        AIMove bestMove = null;
 
         // Use the GameTimer to determine how far through the game we are. This allows us to put a time stamp
         // on the entries within the transposition table.
@@ -44,8 +44,8 @@ public class AlphaBeta {
 
         // Use the iterative deepening method combined with aspiration windows for better move ordering:
         for (int iteration = depth; iteration <= depth; iteration++) {
-            for (Move_AI listMove : possMoves) {
-                Board_AI newBoard = board.clone();
+            for (AIMove listMove : possMoves) {
+                AIBoard newBoard = board.clone();
                 newBoard.ApplyMove(listMove);
 
                 // Maximise the corresponding value returned
@@ -71,9 +71,9 @@ public class AlphaBeta {
         return bestMove;
     }
 
-    public double alphaBeta(Board_AI board, int depth, double alpha, double beta, int colour, int maximisingPlayer) {
+    public double alphaBeta(AIBoard board, int depth, double alpha, double beta, int colour, int maximisingPlayer) {
 
-        Move_AI testMove = new Move_AI();
+        AIMove testMove = new AIMove();
         NodesSearched++;
         double score;
 
@@ -83,8 +83,6 @@ public class AlphaBeta {
             // (i.e. if it has been resolved to a greater depth than we are currently at and what sort of bound
             // has been placed on its evaluation. Note that we can only use certain bounds depending on whether we are
             // maximising or minimising).
-
-            //System.out.println("Transposition found!");
 
             int evalType = testMove.getEvaluationType();
             double evaluation = testMove.getScore();
@@ -120,7 +118,7 @@ public class AlphaBeta {
         }
 
 
-        ArrayList<Move_AI> possMoves = new ArrayList<>();
+        ArrayList<AIMove> possMoves = new ArrayList<>();
         validMoves.GenerateMoves(board, possMoves, colour);
 
         if (possMoves.size() == 0) {
@@ -130,8 +128,8 @@ public class AlphaBeta {
             return alphaBeta(board, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
         }
 
-        for (Move_AI listMove : possMoves) {
-            Board_AI newBoard = board.clone();
+        for (AIMove listMove : possMoves) {
+            AIBoard newBoard = board.clone();
             newBoard.ApplyMove(listMove);
             score = alphaBeta(newBoard, depth - 1, alpha, beta, (colour + 1) % 4, maximisingPlayer);
 

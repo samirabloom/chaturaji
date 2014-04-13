@@ -1,7 +1,6 @@
 package ac.ic.chaturaji.integration;
 
-import ac.ic.chaturaji.ai.Move_AI;
-import org.junit.Ignore;
+import ac.ic.chaturaji.ai.AIMove;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,11 +9,11 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author dg3213
  */
-public class Move_AITest {
+public class _AIMoveTest {
 
     @Test
     public void MoveTest() {
-        Move_AI theMove = new Move_AI();
+        AIMove theMove = new AIMove();
 
         theMove.SetCaptured(0);
         theMove.SetType(0);
@@ -32,8 +31,8 @@ public class Move_AITest {
 
     @Test
     public void IsEqualTest() {
-        Move_AI theMove = new Move_AI();
-        Move_AI otherMove = new Move_AI();
+        AIMove theMove = new AIMove();
+        AIMove otherMove = new AIMove();
 
         theMove.SetCaptured(0);
         theMove.SetType(0);

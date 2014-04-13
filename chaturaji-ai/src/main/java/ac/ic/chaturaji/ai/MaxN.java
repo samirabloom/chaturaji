@@ -13,18 +13,18 @@ public class MaxN {
     }
 
     // Search to find the best move for the given colour to the given depth:
-    public Move_AI Search(Board_AI board, int colour, int depth) {
-        ArrayList<Move_AI> possMoves = new ArrayList<>();
+    public AIMove Search(AIBoard board, int colour, int depth) {
+        ArrayList<AIMove> possMoves = new ArrayList<>();
 
         // First generate the moves for the current player.
         validMoves.GenerateMoves(board, possMoves, colour);
 
         double bestVal = -1000000;
-        Move_AI bestMove = null;
+        AIMove bestMove = null;
         double[] returnEval = null;
 
-        for (Move_AI listMove : possMoves) {
-            Board_AI newBoard = board.clone();
+        for (AIMove listMove : possMoves) {
+            AIBoard newBoard = board.clone();
             newBoard.ApplyMove(listMove);
             double[] value = MinimaxN(newBoard, depth - 1, (colour + 1) % 4);
             if (value[colour] > bestVal) {
@@ -42,12 +42,12 @@ public class MaxN {
         return bestMove;
     }
 
-    private double[] MinimaxN(Board_AI board, int depth, int colour) {
+    private double[] MinimaxN(AIBoard board, int depth, int colour) {
 
         if (depth == 0 || board.isGameOver() == 0)
             return Evaluate(board.GetMaterialValue());
 
-        ArrayList<Move_AI> possMoves = new ArrayList<>();
+        ArrayList<AIMove> possMoves = new ArrayList<>();
         validMoves.GenerateMoves(board, possMoves, colour);
 
         if (possMoves.size() == 0) {
@@ -60,8 +60,8 @@ public class MaxN {
         double bestVal = -1000000;
         double[] returnEval = null;
 
-        for (Move_AI listMove : possMoves) {
-            Board_AI newBoard = board.clone();
+        for (AIMove listMove : possMoves) {
+            AIBoard newBoard = board.clone();
             newBoard.ApplyMove(listMove);
             double[] value = MinimaxN(newBoard, depth - 1, (colour + 1) % 4);
             if (value[colour] > bestVal) {

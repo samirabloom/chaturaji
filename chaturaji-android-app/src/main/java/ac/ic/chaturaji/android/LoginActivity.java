@@ -1,6 +1,6 @@
 package ac.ic.chaturaji.android;
 
-import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.chatuService.ChaturajiService;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class LoginActivity extends Activity {
 
+    private static final String TAG = "LoginActivity";
     public OnClickListener signupButtonListener = new OnClickListener() {
 
         @Override
@@ -66,7 +68,7 @@ public class LoginActivity extends Activity {
             try {
 
                 String state = new Login().execute("").get();
-                System.out.println(state);
+                Log.d(TAG, "Login status " + state);
 
                 switch (state) {
                     case "Success":
@@ -110,7 +112,7 @@ public class LoginActivity extends Activity {
                 try {
 
                     String state = new UpdatePassword().execute(email).get();
-                    System.out.println(state);
+                    Log.d(TAG, "UpdatePassword status " + state);
 
                     switch (state) {
                         case "Success":
@@ -165,7 +167,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected String doInBackground(String... info) {
-            return ChatuService.getInstance().login(email, password);
+            return ChaturajiService.getInstance().login(email, password);
         }
 
     }
@@ -174,7 +176,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected String doInBackground(String... info) {
-            return ChatuService.getInstance().updatePassword(email);
+            return ChaturajiService.getInstance().updatePassword(email);
         }
 
     }

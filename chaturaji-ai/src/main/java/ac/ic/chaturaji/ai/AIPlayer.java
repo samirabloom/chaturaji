@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * @author dg3213
  */
-abstract public class Player_AI {
+abstract public class AIPlayer {
 
     // Data Members
 
@@ -18,7 +18,7 @@ abstract public class Player_AI {
 
     // Constructor
 
-    public Player_AI(int points, Set<Integer> kingsCaptured) {
+    public AIPlayer(int points, Set<Integer> kingsCaptured) {
         this.points = points;
         this.kingsCaptured = kingsCaptured;
     }
@@ -29,13 +29,13 @@ abstract public class Player_AI {
         colour = col;
     }
 
-    int GetPoints() {
+    int getPoints() {
         return points;
     }
 
     // Functions
 
-    protected void setPoints(Board_AI theBoard, Move_AI theMove) {
+    protected void setPoints(AIBoard theBoard, AIMove theMove) {
         if (theMove != null) {
             switch (theMove.getCaptured()) {
                 case GameConstants.PAWN:
@@ -52,10 +52,11 @@ abstract public class Player_AI {
                     break;
                 case GameConstants.KING:
                     int kingColour = theBoard.FindColourPieceInSquare(theMove.getDest());
-                    if (checkKingsCaptured(kingColour) && theBoard.GetBitBoard(GameConstants.KING + colour) != 0)
+                    if (checkKingsCaptured(kingColour) && theBoard.GetBitBoard(GameConstants.KING + colour) != 0) {
                         points += 54;
-                    else
+                    } else {
                         points += 5;
+                    }
                     break;
                 default:
                     break;

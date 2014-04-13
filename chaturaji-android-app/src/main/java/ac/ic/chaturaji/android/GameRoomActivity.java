@@ -1,8 +1,7 @@
 package ac.ic.chaturaji.android;
 
-import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.chatuService.ChaturajiService;
 import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -27,6 +23,7 @@ import java.util.Arrays;
  */
 public class GameRoomActivity extends Activity {
 
+    private static final String TAG = "GameRoomActivity";
     public View.OnClickListener createGameButtonListener = new View.OnClickListener() {
 
         @Override
@@ -71,7 +68,7 @@ public class GameRoomActivity extends Activity {
         try {
 
             String[] state = new JoinGame().execute(gameId).get();
-            System.out.println(Arrays.asList(state));
+            Log.d(TAG, "JoinGame status " + Arrays.asList(state));
 
             String colour = "in_game_yellow";
 
@@ -103,9 +100,9 @@ public class GameRoomActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
                     Intent logOut = new Intent(GameRoomActivity.this, LoginActivity.class);
                     logOut.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    ChatuService chatuService = ChatuService.getInstance();
-                    chatuService.logout();
-                    chatuService.clearCookieCred();
+                    ChaturajiService chaturajiService = ChaturajiService.getInstance();
+                    chaturajiService.logout();
+                    chaturajiService.clearCookieCred();
                     startActivity(logOut);
                     break;
             }
@@ -125,45 +122,22 @@ public class GameRoomActivity extends Activity {
         return true;
     }
 
-    private class GetGames extends AsyncTask<Void, Void, String> {
+    private class GetGames extends AsyncTask<Void, Void, Game[]> {
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected Game[] doInBackground(Void... voids) {
 
-            ChatuService testService = ChatuService.getInstance();
-
-            String test = testService.getGames();
-
-            System.out.println(test);
-
-            return test;
-        }
-
-        protected void onPostExecute(String test) {
-
-            try {
-                gamesList = new ObjectMapperFactory().createObjectMapper().readValue(test, Game[].class);
-                System.out.println(test);
-                System.out.println(Arrays.asList(gamesList));
-            } catch (JsonGenerationException e) {
-                Log.d("JsonGenerationException ", e.toString());
-                e.printStackTrace();
-            } catch (JsonMappingException e) {
-                Log.d("JsonMappingException", e.toString());
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.d("IOException", e.toString());
-                e.printStackTrace();
-            }
+            gamesList = ChaturajiService.getInstance().getGames();
 
             if (gameRooms != null && gamesList != null) {
-
                 gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
-
-            } else
-
+            } else {
                 Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+            }
 
+            Log.d(TAG, "Games list received from server " + Arrays.asList(gamesList));
+
+            return gamesList;
         }
 
     }
@@ -172,7 +146,7 @@ public class GameRoomActivity extends Activity {
 
         @Override
         protected String[] doInBackground(String... info) {
-            return ChatuService.getInstance().joinGame(info[0]);
+            return ChaturajiService.getInstance().joinGame(info[0]);
         }
 
     }

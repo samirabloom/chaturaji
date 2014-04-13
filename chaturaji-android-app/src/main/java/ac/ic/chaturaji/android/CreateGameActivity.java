@@ -1,10 +1,11 @@
 package ac.ic.chaturaji.android;
 
-import ac.ic.chaturaji.chatuService.ChatuService;
+import ac.ic.chaturaji.chatuService.ChaturajiService;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -14,11 +15,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 /**
  * @author Haider
  */
 public class CreateGameActivity extends Activity {
 
+    private static final String TAG = "CreateGameActivity";
     Button start_game_button;
     RadioGroup radioAI;
     RadioButton radioAI0;
@@ -61,40 +65,46 @@ public class CreateGameActivity extends Activity {
 
             Intent startGame = new Intent(CreateGameActivity.this, GameActivity.class);
 
-            PostGame postgame = new PostGame();
+            CreateGame createGame = new CreateGame();
 
             try {
 
-                postgame.execute(numberOfAI);
-                String[] state = postgame.get();
-                System.out.println(state);
+                createGame.execute(numberOfAI);
+                String[] state = createGame.get();
+                Log.d(TAG, "CreateGame status " + Arrays.asList(state));
 
                 String colour = "in_game_yellow";
 
-                if (state[1].equals("BLUE"))
-                    colour = "in_game_blue";
-
-                else if (state[1].equals("RED"))
-                    colour = "in_game_red";
-
-                else if (state[1].equals("GREEN"))
-                    colour = "in_game_green";
+                switch (state[1]) {
+                    case "BLUE":
+                        colour = "in_game_blue";
+                        break;
+                    case "RED":
+                        colour = "in_game_red";
+                        break;
+                    case "GREEN":
+                        colour = "in_game_green";
+                        break;
+                }
 
                 startGame.putExtra("colour", colour);
 
-                if (state[0].equals("Error")) {
-                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
-                } else if (state[0].equals("401")) {
-                    Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
-                    Intent logOut = new Intent(CreateGameActivity.this, LoginActivity.class);
-                    logOut.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    ChatuService chatuService = ChatuService.getInstance();
-                    chatuService.logout();
-                    chatuService.clearCookieCred();
-                    startActivity(logOut);
-                } else {
-
-                    startActivity(startGame);
+                switch (state[0]) {
+                    case "Error":
+                        Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                        break;
+                    case "401":
+                        Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
+                        Intent logOut = new Intent(CreateGameActivity.this, LoginActivity.class);
+                        logOut.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ChaturajiService chaturajiService = ChaturajiService.getInstance();
+                        chaturajiService.logout();
+                        chaturajiService.clearCookieCred();
+                        startActivity(logOut);
+                        break;
+                    default:
+                        startActivity(startGame);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -109,7 +119,7 @@ public class CreateGameActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
-            numberOfAI = radioAI0.getText().toString();
+            numberOfAI = String.valueOf(radioAI0.getText());
         }
     };
 
@@ -118,7 +128,7 @@ public class CreateGameActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
-            numberOfAI = radioAI1.getText().toString();
+            numberOfAI = String.valueOf(radioAI1.getText());
         }
     };
 
@@ -127,7 +137,7 @@ public class CreateGameActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
-            numberOfAI = radioAI2.getText().toString();
+            numberOfAI = String.valueOf(radioAI2.getText());
         }
     };
 
@@ -136,15 +146,15 @@ public class CreateGameActivity extends Activity {
         @Override
         public void onClick(View theView) {
 
-            numberOfAI = radioAI3.getText().toString();
+            numberOfAI = String.valueOf(radioAI3.getText());
         }
     };
 
-    private class PostGame extends AsyncTask<String, Void, String[]> {
+    private class CreateGame extends AsyncTask<String, Void, String[]> {
 
         @Override
         protected String[] doInBackground(String... AIs) {
-            return ChatuService.getInstance().createGame(AIs[0]);
+            return ChaturajiService.getInstance().createGame(AIs[0]);
         }
 
     }

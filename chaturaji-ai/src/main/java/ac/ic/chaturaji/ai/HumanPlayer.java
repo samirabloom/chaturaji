@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * @author dg3213
  */
-public class PlayerHuman extends Player_AI {
+public class HumanPlayer extends AIPlayer {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -21,7 +21,7 @@ public class PlayerHuman extends Player_AI {
 
     // Constructor
 
-    public PlayerHuman(int colour, int points, Set<Integer> kingsCaptured) {
+    public HumanPlayer(int colour, int points, Set<Integer> kingsCaptured) {
         super(points, kingsCaptured);
         this.type = GameConstants.AI;
         this.SetColour(colour);
@@ -31,8 +31,8 @@ public class PlayerHuman extends Player_AI {
     // Functions
 
     // Ask for move from the human player:
-    public Move_AI GetMove(Board_AI theBoard, int source, int dest) {
-        Move_AI move;
+    public AIMove GetMove(AIBoard theBoard, int source, int dest) {
+        AIMove move;
         // Generate all the possible moves for the player.
         ValidMoves.ComputeMoves(theBoard);
 
@@ -44,7 +44,7 @@ public class PlayerHuman extends Player_AI {
         move = ValidMoves.FindMove(source, dest);
 
         if (move != null) {
-            logger.info("The move chosen is: " + move.Print());
+            logger.debug("The move chosen is: " + move.Print());
         }
 
         setPoints(theBoard, move);
@@ -52,7 +52,7 @@ public class PlayerHuman extends Player_AI {
         return move;
     }
 
-    public ArrayList<Move_AI> getMoves(Board_AI theBoard) {
+    public ArrayList<AIMove> getMoves(AIBoard theBoard) {
         return ValidMoves.ComputeMoves(theBoard);
     }
 }

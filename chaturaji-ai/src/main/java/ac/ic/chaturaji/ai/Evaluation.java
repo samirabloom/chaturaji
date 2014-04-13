@@ -20,7 +20,7 @@ public class Evaluation {
 
     // Weigh up the different factors in the evaluation.
     // Material is by the far the most important factor.
-    public double EvaluateScore(int player, Board_AI board) {
+    public double EvaluateScore(int player, AIBoard board) {
         double score;
 
         score = EvaluateMaterial(player, board);
@@ -32,7 +32,7 @@ public class Evaluation {
         return score;
     }
 
-    private double EvaluateMaterial(int maximisingColour, Board_AI board) {
+    private double EvaluateMaterial(int maximisingColour, AIBoard board) {
         int kingScore = 0;
         int elephantScore = 0;
         int knightScore = 0;
@@ -76,7 +76,7 @@ public class Evaluation {
                 + (pawnCount[maximisingColour] - pawnScore);
     }
 
-    private double EvaluatePawns(int maximisingColour, Board_AI board) {
+    private double EvaluatePawns(int maximisingColour, AIBoard board) {
         int score = 0;
 
         if (board.GetBitBoard(GameConstants.PAWN + maximisingColour) == 0)
@@ -119,7 +119,7 @@ public class Evaluation {
         return score;
     }
 
-    private boolean DoubledPawn(int square, int colour, Board_AI board) {
+    private boolean DoubledPawn(int square, int colour, AIBoard board) {
 
         switch (colour % 2) {
             case 0: {
@@ -140,7 +140,7 @@ public class Evaluation {
         return false;
     }
 
-    private double EvaluatePosition(int maximisingColour, Board_AI board) {
+    private double EvaluatePosition(int maximisingColour, AIBoard board) {
         int score = 0;
         int count = 0;
 
@@ -165,8 +165,8 @@ public class Evaluation {
         return score;
     }
 
-    private double EvaluateMobility(int maximisingColour, Board_AI board) {
-        ArrayList<Move_AI> possMoves = new ArrayList<>();
+    private double EvaluateMobility(int maximisingColour, AIBoard board) {
+        ArrayList<AIMove> possMoves = new ArrayList<>();
 
         int currentMobility;
         int otherMobility = 0;
@@ -182,7 +182,7 @@ public class Evaluation {
         return currentMobility - otherMobility;
     }
 
-    private int EvaluateDefense(int colour, Board_AI board) {
+    private int EvaluateDefense(int colour, AIBoard board) {
         // Wish to make sure that the pieces are backed up:
         int score = 0;
 
@@ -202,7 +202,7 @@ public class Evaluation {
     }
 
     // Check if a given square is within the attacking/ defending range of a given colour's piece:
-    private boolean CheckCover(Board_AI board, int position, int piece, int colour) {
+    private boolean CheckCover(AIBoard board, int position, int piece, int colour) {
         if (board.GetBitBoard(piece + colour) == 0)
             return false;
 
@@ -257,7 +257,7 @@ public class Evaluation {
         return false;
     }
 
-    private int PawnCover(Board_AI board, int position, int colour) {
+    private int PawnCover(AIBoard board, int position, int colour) {
         if (board.GetBitBoard(GameConstants.PAWN + colour) == 0)
             return 0;
 

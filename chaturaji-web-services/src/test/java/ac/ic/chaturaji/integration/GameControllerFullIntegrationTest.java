@@ -120,7 +120,6 @@ public class GameControllerFullIntegrationTest {
                 new BasicNameValuePair("password", password)
         )));
         HttpResponse httpResponse = httpClient.execute(register);
-        System.out.println("httpResponse = " + httpResponse);
     }
 
     protected CloseableHttpClient createApacheClient() throws Exception {

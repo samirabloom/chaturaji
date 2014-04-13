@@ -53,7 +53,6 @@ public class RegistrationIntegrationTest extends GameControllerFullIntegrationTe
         // when
         login = new HttpPost("https://some_user%40example.com:qazQAZ123@127.0.0.1:" + httpsPort + "/login");
         loginResponse = httpClient.execute(login);
-        System.out.println("loginResponse = " + loginResponse);
 
         // then
         assertEquals(HttpStatus.ACCEPTED.value(), loginResponse.getStatusLine().getStatusCode());

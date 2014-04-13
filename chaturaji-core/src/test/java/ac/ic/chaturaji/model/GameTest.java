@@ -6,6 +6,9 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -128,5 +131,46 @@ public class GameTest {
         assertThat(game.getCurrentPlayerColour(), is(Colour.YELLOW));
         assertThat(game.getCurrentPlayerType(), is(PlayerType.HUMAN));
         assertThat(game.getNextPlayerColour(), is(Colour.BLUE));
+    }
+
+
+    @Test
+    public void shouldCalculateWinningPlayers() {
+        Game game = new Game();
+        Player playerOne = new Player();
+        playerOne.setPoints(0);
+        game.addPlayer(playerOne);
+        Player playerTwo = new Player();
+        playerTwo.setPoints(10);
+        game.addPlayer(playerTwo);
+        Player playerThree = new Player();
+        playerThree.setPoints(5);
+        game.addPlayer(playerThree);
+        Player playerFour = new Player();
+        playerFour.setPoints(3);
+        game.addPlayer(playerFour);
+
+        assertThat(game.getPlayersWithHighestScore(), contains(playerTwo));
+        assertThat(game.getPlayersWithHighestScore(), hasSize(1));
+    }
+
+    @Test
+    public void shouldCalculateWinningPlayersWhenDraw() {
+        Game game = new Game();
+        Player playerOne = new Player();
+        playerOne.setPoints(0);
+        game.addPlayer(playerOne);
+        Player playerTwo = new Player();
+        playerTwo.setPoints(10);
+        game.addPlayer(playerTwo);
+        Player playerThree = new Player();
+        playerThree.setPoints(5);
+        game.addPlayer(playerThree);
+        Player playerFour = new Player();
+        playerFour.setPoints(10);
+        game.addPlayer(playerFour);
+
+        assertThat(game.getPlayersWithHighestScore(), containsInAnyOrder(playerTwo, playerFour));
+        assertThat(game.getPlayersWithHighestScore(), hasSize(2));
     }
 }

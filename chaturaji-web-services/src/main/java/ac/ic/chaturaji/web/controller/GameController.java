@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInMemoryGames;
 
@@ -35,7 +34,6 @@ import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInM
  */
 @Controller
 public class GameController {
-    public static final int AI_PLAYER_DELAY = 1000;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private GameDAO gameDAO;
@@ -141,7 +139,7 @@ public class GameController {
     @RequestMapping(value = "/submitMove", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> submitMove(@RequestBody final Move move) {
         try {
-            logger.info("User " + springSecurityUserContext.getCurrentUser() + " is submitting move " + move);
+            logger.debug("User " + springSecurityUserContext.getCurrentUser() + " is submitting move " + move);
             final Game game = getInMemoryGames(servletContext).get(move.getGameId());
             if (game != null) {
                 Result result = ai.submitMove(game, move);
@@ -159,15 +157,10 @@ public class GameController {
                         game.setCurrentPlayerColour(game.getNextPlayerColour());
                     }
                     // now schedule AI move if next player is AI
-                    if (game.getCurrentPlayerType() == PlayerType.AI && result.getGameStatus() != GameStatus.GAME_OVER) {
+                    if (game.getCurrentPlayerType() == PlayerType.AI && result.getGameStatus() == GameStatus.IN_PLAY) {
                         taskExecutor.execute(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    TimeUnit.MILLISECONDS.sleep(AI_PLAYER_DELAY);
-                                } catch (InterruptedException e) {
-                                    throw new RuntimeException(e);
-                                }
                                 submitMove(new Move(uuidFactory.generateUUID(), move.getGameId(), game.getCurrentPlayerColour(), -1, -1));
                             }
                         });
