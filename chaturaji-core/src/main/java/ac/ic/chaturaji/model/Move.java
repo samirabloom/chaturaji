@@ -1,7 +1,5 @@
 package ac.ic.chaturaji.model;
 
-import java.util.UUID;
-
 /**
  * @author samirarabbanian
  */

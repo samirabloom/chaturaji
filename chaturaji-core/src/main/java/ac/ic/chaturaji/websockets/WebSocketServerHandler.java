@@ -65,7 +65,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         String request = ((TextWebSocketFrame) frame).text();
         if (request.startsWith("ID")) {
             clients.put(request, ctx.channel());
-            if(clientRegistrationListeners.containsKey(request)) {
+            if (clientRegistrationListeners.containsKey(request)) {
                 clientRegistrationListeners.get(request).onRegister(ctx.channel());
             }
         }

@@ -1,9 +1,7 @@
 package ac.ic.chaturaji.android.test;
 
 import ac.ic.chaturaji.android.*;
-import android.annotation.TargetApi;
 import android.app.Instrumentation;
-import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 
@@ -69,7 +67,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
 
     } */
 
-    public void testTClickMultiPlayer(){
+    public void testTClickMultiPlayer() {
 
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(GameRoomActivity.class.getName(), null, false);
 
@@ -92,7 +90,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
 
     }
 
-    public void testTClickSettings(){
+    public void testTClickSettings() {
 
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(SettingsActivity.class.getName(), null, false);
 
@@ -115,7 +113,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
 
     }
 
-    public void testTClickLogout(){
+    public void testTClickLogout() {
 
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(LoginActivity.class.getName(), null, false);
 
