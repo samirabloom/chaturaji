@@ -26,6 +26,7 @@ public class ComputerPlayer extends AIPlayer {
         // Set the points if a capture occurred.
         if (move != null) {
             setPoints(board, move);
+            System.out.println("Player " + GameConstants.PlayerStrings[board.getCurrentPlayer()] + " has " + getPoints() + " points.");
         }
 
         //Return the move
