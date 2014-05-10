@@ -263,6 +263,8 @@ public class AIBoard implements Cloneable {
         // Check if the move is a promotion
         boolean isPromotion = (theMove.getPromoType() > 0);
 
+
+
         // Check if the piece moved was a pawn. If so, determine its promotion piece and update
         // the relevant board.
 
@@ -289,6 +291,8 @@ public class AIBoard implements Cloneable {
                 RemovePiece(theMove.getSource(), theMove.getPiece());
                 RemovePiece(theMove.getDestination(), theMove.getCaptured());
                 AddPiece(theMove.getDestination(), theMove.getPiece());
+                //Check if the capture has made a pawn in the end squares to promote
+                CheckDelayedPromotion(theMove.getCaptured());
                 break;
             case GameConstants.RESIGN:
                 break;
@@ -309,7 +313,8 @@ public class AIBoard implements Cloneable {
         // Handle the pawn promotions
         if (isPromotion) {
             int colour = (theMove.getPiece() % 4);
-            switch (theMove.getPromoType()) {
+            Promote(theMove.getPiece(),theMove.getDestination(),colour,theMove.getPromoType());
+            /*switch (theMove.getPromoType()) {
                 case GameConstants.KNIGHT:
                     if (BitBoards[GameConstants.KNIGHT + colour] == 0) {
                         RemovePiece(theMove.getDestination(), theMove.getPiece());
@@ -338,8 +343,9 @@ public class AIBoard implements Cloneable {
                         AddPiece(theMove.getDestination(), GameConstants.KING + colour);
                     }
                     break;
-            }
+            }     */
         }
+
         EvalMaterial();
 
         NextPlayer();
@@ -377,6 +383,59 @@ public class AIBoard implements Cloneable {
         }
 
         return true;
+    }
+
+    //Check for a delayed promotion of a pawn
+    private void CheckDelayedPromotion(int CapturedPiece){
+        int colour = CapturedPiece % 4;
+        long pawnToPromote = BitBoards[GameConstants.YELLOW_END_SQUARES + (colour % 4)] & BitBoards[GameConstants.PAWN+ ((colour) % 4)];
+        if (pawnToPromote != 0) {
+            // If true then there is a pawn that might need to be promoted
+            if ((BitBoards[GameConstants.KNIGHT_PAWNS + CapturedPiece/4] & pawnToPromote)!= 0) {
+                pawnToPromote = getBitBoard(GameConstants.KNIGHT_PAWNS +CapturedPiece/4) & pawnToPromote;
+                BitBoards[CapturedPiece] |= pawnToPromote;
+                BitBoards[GameConstants.PAWN+colour]^=pawnToPromote;
+
+            }
+            return;
+        }
+
+    }
+
+    //Promote a pawn
+    private void Promote(int Piece, int destination, int colour, int PromoType)  {
+        switch (PromoType) {
+            case GameConstants.KNIGHT:
+                if (BitBoards[GameConstants.KNIGHT + colour] == 0) {
+                    RemovePiece(destination, Piece);
+                    RemovePiece(destination, GameConstants.KNIGHT_PAWNS);
+                    AddPiece(destination, GameConstants.KNIGHT + colour);
+                }
+                break;
+            case GameConstants.BOAT:
+                if (BitBoards[GameConstants.BOAT + colour] == 0) {
+                    RemovePiece(destination, Piece);
+                    RemovePiece(destination, GameConstants.BOAT_PAWNS);
+                    AddPiece(destination, GameConstants.BOAT + colour);
+                }
+                break;
+            case GameConstants.ELEPHANT:
+                if (BitBoards[GameConstants.ELEPHANT + colour] == 0) {
+                    RemovePiece(destination, Piece);
+                    RemovePiece(destination, GameConstants.ELEPHANT_PAWNS);
+                    AddPiece(destination, GameConstants.ELEPHANT + colour);
+                }
+                break;
+            case GameConstants.KING:
+                if (BitBoards[GameConstants.KING + colour] == 0) {
+                    RemovePiece(destination, Piece);
+                    RemovePiece(destination, GameConstants.KING_PAWNS);
+                    AddPiece(destination, GameConstants.KING + colour);
+                }
+                break;
+        }
+
+
     }
 
     // Delete all pieces from the board
