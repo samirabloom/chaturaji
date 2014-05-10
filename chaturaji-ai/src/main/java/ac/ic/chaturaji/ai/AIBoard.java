@@ -416,6 +416,7 @@ public class AIBoard implements Cloneable {
         stringBuilder.append("    A    B    C    D    E    F    G    H   ");
         stringBuilder.append("\n");
 
+        logger.info(stringBuilder.toString());
         logger.debug(stringBuilder.toString());
     }
 
