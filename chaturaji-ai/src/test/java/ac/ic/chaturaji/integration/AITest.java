@@ -93,6 +93,7 @@ public class AITest {
         }
     }
     */
+
     @Test
     public void boatTriumphTest() throws Exception {
         int[][] boatTriumph = TestCases.BoatTriumphGame;
@@ -170,6 +171,48 @@ public class AITest {
 
         game.setBitboards(PawnBoards);
         checkPromo(game);
+    }
+
+    @Test
+    public void delayedPromoTest() throws Exception {
+        Game game = new Game();
+        game = ai.createGame(game);
+
+        long[] gameBoards = new long[32];
+
+        for (int i = 0; i < 4; i++) {
+            Player player = new Player();
+            player.setType(PlayerType.HUMAN);
+            game.addPlayer(player);
+        }
+
+        for (int i = 0; i < 32; i++) {
+            gameBoards[i] = (TestCases.EndYellowBoard[i] | TestCases.GreenElephantAndKing[i] |
+                    TestCases.RedElephantAndKing[i] | TestCases.BlueElephant[i]);
+        }
+
+        game.setBitboards(gameBoards);
+        checkDelayedPromo(game);
+    }
+
+    private void checkDelayedPromo(Game game) throws Exception {
+        int source, dest;
+        int[][] DelayedTest = TestCases.DelayedPromo;
+
+        Move move = new Move();
+        Result result = null;
+
+        for (int[] moves : DelayedTest) {
+
+            source = moves[0];
+            dest = moves[1];
+
+            move.setColour(game.getCurrentPlayerColour());
+            move.setSource(source);
+            move.setDestination(dest);
+
+            ai.submitMove(game, move);
+        }
     }
 
     private void checkPromo(Game game) throws Exception {

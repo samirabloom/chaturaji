@@ -260,11 +260,6 @@ public class AIBoard implements Cloneable {
 
     // Apply the move given and update the bit boards.
     public void ApplyMove(AIMove theMove) {
-        // Check if the move is a promotion
-        boolean isPromotion = (theMove.getPromoType() > 0);
-
-
-
         // Check if the piece moved was a pawn. If so, determine its promotion piece and update
         // the relevant board.
 
@@ -291,7 +286,8 @@ public class AIBoard implements Cloneable {
                 RemovePiece(theMove.getSource(), theMove.getPiece());
                 RemovePiece(theMove.getDestination(), theMove.getCaptured());
                 AddPiece(theMove.getDestination(), theMove.getPiece());
-                //Check if the capture has made a pawn in the end squares to promote
+
+                //Check if the capture has lead to a possible promotion on the opponent's side
                 CheckDelayedPromotion(theMove.getCaptured());
                 break;
             case GameConstants.RESIGN:
@@ -310,44 +306,12 @@ public class AIBoard implements Cloneable {
             }
         }
 
-        // Handle the pawn promotions
+        // Check if the move is a promotion
+        boolean isPromotion = (theMove.getPromoType() > 0);
+
         if (isPromotion) {
-            int colour = (theMove.getPiece() % 4);
-            Promote(theMove.getPiece(),theMove.getDestination(),colour,theMove.getPromoType());
-            /*switch (theMove.getPromoType()) {
-                case GameConstants.KNIGHT:
-                    if (BitBoards[GameConstants.KNIGHT + colour] == 0) {
-                        RemovePiece(theMove.getDestination(), theMove.getPiece());
-                        RemovePiece(theMove.getDestination(), GameConstants.KNIGHT_PAWNS);
-                        AddPiece(theMove.getDestination(), GameConstants.KNIGHT + colour);
-                    }
-                    break;
-                case GameConstants.BOAT:
-                    if (BitBoards[GameConstants.BOAT + colour] == 0) {
-                        RemovePiece(theMove.getDestination(), theMove.getPiece());
-                        RemovePiece(theMove.getDestination(), GameConstants.BOAT_PAWNS);
-                        AddPiece(theMove.getDestination(), GameConstants.BOAT + colour);
-                    }
-                    break;
-                case GameConstants.ELEPHANT:
-                    if (BitBoards[GameConstants.ELEPHANT + colour] == 0) {
-                        RemovePiece(theMove.getDestination(), theMove.getPiece());
-                        RemovePiece(theMove.getDestination(), GameConstants.ELEPHANT_PAWNS);
-                        AddPiece(theMove.getDestination(), GameConstants.ELEPHANT + colour);
-                    }
-                    break;
-                case GameConstants.KING:
-                    if (BitBoards[GameConstants.KING + colour] == 0) {
-                        RemovePiece(theMove.getDestination(), theMove.getPiece());
-                        RemovePiece(theMove.getDestination(), GameConstants.KING_PAWNS);
-                        AddPiece(theMove.getDestination(), GameConstants.KING + colour);
-                    }
-                    break;
-            }     */
+            Promote(theMove.getPiece(), theMove.getDestination(), theMove.getPiece() % 4, theMove.getPromoType());
         }
-
-        EvalMaterial();
-
         NextPlayer();
     }
 
@@ -391,15 +355,13 @@ public class AIBoard implements Cloneable {
         long pawnToPromote = BitBoards[GameConstants.YELLOW_END_SQUARES + (colour % 4)] & BitBoards[GameConstants.PAWN+ ((colour) % 4)];
         if (pawnToPromote != 0) {
             // If true then there is a pawn that might need to be promoted
-            if ((BitBoards[GameConstants.KNIGHT_PAWNS + CapturedPiece/4] & pawnToPromote)!= 0) {
-                pawnToPromote = getBitBoard(GameConstants.KNIGHT_PAWNS +CapturedPiece/4) & pawnToPromote;
+            if ((BitBoards[GameConstants.KNIGHT_PAWNS + (CapturedPiece/4 - 1)] & pawnToPromote)!= 0) {
+                pawnToPromote = BitBoards[GameConstants.KNIGHT_PAWNS + (CapturedPiece/4 - 1)] & pawnToPromote;
                 BitBoards[CapturedPiece] |= pawnToPromote;
-                BitBoards[GameConstants.PAWN+colour]^=pawnToPromote;
+                BitBoards[GameConstants.PAWN+colour] ^= pawnToPromote;
 
             }
-            return;
         }
-
     }
 
     //Promote a pawn

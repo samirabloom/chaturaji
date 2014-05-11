@@ -12,7 +12,7 @@ public class TestCases {
     public static int[][] KnightPromo;
     public static int[][] ElephantPromo;
     public static int[][] KingPromo;
-
+    public static int[][] DelayedPromo;
 
     public static long Squares[];
     public static long[] JustYellows;
@@ -24,6 +24,11 @@ public class TestCases {
     public static long[] BluePawns;
     public static long[] RedPawns;
     public static long[] GreenPawns;
+
+    public static long[] GreenElephantAndKing;
+    public static long[] RedElephantAndKing;
+    public static long[] BlueElephant;
+    public static long[] EndYellowBoard;
 
     // Initialise the test cases:
     static {
@@ -44,6 +49,11 @@ public class TestCases {
         RedPawns = new long[32];
         GreenPawns = new long[32];
 
+        GreenElephantAndKing = new long[32];
+        RedElephantAndKing = new long[32];
+        EndYellowBoard = new long[32];
+        BlueElephant = new long[32];
+
         EmptyBoards();
         SinglePieceBoards();
 
@@ -59,6 +69,8 @@ public class TestCases {
 
         KingPromo = new int[][]{{25, 26}, {12, 20}, {38, 37}, {51, 43}, {26, 27}, {20, 28}, {37, 36}, {43, 35}, {27, 28}, {28, 36}, {36, 35},
                 {35, 27}, {28, 29}, {36, 44}, {35, 34}, {27, 19}, {29, 30}, {44, 52}, {34, 33}, {19, 11}, {30, 31}, {52, 60}, {33, 32}, {11, 3}};
+
+        DelayedPromo = new int[][] {{24,25}, {5,61}, {47,41}, {58,56}, {16,17}, {61,62}, {41,25}, {56,8}, {17,9}, {62,63}, {25,9}, {8,0}};
     }
 
     private static void setYellows() {
@@ -83,7 +95,6 @@ public class TestCases {
 
         JustYellows[GameConstants.ALL_YELLOW_PIECES] = (JustYellows[GameConstants.YELLOW_PAWN] | JustYellows[GameConstants.YELLOW_BOAT]
                 | JustYellows[GameConstants.YELLOW_KNIGHT] | JustYellows[GameConstants.YELLOW_ELEPHANT] | JustYellows[GameConstants.YELLOW_KING]);
-
     }
 
     private static void setBlues() {
@@ -161,11 +172,27 @@ public class TestCases {
 
     }
 
+    private static void setEndYellows() {
+        copy(EndYellowBoard, JustYellows);
+
+        EndYellowBoard[GameConstants.YELLOW_PAWN] ^= (JustYellows[GameConstants.YELLOW_PAWN] | Squares[7] | Squares[15] | Squares[23] | Squares[31]);
+        EndYellowBoard[GameConstants.ALL_PIECES] ^= (JustYellows[GameConstants.YELLOW_PAWN] | Squares[7] | Squares[15] | Squares[23] | Squares[31]);
+
+        EndYellowBoard[GameConstants.BOAT_PAWNS] ^= (Squares[1] | Squares[7]);
+        EndYellowBoard[GameConstants.KNIGHT_PAWNS] ^= (Squares[9] | Squares[15]);
+        EndYellowBoard[GameConstants.ELEPHANT_PAWNS] ^= (Squares[17] | Squares[23]);
+        EndYellowBoard[GameConstants.KING_PAWNS] ^= (Squares[25] | Squares[31]);
+    }
+
     private static void SinglePieceBoards() {
         setYellows();
         setBlues();
         setGreens();
         setReds();
+        setEndYellows();
+        RedElephantAndKing();
+        GreenElephantAndKing();
+        BlueElephant();
     }
 
     private static void EmptyBoards() {
@@ -174,7 +201,28 @@ public class TestCases {
             JustBlues[i] = 0;
             JustReds[i] = 0;
             JustGreens[i] = 0;
+            GreenElephantAndKing[i] = 0;
+            RedElephantAndKing[i] = 0;
+            EndYellowBoard[i] = 0;
+            BlueElephant[i] = 0;
         }
+    }
+
+    private static void RedElephantAndKing() {
+        RedElephantAndKing[GameConstants.ELEPHANT + 2] = Squares[47];
+        RedElephantAndKing[GameConstants.KING + 2] = Squares[39];
+        RedElephantAndKing[GameConstants.ALL_PIECES + 2] = Squares[47] | Squares[39];
+    }
+
+    private static void GreenElephantAndKing() {
+        GreenElephantAndKing[GameConstants.ELEPHANT + 3] = Squares[58];
+        GreenElephantAndKing[GameConstants.KING + 3] = Squares[59];
+        GreenElephantAndKing[GameConstants.ALL_PIECES + 3] = Squares[58] | Squares[59];
+    }
+
+    private static void BlueElephant() {
+        BlueElephant[GameConstants.ELEPHANT + 1] = Squares[5];
+        BlueElephant[GameConstants.ALL_PIECES + 1] = Squares[5];
     }
 
     private static void copy(long[] board1, long[] board2) {
