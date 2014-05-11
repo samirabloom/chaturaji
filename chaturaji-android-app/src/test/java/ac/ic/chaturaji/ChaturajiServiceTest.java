@@ -192,6 +192,23 @@ public class ChaturajiServiceTest {
     }
 
     @Test
+    public void updatePassword() throws Exception {
+
+        ChaturajiService chaturajiService = ChaturajiService.getInstance();
+        chaturajiService.setServerHostAndPort(serverHostAndPort);
+
+        String state = chaturajiService.register("wrongpassword123@test.com", "password123", "testman");
+
+        // if state is successful then it was a 201
+        assertEquals("Success", state);
+
+        state = chaturajiService.updatePassword("wrongpassword123@test.com");
+
+        assertEquals("Success", state);
+    }
+
+
+    @Test
     public void shouldLogin() throws Exception {
 
         ChaturajiService chaturajiService = ChaturajiService.getInstance();
@@ -203,6 +220,28 @@ public class ChaturajiServiceTest {
         assertEquals("Success", state);
 
         state = chaturajiService.login("test_login@test.com", "testpass123");
+
+        // this is the test account that was previously registered, therefore should be able to log in
+        assertEquals("Success", state);
+    }
+
+    @Test
+    public void shouldLogout() throws Exception {
+
+        ChaturajiService chaturajiService = ChaturajiService.getInstance();
+        chaturajiService.setServerHostAndPort(serverHostAndPort);
+
+        String state = chaturajiService.register("test_loginx@test.com", "testpass123", "testman");
+
+        // if state is successful then it was a 201
+        assertEquals("Success", state);
+
+        state = chaturajiService.login("test_loginx@test.com", "testpass123");
+
+        // this is the test account that was previously registered, therefore should be able to log in
+        assertEquals("Success", state);
+
+        state = chaturajiService.logout();
 
         // this is the test account that was previously registered, therefore should be able to log in
         assertEquals("Success", state);
