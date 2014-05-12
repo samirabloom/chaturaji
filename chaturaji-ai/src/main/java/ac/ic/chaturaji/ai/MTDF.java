@@ -8,13 +8,13 @@ import java.util.ArrayList;
 public class MTDF extends AlphaBeta {
     private static final int MaxSearchSize = 250000;
 
-    public AIMove Search(AIBoard board) {
+    public AIMove Search(AIBoard board, int maxIterateDepth) {
         AIMove bestMove = null;
         int iterateDepth;
         double firstGuess = 0;
 
         GameTimer++;
-        for (iterateDepth = 2; iterateDepth <= 15; iterateDepth++) {
+        for (iterateDepth = 2; iterateDepth <= maxIterateDepth; iterateDepth++) {
             bestMove = MTD_f(board, firstGuess, iterateDepth);
 
             if (bestMove != null)

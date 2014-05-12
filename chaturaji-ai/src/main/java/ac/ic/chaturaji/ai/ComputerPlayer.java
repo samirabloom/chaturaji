@@ -13,14 +13,14 @@ public class ComputerPlayer extends AIPlayer {
         colour = col;
     }
 
-    public AIMove GetMove(AIBoard board, int searchType) {
+    public AIMove GetMove(AIBoard board, int searchType, int difficulty) {
         //Generate all the moves
         AIMove move;
 
         if (searchType == 0) {
-            move = new MTDF().Search(board);
+            move = new MTDF().Search(board, 15 - (15 * (1 / difficulty)));
         } else {
-            move = new AlphaBeta().Search(board, board.getCurrentPlayer(), 6);
+            move = new AlphaBeta().Search(board, board.getCurrentPlayer(), 6 - (6 * (1 / difficulty)));
         }
 
         // Set the points if a capture occurred.

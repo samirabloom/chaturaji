@@ -59,7 +59,7 @@ public class AI {
                     case AI: {
                         ComputerPlayer computerPlayer = new ComputerPlayer(colour, player.getPoints(), player.getKingsCaptured());
 
-                        aiMove = computerPlayer.GetMove(board, new Random().nextInt() % 2);
+                        aiMove = computerPlayer.GetMove(board, new Random().nextInt() % 2, game.getAILevel());
                         aiPlayer = computerPlayer;
 
                         if (aiMove != null) {
