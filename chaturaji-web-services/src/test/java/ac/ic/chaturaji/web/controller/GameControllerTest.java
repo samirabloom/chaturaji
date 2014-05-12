@@ -69,7 +69,7 @@ public class GameControllerTest {
         when(gameDAO.getAllWaitingForPlayers()).thenReturn(games);
 
         // when
-        List<Game> result = gameController.getGameList();
+        List<Game> result = gameController.games();
 
         // then
         verify(gameDAO).getAllWaitingForPlayers();
@@ -80,7 +80,7 @@ public class GameControllerTest {
     public void shouldSaveGameToDAOSuccessfully() throws IOException {
         // when
         when(servletContext.getAttribute(WebSocketServletContextListener.WEB_SOCKET_CLIENT_ATTRIBUTE_NAME)).thenReturn(new HashMap<String, Channel>());
-        ResponseEntity result = gameController.createGame(0);
+        ResponseEntity result = gameController.createGame(0, 5);
 
         // then
         // check valid id is returned
@@ -94,7 +94,7 @@ public class GameControllerTest {
     @Test
     public void shouldValidateNumberOfAIPlayerNotTooLarge() throws IOException {
         // when
-        ResponseEntity result = gameController.createGame(5);
+        ResponseEntity result = gameController.createGame(5, 5);
 
         // then
         assertEquals("Invalid numberOfAIPlayers: 5 is not between 0 and 3 inclusive", result.getBody());
@@ -106,7 +106,7 @@ public class GameControllerTest {
     @Test
     public void shouldValidateNumberOfAIPlayerNotTooSmall() throws IOException {
         // when
-        ResponseEntity result = gameController.createGame(-1);
+        ResponseEntity result = gameController.createGame(-1, 5);
 
         // then
         assertEquals("Invalid numberOfAIPlayers: -1 is not between 0 and 3 inclusive", result.getBody());
@@ -121,7 +121,7 @@ public class GameControllerTest {
         doThrow(new RuntimeException("test exception")).when(gameDAO).save(any(Game.class));
 
         // when
-        ResponseEntity result = gameController.createGame(0);
+        ResponseEntity result = gameController.createGame(0, 5);
 
         // then
         assertEquals("test exception", result.getBody());
