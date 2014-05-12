@@ -68,6 +68,7 @@ public class ChaturajiService {
     private CookieStore cookieStoreLocal;
     private CredentialsProvider credsProviderLocal;
     private Player player;
+    private String currentGameID = null;
 
     private ChaturajiService() {
     }
@@ -207,6 +208,8 @@ public class ChaturajiService {
 
     public String[] joinGame(String gameId) {
 
+        setCurrentGameID(gameId);
+
         setupClient();
 
         String[] reply;
@@ -217,6 +220,67 @@ public class ChaturajiService {
             localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
 
             HttpPost httpPost = new HttpPost("https://" + serverHostAndPort + "/joinGame");
+            List<NameValuePair> nameValuePairs = new ArrayList<>(2);
+            nameValuePairs.add(new BasicNameValuePair("gameId", gameId));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            HttpResponse response = httpClient.execute(httpPost, localContext);
+
+            switch (response.getStatusLine().getStatusCode()) {
+                case HttpStatus.SC_UNAUTHORIZED:
+                    reply = new String[]{
+                            response.getStatusLine().getReasonPhrase(),
+                            "Unauthorized",
+                            ""
+                    };
+                    break;
+                case HttpStatus.SC_BAD_REQUEST:
+                    reply = new String[]{
+                            EntityUtils.toString(response.getEntity()),
+                            "Bad request",
+                            ""
+                    };
+                    break;
+                case HttpStatus.SC_CREATED:
+                    player = objectMapper.readValue(EntityUtils.toString(response.getEntity()), Player.class);
+                    reply = new String[]{
+                            "Good",
+                            "Success",
+                            String.valueOf(player.getColour())
+                    };
+                    break;
+                default:
+                    reply = new String[]{
+                            EntityUtils.toString(response.getEntity()),
+                            "Error",
+                            ""
+                    };
+                    break;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Exception while joining game", e);
+            reply = new String[]{
+                    e.getMessage(),
+                    "Error",
+                    ""
+            };
+        }
+
+        return reply;
+    }
+
+    public String[] replayGame (String gameId) {
+
+        setupClient();
+
+        String[] reply;
+        try {
+
+            HttpContext localContext = new BasicHttpContext();
+            localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
+            localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
+
+            HttpPost httpPost = new HttpPost("https://" + serverHostAndPort + "/replayGame");
             List<NameValuePair> nameValuePairs = new ArrayList<>(2);
             nameValuePairs.add(new BasicNameValuePair("gameId", gameId));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -420,6 +484,18 @@ public class ChaturajiService {
 
         credsProviderLocal = null;
         cookieStoreLocal = null;
+
+    }
+
+    public void setCurrentGameID(String gameID){
+
+        currentGameID = gameID;
+
+    }
+
+    public String getCurrentGameID(){
+
+        return currentGameID;
 
     }
 
