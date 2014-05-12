@@ -25,6 +25,7 @@ public class GameTest {
 
         // then
         assertEquals("some id", game.getId());
+        assertEquals(8, game.getAILevel());
         assertEquals(Arrays.asList(player), game.getPlayers());
     }
 
@@ -39,6 +40,7 @@ public class GameTest {
         Player playerThree = new Player();
         Game game = new Game();
         game.setId("some id");
+        game.setAILevel(5);
         game.setBitboards(bitboards);
         game.setCreatedDate(createdDate);
         game.setCurrentPlayerColour(Colour.BLUE);
@@ -47,6 +49,7 @@ public class GameTest {
 
         // then
         assertEquals("some id", game.getId());
+        assertEquals(5, game.getAILevel());
         assertEquals(bitboards, game.getBitboards());
         assertEquals(createdDate, game.getCreatedDate());
         assertEquals(Colour.BLUE, game.getCurrentPlayerColour());

@@ -31,6 +31,7 @@ public class Game extends EqualsHashCodeToString {
     @JsonIgnore
     private int stalemateCount;
     private Object playerWithHighestScore;
+    private int aiLevel = 8;
 
     // Dummy constructor needed to map JSON string back to Java object
     public Game() {
@@ -56,6 +57,14 @@ public class Game extends EqualsHashCodeToString {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getAILevel() {
+        return aiLevel;
+    }
+
+    public void setAILevel(int aiLevel) {
+        this.aiLevel = aiLevel;
     }
 
     public LocalDateTime getCreatedDate() {
