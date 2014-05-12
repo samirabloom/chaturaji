@@ -4,7 +4,6 @@ import ac.ic.chaturaji.model.*;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 public class AIGame {
     AI api;
@@ -12,7 +11,7 @@ public class AIGame {
     char input[];
     Game game;
 
-    public AIGame () {
+    public AIGame() {
         game = new Game();
         api = new AI();
         input = new char[20];
@@ -35,8 +34,7 @@ public class AIGame {
             if (ch == 'H' || ch == 'h') {
                 player.setType(PlayerType.HUMAN);
                 game.addPlayer(player);
-            }
-            else {
+            } else {
                 player.setType(PlayerType.AI);
                 game.addPlayer(player);
             }
@@ -46,7 +44,7 @@ public class AIGame {
         // Initialise the game:
         api.createGame(game);
 
-        do{
+        do {
             //System.out.println("Press 'c' to continue");
             //ch = read.next().charAt(0);
 
@@ -56,7 +54,7 @@ public class AIGame {
             System.out.println(GameConstants.PlayerStrings[colour] + " to move next.");
 
             if (players.get(colour).getType() == PlayerType.HUMAN)
-                System.out.print("Please enter your move:" );
+                System.out.print("Please enter your move:");
             else {
                 move.setColour(game.getCurrentPlayerColour());
                 try {
@@ -64,8 +62,8 @@ public class AIGame {
                     if (result.getGameStatus() == GameStatus.GAME_OVER)
                         move_complete = true;
                 } catch (Exception e) {
-                e.printStackTrace();
-            }
+                    e.printStackTrace();
+                }
                 continue;
             }
 
@@ -77,15 +75,15 @@ public class AIGame {
                 continue;
             }
 
-            source = ((int)(Character.toLowerCase(input[0])) - 'a') + (8 - ((int)(input[1]) - '0')) * 8;
-            dest = ((int)(Character.toLowerCase(input[3])) - 'a') + (8 - ((int)(input[4]) - '0')) * 8;
+            source = ((int) (Character.toLowerCase(input[0])) - 'a') + (8 - ((int) (input[1]) - '0')) * 8;
+            dest = ((int) (Character.toLowerCase(input[3])) - 'a') + (8 - ((int) (input[4]) - '0')) * 8;
 
-            if ((source < 0 ) || (source > 63 )){
-                System.out.println( "Illegal source square " + source);
+            if ((source < 0) || (source > 63)) {
+                System.out.println("Illegal source square " + source);
                 continue;
             }
-            if ((dest < 0 ) || (dest > 63)){
-                System.out.println( "Illegal destination square " + dest);
+            if ((dest < 0) || (dest > 63)) {
+                System.out.println("Illegal destination square " + dest);
                 continue;
             }
 

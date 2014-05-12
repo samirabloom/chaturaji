@@ -25,32 +25,6 @@ public class MainMenu extends Activity {
     Button logout_button;
     String email;
     String password;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.main_menu);
-
-        SharedPreferences settings = getSharedPreferences("main", 0);
-        email = settings.getString("email", "unknown");
-        password = settings.getString("password", "unknown");
-
-
-        single_player_button = (Button) findViewById(R.id.single_player_button);
-        multi_player_button = (Button) findViewById(R.id.multi_player_button);
-        settings_button = (Button) findViewById(R.id.settings_button);
-        logout_button = (Button) findViewById(R.id.log_out_button);
-
-        single_player_button.setOnClickListener(singleButtonListener);
-        multi_player_button.setOnClickListener(multiButttonListener);
-        settings_button.setOnClickListener(settingsButttonListener);
-        logout_button.setOnClickListener(logoutButttonListener);
-    }
-
     private View.OnClickListener singleButtonListener = new View.OnClickListener() {
 
         @Override
@@ -100,7 +74,6 @@ public class MainMenu extends Activity {
 
         }
     };
-
     private View.OnClickListener multiButttonListener = new View.OnClickListener() {
 
         @Override
@@ -110,7 +83,6 @@ public class MainMenu extends Activity {
             startActivity(getGameRooms);
         }
     };
-
     private View.OnClickListener settingsButttonListener = new View.OnClickListener() {
 
         @Override
@@ -120,7 +92,6 @@ public class MainMenu extends Activity {
             startActivity(getSettings);
         }
     };
-
     private View.OnClickListener logoutButttonListener = new View.OnClickListener() {
 
         @Override
@@ -138,6 +109,37 @@ public class MainMenu extends Activity {
         }
     };
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        setContentView(R.layout.main_menu);
+
+        SharedPreferences settings = getSharedPreferences("main", 0);
+        email = settings.getString("email", "unknown");
+        password = settings.getString("password", "unknown");
+
+
+        single_player_button = (Button) findViewById(R.id.single_player_button);
+        multi_player_button = (Button) findViewById(R.id.multi_player_button);
+        settings_button = (Button) findViewById(R.id.settings_button);
+        logout_button = (Button) findViewById(R.id.log_out_button);
+
+        single_player_button.setOnClickListener(singleButtonListener);
+        multi_player_button.setOnClickListener(multiButttonListener);
+        settings_button.setOnClickListener(settingsButttonListener);
+        logout_button.setOnClickListener(logoutButttonListener);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
     private class CreateGame extends AsyncTask<String, Void, String[]> {
 
@@ -154,14 +156,6 @@ public class MainMenu extends Activity {
             return state;
         }
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
 }

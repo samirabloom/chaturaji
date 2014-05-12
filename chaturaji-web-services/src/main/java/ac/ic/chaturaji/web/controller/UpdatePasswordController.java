@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
 @Controller
 public class UpdatePasswordController {
 
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final Pattern PASSWORD_MATCHER = Pattern.compile(User.PASSWORD_PATTERN);
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private UserDAO userDAO;
     @Resource

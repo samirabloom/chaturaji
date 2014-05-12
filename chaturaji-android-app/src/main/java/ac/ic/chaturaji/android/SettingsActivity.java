@@ -17,31 +17,6 @@ import android.widget.CheckBox;
 public class SettingsActivity extends Activity {
 
     private CheckBox soundcbx;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.settings_main);
-
-        SharedPreferences settings = getSharedPreferences("main", 0);
-        boolean soundOn = settings.getBoolean("sound", true);
-
-        soundcbx = (CheckBox) findViewById(R.id.soundbox);
-
-        if (soundOn) {
-            soundcbx.setChecked(true);
-        } else {
-            soundcbx.setChecked(false);
-        }
-
-        soundcbx.setOnClickListener(soundSettings);
-
-    }
-
     private View.OnClickListener soundSettings = new View.OnClickListener() {
 
         @Override
@@ -72,6 +47,30 @@ public class SettingsActivity extends Activity {
             }
         }
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        setContentView(R.layout.settings_main);
+
+        SharedPreferences settings = getSharedPreferences("main", 0);
+        boolean soundOn = settings.getBoolean("sound", true);
+
+        soundcbx = (CheckBox) findViewById(R.id.soundbox);
+
+        if (soundOn) {
+            soundcbx.setChecked(true);
+        } else {
+            soundcbx.setChecked(false);
+        }
+
+        soundcbx.setOnClickListener(soundSettings);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

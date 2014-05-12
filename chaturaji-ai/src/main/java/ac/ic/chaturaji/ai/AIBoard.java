@@ -20,15 +20,13 @@ public class AIBoard implements Cloneable {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /*------ Data Members ------*/
-
+    // Who is currently playing - 0 if yellow, 1 if blue etc.
+    int CurrentPlayer;
     // The actual data representation of a chaturaji board.  First, an array of
     // bitboards, each of which contains flags for the squares where you can
     // find a specific type of piece
     private long BitBoards[];
-
     private int MaterialValue[];
-    // Who is currently playing - 0 if yellow, 1 if blue etc.
-    int CurrentPlayer;
 
 	/*------ Methods ------*/
 
@@ -39,14 +37,6 @@ public class AIBoard implements Cloneable {
 
         StartBoard();
         EvalMaterial();
-    }
-
-    public AIBoard clone() {
-        AIBoard cloned = new AIBoard();
-        cloned.BitBoards = BitBoards.clone();
-        cloned.MaterialValue = MaterialValue.clone();
-        cloned.CurrentPlayer = CurrentPlayer;
-        return cloned;
     }
 
     public AIBoard(long[] bit_boards, int colour) {
@@ -62,6 +52,14 @@ public class AIBoard implements Cloneable {
         BitBoards = board.BitBoards;
         MaterialValue = board.MaterialValue;
         CurrentPlayer = board.CurrentPlayer;
+    }
+
+    public AIBoard clone() {
+        AIBoard cloned = new AIBoard();
+        cloned.BitBoards = BitBoards.clone();
+        cloned.MaterialValue = MaterialValue.clone();
+        cloned.CurrentPlayer = CurrentPlayer;
+        return cloned;
     }
 
     /* Accessors */
@@ -350,22 +348,22 @@ public class AIBoard implements Cloneable {
     }
 
     //Check for a delayed promotion of a pawn
-    private void CheckDelayedPromotion(int CapturedPiece){
+    private void CheckDelayedPromotion(int CapturedPiece) {
         int colour = CapturedPiece % 4;
-        long pawnToPromote = BitBoards[GameConstants.YELLOW_END_SQUARES + (colour % 4)] & BitBoards[GameConstants.PAWN+ ((colour) % 4)];
+        long pawnToPromote = BitBoards[GameConstants.YELLOW_END_SQUARES + (colour % 4)] & BitBoards[GameConstants.PAWN + ((colour) % 4)];
         if (pawnToPromote != 0) {
             // If true then there is a pawn that might need to be promoted
-            if ((BitBoards[GameConstants.KNIGHT_PAWNS + (CapturedPiece/4 - 1)] & pawnToPromote)!= 0) {
-                pawnToPromote = BitBoards[GameConstants.KNIGHT_PAWNS + (CapturedPiece/4 - 1)] & pawnToPromote;
+            if ((BitBoards[GameConstants.KNIGHT_PAWNS + (CapturedPiece / 4 - 1)] & pawnToPromote) != 0) {
+                pawnToPromote = BitBoards[GameConstants.KNIGHT_PAWNS + (CapturedPiece / 4 - 1)] & pawnToPromote;
                 BitBoards[CapturedPiece] |= pawnToPromote;
-                BitBoards[GameConstants.PAWN+colour] ^= pawnToPromote;
+                BitBoards[GameConstants.PAWN + colour] ^= pawnToPromote;
 
             }
         }
     }
 
     //Promote a pawn
-    private void Promote(int Piece, int destination, int colour, int PromoType)  {
+    private void Promote(int Piece, int destination, int colour, int PromoType) {
         switch (PromoType) {
             case GameConstants.KNIGHT:
                 if (BitBoards[GameConstants.KNIGHT + colour] == 0) {

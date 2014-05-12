@@ -1,9 +1,9 @@
 <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/main_colour"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:weightSum="1">
 
     <LinearLayout android:layout_width="fill_parent"
@@ -36,39 +36,39 @@
                   android:layout_gravity="center"
                   android:gravity="center" android:weightSum="1">
 
-    <Button
-            android:layout_width="200sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="40dp"
-            android:text="Single Player"
-            style="@style/btnStyleArsenic"
-            android:id="@+id/single_player_button"/>
-    <Button
-            android:layout_width="200sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:text="Multi Player"
-            style="@style/btnStyleArsenic"
-            android:id="@+id/multi_player_button"/>
-    <Button
-            android:layout_width="200sp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="center"
-            android:text="Settings"
-            style="@style/btnStyleArsenic"
-            android:id="@+id/settings_button"/>
-    <Button
-            android:layout_width="200sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:text="Log out"
-            style="@style/btnStyleArsenic"
-            android:id="@+id/log_out_button"/>
+        <Button
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="40dp"
+                android:text="Single Player"
+                style="@style/btnStyleArsenic"
+                android:id="@+id/single_player_button"/>
+        <Button
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:text="Multi Player"
+                style="@style/btnStyleArsenic"
+                android:id="@+id/multi_player_button"/>
+        <Button
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"
+                android:text="Settings"
+                style="@style/btnStyleArsenic"
+                android:id="@+id/settings_button"/>
+        <Button
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:text="Log out"
+                style="@style/btnStyleArsenic"
+                android:id="@+id/log_out_button"/>
 
     </LinearLayout>
 

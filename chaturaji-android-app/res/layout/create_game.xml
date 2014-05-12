@@ -35,28 +35,28 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:text="0"
-                android:checked="true" />
+                android:checked="true"/>
 
         <RadioButton
-            android:id="@+id/radioAI1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="1" />
+                android:id="@+id/radioAI1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="1"/>
 
         <RadioButton
                 android:id="@+id/radioAI2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="2" />
+                android:text="2"/>
 
         <RadioButton
                 android:id="@+id/radioAI3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="3" />
+                android:text="3"/>
 
 
     </RadioGroup>

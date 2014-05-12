@@ -45,6 +45,49 @@ public class LoginActivity extends Activity {
     EditText email_edittext;
     EditText password_edittext;
     String email = "";
+    public OnClickListener updatePasswordButtonListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View theView) {
+
+            SharedPreferences settings = getSharedPreferences("main", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("sound", false);
+
+            email = email_edittext.getText().toString();
+
+            editor.putString("email", email);
+
+            editor.commit();
+
+            if (StringUtils.isEmpty(email)) {
+                Toast.makeText(getApplicationContext(), "Please provide your email address..", Toast.LENGTH_LONG).show();
+            } else {
+
+                try {
+
+                    String state = new UpdatePassword().execute(email).get();
+                    Log.d(TAG, "UpdatePassword status " + state);
+
+                    switch (state) {
+                        case "Success":
+                            Toast.makeText(getApplicationContext(), "An email has been sent with instructions on how to reset your password..", Toast.LENGTH_LONG).show();
+                            break;
+                        case "Error":
+                            Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
+                            break;
+                    }
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
     String password = "";
     public OnClickListener loginButtonListener = new OnClickListener() {
 
@@ -86,50 +129,6 @@ public class LoginActivity extends Activity {
             } catch (Exception e) {
 
                 e.printStackTrace();
-            }
-        }
-    };
-
-    public OnClickListener updatePasswordButtonListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View theView) {
-
-            SharedPreferences settings = getSharedPreferences("main", 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("sound", false);
-
-            email = email_edittext.getText().toString();
-
-            editor.putString("email", email);
-
-            editor.commit();
-
-            if (StringUtils.isEmpty(email)) {
-                Toast.makeText(getApplicationContext(), "Please provide your email address..", Toast.LENGTH_LONG).show();
-            } else {
-
-                try {
-
-                    String state = new UpdatePassword().execute(email).get();
-                    Log.d(TAG, "UpdatePassword status " + state);
-
-                    switch (state) {
-                        case "Success":
-                            Toast.makeText(getApplicationContext(), "An email has been sent with instructions on how to reset your password..", Toast.LENGTH_LONG).show();
-                            break;
-                        case "Error":
-                            Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
-                            break;
-                        default:
-                            Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
-                            break;
-                    }
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
             }
         }
     };

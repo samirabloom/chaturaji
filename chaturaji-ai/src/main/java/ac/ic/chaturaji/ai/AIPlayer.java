@@ -37,20 +37,20 @@ abstract public class AIPlayer {
 
     protected void setPoints(AIBoard theBoard, AIMove theMove) {
         if (theMove != null) {
-            switch (theMove.getCaptured()/4) {
-                case GameConstants.PAWN/4:
+            switch (theMove.getCaptured() / 4) {
+                case GameConstants.PAWN / 4:
                     points++;
                     break;
-                case GameConstants.BOAT/4:
+                case GameConstants.BOAT / 4:
                     points += 2;
                     break;
-                case GameConstants.KNIGHT/4:
+                case GameConstants.KNIGHT / 4:
                     points += 3;
                     break;
-                case GameConstants.ELEPHANT/4:
+                case GameConstants.ELEPHANT / 4:
                     points += 4;
                     break;
-                case GameConstants.KING/4:
+                case GameConstants.KING / 4:
                     int kingColour = theBoard.FindColourPieceInSquare(theMove.getDestination());
                     if (checkKingsCaptured(kingColour) && theBoard.getBitBoard(GameConstants.KING + colour) != 0) {
                         points += 54;

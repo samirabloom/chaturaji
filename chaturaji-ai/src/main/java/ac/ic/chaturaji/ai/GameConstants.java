@@ -16,45 +16,39 @@ public class GameConstants {
     public static final int GREEN = 3;
 
     public static final int PAWN = 0;
-    public static final int KNIGHT = 4;
-    public static final int BOAT = 8;
-    public static final int ELEPHANT = 12;
-    public static final int KING = 16;
-
     public static final int YELLOW_PAWN = PAWN;
-    public static final int YELLOW_KNIGHT = KNIGHT;
-    public static final int YELLOW_BOAT = BOAT;
-    public static final int YELLOW_ELEPHANT = ELEPHANT;
-    public static final int YELLOW_KING = KING;
-
     public static final int BLUE_PAWN = PAWN + 1;
-    public static final int BLUE_KNIGHT = KNIGHT + 1;
-    public static final int BLUE_BOAT = BOAT + 1;
-    public static final int BLUE_ELEPHANT = ELEPHANT + 1;
-    public static final int BLUE_KING = KING + 1;
-
     public static final int RED_PAWN = PAWN + 2;
-    public static final int RED_KNIGHT = KNIGHT + 2;
-    public static final int RED_BOAT = BOAT + 2;
-    public static final int RED_ELEPHANT = ELEPHANT + 2;
-    public static final int RED_KING = KING + 2;
-
     public static final int GREEN_PAWN = PAWN + 3;
+    public static final int KNIGHT = 4;
+    public static final int YELLOW_KNIGHT = KNIGHT;
+    public static final int BLUE_KNIGHT = KNIGHT + 1;
+    public static final int RED_KNIGHT = KNIGHT + 2;
     public static final int GREEN_KNIGHT = KNIGHT + 3;
+    public static final int BOAT = 8;
+    public static final int YELLOW_BOAT = BOAT;
+    public static final int BLUE_BOAT = BOAT + 1;
+    public static final int RED_BOAT = BOAT + 2;
     public static final int GREEN_BOAT = BOAT + 3;
+    public static final int ELEPHANT = 12;
+    public static final int YELLOW_ELEPHANT = ELEPHANT;
+    public static final int BLUE_ELEPHANT = ELEPHANT + 1;
+    public static final int RED_ELEPHANT = ELEPHANT + 2;
     public static final int GREEN_ELEPHANT = ELEPHANT + 3;
+    public static final int KING = 16;
+    public static final int YELLOW_KING = KING;
+    public static final int BLUE_KING = KING + 1;
+    public static final int RED_KING = KING + 2;
     public static final int GREEN_KING = KING + 3;
 
     public static final int EMPTY_SQUARE = 20;
     public static final int ALL_PIECES = 20;
-    public static final int ALL_SQUARES = 64;
-
     // These index the boards used to represent all the pieces for a particular colour
     public static final int ALL_YELLOW_PIECES = ALL_PIECES;
     public static final int ALL_BLUE_PIECES = ALL_PIECES + 1;
     public static final int ALL_RED_PIECES = ALL_PIECES + 2;
     public static final int ALL_GREEN_PIECES = ALL_PIECES + 3;
-
+    public static final int ALL_SQUARES = 64;
     public static final int YELLOW_END_SQUARES = 24;
     public static final int BLUE_END_SQUARES = 25;
     public static final int RED_END_SQUARES = 26;
@@ -74,105 +68,97 @@ public class GameConstants {
     public static final int BOAT_VALUE = 300;
     public static final int ELEPHANT_VALUE = 800;
     public static final int KING_VALUE = 1300;
-
-    // An array of bitfields, each of which contains the single bit associated
-    // with a square in a bitboard
-    public static long SquareBits[];
-
     /*------ MOVE CONSTANTS ------*/
     //Possible kind of moves
     public static final int NORMAL_MOVE = 0;
     public static final int CAPTURE = 1;
     public static final int RESIGN = 2;
-
     public static final int EXACT_VALUE = 0;
     public static final int UPPER_BOUND = 1;
     public static final int LOWER_BOUND = 2;
+    public static final int HUMAN = 0;
 
     /*------ PLAYER CONSTANTS ------*/
-
-    public static final int HUMAN = 0;
     public static final int AI = 1;
-
-    /*------ OTHER CONSTANTS ------*/
-    // Used for printing:
-    public static String PieceStrings[];
     public static final String PlayerStrings[] = {"Yellow", "Blue", "Red", "Green"};
-
-    public static long ZobristHash[][];
-    public static long ZobristLock[][];
-
     public static final long YellowMove;
     public static final long BlueMove;
     public static final long RedMove;
     public static final long GreenMove;
+    // An array of bitfields, each of which contains the single bit associated
+    // with a square in a bitboard
+    public static long SquareBits[];
+    /*------ OTHER CONSTANTS ------*/
+    // Used for printing:
+    public static String PieceStrings[];
+    public static long ZobristHash[][];
+    public static long ZobristLock[][];
 
     /*------ EVALUATION FUNCTION CONSTANTS ------*/
-
     public static double YellowPawnTable[] = {
-            0,   0,   0, 1.5, 1.5,   2, 5,  7,
-            0,   0,   0, 1.5, 1.5,   2, 5,  7,
-            0,  -2, 1.5,   2,   2, 2.5, 5,  7,
-            0,  -2, 1.5, 2.5, 2.5, 2.5, 5,  7,
-            0,   0,   0, 2.5, 2.5,   2, 3,  7,
-            0,   0,   0,   0,   0,   0, 3,  7,
-            0,   0,   0,   0,   0,   0, 3,  7,
-            0,   0,   0,   0,   0,   0, 3,  7
+            0, 0, 0, 1.5, 1.5, 2, 5, 7,
+            0, 0, 0, 1.5, 1.5, 2, 5, 7,
+            0, -2, 1.5, 2, 2, 2.5, 5, 7,
+            0, -2, 1.5, 2.5, 2.5, 2.5, 5, 7,
+            0, 0, 0, 2.5, 2.5, 2, 3, 7,
+            0, 0, 0, 0, 0, 0, 3, 7,
+            0, 0, 0, 0, 0, 0, 3, 7,
+            0, 0, 0, 0, 0, 0, 3, 7
     };
 
     public static double BluePawnTable[] = {
-            0,   0,  0,   0,   0,   0,   0,   0,
-            0,   0,  0,   0,  -2,  -2,   0,   0,
-            0,   0,  0,   0, 1.5, 1.5,   0,   0,
-            0,   0,  0, 2.5, 2.5,   2, 1.5, 1.5,
-            0,   0,  0, 2.5, 2.5,   2, 1.5, 1.5,
-            0,   0,  0,   2, 2.5,   2,   2,   2,
-            3,   3,  3,   3,   5,   5,   5,   5,
-            7,   7,  7,   7,   7,   7,   7,   7
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, -2, -2, 0, 0,
+            0, 0, 0, 0, 1.5, 1.5, 0, 0,
+            0, 0, 0, 2.5, 2.5, 2, 1.5, 1.5,
+            0, 0, 0, 2.5, 2.5, 2, 1.5, 1.5,
+            0, 0, 0, 2, 2.5, 2, 2, 2,
+            3, 3, 3, 3, 5, 5, 5, 5,
+            7, 7, 7, 7, 7, 7, 7, 7
     };
 
     public static double RedPawnTable[] = {
-            7, 3,   0,   0,   0,   0,   0,  0,
-            7, 3,   0,   0,   0,   0,   0,  0,
-            7, 3,   0,   0,   0,   0,   0,  0,
-            7, 3,   2, 2.5, 2.5,   0,   0,  0,
-            7, 5, 2.5, 2.5, 2.5, 1.5,  -2,  0,
-            7, 5, 2.5,   2,   2, 1.5,  -2,  0,
-            7, 5,   2, 1.5, 1.5,   0,   0,  0,
-            7, 5,   2, 1.5, 1.5,   0,   0,  0
+            7, 3, 0, 0, 0, 0, 0, 0,
+            7, 3, 0, 0, 0, 0, 0, 0,
+            7, 3, 0, 0, 0, 0, 0, 0,
+            7, 3, 2, 2.5, 2.5, 0, 0, 0,
+            7, 5, 2.5, 2.5, 2.5, 1.5, -2, 0,
+            7, 5, 2.5, 2, 2, 1.5, -2, 0,
+            7, 5, 2, 1.5, 1.5, 0, 0, 0,
+            7, 5, 2, 1.5, 1.5, 0, 0, 0
     };
 
     public static double GreenPawnTable[] = {
-            7,   7,   7,   7,   7,  7,  7,  7,
-            5,   5,   5,   5,   3,  3,  3,  3,
-            2,   2,   2, 2.5,   2,  0,  0,  0,
-          1.5, 1.5, 2.5, 2.5, 2.5,  0,  0,  0,
-          1.5, 1.5,   2, 2.5, 2.5,  0,  0,  0,
-            0,   0, 1.5, 1.5,   0,  0,  0,  0,
-            0,   0,  -2,  -2,   0,  0,  0,  0,
-            0,   0,   0,   0,   0,  0,  0,  0
+            7, 7, 7, 7, 7, 7, 7, 7,
+            5, 5, 5, 5, 3, 3, 3, 3,
+            2, 2, 2, 2.5, 2, 0, 0, 0,
+            1.5, 1.5, 2.5, 2.5, 2.5, 0, 0, 0,
+            1.5, 1.5, 2, 2.5, 2.5, 0, 0, 0,
+            0, 0, 1.5, 1.5, 0, 0, 0, 0,
+            0, 0, -2, -2, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0
     };
 
     public static double KnightTable[] = {
-            -50,-40,-30,-30,-30,-30,-40,-50,
-            -40,-20,  0,  0,  0,  0,-20,-40,
-            -30,  0, 10, 15, 15, 10,  0,-30,
-            -30,  5, 15, 20, 20, 15,  5,-30,
-            -30,  0, 15, 20, 20, 15,  0,-30,
-            -30,  5, 10, 15, 15, 10,  5,-30,
-            -40,-20,  0,  5,  5,  0,-20,-40,
-            -50,-40,-20,-30,-30,-20,-40,-50,
+            -50, -40, -30, -30, -30, -30, -40, -50,
+            -40, -20, 0, 0, 0, 0, -20, -40,
+            -30, 0, 10, 15, 15, 10, 0, -30,
+            -30, 5, 15, 20, 20, 15, 5, -30,
+            -30, 0, 15, 20, 20, 15, 0, -30,
+            -30, 5, 10, 15, 15, 10, 5, -30,
+            -40, -20, 0, 5, 5, 0, -20, -40,
+            -50, -40, -20, -30, -30, -20, -40, -50,
     };
 
     public static double BoatTable[] = {
-            -20,-10,-10,-10,-10,-10,-10,-20,
-            -10,  0,  0,  0,  0,  0,  0,-10,
-            -10,  0,  5, 10, 10,  5,  0,-10,
-            -10,  5,  5, 10, 10,  5,  5,-10,
-            -10,  0, 10, 10, 10, 10,  0,-10,
-            -10, 10, 10, 10, 10, 10, 10,-10,
-            -10,  5,  0,  0,  0,  0,  5,-10,
-            -20,-10,-40,-10,-10,-40,-10,-20,
+            -20, -10, -10, -10, -10, -10, -10, -20,
+            -10, 0, 0, 0, 0, 0, 0, -10,
+            -10, 0, 5, 10, 10, 5, 0, -10,
+            -10, 5, 5, 10, 10, 5, 5, -10,
+            -10, 0, 10, 10, 10, 10, 0, -10,
+            -10, 10, 10, 10, 10, 10, 10, -10,
+            -10, 5, 0, 0, 0, 0, 5, -10,
+            -20, -10, -40, -10, -10, -40, -10, -20,
     };
 
 

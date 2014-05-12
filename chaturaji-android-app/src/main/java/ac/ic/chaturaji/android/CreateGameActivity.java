@@ -31,33 +31,6 @@ public class CreateGameActivity extends Activity {
     RadioButton radioAI3;
 
     String numberOfAI = "0";
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.create_game);
-
-
-        start_game_button = (Button) findViewById(R.id.start_game_button);
-        radioAI = (RadioGroup) findViewById(R.id.radioAI);
-        radioAI0 = (RadioButton) findViewById(R.id.radioAI0);
-        radioAI1 = (RadioButton) findViewById(R.id.radioAI1);
-        radioAI2 = (RadioButton) findViewById(R.id.radioAI2);
-        radioAI3 = (RadioButton) findViewById(R.id.radioAI3);
-
-        start_game_button.setOnClickListener(startButtonListener);
-        radioAI0.setOnClickListener(radioAI0Listener);
-        radioAI1.setOnClickListener(radioAI1Listener);
-        radioAI2.setOnClickListener(radioAI2Listener);
-        radioAI3.setOnClickListener(radioAI3Listener);
-
-
-    }
-
     public View.OnClickListener startButtonListener = new View.OnClickListener() {
 
         @Override
@@ -113,7 +86,6 @@ public class CreateGameActivity extends Activity {
             }
         }
     };
-
     public View.OnClickListener radioAI0Listener = new View.OnClickListener() {
 
         @Override
@@ -122,7 +94,6 @@ public class CreateGameActivity extends Activity {
             numberOfAI = String.valueOf(radioAI0.getText());
         }
     };
-
     public View.OnClickListener radioAI1Listener = new View.OnClickListener() {
 
         @Override
@@ -131,7 +102,6 @@ public class CreateGameActivity extends Activity {
             numberOfAI = String.valueOf(radioAI1.getText());
         }
     };
-
     public View.OnClickListener radioAI2Listener = new View.OnClickListener() {
 
         @Override
@@ -140,7 +110,6 @@ public class CreateGameActivity extends Activity {
             numberOfAI = String.valueOf(radioAI2.getText());
         }
     };
-
     public View.OnClickListener radioAI3Listener = new View.OnClickListener() {
 
         @Override
@@ -150,12 +119,29 @@ public class CreateGameActivity extends Activity {
         }
     };
 
-    private class CreateGame extends AsyncTask<String, Void, String[]> {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        @Override
-        protected String[] doInBackground(String... AIs) {
-            return ChaturajiService.getInstance().createGame(AIs[0]);
-        }
+        setContentView(R.layout.create_game);
+
+
+        start_game_button = (Button) findViewById(R.id.start_game_button);
+        radioAI = (RadioGroup) findViewById(R.id.radioAI);
+        radioAI0 = (RadioButton) findViewById(R.id.radioAI0);
+        radioAI1 = (RadioButton) findViewById(R.id.radioAI1);
+        radioAI2 = (RadioButton) findViewById(R.id.radioAI2);
+        radioAI3 = (RadioButton) findViewById(R.id.radioAI3);
+
+        start_game_button.setOnClickListener(startButtonListener);
+        radioAI0.setOnClickListener(radioAI0Listener);
+        radioAI1.setOnClickListener(radioAI1Listener);
+        radioAI2.setOnClickListener(radioAI2Listener);
+        radioAI3.setOnClickListener(radioAI3Listener);
+
 
     }
 
@@ -164,5 +150,14 @@ public class CreateGameActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    private class CreateGame extends AsyncTask<String, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(String... AIs) {
+            return ChaturajiService.getInstance().createGame(AIs[0]);
+        }
+
     }
 }

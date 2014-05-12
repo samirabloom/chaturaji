@@ -22,12 +22,11 @@ import static org.junit.Assert.assertEquals;
 public class GameDAOTest {
 
     @Resource
+    PasswordEncoder passwordEncoder;
+    @Resource
     private GameDAO gameDAO;
     @Resource
     private UUIDFactory uuidFactory;
-
-    @Resource
-    PasswordEncoder passwordEncoder;
 
     @Test
     public void shouldSaveAndGetGame() {

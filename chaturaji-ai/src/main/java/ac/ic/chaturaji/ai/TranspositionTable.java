@@ -11,6 +11,18 @@ class TableEntry {
     private double eval;
     private int time;
 
+    public TableEntry() {
+        this.flag = -1;
+    }
+
+    public TableEntry(long zobrist, int depth, int flag, double eval, int timeStamp) {
+        this.zobristKey = zobrist;
+        this.depth = depth;
+        this.flag = flag;
+        this.eval = eval;
+        this.time = timeStamp;
+    }
+
     public long getZobrist() {
         return zobristKey;
     }
@@ -29,18 +41,6 @@ class TableEntry {
 
     public int getDepth() {
         return depth;
-    }
-
-    public TableEntry() {
-        this.flag = -1;
-    }
-
-    public TableEntry(long zobrist, int depth, int flag, double eval, int timeStamp) {
-        this.zobristKey = zobrist;
-        this.depth = depth;
-        this.flag = flag;
-        this.eval = eval;
-        this.time = timeStamp;
     }
 }
 

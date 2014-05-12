@@ -51,8 +51,16 @@ public class AIMove {
         return capturedPiece;
     }
 
+    public void setCaptured(int newCap) {
+        capturedPiece = newCap;
+    }
+
     public int getType() {
         return type;
+    }
+
+    public void setType(int moveType) {
+        type = moveType;
     }
 
     public int getPromoType() {
@@ -71,16 +79,16 @@ public class AIMove {
         return score;
     }
 
+    public void setScore(double evaluation) {
+        score = evaluation;
+    }
+
     public int getDepth() {
         return depth;
     }
 
-    public void setCaptured(int newCap) {
-        capturedPiece = newCap;
-    }
-
-    public void setType(int moveType) {
-        type = moveType;
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 
     public void setPromotion(int promoType) {
@@ -93,14 +101,6 @@ public class AIMove {
 
     public void setEvalType(int flag) {
         evaluationType = flag;
-    }
-
-    public void setScore(double evaluation) {
-        score = evaluation;
-    }
-
-    public void setDepth(int depth) {
-        this.depth = depth;
     }
 
     // Functions
