@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class GameController {
 
     @ResponseBody
     @RequestMapping(value = "/games", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
-    public List<Game> getGameList() throws IOException {
+    public List<Game> games() throws IOException {
         User currentUser = springSecurityUserContext.getCurrentUser();
         List<Game> notYourGames = new ArrayList<>();
         for (Game game : gameDAO.getAllWaitingForPlayers()) {
@@ -66,17 +67,29 @@ public class GameController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/gameHistory", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+    public Collection<Game> gameHistory() throws IOException {
+        User currentUser = springSecurityUserContext.getCurrentUser();
+        return gameDAO.getFinishedGames(currentUser.getId());
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/createGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-    public ResponseEntity createGame(@RequestParam("numberOfAIPlayers") int numberOfAIPlayers) throws IOException {
+    public ResponseEntity createGame(@RequestParam("numberOfAIPlayers") int numberOfAIPlayers, @RequestParam(value = "aiLevel", required = false, defaultValue = "8") int aiLevel) throws IOException {
         logger.info("User " + springSecurityUserContext.getCurrentUser() + " creating game with " + numberOfAIPlayers + " number of AI players");
         if (numberOfAIPlayers < 0 || numberOfAIPlayers > 3) {
             return new ResponseEntity<>("Invalid numberOfAIPlayers: " + numberOfAIPlayers + " is not between 0 and 3 inclusive", HttpStatus.BAD_REQUEST);
         }
+        if (aiLevel > 10 || aiLevel < 2) {
+            return new ResponseEntity<>("Invalid aiLevel: " + aiLevel + " is not between 2 and 10 inclusive", HttpStatus.BAD_REQUEST);
+        }
+
         User currentUser = springSecurityUserContext.getCurrentUser();
         // create new player
         Player player = new Player(uuidFactory.generateUUID(), currentUser, Colour.values()[0], PlayerType.HUMAN);
         // create game
         Game game = new Game(uuidFactory.generateUUID(), player);
+        game.setAILevel(aiLevel);
         // add AI players
         for (int i = 1; i <= numberOfAIPlayers; i++) {
             game.addPlayer(new Player(uuidFactory.generateUUID(), currentUser, Colour.values()[i], PlayerType.AI));

@@ -66,6 +66,24 @@ public class GameDAO {
         return games;
     }
 
+    public Collection<Game> getFinishedGames(String userId) {
+        String sql = "SELECT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS " +
+                "FROM GAME NATURAL JOIN PLAYER NATURAL JOIN USER " +
+                "WHERE GAME_STATUS > 1 AND USER_ID = ?";
+        List<Game> games = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, userId);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                games.add(getGame(result));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return games;
+    }
+
     // SELECT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS FROM GAME NATURAL JOIN PLAYER WHERE GAME_STATUS = 0 AND CREATED_DATE >= '2014-03-19' GROUP BY GAME_ID HAVING count(PLAYER_ID) < 4;
 
     public Game get(String id) {
