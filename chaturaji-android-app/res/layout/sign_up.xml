@@ -13,7 +13,7 @@
             android:textSize="40sp"
             android:gravity="center"
             android:layout_gravity="center"
-            android:id="@+id/textView"/>
+            android:id="@+id/sign_up_title"/>
 
 
     <EditText

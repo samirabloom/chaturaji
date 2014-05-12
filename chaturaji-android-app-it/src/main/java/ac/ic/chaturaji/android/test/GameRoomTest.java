@@ -5,13 +5,18 @@ import ac.ic.chaturaji.android.GameRoomActivity;
 import ac.ic.chaturaji.android.GameRoomAdapter;
 import ac.ic.chaturaji.android.R;
 import ac.ic.chaturaji.model.Game;
+import ac.ic.chaturaji.model.Player;
+import ac.ic.chaturaji.model.PlayerType;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Haider
@@ -44,6 +49,7 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
         localListView = (ListView) mActivity.findViewById(R.id.game_rooms_list);
 
         localAdapter = new GameRoomAdapter(mActivity, Arrays.asList(gamesList));
+
     }
 
     public void testTCreateGame() {
@@ -68,5 +74,37 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
 
     }
 
+    public void testGetCount() {
+        assertEquals( 3, localAdapter.getCount());
+    }
+
+    public void testGetItemId() {
+        assertEquals(0, localAdapter.getItemId(0));
+    }
+
+    public void testGetItem() {
+        assertEquals(gamesList[0],
+                ((Game) localAdapter.getItem(0)));
+    }
+
+    public void testGetView() {
+
+        View view = localAdapter.getView(0, null, null);
+
+        TextView name = (TextView) view
+                .findViewById(R.id.game_username);
+
+        TextView numberhumans = (TextView) view
+                .findViewById(R.id.game_humans);
+
+        TextView numberAIs = (TextView) view
+                .findViewById(R.id.game_ais);
+
+        assertNotNull(view);
+        assertNotNull(name);
+        assertNotNull(numberhumans);
+        assertNotNull(numberAIs);
+
+    }
 
 }
