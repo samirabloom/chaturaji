@@ -76,6 +76,7 @@ public class CreateGameActivity extends Activity {
                         startActivity(logOut);
                         break;
                     default:
+                        startGame.putExtra("Replay?", false);
                         startActivity(startGame);
                         break;
                 }

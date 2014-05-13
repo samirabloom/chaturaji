@@ -1,6 +1,7 @@
 package ac.ic.chaturaji.android;
 
 import ac.ic.chaturaji.chatuService.ChaturajiService;
+import ac.ic.chaturaji.model.Game;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,16 +16,19 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 public class MainMenu extends Activity {
 
     private static final String TAG = "MainMenu";
     Button single_player_button;
+    Button replay_button;
     Button multi_player_button;
     Button settings_button;
     Button logout_button;
     String email;
     String password;
+
     private View.OnClickListener singleButtonListener = new View.OnClickListener() {
 
         @Override
@@ -80,6 +84,17 @@ public class MainMenu extends Activity {
         }
     };
 
+    private View.OnClickListener replayButttonListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View theView) {
+
+            Intent getGameRooms = new Intent(MainMenu.this, ReplayActivity.class);
+            startActivity(getGameRooms);
+
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,11 +113,13 @@ public class MainMenu extends Activity {
         multi_player_button = (Button) findViewById(R.id.multi_player_button);
         settings_button = (Button) findViewById(R.id.settings_button);
         logout_button = (Button) findViewById(R.id.log_out_button);
+        replay_button = (Button) findViewById(R.id.replay_button);
 
         single_player_button.setOnClickListener(singleButtonListener);
         multi_player_button.setOnClickListener(multiButttonListener);
         settings_button.setOnClickListener(settingsButttonListener);
         logout_button.setOnClickListener(logoutButttonListener);
+        replay_button.setOnClickListener(replayButttonListener);
     }
 
     @Override
@@ -126,6 +143,7 @@ public class MainMenu extends Activity {
         }
 
     }
+
 
 }
 

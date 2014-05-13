@@ -146,6 +146,20 @@ public class ChaturajiService {
         return new Game[]{};
     }
 
+    public Game[] getGamesHistory() {
+        setupClient();
+
+        try {
+            HttpResponse response = httpClient.execute(new HttpGet("https://" + serverHostAndPort + "/gameHistory"));
+            String games = EntityUtils.toString(response.getEntity());
+            return objectMapper.readValue(games, Game[].class);
+        } catch (Exception e) {
+            Log.d(TAG, "Exception while loading games", e);
+        }
+
+        return new Game[]{};
+    }
+
     public String[] createGame(String numberOfComputerOpponents, String difficulty) {
 
         String[] reply;

@@ -47,6 +47,10 @@
                 android:name=".ChooseAI"
                 android:label="Choose Colour">
         </activity>
+        <activity
+                android:name=".ReplayActivity"
+                android:label="Choose Colour">
+        </activity>
 
     </application>
 

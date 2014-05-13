@@ -20,23 +20,14 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 /**
- * @author Haider
+ * Created by Haider on 13/05/14.
  */
-public class GameRoomActivity extends Activity {
+public class ReplayActivity extends Activity {
 
-    private static final String TAG = "GameRoomActivity";
-    public View.OnClickListener createGameButtonListener = new View.OnClickListener() {
+    private static final String TAG = "ReplayActivity";
 
-        @Override
-        public void onClick(View theView) {
-
-            Intent createGame = new Intent(GameRoomActivity.this, CreateGameActivity.class);
-            startActivity(createGame);
-        }
-    };
     ListView gameRooms;
     Game[] gamesList;
-    Button create_game_button;
     Context context;
 
     @Override
@@ -47,14 +38,11 @@ public class GameRoomActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
-        setContentView(R.layout.game_rooms);
+        setContentView(R.layout.replay_rooms);
 
         context = getApplicationContext();
 
-        create_game_button = (Button) findViewById(R.id.create_game_button);
-        create_game_button.setOnClickListener(createGameButtonListener);
-
-        gameRooms = (ListView) findViewById(R.id.game_rooms_list);
+        gameRooms = (ListView) findViewById(R.id.game_rooms_list_r);
 
         GetGames gg = new GetGames();
         try {
@@ -65,7 +53,7 @@ public class GameRoomActivity extends Activity {
             e.printStackTrace();
         }
 
-        gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
+        gameRooms.setAdapter(new GameRoomAdapter(ReplayActivity.this, Arrays.asList(gamesList)));
 
     }
 
@@ -73,7 +61,7 @@ public class GameRoomActivity extends Activity {
 
         String gameId = v.getTag().toString();
 
-        Intent gotoGame = new Intent(GameRoomActivity.this, GameActivity.class);
+        Intent gotoGame = new Intent(ReplayActivity.this, GameActivity.class);
 
         try {
 
@@ -101,7 +89,7 @@ public class GameRoomActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server.. " + state[0], Toast.LENGTH_LONG).show();
                     break;
                 case "Success":
-                    gotoGame.putExtra("Replay?", false);
+                    gotoGame.putExtra("Replay?", true);
                     startActivity(gotoGame);
                     break;
                 case "Bad request":
@@ -109,7 +97,7 @@ public class GameRoomActivity extends Activity {
                     break;
                 case "401":
                     Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
-                    Intent logOut = new Intent(GameRoomActivity.this, LoginActivity.class);
+                    Intent logOut = new Intent(ReplayActivity.this, LoginActivity.class);
                     logOut.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     ChaturajiService chaturajiService = ChaturajiService.getInstance();
                     chaturajiService.logout();
@@ -140,7 +128,7 @@ public class GameRoomActivity extends Activity {
 
             Game[] lgamesList;
 
-            lgamesList = ChaturajiService.getInstance().getGames();
+            lgamesList = ChaturajiService.getInstance().getGamesHistory();
 
             if (gameRooms != null && lgamesList != null) {
             } else {
@@ -158,7 +146,7 @@ public class GameRoomActivity extends Activity {
 
         @Override
         protected String[] doInBackground(String... info) {
-            return ChaturajiService.getInstance().joinGame(info[0]);
+            return ChaturajiService.getInstance().replayGame(info[0]);
         }
 
     }
