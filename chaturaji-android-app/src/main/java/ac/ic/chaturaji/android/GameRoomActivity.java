@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Haider
@@ -55,7 +56,16 @@ public class GameRoomActivity extends Activity {
 
         gameRooms = (ListView) findViewById(R.id.game_rooms_list);
 
-        new GetGames().execute();
+        GetGames gg = new GetGames();
+        try {
+            gamesList = gg.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
 
     }
 
@@ -127,17 +137,18 @@ public class GameRoomActivity extends Activity {
         @Override
         protected Game[] doInBackground(Void... voids) {
 
-            gamesList = ChaturajiService.getInstance().getGames();
+            Game[] lgamesList;
 
-            if (gameRooms != null && gamesList != null) {
-                gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
+            lgamesList = ChaturajiService.getInstance().getGames();
+
+            if (gameRooms != null && lgamesList != null) {
             } else {
                 Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
             }
 
-            Log.d(TAG, "Games list received from server " + Arrays.asList(gamesList));
+            Log.d(TAG, "Games list received from server " + Arrays.asList(lgamesList));
 
-            return gamesList;
+            return lgamesList;
         }
 
     }

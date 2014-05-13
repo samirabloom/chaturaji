@@ -30,42 +30,13 @@ public class MainMenu extends Activity {
         @Override
         public void onClick(View theView) {
 
-            Intent getSingleGame = new Intent(MainMenu.this, GameActivity.class);
+            Intent getSingleGame = new Intent(MainMenu.this, ChooseAI.class);
 
             try {
 
                 String[] state = new CreateGame().execute("3").get();
 
-                String colour = "in_game_yellow";
-
-                switch (state[1]) {
-                    case "BLUE":
-                        colour = "in_game_blue";
-                        break;
-                    case "RED":
-                        colour = "in_game_red";
-                        break;
-                    case "GREEN":
-                        colour = "in_game_green";
-                        break;
-                }
-
-                getSingleGame.putExtra("colour", colour);
-
-                if (Arrays.asList(state).contains("Error")) {
-                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server..", Toast.LENGTH_LONG).show();
-                } else if (Arrays.asList(state).contains("Invalid")) {
-                    Toast.makeText(getApplicationContext(), "Sorry, there was a problem logging in.", Toast.LENGTH_LONG).show();
-                } else if (Arrays.asList(state).contains("401")) {
-                    Toast.makeText(getApplicationContext(), "Unauthorized, perhaps your session has run out.", Toast.LENGTH_LONG).show();
-                    Intent logOut = new Intent(MainMenu.this, LoginActivity.class);
-                    ChaturajiService chaturajiService = ChaturajiService.getInstance();
-                    chaturajiService.logout();
-                    chaturajiService.clearCookieCred();
-                    startActivity(logOut);
-                } else {
-                    startActivity(getSingleGame);
-                }
+                startActivity(getSingleGame);
 
             } catch (Exception e) {
 
@@ -149,9 +120,7 @@ public class MainMenu extends Activity {
 
             chaturajiService.setEmailPassword(email, password);
 
-            String[] state = chaturajiService.createGame(AIs[0]);
-
-            Log.d(TAG, "CreateGame status " + Arrays.asList(state));
+            String[] state = {"Success", ""};
 
             return state;
         }

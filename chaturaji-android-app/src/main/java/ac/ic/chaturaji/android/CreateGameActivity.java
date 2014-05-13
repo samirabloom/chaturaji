@@ -10,10 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.Arrays;
 
@@ -29,8 +26,11 @@ public class CreateGameActivity extends Activity {
     RadioButton radioAI1;
     RadioButton radioAI2;
     RadioButton radioAI3;
+    SeekBar ai_diff;
+    TextView diffText;
 
     String numberOfAI = "0";
+    String aiDiff = "2";
     public View.OnClickListener startButtonListener = new View.OnClickListener() {
 
         @Override
@@ -135,12 +135,33 @@ public class CreateGameActivity extends Activity {
         radioAI1 = (RadioButton) findViewById(R.id.radioAI1);
         radioAI2 = (RadioButton) findViewById(R.id.radioAI2);
         radioAI3 = (RadioButton) findViewById(R.id.radioAI3);
+        ai_diff = (SeekBar) findViewById(R.id.ai_diff_sb);
+        diffText = (TextView) findViewById(R.id.diff_txt);
 
         start_game_button.setOnClickListener(startButtonListener);
         radioAI0.setOnClickListener(radioAI0Listener);
         radioAI1.setOnClickListener(radioAI1Listener);
         radioAI2.setOnClickListener(radioAI2Listener);
         radioAI3.setOnClickListener(radioAI3Listener);
+        ai_diff.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    int progress = 2;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                        progress = progresValue + 2;
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        aiDiff = Integer.toString(progress);
+                        diffText.setText(aiDiff);
+                    }
+                });
+
 
 
     }
@@ -156,7 +177,7 @@ public class CreateGameActivity extends Activity {
 
         @Override
         protected String[] doInBackground(String... AIs) {
-            return ChaturajiService.getInstance().createGame(AIs[0]);
+            return ChaturajiService.getInstance().createGame(AIs[0], aiDiff);
         }
 
     }

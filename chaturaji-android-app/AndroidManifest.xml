@@ -43,6 +43,10 @@
                 android:name=".ChooseColour"
                 android:label="Choose Colour">
         </activity>
+        <activity
+                android:name=".ChooseAI"
+                android:label="Choose Colour">
+        </activity>
 
     </application>
 

@@ -146,7 +146,7 @@ public class ChaturajiService {
         return new Game[]{};
     }
 
-    public String[] createGame(String numberOfComputerOpponents) {
+    public String[] createGame(String numberOfComputerOpponents, String difficulty) {
 
         String[] reply;
 
@@ -165,6 +165,7 @@ public class ChaturajiService {
                 HttpPost httpPost = new HttpPost("https://" + serverHostAndPort + "/createGame");
                 List<NameValuePair> nameValuePairs = new ArrayList<>(2);
                 nameValuePairs.add(new BasicNameValuePair("numberOfAIPlayers", numberOfComputerOpponents));
+                nameValuePairs.add(new BasicNameValuePair("aiLevel", difficulty));
                 httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                 HttpResponse response = httpClient.execute(httpPost, localContext);

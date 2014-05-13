@@ -137,7 +137,7 @@ public class ChaturajiServiceTest {
 
         // create game
         startTime = System.currentTimeMillis();
-        chaturajiService.createGame("0");
+        chaturajiService.createGame("0", "2");
         elapsedTime = System.currentTimeMillis() - startTime;
         assertTrue(elapsedTime < maxRequestTime);
     }
@@ -275,7 +275,7 @@ public class ChaturajiServiceTest {
 
         chaturajiService.clearCookieCred();
 
-        String[] state2 = chaturajiService.createGame("2");
+        String[] state2 = chaturajiService.createGame("2", "2");
 
         // we cleared the cookie and creds on the client, so should not be able to log in now
         assertEquals("Unauthorized", state2[0]);
@@ -296,7 +296,7 @@ public class ChaturajiServiceTest {
 
         assertEquals("Success", state);
 
-        String[] state2 = chaturajiService.createGame("2");
+        String[] state2 = chaturajiService.createGame("2", "2");
 
         // we cleared the cookie and creds on the client, so should not be able to log in now
         assertEquals("Success", state2[0]);
@@ -317,7 +317,7 @@ public class ChaturajiServiceTest {
 
         assertEquals("Success", state);
 
-        String[] state2 = chaturajiService.createGame("5");
+        String[] state2 = chaturajiService.createGame("5", "2");
 
         // should not allow more than 3 AIs
         assertEquals("Invalid Number Of Computer Opponents", state2[0]);
@@ -335,7 +335,7 @@ public class ChaturajiServiceTest {
 
         assertEquals("Success", state);
 
-        String[] state2 = chaturajiService.createGame("0");
+        String[] state2 = chaturajiService.createGame("0", "2");
 
         assertEquals("Success", state2[0]);
 
@@ -472,7 +472,7 @@ public class ChaturajiServiceTest {
 
         assertEquals("Success", state);
 
-        String[] state2 = chaturajiService.createGame("0");
+        String[] state2 = chaturajiService.createGame("0", "2");
 
         assertEquals("Success", state2[0]);
 
