@@ -34,7 +34,7 @@
     <SeekBar
             android:layout_width="196dp"
             android:layout_height="wrap_content"
-            android:max="6"
+            android:max="8"
             android:id="@+id/ai_diff_sb_c" android:layout_gravity="center_horizontal"/>
     <Button
             android:layout_width="wrap_content"
