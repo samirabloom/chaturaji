@@ -48,8 +48,8 @@ public class AI {
 
                         if (aiMove != null) {
                             board.ApplyMove(aiMove);
-                            board.Print();
-                            logger.debug(aiMove.Print());
+                            //board.Print();
+                            //logger.debug(aiMove.Print());
                         } else {
                             result.setType(ResultType.NOT_VALID);
                         }
@@ -59,19 +59,19 @@ public class AI {
                     case AI: {
                         ComputerPlayer computerPlayer = new ComputerPlayer(colour, player.getPoints(), player.getKingsCaptured());
 
-                        aiMove = computerPlayer.GetMove(board, new Random().nextInt() % 2, game.getAILevel());
+                        aiMove = computerPlayer.GetMove(board, game.getAILevel());
                         aiPlayer = computerPlayer;
 
                         if (aiMove != null) {
                             board.ApplyMove(aiMove);
-                            board.Print();
-                            logger.debug(aiMove.Print());
+                            //board.Print();
+                            //logger.debug(aiMove.Print());
 
                             move.setSource(aiMove.getSource());
                             move.setDestination(aiMove.getDestination());
                             move.setColour(game.getCurrentPlayerColour());
                         } else {
-                            // No available move so, move on to the next player.
+                            // No available move, so move on to the next player.
                             board.NextPlayer();
                         }
                     }

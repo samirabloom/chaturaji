@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * MoveGenerator_AI contains methods used to generate all possible moves given a
@@ -71,6 +72,7 @@ public class AIMoveGenerator {
     // Computes the possible moves for the given player:
     public ArrayList<AIMove> computeMoves(AIBoard board) {
         generateMoves(board, moves, board.getCurrentPlayer());
+        Collections.sort(moves);
         return moves;
     }
 
@@ -80,6 +82,7 @@ public class AIMoveGenerator {
         getBoatMoves(board, moves, colour);
         getKnightMoves(board, moves, colour);
         getPawnMoves(board, moves, colour);
+        //Collections.sort(moves);
     }
 
 

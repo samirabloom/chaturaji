@@ -3,22 +3,22 @@ package ac.ic.chaturaji.ai;
 /**
  * @author dg3213
  */
-public class AIMove {
+public class AIMove implements Comparable<AIMove> {
 
     //------ Data Members ------//
 
     // Set default to negative sentinel values.
-    private int piece = -1;
-    private int capturedPiece = -1;
-    private int source = -1;
-    private int destination = -1;
-    private int type = -1;
-    private int promotionType = -1;
-    private boolean boatTriumph = false;
+    private int piece = -1;                // The piece to be moved
+    private int capturedPiece = -1;        // The piece that has been captured (includes colour)
+    private int source = -1;               // Source square
+    private int destination = -1;          // Destination square
+    private int type = -1;                 // What type of move is it - i.e capture/regular
+    private int promotionType = -1;        // Is a promotion possible, and if so what type?
+    private boolean boatTriumph = false;   // Does the move result in a boat triumph?
 
-    private int evaluationType;
-    private double score;
-    private int depth;
+    private int evaluationType;            // These are used by the AI when storing values in the
+    private double score;                  // transposition tables, allows us to associate moves
+    private int depth;                     // with scores.
 
     //------ Methods ------//
 
@@ -123,6 +123,15 @@ public class AIMove {
 
         // Otherwise all data entries match
         return true;
+    }
+
+    public int compareTo(AIMove compareMove) {
+
+        int otherType = ((AIMove) compareMove).getType();
+
+        // Wish to order our moves list in descending order (all captures come first)
+        return otherType - this.type;
+
     }
 
     public String Print() {

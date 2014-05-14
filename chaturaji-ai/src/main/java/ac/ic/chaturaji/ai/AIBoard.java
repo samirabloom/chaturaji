@@ -22,9 +22,9 @@ public class AIBoard implements Cloneable {
     /*------ Data Members ------*/
     // Who is currently playing - 0 if yellow, 1 if blue etc.
     int CurrentPlayer;
-    // The actual data representation of a chaturaji board.  First, an array of
-    // bitboards, each of which contains flags for the squares where you can
-    // find a specific type of piece
+
+    // The actual data representation of the game board: an array of
+    // bitboards, each of which corresponds to a certain aspect of the board.
     private long BitBoards[];
     private int MaterialValue[];
 
@@ -36,13 +36,11 @@ public class AIBoard implements Cloneable {
         MaterialValue = new int[4];
 
         StartBoard();
-        EvalMaterial();
     }
 
     public AIBoard(long[] bit_boards, int colour) {
         BitBoards = bit_boards;
         MaterialValue = new int[4];
-        EvalMaterial();
 
         CurrentPlayer = colour;
     }
@@ -87,7 +85,7 @@ public class AIBoard implements Cloneable {
 
     // Initialise the Board:
     private void StartBoard() {
-        // Empty the board of anything that may be on it.
+        // First empty the board of anything that may be on it.
         EmptyBoard();
 
         AddPiece(0, GameConstants.YELLOW_BOAT);
@@ -150,41 +148,6 @@ public class AIBoard implements Cloneable {
 
         // Player to go first is always yellow
         CurrentPlayer = GameConstants.YELLOW;
-    }
-
-    private void EvalMaterial() {
-        MaterialValue = new int[4];
-        for (int i = 0; i < 4; i++) {
-            //Check for the pawns of that colour
-            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.KING_PAWNS]) != 0)
-                MaterialValue[i] += GameConstants.PAWN_VALUE;
-
-            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0)
-                MaterialValue[i] += GameConstants.PAWN_VALUE;
-
-            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.BOAT_PAWNS]) != 0)
-                MaterialValue[i] += GameConstants.PAWN_VALUE;
-
-            if ((BitBoards[GameConstants.PAWN + i] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0)
-                MaterialValue[i] += GameConstants.PAWN_VALUE;
-
-            //Check for the elephant
-            if ((BitBoards[GameConstants.ELEPHANT + i]) != 0)
-                MaterialValue[i] += GameConstants.ELEPHANT_VALUE;
-
-            //Check for the boat
-            if ((BitBoards[GameConstants.BOAT + i]) != 0)
-                MaterialValue[i] += GameConstants.BOAT_VALUE;
-
-            //Check for the knight
-            if ((BitBoards[GameConstants.KNIGHT + i]) != 0)
-                MaterialValue[i] += GameConstants.KNIGHT_VALUE;
-
-            //Check for the king
-            if ((BitBoards[GameConstants.KING + i]) != 0)
-                MaterialValue[i] += GameConstants.KING_VALUE;
-        }
-
     }
 
     public long ZobristKey() {
@@ -258,23 +221,14 @@ public class AIBoard implements Cloneable {
 
     // Apply the move given and update the bit boards.
     public void ApplyMove(AIMove theMove) {
-        // Check if the piece moved was a pawn. If so, determine its promotion piece and update
-        // the relevant board.
 
-        if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0) {
-            RemovePiece(theMove.getSource(), GameConstants.KNIGHT_PAWNS);
-            AddPiece(theMove.getDestination(), GameConstants.KNIGHT_PAWNS);
-        } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.BOAT_PAWNS]) != 0) {
-            RemovePiece(theMove.getSource(), GameConstants.BOAT_PAWNS);
-            AddPiece(theMove.getDestination(), GameConstants.BOAT_PAWNS);
-        } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0) {
-            RemovePiece(theMove.getSource(), GameConstants.ELEPHANT_PAWNS);
-            AddPiece(theMove.getDestination(), GameConstants.ELEPHANT_PAWNS);
-        } else if ((GameConstants.SquareBits[theMove.getSource()] & BitBoards[GameConstants.KING_PAWNS]) != 0) {
-            RemovePiece(theMove.getSource(), GameConstants.KING_PAWNS);
-            AddPiece(theMove.getDestination(), GameConstants.KING_PAWNS);
+        // Check if the piece moved was a pawn:
+        if (theMove.getPiece() < 4) {
+            // Now determine its promotion piece and update the relevant board:
+            handlePawnMoves(theMove.getSource(), theMove.getDestination());
         }
 
+        // Must alter the board depending on the move type received:
         switch (theMove.getType()) {
             case GameConstants.NORMAL_MOVE:
                 RemovePiece(theMove.getSource(), theMove.getPiece());
@@ -292,27 +246,20 @@ public class AIBoard implements Cloneable {
                 break;
         }
 
-        // Must delete the other players' boats!
-        int boat_square;
+        // Check if the move is a boat triumph
         if (theMove.getTriumph()) {
-            for (int i = 1; i < 4; i++) {
-                boat_square = FindBoatSquare((CurrentPlayer + i) % 4);
-                if (boat_square >= 0) {
-                    RemovePiece(boat_square, GameConstants.BOAT + ((CurrentPlayer + i) % 4));
-                } else
-                    logger.error("ERROR CALCULATING BOAT TRIUMPH");
-            }
+            performBoatTriumph();
         }
 
         // Check if the move is a promotion
         boolean isPromotion = (theMove.getPromoType() > 0);
-
         if (isPromotion) {
             Promote(theMove.getPiece(), theMove.getDestination(), theMove.getPiece() % 4, theMove.getPromoType());
         }
+
+        // Set the next player
         NextPlayer();
     }
-
 
     /*---- Helper functions ------*/
 
@@ -345,6 +292,36 @@ public class AIBoard implements Cloneable {
         }
 
         return true;
+    }
+
+    private void performBoatTriumph() {
+        int boat_square;
+        for (int i = 1; i < 4; i++) {
+            boat_square = FindBoatSquare((CurrentPlayer + i) % 4);
+            if (boat_square >= 0) {
+                RemovePiece(boat_square, GameConstants.BOAT + ((CurrentPlayer + i) % 4));
+            } else
+                logger.error("ERROR CALCULATING BOAT TRIUMPH");
+        }
+    }
+
+    private void handlePawnMoves(int source, int destination) {
+        // Cycle through the bitboards for each pawn promotion type. When the correct one is found, update
+        // the new pawn position.
+
+        if ((GameConstants.SquareBits[source] & BitBoards[GameConstants.KNIGHT_PAWNS]) != 0) {
+            RemovePiece(source, GameConstants.KNIGHT_PAWNS);
+            AddPiece(destination, GameConstants.KNIGHT_PAWNS);
+        } else if ((GameConstants.SquareBits[source] & BitBoards[GameConstants.BOAT_PAWNS]) != 0) {
+            RemovePiece(source, GameConstants.BOAT_PAWNS);
+            AddPiece(destination, GameConstants.BOAT_PAWNS);
+        } else if ((GameConstants.SquareBits[source] & BitBoards[GameConstants.ELEPHANT_PAWNS]) != 0) {
+            RemovePiece(source, GameConstants.ELEPHANT_PAWNS);
+            AddPiece(destination, GameConstants.ELEPHANT_PAWNS);
+        } else if ((GameConstants.SquareBits[source] & BitBoards[GameConstants.KING_PAWNS]) != 0) {
+            RemovePiece(source, GameConstants.KING_PAWNS);
+            AddPiece(destination, GameConstants.KING_PAWNS);
+        }
     }
 
     //Check for a delayed promotion of a pawn
@@ -417,12 +394,10 @@ public class AIBoard implements Cloneable {
             for (int col = 0; col < 8; col++) {
                 long bits = GameConstants.SquareBits[line * 8 + col];
 
-                // Scan the bitboards to find a piece, if any
                 int piece = 0;
                 while ((piece < GameConstants.ALL_PIECES) && ((bits & BitBoards[piece]) == 0))
                     piece++;
 
-                // Show the piece
                 stringBuilder.append("| ").append(GameConstants.PieceStrings[piece]).append(" ");
             }
             stringBuilder.append("|");

@@ -213,6 +213,18 @@ public class AITest {
 
             ai.submitMove(game, move);
         }
+
+        long pawnCount = game.getBitboards()[GameConstants.PAWN];
+        long boatCount = game.getBitboards()[GameConstants.BOAT];
+        long knightCount = game.getBitboards()[GameConstants.KNIGHT];
+        long elephantCount = game.getBitboards()[GameConstants.ELEPHANT];
+        long kingCount = game.getBitboards()[GameConstants.KING];
+
+        assertTrue(pawnCount == 0);
+        assertTrue(boatCount != 0);
+        assertTrue(knightCount != 0);
+        assertTrue(elephantCount != 0);
+        assertTrue(kingCount != 0);
     }
 
     private void checkPromo(Game game) throws Exception {

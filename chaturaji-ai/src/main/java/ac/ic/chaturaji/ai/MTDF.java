@@ -3,6 +3,8 @@ package ac.ic.chaturaji.ai;
 import java.util.ArrayList;
 
 /**
+ * Pseudocode obtained from Aske Plaat's website explaining MTD(f): http://people.csail.mit.edu/plaat/mtdf.html
+ *
  * @author dg3213
  */
 public class MTDF extends AlphaBeta {
@@ -13,6 +15,8 @@ public class MTDF extends AlphaBeta {
         int iterateDepth;
         double firstGuess = 0;
 
+        // Call MTD(f) iteratively, allows a more accurate estimate of the true minimax value
+        // to be used by the search function at each depth.
         GameTimer++;
         for (iterateDepth = 2; iterateDepth <= maxIterateDepth; iterateDepth++) {
             bestMove = MTD_f(board, firstGuess, iterateDepth);
