@@ -20,6 +20,7 @@
 
         <!-- ALL -->
         <security:intercept-url pattern="/games" access="permitAll()" requires-channel="https"/>
+        <security:intercept-url pattern="/client" access="permitAll()" requires-channel="https"/>
         <!-- NOT LOGGED IN -->
         <security:intercept-url pattern="/register" access="isAnonymous()" requires-channel="https"/>
         <security:intercept-url pattern="/logout" access="isAnonymous()" requires-channel="https"/>
