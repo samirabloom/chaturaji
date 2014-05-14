@@ -324,62 +324,72 @@ public class AIMoveGenerator {
 
                 switch (colour) {
                     case 0: {
-                        if (square < 8) {
-                            destination = square + 9;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else if (square >= 56) {
-                            destination = square - 7;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else {
-                            destination = square + 9;
-                            SetCapture(board, Moves, colour, square, destination);
-                            destination = square - 7;
-                            SetCapture(board, Moves, colour, square, destination);
+                        // First make sure that the pawn has not reached its end file/rank - if so then it
+                        // may not generate any more moves!
+                        if ((square % 8) != 7) {
+                            if (square < 8) {
+                                destination = square + 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else if (square >= 56) {
+                                destination = square - 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else {
+                                destination = square + 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                                destination = square - 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                            }
                         }
                     }
                     break;
                     case 2: {
-                        if (square < 8) {
-                            destination = square + 7;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else if (square >= 56) {
-                            destination = square - 9;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else {
-                            destination = square + 7;
-                            SetCapture(board, Moves, colour, square, destination);
-                            destination = square - 9;
-                            SetCapture(board, Moves, colour, square, destination);
+                        if ((square % 8) != 0) {
+                            if (square < 8) {
+                                destination = square + 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else if (square >= 56) {
+                                destination = square - 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else {
+                                destination = square + 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                                destination = square - 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                            }
                         }
                     }
                     break;
                     case 1: {
-                        if ((square % 8) == 0) {
-                            destination = square + 9;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else if ((square % 8) == 7) {
-                            destination = square + 7;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else {
-                            destination = square + 9;
-                            SetCapture(board, Moves, colour, square, destination);
-                            destination = square + 7;
-                            SetCapture(board, Moves, colour, square, destination);
+                        if ((square / 8) != 7) {
+                            if ((square % 8) == 0) {
+                                destination = square + 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else if ((square % 8) == 7) {
+                                destination = square + 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else {
+                                destination = square + 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                                destination = square + 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                            }
                         }
                     }
                     break;
                     case 3: {
-                        if ((square % 8) == 0) {
-                            destination = square - 7;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else if ((square % 8) == 7) {
-                            destination = square - 9;
-                            SetCapture(board, Moves, colour, square, destination);
-                        } else {
-                            destination = square - 7;
-                            SetCapture(board, Moves, colour, square, destination);
-                            destination = square - 9;
-                            SetCapture(board, Moves, colour, square, destination);
+                        if ((square / 8) != 0) {
+                            if ((square % 8) == 0) {
+                                destination = square - 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else if ((square % 8) == 7) {
+                                destination = square - 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                            } else {
+                                destination = square - 7;
+                                SetCapture(board, Moves, colour, square, destination);
+                                destination = square - 9;
+                                SetCapture(board, Moves, colour, square, destination);
+                            }
                         }
                     }
                     break;
