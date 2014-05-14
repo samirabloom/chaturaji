@@ -255,48 +255,50 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         int i;
         int j;
+        if(!replay)
+        {
+            for (i = 0; i < 8; i++) {
+                final int column = i;
+                for (j = 0; j < 8; j++) {
+                    final int row = j;
+                    BoardImage[column][row].setOnClickListener(new View.OnClickListener() {
 
-        for (i = 0; i < 8; i++) {
-            final int column = i;
-            for (j = 0; j < 8; j++) {
-                final int row = j;
-                BoardImage[column][row].setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
 
-                    public void onClick(View v) {
-
-                        if (gameInPlay) {
-                            if ((((move_count + 3) % 4) + 1) == player_colour) {
-                                if (selected_column == column && selected_row == row) {
-                                    clearSelections();
-                                } else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row]) {
-                                    try {
-                                        String state = new SubmitMove().execute(convertMove(selected_column, selected_row), convertMove(column, row)).get();
-                                        switch (state) {
-                                            case "Error":
-                                                Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
-                                                break;
-                                            case "Success":
-                                                break;
-                                            default:
-                                                Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
-                                                break;
+                            if (gameInPlay) {
+                                if ((((move_count + 3) % 4) + 1) == player_colour) {
+                                    if (selected_column == column && selected_row == row) {
+                                        clearSelections();
+                                    } else if ((selected_column != -1) && (selected_row != -1) && valid_moves[column][row]) {
+                                        try {
+                                            String state = new SubmitMove().execute(convertMove(selected_column, selected_row), convertMove(column, row)).get();
+                                            switch (state) {
+                                                case "Error":
+                                                    Toast.makeText(getApplicationContext(), "Sorry there was a problem connecting with the server", Toast.LENGTH_LONG).show();
+                                                    break;
+                                                case "Success":
+                                                    break;
+                                                default:
+                                                    Toast.makeText(getApplicationContext(), state, Toast.LENGTH_LONG).show();
+                                                    break;
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                    } else if ((!moved) && selectPiece(column, row)) {
+                                        clearSelections();
+                                        BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
+                                        selected_column = column;
+                                        selected_row = row;
+                                        showValidMoves(column, row);
                                     }
-                                } else if ((!moved) && selectPiece(column, row)) {
-                                    clearSelections();
-                                    BoardImage[column][row].setBackgroundColor(getResources().getColor(R.color.light_blue));
-                                    selected_column = column;
-                                    selected_row = row;
-                                    showValidMoves(column, row);
-                                }
 
-                                moved = false;
+                                    moved = false;
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -493,7 +495,8 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         int colour = 0;
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++)
+        {
             if (colour != 0)
                 break;
 
