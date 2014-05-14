@@ -17,7 +17,7 @@ public class ComputerPlayer extends AIPlayer {
         //Generate all the moves
         AIMove move;
 
-        move = new MTDF().Search(board, 15 - (15 * (1 / difficulty)));
+        move = new MTDF().Search(board, (int) (1.5 * difficulty) - 1);
 
         // Set the points if a capture occurred.
         if (move != null) {
