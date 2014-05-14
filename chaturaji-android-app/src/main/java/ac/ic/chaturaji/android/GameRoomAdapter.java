@@ -21,10 +21,12 @@ public class GameRoomAdapter extends BaseAdapter {
 
     Context context;
     List<Game> gamesList;
+    private final String actionName;
 
-    public GameRoomAdapter(Context context, List<Game> gamesList) {
+    public GameRoomAdapter(Context context, List<Game> gamesList, String actionName) {
         this.context = context;
         this.gamesList = gamesList;
+        this.actionName = actionName;
     }
 
     @Override
@@ -45,18 +47,20 @@ public class GameRoomAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        int humans = 1;
+        int humans = 0;
         int ais = 0;
 
         Game current = gamesList.get(i);
         List<Player> players = current.getPlayers();
 
-        for (int j = 1; j < players.size(); j++) {
-            if (players.get(j) != null) {
-                if (players.get(j).getType() == PlayerType.AI)
+        for (int j = 0; j < players.size(); j++) {
+            Player player = players.get(j);
+            if (player != null) {
+                if (player.getType() == PlayerType.AI) {
                     ais++;
-                if (players.get(j).getType() == PlayerType.HUMAN)
+                } else {
                     humans++;
+                }
             }
         }
 
@@ -67,8 +71,9 @@ public class GameRoomAdapter extends BaseAdapter {
         TextView ais_text = (TextView) row.findViewById(R.id.game_ais);
         TextView human_text = (TextView) row.findViewById(R.id.game_humans);
         ImageView icon = (ImageView) row.findViewById(R.id.gameImage);
-        Button joinButton = (Button) row.findViewById(R.id.join_button);
-        joinButton.setTag(current.getId());
+        Button actionButton = (Button) row.findViewById(R.id.join_button);
+        actionButton.setText(actionName);
+        actionButton.setTag(current.getId());
 
         switch (humans) {
             case 2:
@@ -85,10 +90,28 @@ public class GameRoomAdapter extends BaseAdapter {
         }
 
         if (players.size() > 0 && players.get(0) != null) {
-            username.setText(players.get(0).getUser().getNickname());
-        }
-
-        if (username.getText().length() < 1) {
+            if (actionName.equals("Replay")) {
+                // widen username
+                ViewGroup.LayoutParams userNameLayoutParams = username.getLayoutParams();
+                userNameLayoutParams.width = 190;
+                username.setLayoutParams(userNameLayoutParams);
+                username.setText(players.get(0).getUser().getNickname() + (actionName.equals("Replay") ? " " + current.getCreatedDate().toString("MM-dd HH:mm") : 0));
+                current.getCreatedDate();
+                // widen button
+                ViewGroup.LayoutParams actionLayoutParams = actionButton.getLayoutParams();
+                actionLayoutParams.width = 135;
+                actionButton.setLayoutParams(actionLayoutParams);
+                // narrow Human & AI
+                ViewGroup.LayoutParams aiLayoutParams = ais_text.getLayoutParams();
+                aiLayoutParams.width = 15;
+                ais_text.setLayoutParams(aiLayoutParams);
+                ViewGroup.LayoutParams humanLayoutParams = human_text.getLayoutParams();
+                humanLayoutParams.width = 15;
+                human_text.setLayoutParams(humanLayoutParams);
+            } else {
+                username.setText(players.get(0).getUser().getNickname());
+            }
+        } else {
             username.setText("No Name");
         }
 

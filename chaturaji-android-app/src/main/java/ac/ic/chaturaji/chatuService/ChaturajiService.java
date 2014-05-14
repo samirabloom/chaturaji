@@ -60,8 +60,8 @@ public class ChaturajiService {
     private final ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
     private final UUIDFactory uuidFactory = new UUIDFactory();
     //    private String serverHostAndPort = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com:8443";
-    //    private String serverHostAndPort = "192.168.1.100:8443";
-    private String serverHostAndPort = "msc14-prj-14.doc.ic.ac.uk:55443";
+    //    private String serverHostAndPort = "msc14-prj-14.doc.ic.ac.uk:55443";
+    private String serverHostAndPort = "192.168.1.110:8443";
     private DefaultHttpClient httpClient;
     private String email = "";
     private String password = "";
@@ -150,7 +150,11 @@ public class ChaturajiService {
         setupClient();
 
         try {
-            HttpResponse response = httpClient.execute(new HttpGet("https://" + serverHostAndPort + "/gameHistory"));
+            HttpContext localContext = new BasicHttpContext();
+            localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStoreLocal);
+            localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProviderLocal);
+
+            HttpResponse response = httpClient.execute(new HttpGet("https://" + serverHostAndPort + "/gameHistory"), localContext);
             String games = EntityUtils.toString(response.getEntity());
             return objectMapper.readValue(games, Game[].class);
         } catch (Exception e) {
@@ -284,7 +288,7 @@ public class ChaturajiService {
         return reply;
     }
 
-    public String[] replayGame (String gameId) {
+    public String[] replayGame(String gameId) {
 
         setupClient();
 
@@ -317,7 +321,7 @@ public class ChaturajiService {
                             ""
                     };
                     break;
-                case HttpStatus.SC_CREATED:
+                case HttpStatus.SC_ACCEPTED:
                     player = objectMapper.readValue(EntityUtils.toString(response.getEntity()), Player.class);
                     reply = new String[]{
                             "Good",
@@ -502,13 +506,13 @@ public class ChaturajiService {
 
     }
 
-    public void setCurrentGameID(String gameID){
+    public void setCurrentGameID(String gameID) {
 
         currentGameID = gameID;
 
     }
 
-    public String getCurrentGameID(){
+    public String getCurrentGameID() {
 
         return currentGameID;
 

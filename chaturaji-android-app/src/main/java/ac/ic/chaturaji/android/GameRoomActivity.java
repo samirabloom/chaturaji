@@ -59,13 +59,11 @@ public class GameRoomActivity extends Activity {
         GetGames gg = new GetGames();
         try {
             gamesList = gg.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
-        gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList)));
+        gameRooms.setAdapter(new GameRoomAdapter(GameRoomActivity.this, Arrays.asList(gamesList), "Join"));
 
     }
 

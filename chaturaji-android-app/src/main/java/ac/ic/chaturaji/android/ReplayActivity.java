@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,13 +46,11 @@ public class ReplayActivity extends Activity {
         GetGames gg = new GetGames();
         try {
             gamesList = gg.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
-        gameRooms.setAdapter(new GameRoomAdapter(ReplayActivity.this, Arrays.asList(gamesList)));
+        gameRooms.setAdapter(new GameRoomAdapter(ReplayActivity.this, Arrays.asList(gamesList), "Replay"));
 
     }
 
@@ -65,8 +62,8 @@ public class ReplayActivity extends Activity {
 
         try {
 
-            String[] state = new JoinGame().execute(gameId).get();
-            Log.d(TAG, "JoinGame status " + Arrays.asList(state));
+            String[] state = new ReplayGame().execute(gameId).get();
+            Log.d(TAG, "ReplayGame status " + Arrays.asList(state));
 
             String colour = "in_game_yellow";
 
@@ -142,7 +139,7 @@ public class ReplayActivity extends Activity {
 
     }
 
-    private class JoinGame extends AsyncTask<String, Void, String[]> {
+    private class ReplayGame extends AsyncTask<String, Void, String[]> {
 
         @Override
         protected String[] doInBackground(String... info) {

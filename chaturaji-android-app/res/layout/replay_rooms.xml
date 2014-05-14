@@ -45,7 +45,7 @@
 
     <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:id="@+id/game_rooms_list_r"
             android:layout_weight="10"/>
 

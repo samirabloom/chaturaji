@@ -255,8 +255,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         int i;
         int j;
-        if(!replay)
-        {
+        if (!replay) {
             for (i = 0; i < 8; i++) {
                 final int column = i;
                 for (j = 0; j < 8; j++) {
@@ -396,14 +395,16 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
             } else if (board[destination_column][destination_row] instanceof King) {
                 score = 5;
                 taken_type = "King";
-                if (board[destination_column][destination_row].colour == 1) {
-                    blue_king_captured_by = board[source_column][source_row].colour;
-                } else if (board[destination_column][destination_row].colour == 2) {
-                    red_king_captured_by = board[source_column][source_row].colour;
-                } else if (board[destination_column][destination_row].colour == 3) {
-                    green_king_captured_by = board[source_column][source_row].colour;
-                } else if (board[destination_column][destination_row].colour == 4) {
-                    yellow_king_captured_by = board[source_column][source_row].colour;
+                if (board[source_column][source_row] != null) {
+                    if (board[destination_column][destination_row].colour == 1) {
+                        blue_king_captured_by = board[source_column][source_row].colour;
+                    } else if (board[destination_column][destination_row].colour == 2) {
+                        red_king_captured_by = board[source_column][source_row].colour;
+                    } else if (board[destination_column][destination_row].colour == 3) {
+                        green_king_captured_by = board[source_column][source_row].colour;
+                    } else if (board[destination_column][destination_row].colour == 4) {
+                        yellow_king_captured_by = board[source_column][source_row].colour;
+                    }
                 }
 
                 if (blue_king_captured_by == 0 && red_king_captured_by == 1 && green_king_captured_by == 1 && yellow_king_captured_by == 1) {
@@ -495,8 +496,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
 
         int colour = 0;
 
-        for (int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             if (colour != 0)
                 break;
 
@@ -691,24 +691,30 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         move_count++;
 
         String winnerMessage = "";
-        switch (result.getGameStatus()) {
-            case GAME_OVER:
-                List<Player> playersWithHighestScore = result.getGame().getPlayersWithHighestScore();
-                for (int i = 0; i < playersWithHighestScore.size(); i++) {
-                    winnerMessage += playersWithHighestScore.get(i).getColour().name();
-                    if (i < playersWithHighestScore.size() - 1) {
-                        winnerMessage += " and ";
+        if (result.getGameStatus() != null) {
+            switch (result.getGameStatus()) {
+                case GAME_OVER:
+                    List<Player> playersWithHighestScore = result.getGame().getPlayersWithHighestScore();
+                    for (int i = 0; i < playersWithHighestScore.size(); i++) {
+                        winnerMessage += playersWithHighestScore.get(i).getColour().name();
+                        if (i < playersWithHighestScore.size() - 1) {
+                            winnerMessage += " and ";
+                        }
                     }
-                }
-                winnerMessage += " wins";
-                moveList = "-- GAME OVER --\n" + moveList;
-                moveList = winnerMessage + "\n" + moveList;
-                gameInPlay = false;
-                break;
-            case STALEMATE:
-                moveList = "-- STALEMATE --\n" + moveList;
-                gameInPlay = false;
-                break;
+                    if (winnerMessage.length() > 0) {
+                        winnerMessage += " wins";
+                    }
+                    moveList = "-- GAME OVER --\n" + moveList;
+                    if (winnerMessage.length() > 0) {
+                        moveList = winnerMessage + "\n" + moveList;
+                    }
+                    gameInPlay = false;
+                    break;
+                case STALEMATE:
+                    moveList = "-- STALEMATE --\n" + moveList;
+                    gameInPlay = false;
+                    break;
+            }
         }
 
         updateGameThread(result.getGameStatus(), winnerMessage);
@@ -736,16 +742,18 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                             clearSelections();
                             drawPieces();
 
-                            switch (gameStatus) {
-                                case GAME_OVER: {
-                                    Toast.makeText(getApplicationContext(), "-- GAME OVER " + (winnersMessage.length() > 0 ? winnersMessage : "") + "--", Toast.LENGTH_LONG).show();
-                                    ((TextView) findViewById(R.id.turn)).setText(winnersMessage);
-                                    break;
-                                }
-                                case STALEMATE: {
-                                    Toast.makeText(getApplicationContext(), "-- STALEMATE --", Toast.LENGTH_LONG).show();
-                                    ((TextView) findViewById(R.id.turn)).setText("-- STALEMATE --");
-                                    break;
+                            if (gameStatus != null) {
+                                switch (gameStatus) {
+                                    case GAME_OVER: {
+                                        Toast.makeText(getApplicationContext(), "-- GAME OVER " + (winnersMessage.length() > 0 ? winnersMessage : "") + "--", Toast.LENGTH_LONG).show();
+                                        ((TextView) findViewById(R.id.turn)).setText(winnersMessage);
+                                        break;
+                                    }
+                                    case STALEMATE: {
+                                        Toast.makeText(getApplicationContext(), "-- STALEMATE --", Toast.LENGTH_LONG).show();
+                                        ((TextView) findViewById(R.id.turn)).setText("-- STALEMATE --");
+                                        break;
+                                    }
                                 }
                             }
 
