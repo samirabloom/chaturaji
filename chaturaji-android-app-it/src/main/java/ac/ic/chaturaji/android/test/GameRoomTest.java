@@ -1,9 +1,6 @@
 package ac.ic.chaturaji.android.test;
 
-import ac.ic.chaturaji.android.CreateGameActivity;
-import ac.ic.chaturaji.android.GameRoomActivity;
-import ac.ic.chaturaji.android.GameRoomAdapter;
-import ac.ic.chaturaji.android.R;
+import ac.ic.chaturaji.android.*;
 import ac.ic.chaturaji.model.Game;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.PlayerType;
@@ -73,6 +70,30 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
         nextActivity.finish();
 
     }
+
+   /* public void testTClickSettings() {
+
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(GameActivity.class.getName(), null, false);
+
+        GameRoomActivity myActivity = getActivity();
+
+        View test = (View) localListView.getChildAt(1);
+        final Button settings = (Button) test.findViewById(R.id.join_button);
+
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                settings.performClick();
+            }
+        });
+
+        GameActivity nextActivity = (GameActivity) getInstrumentation().waitForMonitor(activityMonitor);
+
+        assertNotNull(nextActivity);
+        nextActivity.finish();
+
+    } */
 
     public void testGetCount() {
         assertEquals( 3, localAdapter.getCount());

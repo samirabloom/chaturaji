@@ -14,6 +14,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
 
     private Button singlePlayer;
     private Button multi_player_button;
+    private Button replay_button;
     private Button settings_button;
     private Button logout_button;
 
@@ -34,6 +35,7 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
         multi_player_button = (Button) mActivity.findViewById(R.id.multi_player_button);
         settings_button = (Button) mActivity.findViewById(R.id.settings_button);
         logout_button = (Button) mActivity.findViewById(R.id.log_out_button);
+        replay_button = (Button) mActivity.findViewById(R.id.replay_button);
     }
 
     public void testPreconditions() {
@@ -42,11 +44,12 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
         assertTrue(multi_player_button != null);
         assertTrue(settings_button != null);
         assertTrue(logout_button != null);
+        assertTrue(replay_button != null);
     }
 
-   /* public void testTClickSinglePlayer(){
+   public void testTClickSinglePlayer(){
 
-        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(GameActivity.class.getName(), null, false);
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(ChooseAI.class.getName(), null, false);
 
         MainMenu myActivity = getActivity();
 
@@ -60,12 +63,12 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
             }
         });
 
-        GameActivity nextActivity = (GameActivity) getInstrumentation().waitForMonitor(activityMonitor);
+        ChooseAI nextActivity = (ChooseAI) getInstrumentation().waitForMonitor(activityMonitor);
 
         assertNotNull(nextActivity);
         nextActivity.finish();
 
-    } */
+    }
 
     public void testTClickMultiPlayer() {
 
@@ -89,6 +92,30 @@ public class MainMenuTest extends ActivityInstrumentationTestCase2<MainMenu> {
         nextActivity.finish();
 
     }
+
+    public void testTClickReplay() {
+
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(ReplayActivity.class.getName(), null, false);
+
+        MainMenu myActivity = getActivity();
+
+        final Button mPlayer = (Button) myActivity.findViewById(R.id.replay_button);
+
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                mPlayer.performClick();
+            }
+        });
+
+        ReplayActivity nextActivity = (ReplayActivity) getInstrumentation().waitForMonitor(activityMonitor);
+
+        assertNotNull(nextActivity);
+        nextActivity.finish();
+
+    }
+
 
     public void testTClickSettings() {
 
