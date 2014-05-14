@@ -45,6 +45,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     private int green_king_captured_by = 0;
     private int yellow_king_captured_by = 0;
     private boolean gameInPlay = true;
+    private boolean replay = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         chaturajiService.setupSocketClient(GameActivity.this);
 
         String colour = getIntent().getStringExtra("colour");
+        boolean Replay = getIntent().getBooleanExtra("Replay?", false);
 
         switch (colour) {
             case "in_game_yellow":
@@ -108,6 +110,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         savedInstanceState.putInt("red_king_captured_by", red_king_captured_by);
         savedInstanceState.putInt("green_king_captured_by", green_king_captured_by);
         savedInstanceState.putInt("yellow_king_captured_by", yellow_king_captured_by);
+        savedInstanceState.putBoolean("replay", replay);
     }
 
     @Override
@@ -129,6 +132,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         red_king_captured_by = savedInstanceState.getInt("red_king_captured_by");
         green_king_captured_by = savedInstanceState.getInt("green_king_captured_by");
         yellow_king_captured_by = savedInstanceState.getInt("yellow_king_captured_by");
+        replay = savedInstanceState.getBoolean("replay");
     }
 
     @Override
