@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="300dp"
+                  android:layout_height="350dp"
                   android:orientation="vertical"
                   android:layout_gravity="center"
                   android:gravity="center" android:weightSum="1">
@@ -53,6 +53,16 @@
                 android:text="Multi Player"
                 style="@style/btnStyleArsenic"
                 android:id="@+id/multi_player_button"/>
+
+        <Button
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:text="Replay"
+                style="@style/btnStyleArsenic"
+                android:id="@+id/replay_button"/>
+
         <Button
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
