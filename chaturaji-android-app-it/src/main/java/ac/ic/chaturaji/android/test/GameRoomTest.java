@@ -1,9 +1,10 @@
 package ac.ic.chaturaji.android.test;
 
-import ac.ic.chaturaji.android.*;
+import ac.ic.chaturaji.android.CreateGameActivity;
+import ac.ic.chaturaji.android.GameRoomActivity;
+import ac.ic.chaturaji.android.GameRoomAdapter;
+import ac.ic.chaturaji.android.R;
 import ac.ic.chaturaji.model.Game;
-import ac.ic.chaturaji.model.Player;
-import ac.ic.chaturaji.model.PlayerType;
 import ac.ic.chaturaji.objectmapper.ObjectMapperFactory;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
@@ -13,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Haider
@@ -45,7 +45,7 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
 
         localListView = (ListView) mActivity.findViewById(R.id.game_rooms_list);
 
-        localAdapter = new GameRoomAdapter(mActivity, Arrays.asList(gamesList));
+        localAdapter = new GameRoomAdapter(mActivity, Arrays.asList(gamesList), "Join");
 
     }
 
@@ -96,7 +96,7 @@ public class GameRoomTest extends ActivityInstrumentationTestCase2<GameRoomActiv
     } */
 
     public void testGetCount() {
-        assertEquals( 3, localAdapter.getCount());
+        assertEquals(3, localAdapter.getCount());
     }
 
     public void testGetItemId() {
