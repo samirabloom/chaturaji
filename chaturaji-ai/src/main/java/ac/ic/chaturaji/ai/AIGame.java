@@ -5,6 +5,8 @@ import ac.ic.chaturaji.model.*;
 import java.util.List;
 import java.util.Scanner;
 
+// This class is similar to the AIChaturaji class, made just for testing within the AI framework.
+
 public class AIGame {
     AI api;
     Scanner read;
