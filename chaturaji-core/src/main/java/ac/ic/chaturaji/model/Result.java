@@ -15,13 +15,19 @@ public class Result extends EqualsHashCodeToString {
     }
 
     public Result(GameStatus gameStatus, Game game, Move move) {
-        game.setGameStatus(gameStatus);
+        if (game != null) {
+            game.setGameStatus(gameStatus);
+        }
         this.game = game;
         this.move = move;
     }
 
     public GameStatus getGameStatus() {
-        return game.getGameStatus();
+        if (game != null) {
+            return game.getGameStatus();
+        } else {
+            return null;
+        }
     }
 
     public void setGameStatus(GameStatus gameStatus) {
