@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**");
+        web.ignoring().antMatchers("/resources/**", "/favicon.ico", "/client/**");
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/register", "/games", "/sendUpdatePasswordEmail", "/updatePassword", "/winnersMessage", "/log").permitAll()
-                .antMatchers("/login", "/createGame", "/joinGame", "/submitMove").authenticated()
+                .antMatchers("/login", "/createGame", "/joinGame", "/submitMove", "/gameHistory", "/replayGame").authenticated()
                 .antMatchers("/**").denyAll();
     }
 }
