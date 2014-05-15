@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInMemoryGames;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -100,8 +101,13 @@ public class GameControllerMockMVCIntegrationTest {
                 new Game("1", new Player(gameIds[0], new User(), Colour.YELLOW, PlayerType.HUMAN)),
                 new Game("2", new Player(gameIds[1], new User(), Colour.YELLOW, PlayerType.HUMAN)),
                 new Game("3", new Player(gameIds[2], new User(), Colour.YELLOW, PlayerType.HUMAN)),
-                new Game("4", new Player(gameIds[3], new User(), Colour.YELLOW, PlayerType.HUMAN))
+                new Game("4", new Player(gameIds[3], new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game("5", new Player(gameIds[3], new User(), Colour.YELLOW, PlayerType.HUMAN))
         ));
+        getInMemoryGames(servletContext).put("1", new Game("1", new Player(gameIds[0], new User(), Colour.YELLOW, PlayerType.HUMAN)));
+        getInMemoryGames(servletContext).put("2", new Game("2", new Player(gameIds[1], new User(), Colour.YELLOW, PlayerType.HUMAN)));
+        getInMemoryGames(servletContext).put("3", new Game("3", new Player(gameIds[2], new User(), Colour.YELLOW, PlayerType.HUMAN)));
+        getInMemoryGames(servletContext).put("4", new Game("4", new Player(gameIds[3], new User(), Colour.YELLOW, PlayerType.HUMAN)));
 
         // when
         mockMvc.perform(

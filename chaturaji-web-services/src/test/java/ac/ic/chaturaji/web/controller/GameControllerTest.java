@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static ac.ic.chaturaji.web.controller.InMemoryGamesContextListener.getInMemoryGames;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -65,15 +66,21 @@ public class GameControllerTest {
     @Test
     public void shouldGetGamesFromDAOAndCreateJSON() throws IOException {
         // given
-        List<Game> games = Arrays.asList(new Game("a", new Player("player id", new User(), Colour.YELLOW, PlayerType.HUMAN)));
+        List<Game> games = Arrays.asList(
+                new Game("a", new Player("player id", new User(), Colour.YELLOW, PlayerType.HUMAN)),
+                new Game("b", new Player("player id", new User(), Colour.YELLOW, PlayerType.HUMAN))
+        );
         when(gameDAO.getAllWaitingForPlayers()).thenReturn(games);
+        getInMemoryGames(servletContext).put("a", new Game("a", new Player("player id", new User(), Colour.YELLOW, PlayerType.HUMAN)));
 
         // when
         List<Game> result = gameController.games();
 
         // then
         verify(gameDAO).getAllWaitingForPlayers();
-        assertEquals(games, result);
+        assertEquals(Arrays.asList(
+                new Game("a", new Player("player id", new User(), Colour.YELLOW, PlayerType.HUMAN))
+        ), result);
     }
 
     @Test

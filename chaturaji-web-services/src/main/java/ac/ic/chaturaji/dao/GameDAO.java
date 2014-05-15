@@ -37,7 +37,7 @@ public class GameDAO {
 
     @PostConstruct
     public void setupDefaultData() {
-//        if ("true".equals(System.getProperty("create_default_games"))) {
+        if ("true".equals(System.getProperty("create_default_games"))) {
             List<Game> games = Arrays.asList(
                     new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "as@df.com", passwordEncoder.encode("qazqaz"), "user_one"), Colour.YELLOW, PlayerType.HUMAN)),
                     new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "fd@sa.com", passwordEncoder.encode("qazqaz"), "user_two"), Colour.YELLOW, PlayerType.HUMAN)),
@@ -47,7 +47,7 @@ public class GameDAO {
             for (Game game : games) {
                 save(game);
             }
-//        }
+        }
     }
 
     public Collection<Game> getAllWaitingForPlayers() {

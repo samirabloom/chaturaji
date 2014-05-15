@@ -72,7 +72,7 @@ public class GameControllerFullIntegrationTest {
         try (FileInputStream fileInputStream = new FileInputStream(new File(projectBase + "../keystore"))) {
             trustStore.load(fileInputStream, "changeit".toCharArray());
         }
-        numberOfGames = 4;
+        numberOfGames = 0;
     }
 
     private static ServerConnector createHTTPConnector(Server server, Integer port, Integer securePort) {
