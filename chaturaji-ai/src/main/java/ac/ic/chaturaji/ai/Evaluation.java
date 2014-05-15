@@ -71,8 +71,8 @@ public class Evaluation {
             pawnScore += pawnCount[(maximisingColour + i) % 4];
         }
 
-        return 12 * (kingCount[maximisingColour] - kingScore) + 9 * (elephantCount[maximisingColour] - elephantScore)
-                + 5 * (knightCount[maximisingColour] - knightScore) + 3 * (boatCount[maximisingColour] - boatScore)
+        return 12 * (kingCount[maximisingColour] - kingScore) + 7 * (elephantCount[maximisingColour] - elephantScore)
+                + 4 * (knightCount[maximisingColour] - knightScore) + 4 * (boatCount[maximisingColour] - boatScore)
                 + (pawnCount[maximisingColour] - pawnScore);
     }
 
