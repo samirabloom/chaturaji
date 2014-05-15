@@ -61,6 +61,27 @@
 
     </RadioGroup>
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="AI Difficulty:"
+            android:id="@+id/textView3"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="2"
+            android:id="@+id/diff_txt"
+            android:layout_gravity="center_horizontal" />
+
+    <SeekBar
+            android:layout_width="196dp"
+            android:layout_height="wrap_content"
+            android:max="8"
+            android:id="@+id/ai_diff_sb" android:layout_gravity="center_horizontal"/>
+
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
