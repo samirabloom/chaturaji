@@ -64,9 +64,9 @@ public class RootConfiguration {
         basicDataSource.setMinEvictableIdleTimeMillis(30000);
 
         // create scheme
-        if ("true".equals(System.getProperty("create_scheme"))) {
+//        if ("true".equals(System.getProperty("create_scheme"))) {
             JdbcTestUtils.executeSqlScript(new JdbcTemplate(basicDataSource), new ClassPathResource("/sql/create_scheme.sql"), false);
-        }
+//        }
         return basicDataSource;
     }
 
