@@ -37,14 +37,16 @@ public class GameDAO {
 
     @PostConstruct
     public void setupDefaultData() {
-        List<Game> games = Arrays.asList(
-                new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "as@df.com", passwordEncoder.encode("qazqaz"), "user_one"), Colour.YELLOW, PlayerType.HUMAN)),
-                new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "fd@sa.com", passwordEncoder.encode("qazqaz"), "user_two"), Colour.YELLOW, PlayerType.HUMAN)),
-                new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "qa@qa.com", passwordEncoder.encode("qazqaz"), "user_three"), Colour.YELLOW, PlayerType.HUMAN)),
-                new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "qa@az.com", passwordEncoder.encode("qazqaz"), "user_four"), Colour.YELLOW, PlayerType.HUMAN))
-        );
-        for (Game game : games) {
-            save(game);
+        if ("true".equals(System.getProperty("create_default_games"))) {
+            List<Game> games = Arrays.asList(
+                    new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "as@df.com", passwordEncoder.encode("qazqaz"), "user_one"), Colour.YELLOW, PlayerType.HUMAN)),
+                    new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "fd@sa.com", passwordEncoder.encode("qazqaz"), "user_two"), Colour.YELLOW, PlayerType.HUMAN)),
+                    new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "qa@qa.com", passwordEncoder.encode("qazqaz"), "user_three"), Colour.YELLOW, PlayerType.HUMAN)),
+                    new Game(uuidFactory.generateUUID(), new Player(uuidFactory.generateUUID(), new User(uuidFactory.generateUUID(), "qa@az.com", passwordEncoder.encode("qazqaz"), "user_four"), Colour.YELLOW, PlayerType.HUMAN))
+            );
+            for (Game game : games) {
+                save(game);
+            }
         }
     }
 
@@ -67,7 +69,7 @@ public class GameDAO {
     }
 
     public Collection<Game> getFinishedGames(String userId) {
-        String sql = "SELECT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS " +
+        String sql = "SELECT DISTINCT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS " +
                 "FROM GAME NATURAL JOIN PLAYER NATURAL JOIN USER " +
                 "WHERE GAME_STATUS > 1 AND USER_ID = ?";
         List<Game> games = new ArrayList<>();
@@ -121,7 +123,7 @@ public class GameDAO {
                 PreparedStatement ps = connection.prepareStatement(sql);
 
                 ps.setString(1, game.getId());
-                ps.setDate(2, new java.sql.Date(game.getCreatedDate().toDate().getTime()));
+                ps.setTimestamp(2, new java.sql.Timestamp(game.getCreatedDate().toDate().getTime()));
                 ps.setInt(3, game.getCurrentPlayerColour().ordinal());
                 ps.setInt(4, game.getGameStatus().ordinal());
                 if (ps.executeUpdate() != 1) {
@@ -142,7 +144,7 @@ public class GameDAO {
             try (Connection connection = dataSource.getConnection()) {
                 PreparedStatement ps = connection.prepareStatement(sql);
 
-                ps.setDate(1, new java.sql.Date(game.getCreatedDate().toDate().getTime()));
+                ps.setTimestamp(1, new java.sql.Timestamp(game.getCreatedDate().toDate().getTime()));
                 ps.setInt(2, game.getCurrentPlayerColour().ordinal());
                 ps.setInt(3, game.getGameStatus().ordinal());
                 ps.setString(4, game.getId());
