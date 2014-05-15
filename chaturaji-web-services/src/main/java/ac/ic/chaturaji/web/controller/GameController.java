@@ -59,7 +59,7 @@ public class GameController {
         User currentUser = springSecurityUserContext.getCurrentUser();
         List<Game> notYourGames = new ArrayList<>();
         for (Game game : gameDAO.getAllWaitingForPlayers()) {
-            if (!alreadyJoinedGame(game, currentUser)) {
+            if (!alreadyJoinedGame(game, currentUser) && getInMemoryGames(servletContext).get(game.getId()) != null) {
                 notYourGames.add(game);
             }
         }
@@ -194,7 +194,7 @@ public class GameController {
     @RequestMapping(value = "/replayGame", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public ResponseEntity replayGame(@RequestParam("gameId") String gameId) throws IOException {
         logger.info("User " + springSecurityUserContext.getCurrentUser() + " is replaying game " + gameId);
-        Game game = getInMemoryGames(servletContext).get(gameId);
+        Game game = gameDAO.get(gameId);
         if (game == null) {
             logger.info("No game found with gameId: " + gameId);
             return new ResponseEntity<>("No game found with gameId: " + gameId, HttpStatus.BAD_REQUEST);
@@ -208,7 +208,7 @@ public class GameController {
 
         // add web socket registration listener
         Map<String, ClientRegistrationListener> clientRegistrationListeners = (Map<String, ClientRegistrationListener>) servletContext.getAttribute(WebSocketServletContextListener.WEB_SOCKET_CLIENT_REGISTRATION_LISTENERS_ATTRIBUTE_NAME);
-        clientRegistrationListeners.put("ID_" + player.getId(), new ReplayGameMoveSender(gameId, moveDAO));
+        clientRegistrationListeners.put("ID_" + player.getId(), new ReplayGameMoveSender(gameId, moveDAO, gameDAO));
 
         return new ResponseEntity<>(player, HttpStatus.ACCEPTED);
     }
