@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AI {
     public static final int NUMBER_OF_MOVES_WITH_NO_PIECE_CAPTURED_FOR_STALEMATE = 25;
-    public static final int AI_PLAYER_DELAY = 500;
+    public static final int AI_PLAYER_DELAY = 1500;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
 
@@ -85,6 +85,10 @@ public class AI {
                 game.getPlayer(colour).setPoints(aiPlayer.getPoints());
                 game.setCurrentPlayerColour(Colour.values()[board.getCurrentPlayer()]);
                 game.setBitboards(board.GetBitBoards());
+                move.setYellowScore(game.getPlayer(Colour.YELLOW.ordinal()).getPoints());
+                move.setBlueScore(game.getPlayer(Colour.BLUE.ordinal()).getPoints());
+                move.setRedScore(game.getPlayer(Colour.RED.ordinal()).getPoints());
+                move.setGreenScore(game.getPlayer(Colour.GREEN.ordinal()).getPoints());
 
                 if (board.isGameOver() <= 1) {
                     result = new Result(GameStatus.GAME_OVER, game, move);

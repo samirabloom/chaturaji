@@ -30,7 +30,6 @@ public class Game extends EqualsHashCodeToString {
     private long[] bitboards;
     @JsonIgnore
     private int stalemateCount;
-    private Object playerWithHighestScore;
     private int aiLevel = 8;
 
     // Dummy constructor needed to map JSON string back to Java object

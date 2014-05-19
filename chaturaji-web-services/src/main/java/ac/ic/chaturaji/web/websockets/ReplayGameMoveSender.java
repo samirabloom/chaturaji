@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * @author samirarabbanian
  */
 public class ReplayGameMoveSender implements ClientRegistrationListener {
-    public static final int MOVE_DELAY = 500;
+    public static final int MOVE_DELAY = 1250;
     private final String gameId;
     private final MoveDAO moveDAO;
     private final GameDAO gameDAO;

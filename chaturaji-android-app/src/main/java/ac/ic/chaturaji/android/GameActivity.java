@@ -3,7 +3,6 @@ package ac.ic.chaturaji.android;
 import ac.ic.chaturaji.android.pieces.*;
 import ac.ic.chaturaji.chatuService.ChaturajiService;
 import ac.ic.chaturaji.chatuService.OnMoveCompleteListener;
-import ac.ic.chaturaji.model.Colour;
 import ac.ic.chaturaji.model.GameStatus;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.Result;
@@ -247,8 +246,9 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                     String piece = colour + piece_type;
                     int identifier = getResources().getIdentifier(piece, "drawable", GameActivity.this.getPackageName());
                     BoardImage[i][j].setImageResource(identifier);
-                } else
+                } else {
                     BoardImage[i][j].setImageResource(0);
+                }
             }
     }
 
@@ -398,7 +398,12 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         return false;
     }
 
-    public void move(int source_column, int source_row, int destination_column, int destination_row, Result result) {
+    public void move(Result result) {
+        int source_column = getColumn(result.getMove().getSource());
+        int source_row = getRow(result.getMove().getSource());
+
+        int destination_column = getColumn(result.getMove().getDestination());
+        int destination_row = getRow(result.getMove().getDestination());
 
         updateScoreBoard(source_column, source_row, destination_column, destination_row, result);
 
@@ -407,10 +412,10 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     }
 
     private void updateScoreBoard(int source_column, int source_row, int destination_column, int destination_row, Result result) {
-        yellow_score = result.getGame().getPlayer(Colour.YELLOW.ordinal()).getPoints();
-        blue_score = result.getGame().getPlayer(Colour.BLUE.ordinal()).getPoints();
-        red_score = result.getGame().getPlayer(Colour.RED.ordinal()).getPoints();
-        green_score = result.getGame().getPlayer(Colour.GREEN.ordinal()).getPoints();
+        yellow_score = result.getMove().getYellowScore();
+        blue_score = result.getMove().getBlueScore();
+        red_score = result.getMove().getRedScore();
+        green_score = result.getMove().getGreenScore();
 
         String takenType = "";
         String takenColour = "";
@@ -534,14 +539,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
     // This method gets called by the server every time a new move is made, including your current player's move
 
     public void updateGame(Result result) {
-
-        int colSrc = getColumn(result.getMove().getSource());
-        int rowSrc = getRow(result.getMove().getSource());
-
-        int colDest = getColumn(result.getMove().getDestination());
-        int rowDest = getRow(result.getMove().getDestination());
-
-        move(colSrc, rowSrc, colDest, rowDest, result);
+        move(result);
         moved = true;
         move_count++;
 
