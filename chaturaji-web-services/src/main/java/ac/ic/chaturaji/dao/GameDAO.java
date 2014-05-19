@@ -71,7 +71,7 @@ public class GameDAO {
     public Collection<Game> getFinishedGames(String userId) {
         String sql = "SELECT DISTINCT GAME_ID, CREATED_DATE, CURRENT_PLAYER, GAME_STATUS " +
                 "FROM GAME NATURAL JOIN PLAYER NATURAL JOIN USER " +
-                "WHERE GAME_STATUS > 1 AND USER_ID = ?";
+                "WHERE GAME_STATUS > 1 AND USER_ID = ? ORDER BY CREATED_DATE DESC";
         List<Game> games = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);

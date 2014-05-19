@@ -86,7 +86,7 @@ public class ReplayActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server.. " + state[0], Toast.LENGTH_LONG).show();
                     break;
                 case "Success":
-                    gotoGame.putExtra("Replay?", true);
+                    gotoGame.putExtra("REPLAY", true);
                     startActivity(gotoGame);
                     break;
                 case "Bad request":

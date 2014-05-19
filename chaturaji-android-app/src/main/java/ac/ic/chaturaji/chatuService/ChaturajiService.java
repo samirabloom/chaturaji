@@ -60,8 +60,8 @@ public class ChaturajiService {
     private final ObjectMapper objectMapper = new ObjectMapperFactory().createObjectMapper();
     private final UUIDFactory uuidFactory = new UUIDFactory();
     //    private String serverHostAndPort = "ec2-54-186-2-140.us-west-2.compute.amazonaws.com:8443";
-    private String serverHostAndPort = "msc14-prj-14.doc.ic.ac.uk:55443";
-    //    private String serverHostAndPort = "192.168.1.110:8443";
+//    private String serverHostAndPort = "msc14-prj-14.doc.ic.ac.uk:55443";
+    private String serverHostAndPort = "192.168.1.110:8443";
     private DefaultHttpClient httpClient;
     private String email = "";
     private String password = "";

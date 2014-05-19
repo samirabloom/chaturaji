@@ -99,7 +99,7 @@ public class GameRoomActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Sorry, there was a problem connecting with server.. " + state[0], Toast.LENGTH_LONG).show();
                     break;
                 case "Success":
-                    gotoGame.putExtra("Replay?", false);
+                    gotoGame.putExtra("REPLAY", false);
                     startActivity(gotoGame);
                     break;
                 case "Bad request":

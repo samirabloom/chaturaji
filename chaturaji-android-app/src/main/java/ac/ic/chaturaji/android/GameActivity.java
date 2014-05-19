@@ -3,6 +3,7 @@ package ac.ic.chaturaji.android;
 import ac.ic.chaturaji.android.pieces.*;
 import ac.ic.chaturaji.chatuService.ChaturajiService;
 import ac.ic.chaturaji.chatuService.OnMoveCompleteListener;
+import ac.ic.chaturaji.model.Colour;
 import ac.ic.chaturaji.model.GameStatus;
 import ac.ic.chaturaji.model.Player;
 import ac.ic.chaturaji.model.Result;
@@ -57,7 +58,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         chaturajiService.setupSocketClient(GameActivity.this);
 
         String colour = getIntent().getStringExtra("colour");
-        boolean Replay = getIntent().getBooleanExtra("Replay?", false);
+        replay = getIntent().getBooleanExtra("REPLAY", false);
 
         switch (colour) {
             case "in_game_yellow":
@@ -302,6 +303,20 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         }
     }
 
+    public void showValidMoves(int column, int row) {
+
+        valid_moves = board[column][row].valid_moves(column, row, board);
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (valid_moves[i][j]) {
+                    BoardImage[i][j].setBackgroundColor(getResources().getColor(R.color.light_blue));
+                }
+            }
+        }
+
+    }
+
     public void setScoreboard() {
 
         TextView blue_score_text = (TextView) findViewById(R.id.blue_score);
@@ -326,134 +341,25 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         move_list.setText(moveList);
 
         TextView show_turn = (TextView) findViewById(R.id.turn);
-        int gameOver = checkEndGame();
 
         if (gameInPlay) {
-            if (gameOver != 0) {
-                String colour;
+            int turn = ((move_count + 3) % 4) + 1;
+            String colour;
 
-                if (gameOver == 1)
-                    colour = "Blue";
-                else if (gameOver == 2)
-                    colour = "Red";
-                else if (gameOver == 3)
-                    colour = "Green";
-                else if (gameOver == 4)
-                    colour = "Yellow";
-                else
-                    colour = "";
-
-                if (gameOver == 5)
-                    show_turn.setText("It is a draw!");
-                else {
-                    String winner = colour + " wins!";
-                    show_turn.setText(winner);
-                }
-
-            } else {
-                int turn = ((move_count + 3) % 4) + 1;
-                String colour;
-
-                if (turn == 1)
-                    colour = "Blue";
-                else if (turn == 2)
-                    colour = "Red";
-                else if (turn == 3)
-                    colour = "Green";
-                else if (turn == 4)
-                    colour = "Yellow";
-                else
-                    colour = "";
-
-
-                String turn_string = "It is " + colour + "'s turn to move";
-                show_turn.setText(turn_string);
-            }
-        }
-    }
-
-    public void adjustScoreboard(int source_column, int source_row, int destination_column, int destination_row) {
-
-        int score = 0;
-        boolean boattriumph = false;
-        String taken_type = "";
-        String taken_colour = "";
-
-        if (board[destination_column][destination_row] != null) {
-            if (board[destination_column][destination_row] instanceof Pawn) {
-                score = 1;
-                taken_type = "Pawn";
-            } else if (board[destination_column][destination_row] instanceof Boat) {
-                score = 2;
-                taken_type = "Boat";
-            } else if (board[destination_column][destination_row] instanceof Knight) {
-                score = 3;
-                taken_type = "Knight";
-            } else if (board[destination_column][destination_row] instanceof Elephant) {
-                score = 4;
-                taken_type = "Elephant";
-            } else if (board[destination_column][destination_row] instanceof King) {
-                score = 5;
-                taken_type = "King";
-                if (board[source_column][source_row] != null) {
-                    if (board[destination_column][destination_row].colour == 1) {
-                        blue_king_captured_by = board[source_column][source_row].colour;
-                    } else if (board[destination_column][destination_row].colour == 2) {
-                        red_king_captured_by = board[source_column][source_row].colour;
-                    } else if (board[destination_column][destination_row].colour == 3) {
-                        green_king_captured_by = board[source_column][source_row].colour;
-                    } else if (board[destination_column][destination_row].colour == 4) {
-                        yellow_king_captured_by = board[source_column][source_row].colour;
-                    }
-                }
-
-                if (blue_king_captured_by == 0 && red_king_captured_by == 1 && green_king_captured_by == 1 && yellow_king_captured_by == 1) {
-                    score = score + 54;
-                } else if (blue_king_captured_by == 2 && red_king_captured_by == 0 && green_king_captured_by == 2 && yellow_king_captured_by == 2) {
-                    score = score + 54;
-                } else if (blue_king_captured_by == 3 && red_king_captured_by == 3 && green_king_captured_by == 0 && yellow_king_captured_by == 3) {
-                    score = score + 54;
-                } else if (blue_king_captured_by == 4 && red_king_captured_by == 4 && green_king_captured_by == 4 && yellow_king_captured_by == 0) {
-                    score = score + 54;
-                }
-            }
-
-            if (board[destination_column][destination_row].colour == 1)
-                taken_colour = "Blue";
-            else if (board[destination_column][destination_row].colour == 2)
-                taken_colour = "Red";
-            else if (board[destination_column][destination_row].colour == 3)
-                taken_colour = "Green";
-            else if (board[destination_column][destination_row].colour == 4)
-                taken_colour = "Yellow";
+            if (turn == 1)
+                colour = "Blue";
+            else if (turn == 2)
+                colour = "Red";
+            else if (turn == 3)
+                colour = "Green";
+            else if (turn == 4)
+                colour = "Yellow";
             else
-                taken_colour = "";
+                colour = "";
+
+            String turn_string = "It is " + colour + "'s turn to move";
+            show_turn.setText(turn_string);
         }
-
-        if (board[source_column][source_row] instanceof Boat)
-            if (boatTriumph(destination_column, destination_row)) {
-                score = score + 6;
-                boattriumph = true;
-            }
-
-        if (board[source_column][source_row] != null) {
-            if (board[source_column][source_row].colour == 1) {
-                blue_score = blue_score + score;
-            } else if (board[source_column][source_row].colour == 2) {
-                red_score = red_score + score;
-            } else if (board[source_column][source_row].colour == 3) {
-                green_score = green_score + score;
-            } else if (board[source_column][source_row].colour == 4) {
-                yellow_score = yellow_score + score;
-            }
-        }
-
-        if (!boattriumph && board[destination_column][destination_row] == null)
-            moveList = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + "\n" + moveList;
-        else if (boattriumph)
-            moveList = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " Boat Triumph!\n" + moveList;
-        else if (board[destination_column][destination_row] != null)
-            moveList = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " taking " + taken_colour + "'s " + taken_type + "\n" + moveList;
     }
 
     public boolean selectPiece(int column, int row) {
@@ -492,80 +398,56 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         return false;
     }
 
-    public int checkEndGame() {
+    public void move(int source_column, int source_row, int destination_column, int destination_row, Result result) {
 
-        int colour = 0;
-
-        for (int i = 0; i < 8; i++) {
-            if (colour != 0)
-                break;
-
-            for (int j = 0; j < 8; j++)
-                if (board[i][j] != null) {
-                    colour = board[i][j].colour;
-                    break;
-                }
-        }
-
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if ((board[i][j] != null) && (board[i][j].colour != colour))
-                    return 0;
-            }
-        }
-
-        int final_score = 0;
-
-        if (blue_score >= final_score)
-            final_score = blue_score;
-
-        if (red_score >= final_score)
-            final_score = red_score;
-
-        if (green_score >= final_score)
-            final_score = green_score;
-
-        if (yellow_score >= final_score)
-            final_score = yellow_score;
-
-        if (final_score == blue_score) {
-            if (blue_score == red_score || blue_score == green_score || blue_score == yellow_score)
-                colour = 5;
-            else
-                colour = 1;
-        } else if (final_score == red_score) {
-            if (red_score == green_score || red_score == yellow_score)
-                colour = 5;
-            else
-                colour = 2;
-        } else if (final_score == green_score) {
-            if (green_score == yellow_score)
-                colour = 5;
-            else
-                colour = 3;
-        } else if (final_score == yellow_score)
-            colour = 4;
-
-        return colour;
-    }
-
-    public void showValidMoves(int column, int row) {
-
-        valid_moves = board[column][row].valid_moves(column, row, board);
-
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                if (valid_moves[i][j])
-                    BoardImage[i][j].setBackgroundColor(getResources().getColor(R.color.light_blue));
-
-    }
-
-    public void move(int source_column, int source_row, int destination_column, int destination_row) {
-
-        adjustScoreboard(source_column, source_row, destination_column, destination_row);
+        updateScoreBoard(source_column, source_row, destination_column, destination_row, result);
 
         board[destination_column][destination_row] = board[source_column][source_row];
         board[source_column][source_row] = null;
+    }
+
+    private void updateScoreBoard(int source_column, int source_row, int destination_column, int destination_row, Result result) {
+        yellow_score = result.getGame().getPlayer(Colour.YELLOW.ordinal()).getPoints();
+        blue_score = result.getGame().getPlayer(Colour.BLUE.ordinal()).getPoints();
+        red_score = result.getGame().getPlayer(Colour.RED.ordinal()).getPoints();
+        green_score = result.getGame().getPlayer(Colour.GREEN.ordinal()).getPoints();
+
+        String takenType = "";
+        String takenColour = "";
+
+        if (board[destination_column][destination_row] != null) {
+            if (board[destination_column][destination_row] instanceof Pawn) {
+                takenType = "Pawn";
+            } else if (board[destination_column][destination_row] instanceof Boat) {
+                takenType = "Boat";
+            } else if (board[destination_column][destination_row] instanceof Knight) {
+                takenType = "Knight";
+            } else if (board[destination_column][destination_row] instanceof Elephant) {
+                takenType = "Elephant";
+            } else if (board[destination_column][destination_row] instanceof King) {
+                takenType = "King";
+            } else {
+                takenType = "";
+            }
+
+            if (board[destination_column][destination_row].colour == 1) {
+                takenColour = "Blue";
+            } else if (board[destination_column][destination_row].colour == 2) {
+                takenColour = "Red";
+            } else if (board[destination_column][destination_row].colour == 3) {
+                takenColour = "Green";
+            } else if (board[destination_column][destination_row].colour == 4) {
+                takenColour = "Yellow";
+            } else {
+                takenColour = "";
+            }
+        }
+
+        if (takenColour.length() > 0 && takenType.length() > 0) {
+            moveList = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + " taking " + takenColour + "'s " + takenType + "\n" + moveList;
+        } else {
+            moveList = (move_count + 1) + ". " + (char) (source_column + 65) + (source_row + 1) + " to " + (char) (destination_column + 65) + (destination_row + 1) + "\n" + moveList;
+        }
     }
 
     public boolean checkPromotion(int column, int row, int piece_type, int colour) {
@@ -636,33 +518,6 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
                 }
     }
 
-    public boolean boatTriumph(int column, int row) {
-
-        if (column <= 6 && row <= 6 && board[column + 1][row] instanceof Boat && board[column + 1][row + 1] instanceof Boat && board[column][row + 1] instanceof Boat) {
-            board[column + 1][row] = null;
-            board[column + 1][row + 1] = null;
-            board[column][row + 1] = null;
-            return true;
-        } else if (column <= 6 && row >= 1 && board[column + 1][row] instanceof Boat && board[column + 1][row - 1] instanceof Boat && board[column][row - 1] instanceof Boat) {
-            board[column + 1][row] = null;
-            board[column + 1][row - 1] = null;
-            board[column][row - 1] = null;
-            return true;
-        } else if (column >= 1 && row <= 6 && board[column][row + 1] instanceof Boat && board[column - 1][row] instanceof Boat && board[column - 1][row + 1] instanceof Boat) {
-            board[column][row + 1] = null;
-            board[column - 1][row] = null;
-            board[column - 1][row + 1] = null;
-            return true;
-        } else if (column >= 1 && row >= 1 && board[column - 1][row] instanceof Boat && board[column - 1][row - 1] instanceof Boat && board[column][row - 1] instanceof Boat) {
-            board[column - 1][row] = null;
-            board[column - 1][row - 1] = null;
-            board[column][row - 1] = null;
-            return true;
-        }
-
-        return false;
-    }
-
     public int convertMove(int column, int row) {
 
         return (column + (row * 8));
@@ -686,7 +541,7 @@ public class GameActivity extends Activity implements OnMoveCompleteListener {
         int colDest = getColumn(result.getMove().getDestination());
         int rowDest = getRow(result.getMove().getDestination());
 
-        move(colSrc, rowSrc, colDest, rowDest);
+        move(colSrc, rowSrc, colDest, rowDest, result);
         moved = true;
         move_count++;
 

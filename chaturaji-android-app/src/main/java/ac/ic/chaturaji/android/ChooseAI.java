@@ -65,7 +65,7 @@ public class ChooseAI extends Activity {
                     chaturajiService.clearCookieCred();
                     startActivity(logOut);
                 } else {
-                    getSingleGame.putExtra("Replay?", false);
+                    getSingleGame.putExtra("REPLAY", false);
                     startActivity(getSingleGame);
                 }
 

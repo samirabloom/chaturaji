@@ -155,30 +155,34 @@ public class GameController {
             logger.debug("User " + springSecurityUserContext.getCurrentUser() + " is submitting move " + move);
             final Game game = getInMemoryGames(servletContext).get(move.getGameId());
             if (game != null) {
-                Result result = ai.submitMove(game, move);
-                if (result.getType() == ResultType.NOT_VALID) {
-                    logger.info("Move " + move + " is not valid");
-                    return new ResponseEntity<>("That move is not valid", HttpStatus.BAD_REQUEST);
+                if (game.getPlayers().size() == 4) {
+                    Result result = ai.submitMove(game, move);
+                    if (result.getType() == ResultType.NOT_VALID) {
+                        logger.info("Move " + move + " is not valid");
+                        return new ResponseEntity<>("That move is not valid", HttpStatus.BAD_REQUEST);
+                    } else {
+                        for (Player player : result.getGame().getPlayers()) {
+                            playerDAO.save(result.getGame().getId(), player);
+                        }
+                        moveDAO.save(result.getGame().getId(), result.getMove());
+                        gameDAO.save(game);
+                        // allow for a human player to have no pieces left
+                        while (game.currentPlayerCanNotMoveAnyPiece()) {
+                            game.setCurrentPlayerColour(game.getNextPlayerColour());
+                        }
+                        // now schedule AI move if next player is AI
+                        if (game.getCurrentPlayerType() == PlayerType.AI && result.getGameStatus() == GameStatus.IN_PLAY) {
+                            taskExecutor.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    submitMove(new Move(uuidFactory.generateUUID(), move.getGameId(), game.getCurrentPlayerColour(), -1, -1));
+                                }
+                            });
+                        }
+                        return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+                    }
                 } else {
-                    for (Player player : result.getGame().getPlayers()) {
-                        playerDAO.save(result.getGame().getId(), player);
-                    }
-                    moveDAO.save(result.getGame().getId(), result.getMove());
-                    gameDAO.save(game);
-                    // allow for a human player to have no pieces left
-                    while (game.currentPlayerCanNotMoveAnyPiece()) {
-                        game.setCurrentPlayerColour(game.getNextPlayerColour());
-                    }
-                    // now schedule AI move if next player is AI
-                    if (game.getCurrentPlayerType() == PlayerType.AI && result.getGameStatus() == GameStatus.IN_PLAY) {
-                        taskExecutor.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                submitMove(new Move(uuidFactory.generateUUID(), move.getGameId(), game.getCurrentPlayerColour(), -1, -1));
-                            }
-                        });
-                    }
-                    return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+                    return new ResponseEntity<>("No enough players, please wait for more players to join", HttpStatus.BAD_REQUEST);
                 }
             } else {
                 return new ResponseEntity<>("No game found with gameId: " + move.getGameId(), HttpStatus.BAD_REQUEST);

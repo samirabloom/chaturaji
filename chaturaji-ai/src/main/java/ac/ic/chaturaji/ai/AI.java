@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AI {
     public static final int NUMBER_OF_MOVES_WITH_NO_PIECE_CAPTURED_FOR_STALEMATE = 25;
-    public static final int AI_PLAYER_DELAY = 750;
+    public static final int AI_PLAYER_DELAY = 500;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, List<MoveListener>> moveListeners = new ConcurrentHashMap<>();
 
@@ -27,6 +30,7 @@ public class AI {
 
     public Result submitMove(final Game game, final Move move) throws Exception {
         final SettableFuture<Result> futureResult = SettableFuture.create();
+        final SettableFuture<String> minimumTimeDelay = SettableFuture.create();
 
         final int colour = game.getCurrentPlayerColour().ordinal();
         final Player player = game.getPlayer(colour);
@@ -109,16 +113,27 @@ public class AI {
             }
         }).start();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(AI_PLAYER_DELAY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                minimumTimeDelay.set("done");
+            }
+        }).start();
+
         // DO NOT COMMENT THIS OUT THIS IS THE WAY THE SERVER INTEGRATES TO AI
 
         Result result;
         try {
             if (player.getType().equals(PlayerType.AI)) {
                 // only wait if its an AI move
-                result = futureResult.get(AI_PLAYER_DELAY, TimeUnit.MILLISECONDS);
-            } else {
-                result = futureResult.get();
+                minimumTimeDelay.get(AI_PLAYER_DELAY, TimeUnit.MILLISECONDS);
             }
+            result = futureResult.get();
         } catch (Exception e) {
             // do nothing as expected exception for timeout
             result = futureResult.get();
